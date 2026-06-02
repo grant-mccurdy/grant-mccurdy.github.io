@@ -11,6 +11,12 @@ const state = {
     mastery: true,
     sections: false,
   },
+  visual: {
+    ribbonOpacity: 0.2,
+    ribbonRange: "50",
+    ribbonPopulation: "completed",
+    smoothCurves: true,
+  },
 };
 
 const metricLabels = {
@@ -21,7 +27,7 @@ const metricLabels = {
 };
 
 const palette = ["#003260", "#c69a36", "#0a477b", "#7b8fa8", "#a87921", "#2f6690", "#6d91b8", "#d2a84b"];
-const assetVersion = document.documentElement.dataset.assetVersion || "student-bands-v2";
+const assetVersion = document.documentElement.dataset.assetVersion || "student-bands-v3";
 
 const els = {
   focus: document.querySelector("#focus-select"),
@@ -32,6 +38,11 @@ const els = {
   networkBand: document.querySelector("#toggle-network-band"),
   masteryLine: document.querySelector("#toggle-mastery-line"),
   sectionLines: document.querySelector("#toggle-section-lines"),
+  ribbonRange: document.querySelector("#ribbon-range-select"),
+  ribbonPopulation: document.querySelector("#ribbon-population-select"),
+  ribbonOpacity: document.querySelector("#ribbon-opacity"),
+  ribbonOpacityValue: document.querySelector("#ribbon-opacity-value"),
+  smoothCurves: document.querySelector("#toggle-smooth-curves"),
   students: document.querySelector("#metric-students"),
   latest: document.querySelector("#metric-latest"),
   change: document.querySelector("#metric-change"),
@@ -213,6 +224,32 @@ function pointsToPath(points) {
   return points.map((point, index) => `${index === 0 ? "M" : "L"} ${point.x.toFixed(1)} ${point.y.toFixed(1)}`).join(" ");
 }
 
+function pointsToCurvePath(points, firstCommand = "M") {
+  if (!state.visual.smoothCurves || points.length < 3) return pointsToPath(points).replace(/^M/, firstCommand);
+
+  const tension = 0.82;
+  const start = `${firstCommand} ${points[0].x.toFixed(1)} ${points[0].y.toFixed(1)}`;
+  const segments = [];
+
+  for (let index = 0; index < points.length - 1; index += 1) {
+    const p0 = points[index - 1] ?? points[index];
+    const p1 = points[index];
+    const p2 = points[index + 1];
+    const p3 = points[index + 2] ?? p2;
+    const c1 = {
+      x: p1.x + ((p2.x - p0.x) / 6) * tension,
+      y: p1.y + ((p2.y - p0.y) / 6) * tension,
+    };
+    const c2 = {
+      x: p2.x - ((p3.x - p1.x) / 6) * tension,
+      y: p2.y - ((p3.y - p1.y) / 6) * tension,
+    };
+    segments.push(`C ${c1.x.toFixed(1)} ${c1.y.toFixed(1)}, ${c2.x.toFixed(1)} ${c2.y.toFixed(1)}, ${p2.x.toFixed(1)} ${p2.y.toFixed(1)}`);
+  }
+
+  return [start, ...segments].join(" ");
+}
+
 function renderTimeSeries(records) {
   const width = 980;
   const height = 420;
@@ -223,12 +260,12 @@ function renderTimeSeries(records) {
   const periods = periodData.map((item) => item.period);
   const groups = unique(periodData.flatMap((item) => item.groups.map((group) => group.key)));
   const yMax = state.metric === "growth" ? 42 : 100;
-  const yMin = state.metric === "growth" ? -4 : state.metric === "score" ? 0 : 35;
+  const yMin = state.metric === "growth" ? -4 : state.metric === "score" && state.visual.ribbonPopulation === "assigned" ? 0 : state.metric === "score" ? 20 : 35;
   const x = (index) => margin.left + (periods.length <= 1 ? innerWidth / 2 : (index / (periods.length - 1)) * innerWidth);
   const y = (value) => margin.top + innerHeight - ((value - yMin) / (yMax - yMin)) * innerHeight;
   const bandScale = (value) => y(state.metric === "growth" ? value - state.source.sections[0].baseline : value);
 
-  const ticks = state.metric === "score" ? [0, 25, 50, 75, 100] : [40, 55, 70, 85, 100];
+  const ticks = state.metric === "score" && yMin === 0 ? [0, 25, 50, 75, 100] : state.metric === "score" ? [25, 50, 75, 100] : [40, 55, 70, 85, 100];
   const grid = ticks.filter((tick) => tick >= yMin && tick <= yMax).map((tick) => `
     <g>
       <line x1="${margin.left}" x2="${width - margin.right}" y1="${y(tick)}" y2="${y(tick)}" class="axis-grid"></line>
@@ -239,6 +276,7 @@ function renderTimeSeries(records) {
   const departmentBand = state.toggles.department && metricAllowsBands() ? renderBand("department", periods, x, bandScale) : "";
   const networkBand = state.toggles.network && metricAllowsBands() ? renderBand("network", periods, x, bandScale) : "";
   const masteryLine = state.toggles.mastery && metricAllowsBands() ? renderBenchmark(periods, x, y) : "";
+  const distributionGlyphs = metricAllowsBands() ? renderDistributionGlyphs(periods, x, y) : "";
 
   const groupLines = groups.map((group, groupIndex) => {
     const color = palette[groupIndex % palette.length];
@@ -250,7 +288,7 @@ function renderTimeSeries(records) {
     if (points.length < 2) return "";
     const circles = points.map((point) => `<circle cx="${point.x}" cy="${point.y}" r="4.5" fill="${color}" class="series-point"></circle>`).join("");
     return `
-      <path d="${pointsToPath(points)}" fill="none" stroke="${color}" stroke-width="3.2" class="series-line"></path>
+      <path d="${pointsToCurvePath(points)}" fill="none" stroke="${color}" stroke-width="3.2" class="series-line"></path>
       ${circles}
     `;
   }).join("");
@@ -268,6 +306,7 @@ function renderTimeSeries(records) {
       ${networkBand}
       ${departmentBand}
       ${masteryLine}
+      ${distributionGlyphs}
       ${sectionLines}
       ${groupLines}
       <line x1="${margin.left}" x2="${width - margin.right}" y1="${margin.top + innerHeight}" y2="${margin.top + innerHeight}" class="axis-line"></line>
@@ -286,8 +325,10 @@ function renderBand(key, periods, x, y) {
   const band = computed ?? state.source.bands[key];
   const lower = periods.map((period, index) => ({ x: x(index), y: y(band.lower[index] ?? band.lower[period.order - 1]) }));
   const upper = periods.map((period, index) => ({ x: x(index), y: y(band.upper[index] ?? band.upper[period.order - 1]) }));
-  const path = `${pointsToPath(upper)} L ${[...lower].reverse().map((point) => `${point.x.toFixed(1)} ${point.y.toFixed(1)}`).join(" L ")} Z`;
-  return `<path d="${path}" class="ribbon ribbon-${key}"></path>`;
+  const lowerReverse = [...lower].reverse();
+  const opacity = key === "department" ? state.visual.ribbonOpacity : state.visual.ribbonOpacity * 0.48;
+  const path = `${pointsToCurvePath(upper)} ${pointsToCurvePath(lowerReverse, "L")} Z`;
+  return `<path d="${path}" class="ribbon ribbon-${key}" style="opacity: ${opacity.toFixed(2)}"></path>`;
 }
 
 function bandFromStudentRecords(key, periods) {
@@ -296,13 +337,20 @@ function bandFromStudentRecords(key, periods) {
 
   const lower = [];
   const upper = [];
+  const ranges = {
+    "50": { department: [0.25, 0.75], network: [0.1, 0.9] },
+    "60": { department: [0.2, 0.8], network: [0.1, 0.9] },
+    "80": { department: [0.1, 0.9], network: [0.05, 0.95] },
+  };
+  const [lowerQuantile, upperQuantile] = ranges[state.visual.ribbonRange]?.[key] ?? ranges["50"][key];
+
   periods.forEach((period) => {
     const rows = studentRecords.filter((record) => record.periodId === period.id);
-    const scores = key === "department"
+    const scores = state.visual.ribbonPopulation === "completed"
       ? rows.filter((record) => record.completed).map((record) => record.score)
       : rows.map((record) => record.score);
-    lower.push(quantile(scores, key === "department" ? 0.2 : 0.1));
-    upper.push(quantile(scores, key === "department" ? 0.8 : 0.9));
+    lower.push(quantile(scores, lowerQuantile));
+    upper.push(quantile(scores, upperQuantile));
   });
 
   return { lower, upper };
@@ -310,7 +358,36 @@ function bandFromStudentRecords(key, periods) {
 
 function renderBenchmark(periods, x, y) {
   const points = periods.map((period, index) => ({ x: x(index), y: y(state.source.bands.mastery.line[period.order - 1]) }));
-  return `<path d="${pointsToPath(points)}" class="benchmark-line"></path>`;
+  return `<path d="${pointsToCurvePath(points)}" class="benchmark-line"></path>`;
+}
+
+function renderDistributionGlyphs(periods, x, y) {
+  const studentRecords = filterStudentRecords();
+  if (!studentRecords.length) return "";
+
+  return periods.map((period, index) => {
+    const rows = studentRecords.filter((record) => {
+      if (record.periodId !== period.id) return false;
+      return state.visual.ribbonPopulation === "completed" ? record.completed : true;
+    });
+    const scores = rows.map((record) => record.score).filter((score) => Number.isFinite(score));
+    if (scores.length < 4) return "";
+    const p10 = quantile(scores, 0.1);
+    const p25 = quantile(scores, 0.25);
+    const median = quantile(scores, 0.5);
+    const p75 = quantile(scores, 0.75);
+    const p90 = quantile(scores, 0.9);
+    const px = x(index);
+    return `
+      <g class="distribution-glyph">
+        <title>${period.label}: p25 ${Math.round(p25)}%, median ${Math.round(median)}%, p75 ${Math.round(p75)}%, n=${scores.length}</title>
+        <line x1="${px}" x2="${px}" y1="${y(p10)}" y2="${y(p90)}" class="distribution-whisker"></line>
+        <line x1="${px - 7}" x2="${px + 7}" y1="${y(p25)}" y2="${y(p25)}" class="distribution-box-edge"></line>
+        <line x1="${px - 7}" x2="${px + 7}" y1="${y(p75)}" y2="${y(p75)}" class="distribution-box-edge"></line>
+        <circle cx="${px}" cy="${y(median)}" r="3.2" class="distribution-median"></circle>
+      </g>
+    `;
+  }).join("");
 }
 
 function renderSectionLines(records, periods, x, y) {
@@ -320,18 +397,21 @@ function renderSectionLines(records, periods, x, y) {
       const row = section.rows.find((record) => record.periodId === period.id);
       return row ? { x: x(index), y: y(row[state.metric]) } : null;
     }).filter(Boolean);
-    return points.length > 1 ? `<path d="${pointsToPath(points)}" class="section-shadow-line"></path>` : "";
+    return points.length > 1 ? `<path d="${pointsToCurvePath(points)}" class="section-shadow-line"></path>` : "";
   }).join("");
 }
 
 function renderLegend(groups) {
-  const departmentLabel = state.source.bands.department.label ?? "Department range";
-  const networkLabel = state.source.bands.network.label ?? "Comparable range";
+  const populationLabel = state.visual.ribbonPopulation === "completed" ? "completed" : "assigned";
+  const rangeLabel = `middle ${state.visual.ribbonRange}%`;
+  const departmentLabel = `Main ${rangeLabel} ${populationLabel}`;
+  const networkLabel = `Wider context ${populationLabel}`;
   const masteryLabel = state.source.bands.mastery.label ?? "Mastery benchmark";
   const ribbonItems = [
     state.toggles.department && metricAllowsBands() ? `<span><i class="legend-swatch ribbon-key department-key"></i>${departmentLabel}</span>` : "",
     state.toggles.network && metricAllowsBands() ? `<span><i class="legend-swatch ribbon-key network-key"></i>${networkLabel}</span>` : "",
     state.toggles.mastery && metricAllowsBands() ? `<span><i class="legend-line benchmark-key"></i>${masteryLabel}</span>` : "",
+    metricAllowsBands() ? `<span><i class="legend-line distribution-key"></i>Period distribution</span>` : "",
     state.toggles.sections ? `<span><i class="legend-line section-key"></i>Section lines</span>` : "",
   ].filter(Boolean).join("");
 
@@ -541,6 +621,27 @@ function initControls() {
 
   els.sectionLines.addEventListener("change", (event) => {
     state.toggles.sections = event.target.checked;
+    render();
+  });
+
+  els.ribbonRange.addEventListener("change", (event) => {
+    state.visual.ribbonRange = event.target.value;
+    render();
+  });
+
+  els.ribbonPopulation.addEventListener("change", (event) => {
+    state.visual.ribbonPopulation = event.target.value;
+    render();
+  });
+
+  els.ribbonOpacity.addEventListener("input", (event) => {
+    state.visual.ribbonOpacity = Number(event.target.value);
+    els.ribbonOpacityValue.textContent = `${Math.round(state.visual.ribbonOpacity * 100)}%`;
+    render();
+  });
+
+  els.smoothCurves.addEventListener("change", (event) => {
+    state.visual.smoothCurves = event.target.checked;
     render();
   });
 }

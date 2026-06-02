@@ -1,11 +1,11 @@
 <!doctype html>
-<html lang="en" data-asset-version="student-bands-v2">
+<html lang="en" data-asset-version="student-bands-v3">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Assessment Dashboard Test | Grant McCurdy</title>
     <meta name="description" content="Interactive synthetic assessment dashboard test for GitHub Pages.">
-    <link rel="stylesheet" href="../assets/css/styles.css">
+    <link rel="stylesheet" href="../assets/css/styles.css?v=student-bands-v3">
   </head>
   <body>
     <header class="site-header compact" data-header>
@@ -71,10 +71,33 @@
         </div>
 
         <div class="toggle-row" aria-label="Dashboard display toggles">
-          <label><input type="checkbox" id="toggle-department-band" checked> Department range</label>
-          <label><input type="checkbox" id="toggle-network-band" checked> Comparable range</label>
+          <label><input type="checkbox" id="toggle-department-band" checked> Main ribbon</label>
+          <label><input type="checkbox" id="toggle-network-band" checked> Context ribbon</label>
           <label><input type="checkbox" id="toggle-mastery-line" checked> Mastery benchmark</label>
           <label><input type="checkbox" id="toggle-section-lines"> Section lines</label>
+        </div>
+
+        <div class="viz-control-row" aria-label="Ribbon controls">
+          <label>
+            Ribbon Range
+            <select id="ribbon-range-select">
+              <option value="50">Middle 50%</option>
+              <option value="60">Middle 60%</option>
+              <option value="80">Middle 80%</option>
+            </select>
+          </label>
+          <label>
+            Population
+            <select id="ribbon-population-select">
+              <option value="completed">Completed Only</option>
+              <option value="assigned">Assigned + Missing</option>
+            </select>
+          </label>
+          <label class="range-control">
+            <span>Ribbon Opacity <output id="ribbon-opacity-value">20%</output></span>
+            <input type="range" id="ribbon-opacity" min="0.08" max="0.42" step="0.02" value="0.2">
+          </label>
+          <label class="checkbox-control"><input type="checkbox" id="toggle-smooth-curves" checked> Smooth curves</label>
         </div>
 
         <div class="metric-grid metric-grid-wide" aria-live="polite">
@@ -174,7 +197,7 @@
       </section>
     </main>
 
-    <script src="../assets/js/site.js?v=student-bands-v2"></script>
-    <script src="../assets/js/assessment-dashboard.js?v=student-bands-v2"></script>
+    <script src="../assets/js/site.js?v=student-bands-v3"></script>
+    <script src="../assets/js/assessment-dashboard.js?v=student-bands-v3"></script>
   </body>
 </html>
