@@ -54,6 +54,16 @@ const fmtPct = (value) => `${Math.round(value)}%`;
 const fmtPts = (value) => `${value >= 0 ? "+" : ""}${Math.round(value)} pts`;
 const unique = (items) => [...new Set(items)].sort((a, b) => String(a).localeCompare(String(b), undefined, { numeric: true }));
 
+function quantile(values, pct) {
+  const sorted = values.filter((value) => Number.isFinite(value)).sort((a, b) => a - b);
+  if (!sorted.length) return 0;
+  const index = (sorted.length - 1) * pct;
+  const low = Math.floor(index);
+  const high = Math.ceil(index);
+  if (low === high) return sorted[low];
+  return sorted[low] * (high - index) + sorted[high] * (index - low);
+}
+
 function heatColor(intensity) {
   const start = [232, 239, 246];
   const end = [0, 50, 96];
@@ -100,6 +110,14 @@ function buildRecords(source) {
 }
 
 function filterRecords(records = state.records) {
+  return records.filter((record) => {
+    const focusMatch = state.focus === "All" || record.course === state.focus;
+    const seasonMatch = state.season === "All" || record.season === state.season;
+    return focusMatch && seasonMatch;
+  });
+}
+
+function filterStudentRecords(records = state.source?.studentRecords ?? []) {
   return records.filter((record) => {
     const focusMatch = state.focus === "All" || record.course === state.focus;
     const seasonMatch = state.season === "All" || record.season === state.season;
@@ -209,7 +227,8 @@ function renderTimeSeries(records) {
   const y = (value) => margin.top + innerHeight - ((value - yMin) / (yMax - yMin)) * innerHeight;
   const bandScale = (value) => y(state.metric === "growth" ? value - state.source.sections[0].baseline : value);
 
-  const grid = [40, 55, 70, 85, 100].filter((tick) => tick >= yMin && tick <= yMax).map((tick) => `
+  const ticks = state.metric === "score" ? [0, 25, 50, 75, 100] : [40, 55, 70, 85, 100];
+  const grid = ticks.filter((tick) => tick >= yMin && tick <= yMax).map((tick) => `
     <g>
       <line x1="${margin.left}" x2="${width - margin.right}" y1="${y(tick)}" y2="${y(tick)}" class="axis-grid"></line>
       <text x="${margin.left - 12}" y="${y(tick) + 5}" class="axis-label" text-anchor="end">${tick}</text>
@@ -262,11 +281,30 @@ function renderTimeSeries(records) {
 }
 
 function renderBand(key, periods, x, y) {
-  const band = state.source.bands[key];
-  const lower = periods.map((period, index) => ({ x: x(index), y: y(band.lower[period.order - 1]) }));
-  const upper = periods.map((period, index) => ({ x: x(index), y: y(band.upper[period.order - 1]) }));
+  const computed = bandFromStudentRecords(key, periods);
+  const band = computed ?? state.source.bands[key];
+  const lower = periods.map((period, index) => ({ x: x(index), y: y(band.lower[index] ?? band.lower[period.order - 1]) }));
+  const upper = periods.map((period, index) => ({ x: x(index), y: y(band.upper[index] ?? band.upper[period.order - 1]) }));
   const path = `${pointsToPath(upper)} L ${[...lower].reverse().map((point) => `${point.x.toFixed(1)} ${point.y.toFixed(1)}`).join(" L ")} Z`;
   return `<path d="${path}" class="ribbon ribbon-${key}"></path>`;
+}
+
+function bandFromStudentRecords(key, periods) {
+  const studentRecords = filterStudentRecords();
+  if (!studentRecords.length) return null;
+
+  const lower = [];
+  const upper = [];
+  periods.forEach((period) => {
+    const rows = studentRecords.filter((record) => record.periodId === period.id);
+    const scores = key === "department"
+      ? rows.filter((record) => record.completed).map((record) => record.score)
+      : rows.map((record) => record.score);
+    lower.push(quantile(scores, key === "department" ? 0.2 : 0.1));
+    upper.push(quantile(scores, key === "department" ? 0.8 : 0.9));
+  });
+
+  return { lower, upper };
 }
 
 function renderBenchmark(periods, x, y) {
