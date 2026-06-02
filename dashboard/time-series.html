@@ -1,11 +1,11 @@
 <!doctype html>
-<html lang="en" data-asset-version="student-bands-v3">
+<html lang="en" data-asset-version="dashboard-views-v1">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Assessment Dashboard Test | Grant McCurdy</title>
     <meta name="description" content="Interactive synthetic assessment dashboard test for GitHub Pages.">
-    <link rel="stylesheet" href="../assets/css/styles.css?v=student-bands-v3">
+    <link rel="stylesheet" href="../assets/css/styles.css?v=dashboard-views-v1">
   </head>
   <body>
     <header class="site-header compact" data-header>
@@ -70,6 +70,13 @@
           </div>
         </div>
 
+        <div class="preset-row" aria-label="Dashboard presets">
+          <button type="button" class="preset-button is-active" data-preset="trend">Program Trend</button>
+          <button type="button" class="preset-button" data-preset="comparison">Course Comparison</button>
+          <button type="button" class="preset-button" data-preset="rollout">Completion Rollout</button>
+          <button type="button" class="preset-button" data-preset="distribution">Distribution Analysis</button>
+        </div>
+
         <div class="toggle-row" aria-label="Dashboard display toggles">
           <label><input type="checkbox" id="toggle-department-band" checked> Main ribbon</label>
           <label><input type="checkbox" id="toggle-network-band" checked> Context ribbon</label>
@@ -84,6 +91,13 @@
               <option value="50">Middle 50%</option>
               <option value="60">Middle 60%</option>
               <option value="80">Middle 80%</option>
+            </select>
+          </label>
+          <label>
+            Center
+            <select id="center-select">
+              <option value="mean">Mean</option>
+              <option value="median">Median</option>
             </select>
           </label>
           <label>
@@ -132,6 +146,23 @@
             <div class="legend" id="time-legend"></div>
           </div>
           <div id="time-chart" class="chart-frame time-chart" role="img" aria-label="Assessment performance time-series chart"></div>
+          <div class="mini-chart-block">
+            <div class="mini-chart-heading">
+              <h4>Completion Rollout</h4>
+              <span id="completion-caption">Assigned vs completed assessment records</span>
+            </div>
+            <div id="completion-chart" class="chart-frame mini-chart" role="img" aria-label="Assessment completion rollout chart"></div>
+          </div>
+        </article>
+
+        <article class="dashboard-panel distribution-panel">
+          <div class="panel-heading">
+            <div>
+              <h3>Distribution Detail</h3>
+              <span id="distribution-caption">Student-level synthetic score spread by period</span>
+            </div>
+          </div>
+          <div id="distribution-chart" class="chart-frame distribution-chart" role="img" aria-label="Distribution detail chart"></div>
         </article>
 
         <div class="dashboard-grid">
@@ -175,19 +206,50 @@
             <h3>Section Detail</h3>
             <span>All public values are synthetic</span>
           </div>
+          <div class="table-control-row" aria-label="Section detail filters">
+            <label>
+              Course
+              <select id="table-course-filter">
+                <option value="All">All Courses</option>
+              </select>
+            </label>
+            <label>
+              Grade
+              <select id="table-grade-filter">
+                <option value="All">All Grades</option>
+              </select>
+            </label>
+            <label>
+              Teacher
+              <select id="table-teacher-filter">
+                <option value="All">All Teachers</option>
+              </select>
+            </label>
+            <label>
+              Completion
+              <select id="table-completion-filter">
+                <option value="All">Any Completion</option>
+                <option value="95">95%+</option>
+                <option value="90">90%+</option>
+                <option value="85">85%+</option>
+              </select>
+            </label>
+            <button class="table-reset" type="button" id="table-reset">Reset</button>
+            <span class="table-count" id="table-count" aria-live="polite"></span>
+          </div>
           <div class="table-wrap">
             <table>
               <thead>
                 <tr>
-                  <th>Course</th>
-                  <th>Grade</th>
-                  <th>Teacher</th>
-                  <th>Section</th>
-                  <th>Students</th>
-                  <th>Fall 2022</th>
-                  <th>Spring 2026</th>
-                  <th>Change</th>
-                  <th>Completion</th>
+                  <th><button type="button" class="table-sort" data-sort="course">Course <span aria-hidden="true"></span></button></th>
+                  <th><button type="button" class="table-sort" data-sort="grade">Grade <span aria-hidden="true"></span></button></th>
+                  <th><button type="button" class="table-sort" data-sort="teacher">Teacher <span aria-hidden="true"></span></button></th>
+                  <th><button type="button" class="table-sort" data-sort="section">Section <span aria-hidden="true"></span></button></th>
+                  <th><button type="button" class="table-sort" data-sort="students">Students <span aria-hidden="true"></span></button></th>
+                  <th><button type="button" class="table-sort" data-sort="first" id="table-first-period">Fall 2022 <span aria-hidden="true"></span></button></th>
+                  <th><button type="button" class="table-sort" data-sort="latest" id="table-latest-period">Spring 2026 <span aria-hidden="true"></span></button></th>
+                  <th><button type="button" class="table-sort" data-sort="change">Change <span aria-hidden="true"></span></button></th>
+                  <th><button type="button" class="table-sort" data-sort="completion">Completion <span aria-hidden="true"></span></button></th>
                 </tr>
               </thead>
               <tbody id="course-table"></tbody>
@@ -197,7 +259,7 @@
       </section>
     </main>
 
-    <script src="../assets/js/site.js?v=student-bands-v3"></script>
-    <script src="../assets/js/assessment-dashboard.js?v=student-bands-v3"></script>
+    <script src="../assets/js/site.js?v=dashboard-views-v1"></script>
+    <script src="../assets/js/assessment-dashboard.js?v=dashboard-views-v1"></script>
   </body>
 </html>

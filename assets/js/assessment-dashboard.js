@@ -5,17 +5,27 @@ const state = {
   groupBy: "course",
   metric: "score",
   season: "All",
+  preset: "trend",
   toggles: {
     department: true,
-    network: true,
+    network: false,
     mastery: true,
     sections: false,
   },
   visual: {
-    ribbonOpacity: 0.2,
+    center: "mean",
+    ribbonOpacity: 0.16,
     ribbonRange: "50",
     ribbonPopulation: "completed",
     smoothCurves: true,
+  },
+  table: {
+    course: "All",
+    grade: "All",
+    teacher: "All",
+    minCompletion: "All",
+    sortKey: "course",
+    sortDir: "asc",
   },
 };
 
@@ -27,9 +37,10 @@ const metricLabels = {
 };
 
 const palette = ["#003260", "#c69a36", "#0a477b", "#7b8fa8", "#a87921", "#2f6690", "#6d91b8", "#d2a84b"];
-const assetVersion = document.documentElement.dataset.assetVersion || "student-bands-v3";
+const assetVersion = document.documentElement.dataset.assetVersion || "dashboard-views-v1";
 
 const els = {
+  presetButtons: [...document.querySelectorAll(".preset-button")],
   focus: document.querySelector("#focus-select"),
   group: document.querySelector("#group-select"),
   metric: document.querySelector("#metric-select"),
@@ -39,6 +50,7 @@ const els = {
   masteryLine: document.querySelector("#toggle-mastery-line"),
   sectionLines: document.querySelector("#toggle-section-lines"),
   ribbonRange: document.querySelector("#ribbon-range-select"),
+  center: document.querySelector("#center-select"),
   ribbonPopulation: document.querySelector("#ribbon-population-select"),
   ribbonOpacity: document.querySelector("#ribbon-opacity"),
   ribbonOpacityValue: document.querySelector("#ribbon-opacity-value"),
@@ -51,10 +63,23 @@ const els = {
   timeChart: document.querySelector("#time-chart"),
   timeLegend: document.querySelector("#time-legend"),
   timeCaption: document.querySelector("#time-caption"),
+  completionChart: document.querySelector("#completion-chart"),
+  completionCaption: document.querySelector("#completion-caption"),
+  distributionChart: document.querySelector("#distribution-chart"),
+  distributionCaption: document.querySelector("#distribution-caption"),
   barChart: document.querySelector("#bar-chart"),
   growthChart: document.querySelector("#growth-chart"),
   skillChart: document.querySelector("#skill-chart"),
   table: document.querySelector("#course-table"),
+  tableCourse: document.querySelector("#table-course-filter"),
+  tableGrade: document.querySelector("#table-grade-filter"),
+  tableTeacher: document.querySelector("#table-teacher-filter"),
+  tableCompletion: document.querySelector("#table-completion-filter"),
+  tableReset: document.querySelector("#table-reset"),
+  tableCount: document.querySelector("#table-count"),
+  tableSortButtons: [...document.querySelectorAll(".table-sort")],
+  tableFirstPeriod: document.querySelector("#table-first-period"),
+  tableLatestPeriod: document.querySelector("#table-latest-period"),
   barCaption: document.querySelector("#bar-caption"),
   growthCaption: document.querySelector("#growth-caption"),
   skillCaption: document.querySelector("#skill-caption"),
@@ -74,6 +99,84 @@ function quantile(values, pct) {
   const high = Math.ceil(index);
   if (low === high) return sorted[low];
   return sorted[low] * (high - index) + sorted[high] * (index - low);
+}
+
+function mean(values) {
+  const numeric = values.filter((value) => Number.isFinite(value));
+  if (!numeric.length) return 0;
+  return numeric.reduce((sum, value) => sum + value, 0) / numeric.length;
+}
+
+function centerValue(values) {
+  return state.visual.center === "median" ? quantile(values, 0.5) : mean(values);
+}
+
+function currentMetricLabel() {
+  if (state.metric === "score") {
+    return state.visual.center === "median" ? "Median Score" : "Mean Score";
+  }
+  return metricLabels[state.metric];
+}
+
+function groupKeyFromStudentRecord(record, groupBy = state.groupBy) {
+  if (groupBy === "section") return `${record.course} ${record.section} (${record.teacher})`;
+  return record[groupBy];
+}
+
+function scoreRowsForPeriod(periodId) {
+  return filterStudentRecords().filter((record) => {
+    if (record.periodId !== periodId) return false;
+    return state.visual.ribbonPopulation === "completed" ? record.completed : true;
+  });
+}
+
+function aggregateScoreByPeriod(groupBy = state.groupBy) {
+  const periods = state.source.periods.filter((period) => state.season === "All" || period.season === state.season);
+  const periodData = periods.map((period) => {
+    const rows = scoreRowsForPeriod(period.id);
+    const grouped = new Map();
+    rows.forEach((record) => {
+      const key = groupKeyFromStudentRecord(record, groupBy);
+      if (!grouped.has(key)) grouped.set(key, []);
+      grouped.get(key).push(record);
+    });
+
+    const groups = [...grouped.entries()].map(([key, groupRows]) => {
+      const scores = groupRows.map((record) => record.score);
+      return {
+        key,
+        rows: groupRows,
+        students: groupRows.length,
+        totalStudents: groupRows.length,
+        score: centerValue(scores),
+        growth: 0,
+      };
+    }).sort((a, b) => a.key.localeCompare(b.key, undefined, { numeric: true }));
+
+    const scores = rows.map((record) => record.score);
+    return {
+      period,
+      groups,
+      rows,
+      score: centerValue(scores),
+      growth: 0,
+    };
+  });
+
+  const firstByKey = new Map((periodData[0]?.groups ?? []).map((group) => [group.key, group.score]));
+  const firstOverall = periodData[0]?.score ?? 0;
+  periodData.forEach((periodItem) => {
+    periodItem.growth = periodItem.score - firstOverall;
+    periodItem.groups.forEach((group) => {
+      group.growth = group.score - (firstByKey.get(group.key) ?? group.score);
+    });
+  });
+
+  return periodData;
+}
+
+function periodDataForTimeSeries(records) {
+  return state.metric === "score" ? aggregateScoreByPeriod() : aggregateByPeriod(records);
 }
 
 function heatColor(intensity) {
@@ -256,7 +359,7 @@ function renderTimeSeries(records) {
   const margin = { top: 24, right: 34, bottom: 78, left: 54 };
   const innerWidth = width - margin.left - margin.right;
   const innerHeight = height - margin.top - margin.bottom;
-  const periodData = aggregateByPeriod(records);
+  const periodData = periodDataForTimeSeries(records);
   const periods = periodData.map((item) => item.period);
   const groups = unique(periodData.flatMap((item) => item.groups.map((group) => group.key)));
   const yMax = state.metric === "growth" ? 42 : 100;
@@ -278,17 +381,29 @@ function renderTimeSeries(records) {
   const masteryLine = state.toggles.mastery && metricAllowsBands() ? renderBenchmark(periods, x, y) : "";
   const distributionGlyphs = metricAllowsBands() ? renderDistributionGlyphs(periods, x, y) : "";
 
-  const groupLines = groups.map((group, groupIndex) => {
-    const color = palette[groupIndex % palette.length];
+  const showComparisons = state.preset !== "trend" || groups.length <= 4;
+  const overallPoints = periodData.map((periodItem, periodIndex) => ({
+    x: x(periodIndex),
+    y: y(periodItem ? metricValue(periodItem) : NaN),
+  })).filter((point) => Number.isFinite(point.y));
+
+  const overallLine = overallPoints.length > 1 ? `
+    <path d="${pointsToCurvePath(overallPoints)}" fill="none" class="series-line overall-series-line"></path>
+    ${overallPoints.map((point) => `<circle cx="${point.x}" cy="${point.y}" r="5" class="series-point overall-series-point"></circle>`).join("")}
+  ` : "";
+
+  const groupLines = !showComparisons ? "" : groups.map((group, groupIndex) => {
+    const color = state.preset === "comparison" ? palette[groupIndex % palette.length] : "#7b8fa8";
     const points = periodData.map((periodItem, periodIndex) => {
       const groupItem = periodItem.groups.find((item) => item.key === group);
       return { x: x(periodIndex), y: y(groupItem ? metricValue(groupItem) : NaN) };
     }).filter((point) => Number.isFinite(point.y));
 
     if (points.length < 2) return "";
-    const circles = points.map((point) => `<circle cx="${point.x}" cy="${point.y}" r="4.5" fill="${color}" class="series-point"></circle>`).join("");
+    const strokeWidth = state.preset === "comparison" ? 3 : 2;
+    const circles = points.map((point) => `<circle cx="${point.x}" cy="${point.y}" r="${state.preset === "comparison" ? 4.3 : 3.2}" fill="${color}" class="series-point comparison-series-point"></circle>`).join("");
     return `
-      <path d="${pointsToCurvePath(points)}" fill="none" stroke="${color}" stroke-width="3.2" class="series-line"></path>
+      <path d="${pointsToCurvePath(points)}" fill="none" stroke="${color}" stroke-width="${strokeWidth}" class="series-line comparison-series-line"></path>
       ${circles}
     `;
   }).join("");
@@ -309,14 +424,15 @@ function renderTimeSeries(records) {
       ${distributionGlyphs}
       ${sectionLines}
       ${groupLines}
+      ${overallLine}
       <line x1="${margin.left}" x2="${width - margin.right}" y1="${margin.top + innerHeight}" y2="${margin.top + innerHeight}" class="axis-line"></line>
       <line x1="${margin.left}" x2="${margin.left}" y1="${margin.top}" y2="${margin.top + innerHeight}" class="axis-line"></line>
       ${xLabels}
-      <text x="${margin.left}" y="18" class="axis-title">${metricLabels[state.metric]}</text>
+      <text x="${margin.left}" y="18" class="axis-title">${currentMetricLabel()}</text>
     </svg>
   `;
 
-  els.timeCaption.textContent = `${metricLabels[state.metric]} by ${state.groupBy} across ${state.season === "All" ? "fall and spring" : state.season.toLowerCase()} assessment periods`;
+  els.timeCaption.textContent = `${currentMetricLabel()} by ${state.groupBy} across ${state.season === "All" ? "fall and spring" : state.season.toLowerCase()} assessment periods`;
   renderLegend(groups);
 }
 
@@ -390,6 +506,147 @@ function renderDistributionGlyphs(periods, x, y) {
   }).join("");
 }
 
+function periodScoreStats(period) {
+  const rows = scoreRowsForPeriod(period.id);
+  const scores = rows.map((record) => record.score).filter((score) => Number.isFinite(score));
+  return {
+    period,
+    rows,
+    n: scores.length,
+    mean: mean(scores),
+    p10: quantile(scores, 0.1),
+    p25: quantile(scores, 0.25),
+    median: quantile(scores, 0.5),
+    p75: quantile(scores, 0.75),
+    p90: quantile(scores, 0.9),
+  };
+}
+
+function renderCompletionChart() {
+  const width = 980;
+  const height = 170;
+  const margin = { top: 18, right: 34, bottom: 42, left: 54 };
+  const innerWidth = width - margin.left - margin.right;
+  const innerHeight = height - margin.top - margin.bottom;
+  const periods = state.source.periods.filter((period) => state.season === "All" || period.season === state.season);
+  const x = (index) => margin.left + (periods.length <= 1 ? innerWidth / 2 : (index / (periods.length - 1)) * innerWidth);
+  const y = (value) => margin.top + innerHeight - (value / 100) * innerHeight;
+
+  const rows = periods.map((period) => {
+    const assigned = filterStudentRecords().filter((record) => record.periodId === period.id);
+    const completed = assigned.filter((record) => record.completed);
+    return {
+      period,
+      assigned: assigned.length,
+      completed: completed.length,
+      completion: assigned.length ? (completed.length / assigned.length) * 100 : 0,
+    };
+  });
+
+  const grid = [50, 75, 100].map((tick) => `
+    <g>
+      <line x1="${margin.left}" x2="${width - margin.right}" y1="${y(tick)}" y2="${y(tick)}" class="axis-grid"></line>
+      <text x="${margin.left - 12}" y="${y(tick) + 4}" class="axis-label" text-anchor="end">${tick}</text>
+    </g>
+  `).join("");
+
+  const bars = rows.map((row, index) => {
+    const barWidth = Math.min(34, innerWidth / Math.max(1, rows.length) * 0.34);
+    const px = x(index) - barWidth / 2;
+    const barHeight = margin.top + innerHeight - y(row.completion);
+    return `
+      <g>
+        <title>${row.period.label}: ${Math.round(row.completion)}% completed (${row.completed}/${row.assigned})</title>
+        <rect x="${px}" y="${margin.top}" width="${barWidth}" height="${innerHeight}" class="completion-track"></rect>
+        <rect x="${px}" y="${y(row.completion)}" width="${barWidth}" height="${barHeight}" class="completion-bar"></rect>
+      </g>
+    `;
+  }).join("");
+
+  const points = rows.map((row, index) => ({ x: x(index), y: y(row.completion) }));
+  const labels = rows.map((row, index) => `
+    <text x="${x(index)}" y="${height - 13}" class="axis-label mini-x-label" text-anchor="middle">${row.period.label.replace(" ", "\n")}</text>
+  `).join("");
+
+  els.completionChart.innerHTML = `
+    <svg viewBox="0 0 ${width} ${height}" aria-hidden="true" focusable="false">
+      <rect x="0" y="0" width="${width}" height="${height}" class="chart-bg"></rect>
+      ${grid}
+      ${bars}
+      <path d="${pointsToCurvePath(points)}" class="completion-line"></path>
+      ${points.map((point) => `<circle cx="${point.x}" cy="${point.y}" r="4" class="completion-point"></circle>`).join("")}
+      <line x1="${margin.left}" x2="${width - margin.right}" y1="${margin.top + innerHeight}" y2="${margin.top + innerHeight}" class="axis-line"></line>
+      ${labels}
+      <text x="${margin.left}" y="15" class="axis-title">Completion</text>
+    </svg>
+  `;
+
+  const latest = rows[rows.length - 1];
+  els.completionCaption.textContent = latest ? `${latest.period.label}: ${Math.round(latest.completion)}% completed (${latest.completed}/${latest.assigned})` : "Assigned vs completed assessment records";
+}
+
+function renderDistributionChart() {
+  const width = 980;
+  const height = 320;
+  const margin = { top: 24, right: 34, bottom: 70, left: 54 };
+  const innerWidth = width - margin.left - margin.right;
+  const innerHeight = height - margin.top - margin.bottom;
+  const periods = state.source.periods.filter((period) => state.season === "All" || period.season === state.season);
+  const stats = periods.map(periodScoreStats);
+  const yMin = state.visual.ribbonPopulation === "assigned" ? 0 : 20;
+  const x = (index) => margin.left + (periods.length <= 1 ? innerWidth / 2 : (index / (periods.length - 1)) * innerWidth);
+  const y = (value) => margin.top + innerHeight - ((value - yMin) / (100 - yMin)) * innerHeight;
+
+  const ticks = yMin === 0 ? [0, 25, 50, 75, 100] : [25, 50, 75, 100];
+  const grid = ticks.map((tick) => `
+    <g>
+      <line x1="${margin.left}" x2="${width - margin.right}" y1="${y(tick)}" y2="${y(tick)}" class="axis-grid"></line>
+      <text x="${margin.left - 12}" y="${y(tick) + 4}" class="axis-label" text-anchor="end">${tick}</text>
+    </g>
+  `).join("");
+
+  const boxes = stats.map((stat, index) => {
+    const px = x(index);
+    const boxWidth = 34;
+    const boxY = y(stat.p75);
+    const boxHeight = Math.max(2, y(stat.p25) - boxY);
+    const center = state.visual.center === "median" ? stat.median : stat.mean;
+    return `
+      <g class="distribution-box">
+        <title>${stat.period.label}: mean ${Math.round(stat.mean)}%, median ${Math.round(stat.median)}%, p25-p75 ${Math.round(stat.p25)}-${Math.round(stat.p75)}%, n=${stat.n}</title>
+        <line x1="${px}" x2="${px}" y1="${y(stat.p10)}" y2="${y(stat.p90)}" class="distribution-detail-whisker"></line>
+        <rect x="${px - boxWidth / 2}" y="${boxY}" width="${boxWidth}" height="${boxHeight}" class="distribution-detail-box"></rect>
+        <line x1="${px - boxWidth / 2}" x2="${px + boxWidth / 2}" y1="${y(stat.median)}" y2="${y(stat.median)}" class="distribution-detail-median"></line>
+        <circle cx="${px}" cy="${y(center)}" r="4.3" class="distribution-detail-center"></circle>
+      </g>
+    `;
+  }).join("");
+
+  const centerPoints = stats.map((stat, index) => ({
+    x: x(index),
+    y: y(state.visual.center === "median" ? stat.median : stat.mean),
+  }));
+  const labels = periods.map((period, index) => `
+    <text x="${x(index)}" y="${height - 28}" class="axis-label x-label" text-anchor="end" transform="rotate(-35 ${x(index)} ${height - 28})">${period.label}</text>
+  `).join("");
+
+  els.distributionChart.innerHTML = `
+    <svg viewBox="0 0 ${width} ${height}" aria-hidden="true" focusable="false">
+      <rect x="0" y="0" width="${width}" height="${height}" class="chart-bg"></rect>
+      ${grid}
+      ${boxes}
+      <path d="${pointsToCurvePath(centerPoints)}" class="distribution-center-line"></path>
+      <line x1="${margin.left}" x2="${width - margin.right}" y1="${margin.top + innerHeight}" y2="${margin.top + innerHeight}" class="axis-line"></line>
+      <line x1="${margin.left}" x2="${margin.left}" y1="${margin.top}" y2="${margin.top + innerHeight}" class="axis-line"></line>
+      ${labels}
+      <text x="${margin.left}" y="18" class="axis-title">${currentMetricLabel()}</text>
+    </svg>
+  `;
+
+  const population = state.visual.ribbonPopulation === "completed" ? "completed assessments" : "assigned records";
+  els.distributionCaption.textContent = `${currentMetricLabel()} with p10-p90 whiskers and p25-p75 boxes for ${population}`;
+}
+
 function renderSectionLines(records, periods, x, y) {
   const sections = aggregate(records, "section");
   return sections.map((section) => {
@@ -408,6 +665,7 @@ function renderLegend(groups) {
   const networkLabel = `Wider context ${populationLabel}`;
   const masteryLabel = state.source.bands.mastery.label ?? "Mastery benchmark";
   const ribbonItems = [
+    `<span><i class="legend-line overall-key"></i>Overall trend</span>`,
     state.toggles.department && metricAllowsBands() ? `<span><i class="legend-swatch ribbon-key department-key"></i>${departmentLabel}</span>` : "",
     state.toggles.network && metricAllowsBands() ? `<span><i class="legend-swatch ribbon-key network-key"></i>${networkLabel}</span>` : "",
     state.toggles.mastery && metricAllowsBands() ? `<span><i class="legend-line benchmark-key"></i>${masteryLabel}</span>` : "",
@@ -518,28 +776,95 @@ function renderTable(records) {
   const lastOrder = Math.max(...displayedPeriods.map((period) => period.order));
   const firstLabel = periodByOrder(firstOrder).label;
   const lastLabel = periodByOrder(lastOrder).label;
-  const sections = aggregate(filterRecords(state.records), "section");
-
-  els.table.innerHTML = sections.map((section) => {
+  const sections = aggregate(records, "section");
+  const rows = sections.map((section) => {
     const first = section.rows.find((row) => row.order === firstOrder);
     const latest = section.rows.find((row) => row.order === lastOrder);
+    return {
+      course: latest?.course ?? first?.course ?? "",
+      grade: latest?.grade ?? first?.grade ?? "",
+      teacher: latest?.teacher ?? first?.teacher ?? "",
+      section: latest?.section ?? first?.section ?? "",
+      students: latest?.students ?? first?.students ?? 0,
+      first: first?.score,
+      latest: latest?.score,
+      change: first && latest ? latest.score - first.score : null,
+      completion: latest?.completion,
+    };
+  });
+  const filteredRows = filterTableRows(rows);
+  const sortedRows = sortTableRows(filteredRows);
+
+  els.table.innerHTML = sortedRows.map((row) => {
     return `
       <tr>
-        <td>${latest?.course ?? first?.course}</td>
-        <td>${latest?.grade ?? first?.grade}</td>
-        <td>${latest?.teacher ?? first?.teacher}</td>
-        <td>${latest?.section ?? first?.section}</td>
-        <td>${latest?.students ?? first?.students}</td>
-        <td>${first ? fmtPct(first.score) : "-"}</td>
-        <td>${latest ? fmtPct(latest.score) : "-"}</td>
-        <td>${first && latest ? fmtPts(latest.score - first.score) : "-"}</td>
-        <td>${latest ? fmtPct(latest.completion) : "-"}</td>
+        <td>${row.course}</td>
+        <td>${row.grade}</td>
+        <td>${row.teacher}</td>
+        <td>${row.section}</td>
+        <td>${row.students}</td>
+        <td>${Number.isFinite(row.first) ? fmtPct(row.first) : "-"}</td>
+        <td>${Number.isFinite(row.latest) ? fmtPct(row.latest) : "-"}</td>
+        <td>${Number.isFinite(row.change) ? fmtPts(row.change) : "-"}</td>
+        <td>${Number.isFinite(row.completion) ? fmtPct(row.completion) : "-"}</td>
       </tr>
     `;
   }).join("");
 
-  document.querySelector("thead th:nth-child(6)").textContent = firstLabel;
-  document.querySelector("thead th:nth-child(7)").textContent = lastLabel;
+  if (!sortedRows.length) {
+    els.table.innerHTML = `<tr><td colspan="9" class="empty-table">No sections match the current filters.</td></tr>`;
+  }
+
+  els.tableFirstPeriod.firstChild.textContent = `${firstLabel} `;
+  els.tableLatestPeriod.firstChild.textContent = `${lastLabel} `;
+  els.tableCount.textContent = `${sortedRows.length} of ${rows.length} sections`;
+  renderTableSortState();
+}
+
+function filterTableRows(rows) {
+  return rows.filter((row) => {
+    const minCompletion = Number(state.table.minCompletion);
+    const completionMatch = state.table.minCompletion === "All" || (Number.isFinite(row.completion) && row.completion >= minCompletion);
+    return (
+      (state.table.course === "All" || row.course === state.table.course) &&
+      (state.table.grade === "All" || String(row.grade) === state.table.grade) &&
+      (state.table.teacher === "All" || row.teacher === state.table.teacher) &&
+      completionMatch
+    );
+  });
+}
+
+function sortTableRows(rows) {
+  const direction = state.table.sortDir === "asc" ? 1 : -1;
+  const numericKeys = new Set(["grade", "students", "first", "latest", "change", "completion"]);
+  return [...rows].sort((a, b) => {
+    const left = a[state.table.sortKey];
+    const right = b[state.table.sortKey];
+    if (numericKeys.has(state.table.sortKey)) {
+      const leftValue = Number.isFinite(left) ? left : Number.NEGATIVE_INFINITY;
+      const rightValue = Number.isFinite(right) ? right : Number.NEGATIVE_INFINITY;
+      if (leftValue !== rightValue) return (leftValue - rightValue) * direction;
+    } else {
+      const comparison = String(left).localeCompare(String(right), undefined, { numeric: true });
+      if (comparison !== 0) return comparison * direction;
+    }
+
+    return `${a.course} ${a.grade} ${a.teacher} ${a.section}`.localeCompare(
+      `${b.course} ${b.grade} ${b.teacher} ${b.section}`,
+      undefined,
+      { numeric: true },
+    );
+  });
+}
+
+function renderTableSortState() {
+  els.tableSortButtons.forEach((button) => {
+    const active = button.dataset.sort === state.table.sortKey;
+    button.querySelector("span").textContent = active ? (state.table.sortDir === "asc" ? "▲" : "▼") : "";
+    const label = button.firstChild?.textContent.trim() || button.dataset.sort;
+    const nextDirection = active && state.table.sortDir === "asc" ? "descending" : "ascending";
+    button.setAttribute("aria-label", `Sort by ${label} ${nextDirection}`);
+  });
 }
 
 function renderInsights(records) {
@@ -569,20 +894,124 @@ function renderInsights(records) {
   els.insights.innerHTML = notes.map((note) => `<li>${note}</li>`).join("");
 }
 
+function syncControls() {
+  els.focus.value = state.focus;
+  els.group.value = state.groupBy;
+  els.metric.value = state.metric;
+  els.season.value = state.season;
+  els.departmentBand.checked = state.toggles.department;
+  els.networkBand.checked = state.toggles.network;
+  els.masteryLine.checked = state.toggles.mastery;
+  els.sectionLines.checked = state.toggles.sections;
+  els.ribbonRange.value = state.visual.ribbonRange;
+  els.center.value = state.visual.center;
+  els.ribbonPopulation.value = state.visual.ribbonPopulation;
+  els.ribbonOpacity.value = state.visual.ribbonOpacity;
+  els.ribbonOpacityValue.textContent = `${Math.round(state.visual.ribbonOpacity * 100)}%`;
+  els.smoothCurves.checked = state.visual.smoothCurves;
+  renderPresetState();
+}
+
+function renderPresetState() {
+  els.presetButtons.forEach((button) => {
+    const active = button.dataset.preset === state.preset;
+    button.classList.toggle("is-active", active);
+    button.setAttribute("aria-pressed", String(active));
+  });
+}
+
+function applyPreset(preset) {
+  state.preset = preset;
+
+  if (preset === "trend") {
+    state.focus = "All";
+    state.groupBy = "course";
+    state.metric = "score";
+    state.season = "All";
+    state.toggles.department = true;
+    state.toggles.network = false;
+    state.toggles.mastery = true;
+    state.toggles.sections = false;
+    state.visual.center = "mean";
+    state.visual.ribbonRange = "50";
+    state.visual.ribbonPopulation = "completed";
+    state.visual.ribbonOpacity = 0.16;
+    state.visual.smoothCurves = true;
+  }
+
+  if (preset === "comparison") {
+    state.groupBy = "course";
+    state.metric = "score";
+    state.season = "All";
+    state.toggles.department = true;
+    state.toggles.network = false;
+    state.toggles.mastery = true;
+    state.toggles.sections = false;
+    state.visual.center = "mean";
+    state.visual.ribbonRange = "50";
+    state.visual.ribbonPopulation = "completed";
+    state.visual.ribbonOpacity = 0.12;
+    state.visual.smoothCurves = true;
+  }
+
+  if (preset === "rollout") {
+    state.groupBy = "course";
+    state.metric = "completion";
+    state.season = "All";
+    state.toggles.department = false;
+    state.toggles.network = false;
+    state.toggles.mastery = false;
+    state.toggles.sections = false;
+    state.visual.center = "mean";
+    state.visual.ribbonRange = "50";
+    state.visual.ribbonPopulation = "assigned";
+    state.visual.ribbonOpacity = 0.1;
+    state.visual.smoothCurves = true;
+  }
+
+  if (preset === "distribution") {
+    state.groupBy = "course";
+    state.metric = "score";
+    state.season = "All";
+    state.toggles.department = true;
+    state.toggles.network = true;
+    state.toggles.mastery = true;
+    state.toggles.sections = false;
+    state.visual.center = "median";
+    state.visual.ribbonRange = "80";
+    state.visual.ribbonPopulation = "completed";
+    state.visual.ribbonOpacity = 0.12;
+    state.visual.smoothCurves = true;
+  }
+
+  syncControls();
+  render();
+}
+
 function render() {
   const records = filterRecords();
   renderMetrics(records);
   renderTimeSeries(records);
+  renderCompletionChart();
+  renderDistributionChart();
   renderComparisonBars(records);
   renderGrowthBars(records);
   renderSkillHeatmap(records);
   renderTable(records);
   renderInsights(records);
+  renderPresetState();
 }
 
 function initControls() {
   const courses = unique(state.source.sections.map((section) => section.course));
   els.focus.innerHTML = [`<option value="All">All Courses</option>`, ...courses.map((course) => `<option value="${course}">${course}</option>`)].join("");
+  els.tableCourse.innerHTML = [`<option value="All">All Courses</option>`, ...courses.map((course) => `<option value="${course}">${course}</option>`)].join("");
+  els.tableGrade.innerHTML = [`<option value="All">All Grades</option>`, ...unique(state.source.sections.map((section) => section.grade)).map((grade) => `<option value="${grade}">${grade}</option>`)].join("");
+  els.tableTeacher.innerHTML = [`<option value="All">All Teachers</option>`, ...unique(state.source.sections.map((section) => section.teacher)).map((teacher) => `<option value="${teacher}">${teacher}</option>`)].join("");
+
+  els.presetButtons.forEach((button) => {
+    button.addEventListener("click", () => applyPreset(button.dataset.preset));
+  });
 
   els.focus.addEventListener("change", (event) => {
     state.focus = event.target.value;
@@ -602,6 +1031,53 @@ function initControls() {
   els.season.addEventListener("change", (event) => {
     state.season = event.target.value;
     render();
+  });
+
+  els.tableCourse.addEventListener("change", (event) => {
+    state.table.course = event.target.value;
+    render();
+  });
+
+  els.tableGrade.addEventListener("change", (event) => {
+    state.table.grade = event.target.value;
+    render();
+  });
+
+  els.tableTeacher.addEventListener("change", (event) => {
+    state.table.teacher = event.target.value;
+    render();
+  });
+
+  els.tableCompletion.addEventListener("change", (event) => {
+    state.table.minCompletion = event.target.value;
+    render();
+  });
+
+  els.tableReset.addEventListener("click", () => {
+    state.table.course = "All";
+    state.table.grade = "All";
+    state.table.teacher = "All";
+    state.table.minCompletion = "All";
+    state.table.sortKey = "course";
+    state.table.sortDir = "asc";
+    els.tableCourse.value = "All";
+    els.tableGrade.value = "All";
+    els.tableTeacher.value = "All";
+    els.tableCompletion.value = "All";
+    render();
+  });
+
+  els.tableSortButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const sortKey = button.dataset.sort;
+      if (state.table.sortKey === sortKey) {
+        state.table.sortDir = state.table.sortDir === "asc" ? "desc" : "asc";
+      } else {
+        state.table.sortKey = sortKey;
+        state.table.sortDir = ["students", "first", "latest", "change", "completion"].includes(sortKey) ? "desc" : "asc";
+      }
+      render();
+    });
   });
 
   els.departmentBand.addEventListener("change", (event) => {
@@ -629,6 +1105,11 @@ function initControls() {
     render();
   });
 
+  els.center.addEventListener("change", (event) => {
+    state.visual.center = event.target.value;
+    render();
+  });
+
   els.ribbonPopulation.addEventListener("change", (event) => {
     state.visual.ribbonPopulation = event.target.value;
     render();
@@ -644,6 +1125,8 @@ function initControls() {
     state.visual.smoothCurves = event.target.checked;
     render();
   });
+
+  syncControls();
 }
 
 fetch(`../data/synthetic/assessment-dashboard.json?v=${assetVersion}`)
