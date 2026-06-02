@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Assessment Dashboard Test | Grant McCurdy</title>
+    <meta name="description" content="Interactive synthetic assessment dashboard test for GitHub Pages.">
+    <link rel="stylesheet" href="../assets/css/styles.css">
+  </head>
+  <body>
+    <header class="site-header compact" data-header>
+      <nav class="nav-shell" aria-label="Primary navigation">
+        <a class="brand" href="../index.html">
+          <span class="brand-mark" aria-hidden="true">GM</span>
+          <span class="brand-text">Grant McCurdy</span>
+        </a>
+        <div class="nav-links static">
+          <a href="../index.html#projects">Projects</a>
+          <a href="../projects/assessment-intelligence.html">Assessment Brief</a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="detail-main dashboard-main">
+      <section class="detail-hero dashboard-hero">
+        <p class="section-kicker">Interactive Test</p>
+        <h1>Assessment Dashboard</h1>
+        <p>Static GitHub Pages dashboard using synthetic assessment data, local JSON, browser-side filtering, SVG charts, and no external dependencies.</p>
+      </section>
+
+      <section class="dashboard-shell" aria-labelledby="dashboard-heading">
+        <div class="dashboard-toolbar">
+          <div>
+            <p class="section-kicker">Synthetic Data</p>
+            <h2 id="dashboard-heading">Program View</h2>
+          </div>
+          <div class="control-row" aria-label="Dashboard filters">
+            <label>
+              Assessment
+              <select id="assessment-select"></select>
+            </label>
+            <label>
+              Course
+              <select id="course-select">
+                <option value="All Courses">All Courses</option>
+              </select>
+            </label>
+          </div>
+        </div>
+
+        <div class="metric-grid" aria-live="polite">
+          <article class="metric-card">
+            <span>Students</span>
+            <strong id="metric-students">-</strong>
+          </article>
+          <article class="metric-card">
+            <span>Proficiency</span>
+            <strong id="metric-proficiency">-</strong>
+          </article>
+          <article class="metric-card">
+            <span>Growth</span>
+            <strong id="metric-growth">-</strong>
+          </article>
+          <article class="metric-card">
+            <span>Completion</span>
+            <strong id="metric-completion">-</strong>
+          </article>
+        </div>
+
+        <div class="dashboard-grid">
+          <article class="dashboard-panel">
+            <div class="panel-heading">
+              <h3>Course Proficiency</h3>
+              <span id="bar-caption"></span>
+            </div>
+            <div id="bar-chart" class="chart-frame" role="img" aria-label="Course proficiency bar chart"></div>
+          </article>
+
+          <article class="dashboard-panel">
+            <div class="panel-heading">
+              <h3>Skill Profile</h3>
+              <span id="skill-caption"></span>
+            </div>
+            <div id="skill-chart" class="chart-frame" role="img" aria-label="Skill profile bar chart"></div>
+          </article>
+        </div>
+
+        <article class="dashboard-panel">
+          <div class="panel-heading">
+            <h3>Course Detail</h3>
+            <span>All values are synthetic</span>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Course</th>
+                  <th>Students</th>
+                  <th>Proficiency</th>
+                  <th>Growth</th>
+                  <th>Completion</th>
+                </tr>
+              </thead>
+              <tbody id="course-table"></tbody>
+            </table>
+          </div>
+        </article>
+      </section>
+    </main>
+
+    <script src="../assets/js/site.js"></script>
+    <script src="../assets/js/assessment-dashboard.js"></script>
+  </body>
+</html>

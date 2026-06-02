@@ -1,0 +1,39 @@
+{
+  "generated": "2026-06-02",
+  "description": "Synthetic assessment data for a public GitHub Pages dashboard test. No real students, grades, rosters, or school records are included.",
+  "assessments": [
+    {
+      "id": "fall-diagnostic",
+      "name": "Fall Diagnostic",
+      "window": "Fall",
+      "courses": [
+        { "course": "Algebra 1", "students": 124, "proficiency": 58, "growth": 0, "completion": 96, "skills": { "Functions": 55, "Linear Models": 61, "Equations": 63, "Data": 54 } },
+        { "course": "Geometry", "students": 118, "proficiency": 62, "growth": 0, "completion": 94, "skills": { "Proof": 49, "Similarity": 65, "Circles": 58, "Coordinate Geometry": 72 } },
+        { "course": "Precalculus", "students": 86, "proficiency": 67, "growth": 0, "completion": 97, "skills": { "Functions": 70, "Trigonometry": 62, "Modeling": 65, "Rates": 68 } },
+        { "course": "AP Statistics", "students": 54, "proficiency": 71, "growth": 0, "completion": 98, "skills": { "Inference": 69, "Probability": 73, "Sampling": 75, "Regression": 68 } }
+      ]
+    },
+    {
+      "id": "winter-benchmark",
+      "name": "Winter Benchmark",
+      "window": "Winter",
+      "courses": [
+        { "course": "Algebra 1", "students": 122, "proficiency": 66, "growth": 8, "completion": 95, "skills": { "Functions": 64, "Linear Models": 70, "Equations": 69, "Data": 61 } },
+        { "course": "Geometry", "students": 117, "proficiency": 68, "growth": 6, "completion": 96, "skills": { "Proof": 57, "Similarity": 72, "Circles": 67, "Coordinate Geometry": 75 } },
+        { "course": "Precalculus", "students": 84, "proficiency": 74, "growth": 7, "completion": 98, "skills": { "Functions": 77, "Trigonometry": 70, "Modeling": 74, "Rates": 75 } },
+        { "course": "AP Statistics", "students": 53, "proficiency": 78, "growth": 7, "completion": 96, "skills": { "Inference": 77, "Probability": 80, "Sampling": 81, "Regression": 74 } }
+      ]
+    },
+    {
+      "id": "spring-summative",
+      "name": "Spring Summative",
+      "window": "Spring",
+      "courses": [
+        { "course": "Algebra 1", "students": 121, "proficiency": 73, "growth": 15, "completion": 97, "skills": { "Functions": 72, "Linear Models": 78, "Equations": 76, "Data": 69 } },
+        { "course": "Geometry", "students": 116, "proficiency": 76, "growth": 14, "completion": 95, "skills": { "Proof": 66, "Similarity": 80, "Circles": 76, "Coordinate Geometry": 82 } },
+        { "course": "Precalculus", "students": 83, "proficiency": 81, "growth": 14, "completion": 99, "skills": { "Functions": 84, "Trigonometry": 78, "Modeling": 82, "Rates": 80 } },
+        { "course": "AP Statistics", "students": 52, "proficiency": 84, "growth": 13, "completion": 98, "skills": { "Inference": 84, "Probability": 86, "Sampling": 88, "Regression": 79 } }
+      ]
+    }
+  ]
+}
