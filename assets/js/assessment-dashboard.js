@@ -21,6 +21,7 @@ const metricLabels = {
 };
 
 const palette = ["#003260", "#c69a36", "#0a477b", "#7b8fa8", "#a87921", "#2f6690", "#6d91b8", "#d2a84b"];
+const assetVersion = document.documentElement.dataset.assetVersion || "student-bands-v2";
 
 const els = {
   focus: document.querySelector("#focus-select"),
@@ -544,7 +545,7 @@ function initControls() {
   });
 }
 
-fetch("../data/synthetic/assessment-dashboard.json")
+fetch(`../data/synthetic/assessment-dashboard.json?v=${assetVersion}`)
   .then((response) => {
     if (!response.ok) throw new Error(`Could not load dashboard data: ${response.status}`);
     return response.json();
