@@ -1,39 +1,176 @@
 {
   "generated": "2026-06-02",
-  "description": "Synthetic assessment data for a public GitHub Pages dashboard test. No real students, grades, rosters, or school records are included.",
-  "assessments": [
+  "description": "Synthetic multi-year assessment data for a public GitHub Pages dashboard test. No real students, grades, rosters, teachers, sections, or school records are included.",
+  "periods": [
+    { "id": "2022-fall", "label": "Fall 2022", "year": 2022, "season": "Fall", "order": 1 },
+    { "id": "2023-spring", "label": "Spring 2023", "year": 2023, "season": "Spring", "order": 2 },
+    { "id": "2023-fall", "label": "Fall 2023", "year": 2023, "season": "Fall", "order": 3 },
+    { "id": "2024-spring", "label": "Spring 2024", "year": 2024, "season": "Spring", "order": 4 },
+    { "id": "2024-fall", "label": "Fall 2024", "year": 2024, "season": "Fall", "order": 5 },
+    { "id": "2025-spring", "label": "Spring 2025", "year": 2025, "season": "Spring", "order": 6 },
+    { "id": "2025-fall", "label": "Fall 2025", "year": 2025, "season": "Fall", "order": 7 },
+    { "id": "2026-spring", "label": "Spring 2026", "year": 2026, "season": "Spring", "order": 8 }
+  ],
+  "bands": {
+    "department": {
+      "label": "Department target range",
+      "lower": [55, 61, 59, 66, 63, 70, 67, 74],
+      "upper": [72, 77, 75, 81, 79, 85, 82, 88]
+    },
+    "network": {
+      "label": "Comparable schools range",
+      "lower": [52, 57, 55, 61, 59, 64, 62, 68],
+      "upper": [68, 73, 71, 77, 75, 80, 78, 84]
+    },
+    "mastery": {
+      "label": "Mastery benchmark",
+      "line": [70, 70, 72, 72, 74, 74, 76, 76]
+    }
+  },
+  "sections": [
     {
-      "id": "fall-diagnostic",
-      "name": "Fall Diagnostic",
-      "window": "Fall",
-      "courses": [
-        { "course": "Algebra 1", "students": 124, "proficiency": 58, "growth": 0, "completion": 96, "skills": { "Functions": 55, "Linear Models": 61, "Equations": 63, "Data": 54 } },
-        { "course": "Geometry", "students": 118, "proficiency": 62, "growth": 0, "completion": 94, "skills": { "Proof": 49, "Similarity": 65, "Circles": 58, "Coordinate Geometry": 72 } },
-        { "course": "Precalculus", "students": 86, "proficiency": 67, "growth": 0, "completion": 97, "skills": { "Functions": 70, "Trigonometry": 62, "Modeling": 65, "Rates": 68 } },
-        { "course": "AP Statistics", "students": 54, "proficiency": 71, "growth": 0, "completion": 98, "skills": { "Inference": 69, "Probability": 73, "Sampling": 75, "Regression": 68 } }
-      ]
+      "id": "alg1-9-a",
+      "course": "Algebra 1",
+      "grade": "9",
+      "teacher": "Teacher A",
+      "section": "A",
+      "students": 28,
+      "baseline": 54,
+      "growth": 4.1,
+      "springLift": 4.5,
+      "skills": { "Functions": -1, "Linear Models": 2, "Equations": 1, "Data": -3 }
     },
     {
-      "id": "winter-benchmark",
-      "name": "Winter Benchmark",
-      "window": "Winter",
-      "courses": [
-        { "course": "Algebra 1", "students": 122, "proficiency": 66, "growth": 8, "completion": 95, "skills": { "Functions": 64, "Linear Models": 70, "Equations": 69, "Data": 61 } },
-        { "course": "Geometry", "students": 117, "proficiency": 68, "growth": 6, "completion": 96, "skills": { "Proof": 57, "Similarity": 72, "Circles": 67, "Coordinate Geometry": 75 } },
-        { "course": "Precalculus", "students": 84, "proficiency": 74, "growth": 7, "completion": 98, "skills": { "Functions": 77, "Trigonometry": 70, "Modeling": 74, "Rates": 75 } },
-        { "course": "AP Statistics", "students": 53, "proficiency": 78, "growth": 7, "completion": 96, "skills": { "Inference": 77, "Probability": 80, "Sampling": 81, "Regression": 74 } }
-      ]
+      "id": "alg1-9-b",
+      "course": "Algebra 1",
+      "grade": "9",
+      "teacher": "Teacher B",
+      "section": "B",
+      "students": 26,
+      "baseline": 57,
+      "growth": 3.7,
+      "springLift": 3.5,
+      "skills": { "Functions": 1, "Linear Models": 3, "Equations": 0, "Data": -1 }
     },
     {
-      "id": "spring-summative",
-      "name": "Spring Summative",
-      "window": "Spring",
-      "courses": [
-        { "course": "Algebra 1", "students": 121, "proficiency": 73, "growth": 15, "completion": 97, "skills": { "Functions": 72, "Linear Models": 78, "Equations": 76, "Data": 69 } },
-        { "course": "Geometry", "students": 116, "proficiency": 76, "growth": 14, "completion": 95, "skills": { "Proof": 66, "Similarity": 80, "Circles": 76, "Coordinate Geometry": 82 } },
-        { "course": "Precalculus", "students": 83, "proficiency": 81, "growth": 14, "completion": 99, "skills": { "Functions": 84, "Trigonometry": 78, "Modeling": 82, "Rates": 80 } },
-        { "course": "AP Statistics", "students": 52, "proficiency": 84, "growth": 13, "completion": 98, "skills": { "Inference": 84, "Probability": 86, "Sampling": 88, "Regression": 79 } }
-      ]
+      "id": "alg1-9-c",
+      "course": "Algebra 1",
+      "grade": "9",
+      "teacher": "Teacher C",
+      "section": "C",
+      "students": 25,
+      "baseline": 51,
+      "growth": 4.8,
+      "springLift": 5,
+      "skills": { "Functions": -2, "Linear Models": 1, "Equations": 3, "Data": -2 }
+    },
+    {
+      "id": "geo-10-a",
+      "course": "Geometry",
+      "grade": "10",
+      "teacher": "Teacher A",
+      "section": "A",
+      "students": 27,
+      "baseline": 59,
+      "growth": 4.3,
+      "springLift": 4,
+      "skills": { "Proof": -5, "Similarity": 3, "Circles": 0, "Coordinate Geometry": 4 }
+    },
+    {
+      "id": "geo-10-b",
+      "course": "Geometry",
+      "grade": "10",
+      "teacher": "Teacher D",
+      "section": "B",
+      "students": 29,
+      "baseline": 62,
+      "growth": 3.9,
+      "springLift": 4.5,
+      "skills": { "Proof": -3, "Similarity": 5, "Circles": 1, "Coordinate Geometry": 3 }
+    },
+    {
+      "id": "geo-10-c",
+      "course": "Geometry",
+      "grade": "10",
+      "teacher": "Teacher E",
+      "section": "C",
+      "students": 24,
+      "baseline": 56,
+      "growth": 5.1,
+      "springLift": 4,
+      "skills": { "Proof": -6, "Similarity": 2, "Circles": 2, "Coordinate Geometry": 5 }
+    },
+    {
+      "id": "precalc-11-a",
+      "course": "Precalculus",
+      "grade": "11",
+      "teacher": "Teacher B",
+      "section": "A",
+      "students": 23,
+      "baseline": 64,
+      "growth": 4.5,
+      "springLift": 3,
+      "skills": { "Functions": 3, "Trigonometry": -4, "Modeling": 1, "Rates": 0 }
+    },
+    {
+      "id": "precalc-11-b",
+      "course": "Precalculus",
+      "grade": "11",
+      "teacher": "Teacher C",
+      "section": "B",
+      "students": 21,
+      "baseline": 68,
+      "growth": 3.8,
+      "springLift": 3.5,
+      "skills": { "Functions": 5, "Trigonometry": -2, "Modeling": 2, "Rates": 1 }
+    },
+    {
+      "id": "precalc-12-a",
+      "course": "Precalculus",
+      "grade": "12",
+      "teacher": "Teacher F",
+      "section": "A",
+      "students": 20,
+      "baseline": 66,
+      "growth": 4.2,
+      "springLift": 4,
+      "skills": { "Functions": 2, "Trigonometry": -3, "Modeling": 4, "Rates": 2 }
+    },
+    {
+      "id": "apstat-11-a",
+      "course": "AP Statistics",
+      "grade": "11",
+      "teacher": "Teacher D",
+      "section": "A",
+      "students": 18,
+      "baseline": 70,
+      "growth": 3.6,
+      "springLift": 3,
+      "skills": { "Inference": 1, "Probability": 3, "Sampling": 4, "Regression": -2 }
+    },
+    {
+      "id": "apstat-12-a",
+      "course": "AP Statistics",
+      "grade": "12",
+      "teacher": "Teacher E",
+      "section": "A",
+      "students": 17,
+      "baseline": 73,
+      "growth": 3.2,
+      "springLift": 3.5,
+      "skills": { "Inference": 3, "Probability": 4, "Sampling": 5, "Regression": 0 }
+    },
+    {
+      "id": "apstat-12-b",
+      "course": "AP Statistics",
+      "grade": "12",
+      "teacher": "Teacher F",
+      "section": "B",
+      "students": 16,
+      "baseline": 68,
+      "growth": 4.4,
+      "springLift": 4,
+      "skills": { "Inference": 0, "Probability": 2, "Sampling": 3, "Regression": -3 }
     }
   ]
 }

@@ -25,69 +25,131 @@
       <section class="detail-hero dashboard-hero">
         <p class="section-kicker">Interactive Test</p>
         <h1>Assessment Dashboard</h1>
-        <p>Static GitHub Pages dashboard using synthetic assessment data, local JSON, browser-side filtering, SVG charts, and no external dependencies.</p>
+        <p>Static GitHub Pages dashboard using synthetic multi-year assessment data, local JSON, browser-side aggregation, SVG charts, and no external dependencies.</p>
       </section>
 
       <section class="dashboard-shell" aria-labelledby="dashboard-heading">
-        <div class="dashboard-toolbar">
+        <div class="dashboard-toolbar dashboard-toolbar-expanded">
           <div>
             <p class="section-kicker">Synthetic Data</p>
-            <h2 id="dashboard-heading">Program View</h2>
+            <h2 id="dashboard-heading">Program Time Series</h2>
           </div>
           <div class="control-row" aria-label="Dashboard filters">
             <label>
-              Assessment
-              <select id="assessment-select"></select>
+              Focus
+              <select id="focus-select">
+                <option value="All">All Courses</option>
+              </select>
             </label>
             <label>
-              Course
-              <select id="course-select">
-                <option value="All Courses">All Courses</option>
+              Group By
+              <select id="group-select">
+                <option value="course">Course</option>
+                <option value="grade">Grade</option>
+                <option value="teacher">Teacher</option>
+                <option value="section">Section</option>
+              </select>
+            </label>
+            <label>
+              Metric
+              <select id="metric-select">
+                <option value="score">Mean Score</option>
+                <option value="proficiency">Proficiency</option>
+                <option value="growth">Growth From Baseline</option>
+                <option value="completion">Completion</option>
+              </select>
+            </label>
+            <label>
+              Season
+              <select id="season-select">
+                <option value="All">Fall + Spring</option>
+                <option value="Fall">Fall Only</option>
+                <option value="Spring">Spring Only</option>
               </select>
             </label>
           </div>
         </div>
 
-        <div class="metric-grid" aria-live="polite">
+        <div class="toggle-row" aria-label="Dashboard display toggles">
+          <label><input type="checkbox" id="toggle-department-band" checked> Department range</label>
+          <label><input type="checkbox" id="toggle-network-band" checked> Comparable range</label>
+          <label><input type="checkbox" id="toggle-mastery-line" checked> Mastery benchmark</label>
+          <label><input type="checkbox" id="toggle-section-lines"> Section lines</label>
+        </div>
+
+        <div class="metric-grid metric-grid-wide" aria-live="polite">
           <article class="metric-card">
             <span>Students</span>
             <strong id="metric-students">-</strong>
           </article>
           <article class="metric-card">
-            <span>Proficiency</span>
-            <strong id="metric-proficiency">-</strong>
+            <span>Latest Score</span>
+            <strong id="metric-latest">-</strong>
           </article>
           <article class="metric-card">
-            <span>Growth</span>
-            <strong id="metric-growth">-</strong>
+            <span>Change</span>
+            <strong id="metric-change">-</strong>
           </article>
           <article class="metric-card">
             <span>Completion</span>
             <strong id="metric-completion">-</strong>
+          </article>
+          <article class="metric-card">
+            <span>Above Target</span>
+            <strong id="metric-target">-</strong>
+          </article>
+        </div>
+
+        <article class="dashboard-panel time-panel">
+          <div class="panel-heading">
+            <div>
+              <h3>Assessment Performance Over Time</h3>
+              <span id="time-caption">Fall and spring assessment periods</span>
+            </div>
+            <div class="legend" id="time-legend"></div>
+          </div>
+          <div id="time-chart" class="chart-frame time-chart" role="img" aria-label="Assessment performance time-series chart"></div>
+        </article>
+
+        <div class="dashboard-grid">
+          <article class="dashboard-panel">
+            <div class="panel-heading">
+              <h3>Latest Comparison</h3>
+              <span id="bar-caption"></span>
+            </div>
+            <div id="bar-chart" class="chart-frame" role="img" aria-label="Latest group comparison bar chart"></div>
+          </article>
+
+          <article class="dashboard-panel">
+            <div class="panel-heading">
+              <h3>Skill Heatmap</h3>
+              <span id="skill-caption"></span>
+            </div>
+            <div id="skill-chart" class="chart-frame heatmap-frame" role="img" aria-label="Synthetic skill heatmap"></div>
           </article>
         </div>
 
         <div class="dashboard-grid">
           <article class="dashboard-panel">
             <div class="panel-heading">
-              <h3>Course Proficiency</h3>
-              <span id="bar-caption"></span>
+              <h3>Growth Ranking</h3>
+              <span id="growth-caption"></span>
             </div>
-            <div id="bar-chart" class="chart-frame" role="img" aria-label="Course proficiency bar chart"></div>
+            <div id="growth-chart" class="chart-frame" role="img" aria-label="Growth ranking chart"></div>
           </article>
 
-          <article class="dashboard-panel">
+          <article class="dashboard-panel insight-panel">
             <div class="panel-heading">
-              <h3>Skill Profile</h3>
-              <span id="skill-caption"></span>
+              <h3>Decision Notes</h3>
+              <span>Generated from synthetic trends</span>
             </div>
-            <div id="skill-chart" class="chart-frame" role="img" aria-label="Skill profile bar chart"></div>
+            <ul class="insight-list" id="insight-list"></ul>
           </article>
         </div>
 
         <article class="dashboard-panel">
           <div class="panel-heading">
-            <h3>Course Detail</h3>
+            <h3>Section Detail</h3>
             <span>All values are synthetic</span>
           </div>
           <div class="table-wrap">
@@ -95,9 +157,13 @@
               <thead>
                 <tr>
                   <th>Course</th>
+                  <th>Grade</th>
+                  <th>Teacher</th>
+                  <th>Section</th>
                   <th>Students</th>
-                  <th>Proficiency</th>
-                  <th>Growth</th>
+                  <th>Fall 2022</th>
+                  <th>Spring 2026</th>
+                  <th>Change</th>
                   <th>Completion</th>
                 </tr>
               </thead>

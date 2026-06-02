@@ -496,6 +496,10 @@ h3 {
   margin-bottom: 1rem;
 }
 
+.dashboard-toolbar-expanded {
+  align-items: start;
+}
+
 .control-row {
   display: flex;
   flex-wrap: wrap;
@@ -526,11 +530,40 @@ h3 {
   padding: 0 0.75rem;
 }
 
+.toggle-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin: 0 0 1rem;
+}
+
+.toggle-row label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-height: 2.4rem;
+  padding: 0.45rem 0.7rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 0.86rem;
+  font-weight: 750;
+}
+
+.toggle-row input {
+  accent-color: var(--navy);
+}
+
 .metric-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 1rem;
   margin-bottom: 1rem;
+}
+
+.metric-grid-wide {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
 }
 
 .metric-card,
@@ -568,6 +601,10 @@ h3 {
   margin-bottom: 1rem;
 }
 
+.time-panel {
+  margin-bottom: 1rem;
+}
+
 .dashboard-panel {
   padding: 1rem;
 }
@@ -578,6 +615,58 @@ h3 {
   justify-content: space-between;
   gap: 1rem;
   margin-bottom: 1rem;
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.55rem 0.85rem;
+  max-width: 55rem;
+}
+
+.legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 760;
+}
+
+.legend-line,
+.legend-swatch {
+  display: inline-block;
+  flex: 0 0 auto;
+}
+
+.legend-line {
+  width: 1.35rem;
+  height: 0;
+  border-top: 3px solid var(--legend-color, var(--navy));
+}
+
+.legend-swatch {
+  width: 1.1rem;
+  height: 0.7rem;
+  border-radius: 3px;
+}
+
+.department-key {
+  background: rgba(198, 154, 54, 0.28);
+}
+
+.network-key {
+  background: rgba(0, 50, 96, 0.14);
+}
+
+.benchmark-key {
+  border-top-style: dashed;
+  border-top-color: var(--gold-2);
+}
+
+.section-key {
+  border-top-color: #9baabd;
 }
 
 .panel-heading span {
@@ -595,6 +684,41 @@ h3 {
   display: block;
   width: 100%;
   min-width: 34rem;
+}
+
+.time-chart svg {
+  min-width: 58rem;
+}
+
+.chart-bg {
+  fill: #ffffff;
+}
+
+.axis-grid {
+  stroke: #dfe7ef;
+  stroke-width: 1;
+}
+
+.axis-line {
+  stroke: #9aaec1;
+  stroke-width: 1.2;
+}
+
+.axis-label,
+.axis-title {
+  fill: var(--muted);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 13px;
+  font-weight: 750;
+}
+
+.axis-title {
+  fill: var(--navy);
+  font-size: 15px;
+}
+
+.x-label {
+  font-size: 12px;
 }
 
 .chart-label,
@@ -615,6 +739,87 @@ h3 {
 
 .chart-bar {
   fill: var(--navy);
+}
+
+.ribbon {
+  stroke: none;
+}
+
+.ribbon-department {
+  fill: rgba(198, 154, 54, 0.28);
+}
+
+.ribbon-network {
+  fill: rgba(0, 50, 96, 0.13);
+}
+
+.benchmark-line {
+  fill: none;
+  stroke: var(--gold-2);
+  stroke-width: 2.4;
+  stroke-dasharray: 7 6;
+}
+
+.series-line {
+  filter: drop-shadow(0 2px 2px rgba(0, 50, 96, 0.12));
+}
+
+.series-point {
+  stroke: #fff;
+  stroke-width: 2;
+}
+
+.section-shadow-line {
+  fill: none;
+  stroke: #8092a6;
+  stroke-width: 1.35;
+  opacity: 0.32;
+}
+
+.heatmap-frame svg {
+  min-width: 44rem;
+}
+
+.heat-label,
+.heat-value {
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-weight: 800;
+}
+
+.heat-label {
+  fill: var(--muted);
+  font-size: 12px;
+}
+
+.heat-value {
+  fill: #ffffff;
+  font-size: 13px;
+}
+
+.heat-cell {
+  stroke: rgba(255, 255, 255, 0.7);
+  stroke-width: 1;
+}
+
+.insight-panel {
+  min-height: 100%;
+}
+
+.insight-list {
+  display: grid;
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.insight-list li {
+  padding: 0.85rem;
+  border-left: 4px solid var(--gold);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  background: var(--surface-soft);
+  color: var(--ink);
+  font-weight: 650;
 }
 
 .table-wrap {
@@ -684,13 +889,18 @@ th {
   .project-grid,
   .principle-grid,
   .dashboard-grid,
-  .metric-grid {
+  .metric-grid,
+  .metric-grid-wide {
     grid-template-columns: 1fr;
   }
 
   .dashboard-toolbar {
     align-items: start;
     flex-direction: column;
+  }
+
+  .legend {
+    justify-content: flex-start;
   }
 
   .project-card {
