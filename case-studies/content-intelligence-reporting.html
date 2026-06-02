@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Content Intelligence Case Study | Grant McCurdy</title>
+    <meta name="description" content="Case study for a public-safe source-grounded content intelligence reporting workflow.">
+    <link rel="stylesheet" href="../assets/css/styles.css">
+  </head>
+  <body>
+    <header class="site-header compact" data-header>
+      <nav class="nav-shell" aria-label="Primary navigation">
+        <a class="brand" href="../index.html">
+          <span class="brand-mark" aria-hidden="true">GM</span>
+          <span class="brand-text">Grant McCurdy</span>
+        </a>
+        <div class="nav-links static">
+          <a href="../index.html#projects">Projects</a>
+          <a href="index.html">Case Studies</a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="detail-main">
+      <section class="detail-hero">
+        <p class="section-kicker">Case Study</p>
+        <h1>Content-to-report pipeline</h1>
+        <p>A public-safe workflow that turns unstructured synthetic notes into a manifest, normalized corpus, retrievable evidence, and a cited analytical report.</p>
+        <div class="hero-actions detail-actions">
+          <a class="button primary" href="../projects/content-intelligence-demo-report.html">View Demo Report</a>
+          <a class="button outline" href="../projects/content-intelligence-reporting.html">Project Brief</a>
+        </div>
+      </section>
+
+      <section class="section-shell case-study-grid" aria-labelledby="case-study-heading">
+        <div class="section-heading case-study-heading">
+          <p class="section-kicker">System Story</p>
+          <h2 id="case-study-heading">From messy source notes to auditable output</h2>
+        </div>
+
+        <article class="case-step">
+          <span>01</span>
+          <h3>Problem</h3>
+          <p>Useful decisions often live in unstructured notes, transcript-like records, and informal planning artifacts. Without source tracking, generated summaries can become hard to audit and risky to publish.</p>
+        </article>
+
+        <article class="case-step">
+          <span>02</span>
+          <h3>Solution</h3>
+          <p>I built a small, reproducible scaffold that preserves source boundaries from the start: every document becomes a manifest record, every passage becomes a citation-preserving segment, and every report claim points back to supporting evidence.</p>
+        </article>
+
+        <article class="case-step">
+          <span>03</span>
+          <h3>Tools and Methods</h3>
+          <p>The demo uses dependency-light Python, synthetic text sources, checksum-backed manifests, whitespace normalization, deterministic segmentation, keyword retrieval, and static HTML/Markdown outputs.</p>
+        </article>
+
+        <article class="case-step">
+          <span>04</span>
+          <h3>Result and Value</h3>
+          <p>The current pipeline turns three synthetic source documents into six retrievable segments and a cited demo report. It shows the transferable architecture without exposing private transcripts, course records, or institutional material.</p>
+        </article>
+
+        <article class="case-step">
+          <span>05</span>
+          <h3>What I Learned</h3>
+          <p>The privacy boundary has to be designed into the pipeline, not patched onto the final report. Source IDs, citation labels, and generated/private file separation make the workflow easier to review and safer to publish.</p>
+        </article>
+      </section>
+    </main>
+  </body>
+</html>
+

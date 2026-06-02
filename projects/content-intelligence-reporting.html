@@ -26,23 +26,46 @@
         <p class="section-kicker">Project Brief</p>
         <h1>Content Intelligence Reporting</h1>
         <p>A generalized pipeline for converting unstructured content into a processable corpus and generating targeted, source-grounded analytical reports.</p>
+        <div class="hero-actions detail-actions">
+          <a class="button primary" href="content-intelligence-demo-report.html">View Demo Report</a>
+          <a class="button outline" href="../case-studies/content-intelligence-reporting.html">Read Case Study</a>
+        </div>
       </section>
 
       <section class="section-shell detail-grid">
         <div>
-          <h2>Pipeline</h2>
-          <p>Ingest source material, normalize it into a corpus, extract grounded evidence, and generate a report against a specific analytical task.</p>
+          <h2>Implemented Pipeline</h2>
+          <p>Ingest synthetic source notes, build a checksum-backed manifest, normalize and segment the corpus, retrieve relevant passages, and generate a cited report against specific analytical questions.</p>
         </div>
         <div class="detail-panel">
-          <h2>Planned Artifacts</h2>
+          <h2>Current Artifacts</h2>
           <ul class="clean-list">
-            <li>Synthetic or public-license corpus</li>
-            <li>Corpus construction scripts</li>
-            <li>Source-grounding documentation</li>
-            <li>Sample analytical report</li>
-            <li>Privacy and copyright model</li>
+            <li>Three synthetic source documents</li>
+            <li>Manifest and corpus construction scripts</li>
+            <li>Transparent keyword retrieval</li>
+            <li>Cited sample report</li>
+            <li>Privacy and copyright documentation</li>
           </ul>
         </div>
+      </section>
+
+      <section class="section-shell artifact-grid" aria-labelledby="artifact-heading">
+        <div class="section-heading">
+          <p class="section-kicker">Evidence</p>
+          <h2 id="artifact-heading">What the demo proves</h2>
+        </div>
+        <article class="artifact">
+          <h3>Source Boundaries</h3>
+          <p>Each source has a manifest record with title, type, license, path, checksum, and processing status.</p>
+        </article>
+        <article class="artifact">
+          <h3>Citation-Preserving Segments</h3>
+          <p>Corpus segments carry source IDs and citation labels, so report claims can be traced back to supporting passages.</p>
+        </article>
+        <article class="artifact">
+          <h3>Public-Safe Output</h3>
+          <p>The demo uses synthetic notes only and excludes private transcripts, course identifiers, student records, and credentials.</p>
+        </article>
       </section>
     </main>
   </body>
