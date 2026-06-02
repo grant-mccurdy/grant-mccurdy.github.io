@@ -71,6 +71,10 @@ function deterministicNoise(sectionIndex, periodIndex) {
 }
 
 function buildRecords(source) {
+  if (Array.isArray(source.records) && source.records.length) {
+    return source.records;
+  }
+
   return source.sections.flatMap((section, sectionIndex) => {
     return source.periods.map((period, periodIndex) => {
       const yearStep = periodIndex / 2;
@@ -165,7 +169,7 @@ function metricValue(item) {
 }
 
 function metricAllowsBands() {
-  return state.metric === "score" || state.metric === "proficiency";
+  return state.metric === "score";
 }
 
 function renderMetrics(records) {
@@ -177,12 +181,13 @@ function renderMetrics(records) {
   const latestValue = latest ? latest[state.metric] : 0;
   const students = latestRows.reduce((sum, row) => sum + row.students, 0);
   const targetRows = latestRows.filter((row) => row.score >= 76);
+  const completed = latestRows.reduce((sum, row) => sum + (row.completed ?? row.students), 0);
 
   els.students.textContent = students.toLocaleString();
   els.latest.textContent = state.metric === "growth" ? fmtPts(latestValue) : fmtPct(latestValue);
   els.change.textContent = fmtPts(latestValue - firstValue);
   els.completion.textContent = fmtPct(weightedAverage(latestRows, "completion"));
-  els.target.textContent = latestRows.length ? fmtPct((targetRows.length / latestRows.length) * 100) : "-";
+  els.target.textContent = completed ? fmtPct((targetRows.reduce((sum, row) => sum + (row.completed ?? row.students), 0) / completed) * 100) : "-";
 }
 
 function pointsToPath(points) {
@@ -199,7 +204,7 @@ function renderTimeSeries(records) {
   const periods = periodData.map((item) => item.period);
   const groups = unique(periodData.flatMap((item) => item.groups.map((group) => group.key)));
   const yMax = state.metric === "growth" ? 42 : 100;
-  const yMin = state.metric === "growth" ? -4 : 35;
+  const yMin = state.metric === "growth" ? -4 : state.metric === "score" ? 0 : 35;
   const x = (index) => margin.left + (periods.length <= 1 ? innerWidth / 2 : (index / (periods.length - 1)) * innerWidth);
   const y = (value) => margin.top + innerHeight - ((value - yMin) / (yMax - yMin)) * innerHeight;
   const bandScale = (value) => y(state.metric === "growth" ? value - state.source.sections[0].baseline : value);
@@ -281,10 +286,13 @@ function renderSectionLines(records, periods, x, y) {
 }
 
 function renderLegend(groups) {
+  const departmentLabel = state.source.bands.department.label ?? "Department range";
+  const networkLabel = state.source.bands.network.label ?? "Comparable range";
+  const masteryLabel = state.source.bands.mastery.label ?? "Mastery benchmark";
   const ribbonItems = [
-    state.toggles.department && metricAllowsBands() ? `<span><i class="legend-swatch ribbon-key department-key"></i>Department range</span>` : "",
-    state.toggles.network && metricAllowsBands() ? `<span><i class="legend-swatch ribbon-key network-key"></i>Comparable range</span>` : "",
-    state.toggles.mastery && metricAllowsBands() ? `<span><i class="legend-line benchmark-key"></i>Mastery benchmark</span>` : "",
+    state.toggles.department && metricAllowsBands() ? `<span><i class="legend-swatch ribbon-key department-key"></i>${departmentLabel}</span>` : "",
+    state.toggles.network && metricAllowsBands() ? `<span><i class="legend-swatch ribbon-key network-key"></i>${networkLabel}</span>` : "",
+    state.toggles.mastery && metricAllowsBands() ? `<span><i class="legend-line benchmark-key"></i>${masteryLabel}</span>` : "",
     state.toggles.sections ? `<span><i class="legend-line section-key"></i>Section lines</span>` : "",
   ].filter(Boolean).join("");
 
@@ -435,6 +443,7 @@ function renderInsights(records) {
     strongest ? `${strongest.key} shows the strongest synthetic trend at ${fmtPts(strongest.change)} since the first selected period.` : "No trend is available for the current filter.",
     watch ? `${watch.key} is the lowest latest group at ${fmtPct(watch.score)}, making it a candidate for item-level review or targeted supports.` : "No watch group is available for the current filter.",
     `Latest completion is ${fmtPct(completion)}, which is ${completion >= 95 ? "above" : "below"} the operating target of 95%.`,
+    `The score ribbons are calibrated from a private assessment score distribution, then regenerated as synthetic 30-question assessment data with declining non-participation over time.`,
     `The department range lower bound for the latest period is ${fmtPct(latestTarget)}; use the ribbon to compare current performance with the synthetic benchmark corridor.`
   ];
 
