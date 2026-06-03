@@ -1,11 +1,11 @@
 <!doctype html>
-<html lang="en" data-asset-version="dashboard-views-v1">
+<html lang="en" data-asset-version="dashboard-lines-v2">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Assessment Dashboard Test | Grant McCurdy</title>
     <meta name="description" content="Interactive synthetic assessment dashboard test for GitHub Pages.">
-    <link rel="stylesheet" href="../assets/css/styles.css?v=dashboard-views-v1">
+    <link rel="stylesheet" href="../assets/css/styles.css?v=dashboard-lines-v2">
   </head>
   <body>
     <header class="site-header compact" data-header>
@@ -34,20 +34,14 @@
             <p class="section-kicker">Calibrated Synthetic Data</p>
             <h2 id="dashboard-heading">Program Time Series</h2>
           </div>
-          <div class="control-row" aria-label="Dashboard filters">
+          <div class="control-row line-control-grid" aria-label="Line chart controls">
             <label>
-              Focus
-              <select id="focus-select">
-                <option value="All">All Courses</option>
-              </select>
-            </label>
-            <label>
-              Group By
+              Slice
               <select id="group-select">
-                <option value="course">Course</option>
-                <option value="grade">Grade</option>
-                <option value="teacher">Teacher</option>
-                <option value="section">Section</option>
+                <option value="course">Courses</option>
+                <option value="grade">Grades</option>
+                <option value="teacher">Teachers</option>
+                <option value="section">Sections</option>
               </select>
             </label>
             <label>
@@ -59,12 +53,31 @@
                 <option value="completion">Completion</option>
               </select>
             </label>
+            <label class="range-control">
+              <span>Minimum window n <output id="line-min-n-value">5</output></span>
+              <input type="range" id="line-min-n" min="1" max="35" step="1" value="5">
+            </label>
             <label>
-              Season
-              <select id="season-select">
-                <option value="All">Fall + Spring</option>
-                <option value="Fall">Fall Only</option>
-                <option value="Spring">Spring Only</option>
+              Sort / cut
+              <select id="line-sort-select">
+                <option value="latest">Latest value</option>
+                <option value="gain">Largest gain</option>
+                <option value="decline">Needs attention</option>
+                <option value="name">Name A-Z</option>
+              </select>
+            </label>
+            <label>
+              Filter
+              <input type="search" id="line-filter" placeholder="Filter lines">
+            </label>
+            <label>
+              Lines shown
+              <select id="line-limit-select">
+                <option value="5">5</option>
+                <option value="8">8</option>
+                <option value="10" selected>10</option>
+                <option value="12">12</option>
+                <option value="all">All</option>
               </select>
             </label>
           </div>
@@ -85,6 +98,20 @@
         </div>
 
         <div class="viz-control-row" aria-label="Ribbon controls">
+          <label>
+            Focus
+            <select id="focus-select">
+              <option value="All">All Courses</option>
+            </select>
+          </label>
+          <label>
+            Season
+            <select id="season-select">
+              <option value="All">Recent Windows</option>
+              <option value="Fall">Fall Only</option>
+              <option value="Spring">Spring Only</option>
+            </select>
+          </label>
           <label>
             Ribbon Range
             <select id="ribbon-range-select">
@@ -140,7 +167,7 @@
         <article class="dashboard-panel time-panel">
           <div class="panel-heading">
             <div>
-              <h3>Assessment Performance Over Time</h3>
+              <h3>Historical Assessment Lines</h3>
               <span id="time-caption">Fall and spring assessment periods</span>
             </div>
             <div class="legend" id="time-legend"></div>
@@ -259,7 +286,7 @@
       </section>
     </main>
 
-    <script src="../assets/js/site.js?v=dashboard-views-v1"></script>
-    <script src="../assets/js/assessment-dashboard.js?v=dashboard-views-v1"></script>
+    <script src="../assets/js/site.js?v=dashboard-lines-v2"></script>
+    <script src="../assets/js/assessment-dashboard.js?v=dashboard-lines-v2"></script>
   </body>
 </html>

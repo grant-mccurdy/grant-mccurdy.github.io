@@ -579,13 +579,24 @@ h3 {
 }
 
 .dashboard-toolbar-expanded {
-  align-items: start;
+  display: grid;
+  grid-template-columns: minmax(12rem, 17rem) minmax(0, 1fr);
+  align-items: end;
+  padding: 1rem;
+  border: 1px solid var(--line);
+  background: #f6f8fb;
 }
 
 .control-row {
   display: flex;
   flex-wrap: wrap;
   gap: 0.75rem;
+}
+
+.line-control-grid {
+  display: grid;
+  grid-template-columns: minmax(9rem, 1fr) minmax(9rem, 1fr) minmax(12rem, 1.12fr) minmax(10rem, 1fr) minmax(10rem, 1.05fr) minmax(7rem, 0.7fr);
+  width: 100%;
 }
 
 .control-row label {
@@ -598,7 +609,8 @@ h3 {
   text-transform: uppercase;
 }
 
-.control-row select {
+.control-row select,
+.control-row input[type="search"] {
   min-width: 12rem;
   min-height: 2.65rem;
   border: 1px solid var(--line);
@@ -610,6 +622,25 @@ h3 {
   font-weight: 650;
   letter-spacing: 0;
   padding: 0 0.75rem;
+}
+
+.line-control-grid select,
+.line-control-grid input[type="search"] {
+  width: 100%;
+  min-width: 0;
+  border-radius: 4px;
+}
+
+.line-control-grid input[type="range"] {
+  width: 100%;
+  min-width: 0;
+  accent-color: var(--navy);
+}
+
+.line-control-grid label:focus-within select,
+.line-control-grid label:focus-within input {
+  border-color: #2f66c8;
+  box-shadow: 0 0 0 2px rgba(47, 102, 200, 0.14);
 }
 
 .toggle-row {
@@ -784,6 +815,9 @@ h3 {
 
 .time-panel {
   margin-bottom: 1rem;
+  padding: 1rem;
+  border-radius: 4px;
+  box-shadow: none;
 }
 
 .distribution-panel {
@@ -880,7 +914,7 @@ h3 {
 }
 
 .time-chart svg {
-  min-width: 58rem;
+  min-width: 66rem;
 }
 
 .mini-chart-block {
@@ -922,30 +956,31 @@ h3 {
 }
 
 .axis-grid {
-  stroke: #dfe7ef;
-  stroke-width: 1;
+  stroke: #dfe6ee;
+  stroke-width: 1.1;
 }
 
 .axis-line {
-  stroke: #9aaec1;
-  stroke-width: 1.2;
+  stroke: #98a9ba;
+  stroke-width: 1.3;
 }
 
 .axis-label,
 .axis-title {
-  fill: var(--muted);
+  fill: #667287;
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  font-size: 13px;
-  font-weight: 750;
+  font-size: 14px;
+  font-weight: 760;
 }
 
 .axis-title {
   fill: var(--navy);
   font-size: 15px;
+  font-weight: 850;
 }
 
 .x-label {
-  font-size: 12px;
+  font-size: 14px;
 }
 
 .chart-label,
@@ -988,12 +1023,12 @@ h3 {
 }
 
 .series-line {
-  filter: drop-shadow(0 2px 2px rgba(0, 50, 96, 0.12));
+  filter: none;
 }
 
 .series-point {
   stroke: #fff;
-  stroke-width: 2;
+  stroke-width: 2.4;
 }
 
 .overall-series-line {
@@ -1006,11 +1041,46 @@ h3 {
 }
 
 .comparison-series-line {
-  opacity: 0.72;
+  opacity: 0.88;
 }
 
 .comparison-series-point {
-  opacity: 0.85;
+  opacity: 0.94;
+}
+
+.direct-series-line {
+  stroke-width: 3.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.direct-series-gap {
+  stroke-dasharray: 8 7;
+}
+
+.direct-label-guide {
+  opacity: 0.44;
+  stroke-width: 2;
+  stroke-dasharray: 4 6;
+}
+
+.right-label-dot {
+  stroke: #fff;
+  stroke-width: 2.2;
+}
+
+.right-label-text {
+  fill: #677083;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 15px;
+  font-weight: 760;
+}
+
+.empty-chart-text {
+  fill: var(--muted);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 16px;
+  font-weight: 750;
 }
 
 .completion-track {
@@ -1312,6 +1382,11 @@ th {
   .dashboard-toolbar {
     align-items: start;
     flex-direction: column;
+  }
+
+  .dashboard-toolbar-expanded,
+  .line-control-grid {
+    grid-template-columns: 1fr;
   }
 
   .table-count {
