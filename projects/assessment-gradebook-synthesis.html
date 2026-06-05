@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Assessment Gradebook Synthesis | Grant McCurdy</title>
+    <meta name="description" content="Public-safe assessment gradebook synthesis and validation summary.">
+    <link rel="stylesheet" href="../assets/css/styles.css">
+  </head>
+  <body>
+    <header class="site-header compact" data-header>
+      <nav class="nav-shell" aria-label="Primary navigation">
+        <a class="brand" href="../index.html">
+          <span class="brand-mark" aria-hidden="true">GM</span>
+          <span class="brand-text">Grant McCurdy</span>
+        </a>
+        <div class="nav-links static">
+          <a href="../index.html#projects">Projects</a>
+          <a href="../case-studies/assessment-reporting.html">Assessment Case Study</a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="detail-main">
+      <section class="detail-hero">
+        <p class="section-kicker">Assessment Artifact</p>
+        <h1>Gradebook synthesis and validation</h1>
+        <p>A public-safe summary of the R workflow that reconstructs a synthetic Canvas-style gradebook from private-reference structure without publishing private rows, identifiers, section labels, or assignment names.</p>
+        <div class="hero-actions detail-actions">
+          <a class="button primary" href="https://github.com/grant-mccurdy/assessment-intelligence">GitHub Repo</a>
+          <a class="button outline" href="../dashboard/assessment.html">Open Dashboard</a>
+        </div>
+      </section>
+
+      <section class="section-shell artifact-grid" aria-labelledby="gradebook-proof-heading">
+        <div class="section-heading">
+          <p class="section-kicker">Validation Summary</p>
+          <h2 id="gradebook-proof-heading">Public-safe proof points</h2>
+        </div>
+        <article class="artifact">
+          <h3>Shape preserved</h3>
+          <p>The synthetic gradebook preserves the reference shape at 287 rows and 39 columns, including 28 numeric assignment columns.</p>
+        </article>
+        <article class="artifact">
+          <h3>No identity overlap</h3>
+          <p>The validation report records zero identity overlap in both the wide synthetic gradebook and long-form analytics output.</p>
+        </article>
+        <article class="artifact">
+          <h3>Analysis-ready output</h3>
+          <p>The workflow exports 8,036 long-form synthetic student-assignment records plus 28 rows of assignment metadata.</p>
+        </article>
+      </section>
+
+      <section class="section-shell detail-grid">
+        <div>
+          <p class="section-kicker">Workflow</p>
+          <h2>Private-reference shape, public synthetic output</h2>
+          <p>The source repo profiles a private reference gradebook locally, generates fake students and assignment records, validates identity separation and distribution fidelity, then renders public-safe reports. The portal summarizes the evidence without copying private inputs or raw table dumps.</p>
+        </div>
+        <div class="detail-panel">
+          <h2>Inspect In Source Repo</h2>
+          <ul class="clean-list">
+            <li><code>reports/gradebook_reconstruction_validation.md</code></li>
+            <li><code>reports/advanced_synthetic_gradebook_synthesis.md</code></li>
+            <li><code>reports/gradebook_reference_schema_public.md</code></li>
+            <li><code>analysis/generate_synthetic_gradebook.R</code></li>
+            <li><code>analysis/validate_synthetic_gradebook.R</code></li>
+          </ul>
+          <div class="link-row detail-action">
+            <a class="text-link" href="https://github.com/grant-mccurdy/assessment-intelligence">Source repo</a>
+            <a class="text-link" href="assessment-intelligence.html">Assessment brief</a>
+            <a class="text-link" href="../case-studies/assessment-reporting.html">Case study</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="intro-band" aria-labelledby="gradebook-boundary-heading">
+        <div class="section-shell intro-grid">
+          <div>
+            <p class="section-kicker">Boundary</p>
+            <h2 id="gradebook-boundary-heading">What is not published</h2>
+          </div>
+          <p>The private reference gradebook, detailed private schema profile, real student identifiers, real section labels, real assignment names, LMS IDs, and raw private exports stay outside the public repository and outside this GitHub Pages portal.</p>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

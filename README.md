@@ -66,4 +66,4 @@ Use only public-safe screenshots, synthetic data, generalized case-study languag
 
 - Content Intelligence Reporting is demo-ready and has a hosted sample report and case study.
 - Assessment Intelligence has a hosted static dashboard and active reporting/modeling source artifacts.
-- Instructional AI Workflows is intentionally labeled as scaffolded until the first synthetic workflow demo is published.
+- Instructional AI Workflows has an active synthetic Precalculus FRQ workflow demo in the source repository.
