@@ -1,8 +1,8 @@
 # grant-mccurdy.github.io
 
-GitHub Pages portfolio front door for Grant McCurdy.
+GitHub Pages public project portal for Grant McCurdy.
 
-The site should summarize public-facing project work in assessment systems, AI-assisted instructional workflows, and content intelligence/reporting pipelines.
+The site summarizes public-facing project work in assessment systems, AI-assisted instructional workflows, and content intelligence/reporting pipelines, and routes reviewers to hosted demos, case studies, and source repositories.
 
 Suggested homepage message:
 
@@ -10,7 +10,7 @@ Suggested homepage message:
 
 ## Role Of This Repo
 
-This repo is the presentation layer. It should link to the project repositories and provide concise case-study pages, screenshots, and demos.
+This repo is the presentation layer. It links to the project repositories and provides concise case-study pages, screenshots, and demos.
 
 It should not contain all project source code, raw data, private Canvas extracts, student records, transcripts, or private workflow artifacts.
 
@@ -62,6 +62,8 @@ http://127.0.0.1:8765/
 
 Use only public-safe screenshots, synthetic data, generalized case-study language, and links to sanitized repos. Do not publish private school data, student data, API credentials, Canvas links, private transcripts, or copyrighted course materials.
 
-## Status
+## Current Portal State
 
-Planning and public-safe scaffolding in progress.
+- Content Intelligence Reporting is demo-ready and has a hosted sample report and case study.
+- Assessment Intelligence has a hosted static dashboard and active reporting/modeling source artifacts.
+- Instructional AI Workflows is intentionally labeled as scaffolded until the first synthetic workflow demo is published.

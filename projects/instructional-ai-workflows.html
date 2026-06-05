@@ -26,22 +26,60 @@
         <p class="section-kicker">Project Brief</p>
         <h1>Instructional AI Workflows</h1>
         <p>LMS-agnostic workflow prototypes for rubric-defined evaluation, draft feedback generation, human review, and student-facing artifacts.</p>
+        <div class="hero-actions detail-actions">
+          <a class="button primary" href="https://github.com/grant-mccurdy/instructional-ai-workflows">GitHub Repo</a>
+          <a class="button outline" href="../case-studies/index.html#feedback-artifacts">Case Study Placeholder</a>
+        </div>
       </section>
 
       <section class="section-shell detail-grid">
         <div>
-          <h2>Workflow</h2>
-          <p>Teacher-defined rubric -> structured evaluation -> draft feedback -> human review -> student-facing feedback, review, or remediation artifact.</p>
+          <p class="section-kicker">Overview</p>
+          <h2>Teacher-controlled AI assistance</h2>
+          <p>The project frames AI as workflow support, not automatic grading: teacher-defined rubric -> structured evaluation -> draft feedback -> human review -> student-facing feedback, review, or remediation artifact.</p>
         </div>
         <div class="detail-panel">
-          <h2>Planned Artifacts</h2>
+          <h2>Current Artifacts</h2>
           <ul class="clean-list">
-            <li>Synthetic FRQ demos</li>
-            <li>Rubric evaluation schema</li>
-            <li>Static HTML and Markdown adapters</li>
-            <li>Canvas adapter boundary</li>
-            <li>Human-in-the-loop safety documentation</li>
+            <li>Repository scaffold and README framing</li>
+            <li>Core workflow boundaries</li>
+            <li>Adapter plan for Canvas, static HTML, and Markdown</li>
+            <li>Public safety rules for synthetic submissions and rubrics</li>
+            <li>Human-in-the-loop review model</li>
           </ul>
+          <div class="link-row detail-action">
+            <a class="text-link" href="https://github.com/grant-mccurdy/instructional-ai-workflows">Source repo</a>
+            <a class="text-link" href="../case-studies/index.html#feedback-artifacts">Case study placeholder</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section-shell artifact-grid" aria-labelledby="workflow-build-heading">
+        <div class="section-heading">
+          <p class="section-kicker">Build Path</p>
+          <h2 id="workflow-build-heading">Next public demo</h2>
+        </div>
+        <article class="artifact">
+          <h3>Synthetic FRQ input</h3>
+          <p>Create fake student responses and a public-safe rubric for a mathematics or statistics prompt.</p>
+        </article>
+        <article class="artifact">
+          <h3>Structured evaluation</h3>
+          <p>Return evidence, rubric-aligned observations, and private teacher notes before generating student-facing text.</p>
+        </article>
+        <article class="artifact">
+          <h3>Reviewed output</h3>
+          <p>Publish a static sample feedback or remediation artifact only after the human-review boundary is visible.</p>
+        </article>
+      </section>
+
+      <section class="intro-band" aria-labelledby="workflow-safety-heading">
+        <div class="section-shell intro-grid">
+          <div>
+            <p class="section-kicker">Safety Boundary</p>
+            <h2 id="workflow-safety-heading">No private instructional records</h2>
+          </div>
+          <p>Public demos must use synthetic submissions, synthetic rubrics, fake course identifiers, and public-safe sample outputs. Do not publish real student submissions, feedback, grades, comments, Canvas IDs, assignment IDs, course IDs, API tokens, or teacher-only review artifacts.</p>
         </div>
       </section>
     </main>
