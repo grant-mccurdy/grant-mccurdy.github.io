@@ -4,9 +4,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Grant McCurdy | Public Project Portal</title>
-    <meta name="description" content="Public project portal for Grant McCurdy's assessment intelligence, instructional AI workflow, and content intelligence reporting projects.">
+    <meta name="description" content="Public project portal for Grant McCurdy's synthetic education data, assessment intelligence, instructional AI workflow, and content intelligence reporting projects.">
     <meta property="og:title" content="Grant McCurdy | Public Project Portal">
-    <meta property="og:description" content="Public-safe demos, project briefs, repositories, and case studies for assessment, instructional workflow, and content intelligence systems.">
+    <meta property="og:description" content="Public-safe demos, project briefs, repositories, and case studies for synthetic education data, assessment, instructional workflow, and content intelligence systems.">
     <meta property="og:type" content="website">
     <meta property="og:image" content="assets/images/portfolio-systems-hero.png">
     <link rel="stylesheet" href="assets/css/styles.css">
@@ -41,7 +41,7 @@
         <div class="hero-content">
           <p class="eyebrow">Public project portal</p>
           <h1>Grant McCurdy</h1>
-          <p class="hero-copy">A front door into public-safe demos, source repositories, and case studies for assessment intelligence, instructional AI workflows, and content intelligence reporting.</p>
+          <p class="hero-copy">A front door into public-safe demos, source repositories, and case studies for synthetic education data, assessment intelligence, instructional AI workflows, and content intelligence reporting.</p>
           <div class="hero-actions">
             <a class="button primary" href="#artifacts">Open Featured Artifacts</a>
             <a class="button secondary" href="#projects">Browse Projects</a>
@@ -55,7 +55,7 @@
             <p class="section-kicker">Reviewer Path</p>
             <h2 id="focus-heading">One portal for the public buildout</h2>
           </div>
-          <p>This GitHub Pages site collects the public artifacts from three sibling repositories under one navigable surface. Start with the hosted demos, then use the project briefs and GitHub links to inspect the source, methods, and safety boundaries.</p>
+          <p>This GitHub Pages site collects the public artifacts from the portfolio repositories under one navigable surface. Start with the hosted demos and project briefs, then use the GitHub links to inspect the source, methods, and safety boundaries.</p>
         </div>
       </section>
 
@@ -70,6 +70,11 @@
             <span class="artifact-kind">Interactive dashboard</span>
             <strong>Assessment Dashboard</strong>
             <p>Synthetic multi-year assessment data, browser-side aggregation, SVG charts, filters, and decision notes.</p>
+          </a>
+          <a class="artifact-link-card" href="projects/synthetic-math-department.html">
+            <span class="artifact-kind">Synthetic data engine</span>
+            <strong>Synthetic Math Department</strong>
+            <p>Validated students, courses, sections, enrollments, attendance behavior, assessment scores, and Canvas-style artifacts.</p>
           </a>
           <a class="artifact-link-card" href="projects/content-intelligence-demo-report.html">
             <span class="artifact-kind">Demo report</span>
@@ -103,12 +108,31 @@
         <div class="project-grid">
           <article class="project-card">
             <div class="project-top">
+              <span class="project-code">SD</span>
+              <span class="project-status">Active build</span>
+            </div>
+            <h3>Synthetic Math Department</h3>
+            <p>Privacy-preserving synthetic education data engine for assessment analytics, dashboard development, and learning-systems prototyping.</p>
+            <p class="inspect-note">Inspect first: the methodology notes, generated state object, assessment gradebook, validation script, and calibration diagnostics.</p>
+            <ul class="tag-list" aria-label="Synthetic math department tags">
+              <li>Synthetic Data</li>
+              <li>Validation</li>
+              <li>Assessment Simulation</li>
+            </ul>
+            <div class="link-row">
+              <a class="text-link" href="projects/synthetic-math-department.html">Project brief</a>
+              <a class="text-link" href="https://github.com/grant-mccurdy/synthetic-math-department">GitHub repo</a>
+            </div>
+          </article>
+
+          <article class="project-card">
+            <div class="project-top">
               <span class="project-code">AI</span>
               <span class="project-status">Active build</span>
             </div>
             <h3>Assessment Intelligence</h3>
-            <p>Assessment system design, synthetic assessment data, R modeling pipeline, dashboarding, and decision-support reporting.</p>
-            <p class="inspect-note">Inspect first: the hosted dashboard, then the synthetic-data and reporting workflow in the source repo.</p>
+            <p>Assessment design, analytics, R modeling pipeline, dashboarding, diagnostics, and decision-support reporting.</p>
+            <p class="inspect-note">Inspect first: the hosted dashboard, then the analytics, diagnostics, and reporting workflow in the source repo.</p>
             <ul class="tag-list" aria-label="Assessment intelligence tags">
               <li>Assessment Design</li>
               <li>Synthetic Data</li>
@@ -178,8 +202,13 @@
             </article>
             <article>
               <span>Active build</span>
+              <h3>Synthetic Math Department</h3>
+              <p>Public repo now surfaces the synthetic data engine behind the assessment ecosystem, including beginning- and end-of-year scores, attendance modeling, longitudinal readiness updates, Canvas-style artifacts, and validation checks.</p>
+            </article>
+            <article>
+              <span>Active build</span>
               <h3>Assessment Intelligence</h3>
-              <p>Substantial modeling, reporting, validation, and dashboard assets exist. The portal now surfaces the dashboard and gradebook synthesis proof points.</p>
+              <p>Substantial analytics, reporting, validation, and dashboard assets exist. The portal surfaces the dashboard and gradebook synthesis proof points while the synthetic data foundation remains in its own repo.</p>
             </article>
             <article>
               <span>Active build</span>
@@ -239,6 +268,7 @@
       <div class="footer-shell">
         <p>&copy; <span data-year></span> Grant McCurdy</p>
         <div class="footer-links">
+          <a href="projects/synthetic-math-department.html">Synthetic Data</a>
           <a href="projects/assessment-intelligence.html">Assessment</a>
           <a href="projects/instructional-ai-workflows.html">Workflows</a>
           <a href="projects/content-intelligence-reporting.html">Reporting</a>

@@ -2,11 +2,11 @@
 
 GitHub Pages public project portal for Grant McCurdy.
 
-The site summarizes public-facing project work in assessment systems, AI-assisted instructional workflows, and content intelligence/reporting pipelines, and routes reviewers to hosted demos, case studies, and source repositories.
+The site summarizes public-facing project work in synthetic education data, assessment systems, AI-assisted instructional workflows, and content intelligence/reporting pipelines, and routes reviewers to hosted demos, case studies, and source repositories.
 
 Suggested homepage message:
 
-> I build assessment systems, AI-assisted instructional workflows, and content intelligence pipelines at the intersection of mathematics, statistics, education, and software.
+> I build synthetic education data systems, assessment analytics, AI-assisted instructional workflows, and content intelligence pipelines at the intersection of mathematics, statistics, education, and software.
 
 ## Role Of This Repo
 
@@ -54,7 +54,8 @@ http://127.0.0.1:8765/
 
 ## Project Areas
 
-- `assessment-intelligence`: assessment design, synthetic assessment data, dashboards, and reporting workflows.
+- `synthetic-math-department`: privacy-preserving synthetic education data generation and validation.
+- `assessment-intelligence`: assessment design, analytics, dashboards, diagnostics, and reporting workflows.
 - `instructional-ai-workflows`: teacher-controlled AI-assisted feedback, review, and remediation workflows.
 - `content-intelligence-reporting`: unstructured content processing and source-grounded report generation.
 
@@ -65,5 +66,6 @@ Use only public-safe screenshots, synthetic data, generalized case-study languag
 ## Current Portal State
 
 - Content Intelligence Reporting is demo-ready and has a hosted sample report and case study.
+- Synthetic Math Department has a public synthetic data engine with methodology, generated artifacts, and validation checks.
 - Assessment Intelligence has a hosted static dashboard and active reporting/modeling source artifacts.
 - Instructional AI Workflows has an active synthetic Precalculus FRQ workflow demo in the source repository.
