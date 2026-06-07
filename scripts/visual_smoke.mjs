@@ -53,7 +53,7 @@ async function inspect(page) {
   return {
     title: await page.title(),
     h1: await page.locator("h1").first().innerText(),
-    syntheticMention: bodyText.includes("Synthetic Math Department"),
+    syntheticMention: bodyText.includes("Synthetic Education Data"),
     projectCards: await page.locator(".project-card").count(),
     artifactCards: await page.locator(".artifact-link-card").count(),
     overflow,
@@ -63,8 +63,8 @@ async function inspect(page) {
 const cases = [
   ["home-desktop", "index.html", 1440, 1000],
   ["home-mobile", "index.html", 390, 900],
-  ["synthetic-desktop", path.join("projects", "synthetic-math-department.html"), 1440, 1000],
-  ["synthetic-mobile", path.join("projects", "synthetic-math-department.html"), 390, 900],
+  ["synthetic-desktop", path.join("projects", "synthetic-education-data.html"), 1440, 1000],
+  ["synthetic-mobile", path.join("projects", "synthetic-education-data.html"), 390, 900],
 ];
 
 const { chromium } = await loadPlaywright();
