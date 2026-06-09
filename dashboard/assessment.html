@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Assessment Dashboard Test | Grant McCurdy</title>
-    <meta name="description" content="Interactive synthetic assessment dashboard test for GitHub Pages.">
+    <title>Assessment Dashboard | Grant McCurdy</title>
+    <meta name="description" content="Interactive public-safe synthetic assessment dashboard for GitHub Pages.">
     <link rel="stylesheet" href="../assets/css/styles.css?v=dashboard-lines-v2">
   </head>
   <body>
@@ -23,12 +23,35 @@
 
     <main class="detail-main dashboard-main">
       <section class="detail-hero dashboard-hero">
-        <p class="section-kicker">Interactive Test</p>
+        <p class="section-kicker">Interactive Dashboard</p>
         <h1>Assessment Dashboard</h1>
-        <p>Static GitHub Pages dashboard using synthetic multi-year assessment data calibrated from a private assessment score distribution, local JSON, browser-side aggregation, SVG charts, and no external dependencies.</p>
+        <p>Static GitHub Pages dashboard using public-safe synthetic assessment data, local JSON, browser-side aggregation, SVG charts, and no external dependencies.</p>
       </section>
 
       <section class="dashboard-shell" aria-labelledby="dashboard-heading">
+        <div class="metric-grid metric-grid-wide" aria-live="polite">
+          <article class="metric-card">
+            <span>Students</span>
+            <strong id="metric-students">-</strong>
+          </article>
+          <article class="metric-card">
+            <span>Latest Score</span>
+            <strong id="metric-latest">-</strong>
+          </article>
+          <article class="metric-card">
+            <span>Change</span>
+            <strong id="metric-change">-</strong>
+          </article>
+          <article class="metric-card">
+            <span>Completion</span>
+            <strong id="metric-completion">-</strong>
+          </article>
+          <article class="metric-card">
+            <span>Above Target</span>
+            <strong id="metric-target">-</strong>
+          </article>
+        </div>
+
         <div class="dashboard-toolbar dashboard-toolbar-expanded">
           <div>
             <p class="section-kicker">Calibrated Synthetic Data</p>
@@ -139,29 +162,6 @@
             <input type="range" id="ribbon-opacity" min="0.08" max="0.42" step="0.02" value="0.2">
           </label>
           <label class="checkbox-control"><input type="checkbox" id="toggle-smooth-curves" checked> Smooth curves</label>
-        </div>
-
-        <div class="metric-grid metric-grid-wide" aria-live="polite">
-          <article class="metric-card">
-            <span>Students</span>
-            <strong id="metric-students">-</strong>
-          </article>
-          <article class="metric-card">
-            <span>Latest Score</span>
-            <strong id="metric-latest">-</strong>
-          </article>
-          <article class="metric-card">
-            <span>Change</span>
-            <strong id="metric-change">-</strong>
-          </article>
-          <article class="metric-card">
-            <span>Completion</span>
-            <strong id="metric-completion">-</strong>
-          </article>
-          <article class="metric-card">
-            <span>Above Target</span>
-            <strong id="metric-target">-</strong>
-          </article>
         </div>
 
         <article class="dashboard-panel time-panel">

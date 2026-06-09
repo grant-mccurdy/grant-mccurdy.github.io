@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://grant-mccurdy.github.io/sitemap.xml

@@ -35,6 +35,7 @@ grant-mccurdy.github.io/
 - `assets/js/site.js` controls the mobile navigation and header state.
 - `assets/images/portfolio-systems-hero.png` is the current hero image.
 - `.nojekyll` keeps GitHub Pages from applying Jekyll processing.
+- `sitemap.xml` and `robots.txt` expose the public portal pages to crawlers.
 
 ## Local Testing
 
@@ -50,6 +51,18 @@ Then open:
 
 ```text
 http://127.0.0.1:8765/
+```
+
+Run local checks:
+
+```bash
+make check
+```
+
+External GitHub links require network access and are checked separately:
+
+```bash
+make external-links
 ```
 
 ## Project Areas
