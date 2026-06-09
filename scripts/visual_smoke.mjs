@@ -66,7 +66,11 @@ const cases = [
   ["synthetic-desktop", path.join("projects", "synthetic-education-data.html"), 1440, 1000],
   ["synthetic-mobile", path.join("projects", "synthetic-education-data.html"), 390, 900],
   ["assessment-desktop", path.join("projects", "assessment-intelligence.html"), 1440, 1000],
+  ["assessment-mobile", path.join("projects", "assessment-intelligence.html"), 390, 900],
   ["content-desktop", path.join("projects", "content-intelligence-reporting.html"), 1440, 1000],
+  ["content-mobile", path.join("projects", "content-intelligence-reporting.html"), 390, 900],
+  ["workflow-desktop", path.join("projects", "instructional-ai-workflows.html"), 1440, 1000],
+  ["workflow-mobile", path.join("projects", "instructional-ai-workflows.html"), 390, 900],
 ];
 
 const { chromium } = await loadPlaywright();

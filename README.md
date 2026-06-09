@@ -2,7 +2,7 @@
 
 GitHub Pages public project portal for Grant McCurdy.
 
-The site summarizes public-facing project work in synthetic education data, assessment systems, AI-assisted instructional workflows, and content intelligence/reporting pipelines, and routes reviewers to hosted demos, case studies, and source repositories.
+The site summarizes public-facing project work in synthetic education data, assessment systems, AI-assisted instructional workflows, and content intelligence pipelines, and routes reviewers to hosted demos, case studies, and source repositories.
 
 Suggested homepage message:
 
@@ -65,7 +65,8 @@ Use only public-safe screenshots, synthetic data, generalized case-study languag
 
 ## Current Portal State
 
-- Content Intelligence is demo-ready and has a hosted sample report, case study, transcript enrichment examples, and method-pack artifacts.
-- Synthetic Education Data has a public synthetic data engine with methodology, generated artifacts, DuckDB marts, star-schema outputs, and validation checks.
-- Assessment Intelligence has a hosted static dashboard, SQL extract reports, optional Supabase extract reports, AI review artifacts, plot catalog, and active reporting/modeling source artifacts.
-- Instructional AI Workflows has an active synthetic Precalculus FRQ workflow demo in the source repository.
+- The homepage includes a portfolio snapshot for four public project repos, current synthetic-data counts, SQL extract counts, content-object counts, and workflow-demo counts.
+- Content Intelligence is portfolio-ready and has a hosted sample report, case study, transcript enrichment examples, OCR cleanup workflow, information-object map, and method-pack artifacts.
+- Synthetic Education Data has a seven-year public synthetic data engine with methodology, generated artifacts, DuckDB marts, star-schema outputs, Supabase/Postgres serving docs, and current validation summaries.
+- Assessment Intelligence has a hosted static dashboard, five SQL extract files, optional Supabase extract reports, AI review artifacts, plot catalog, and active reporting/modeling source artifacts.
+- Instructional AI Workflows has an active synthetic Precalculus FRQ workflow demo with three evaluated examples, teacher review packets, student-facing feedback, and remediation planning output.

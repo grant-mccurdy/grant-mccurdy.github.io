@@ -48,6 +48,8 @@
             <li>Canvas-style course profile JSON files</li>
             <li>DuckDB SQL warehouse and star-schema marts</li>
             <li>LMS-to-SQL roster reconciliation outputs</li>
+            <li>Supabase/Postgres hosted serving path documentation</li>
+            <li>Pipeline validation narrative with 20 / 20 checks passing</li>
             <li>Generation and validation scripts</li>
             <li>Aggregate grade-level calibration diagnostics</li>
           </ul>
@@ -80,6 +82,10 @@
           <h3>SQL analytics layer</h3>
           <p>The DuckDB warehouse normalizes Canvas-like JSON into raw LMS tables, reconciles rosters against canonical enrollments, and exports star-schema facts and dimensions for downstream reporting.</p>
         </article>
+        <article class="artifact">
+          <h3>Hosted serving contract</h3>
+          <p>The public build documents a Supabase/Postgres path for serving curated synthetic marts while preserving DuckDB as the reproducible local warehouse.</p>
+        </article>
       </section>
 
       <section class="section-shell detail-grid">
@@ -99,7 +105,8 @@
             <li>62 synthetic Canvas course JSON profiles</li>
             <li>14 populated assessment assignment windows</li>
             <li>4,018 long-form assessment score rows</li>
-            <li>24 DuckDB validation checks across raw, Canvas, mart, and star-schema layers</li>
+            <li>20 warehouse validation summary checks passing</li>
+            <li>20 / 20 hosted-pipeline validation checks passing</li>
           </ul>
           <div class="link-row detail-action">
             <a class="text-link" href="assessment-intelligence.html">Assessment brief</a>

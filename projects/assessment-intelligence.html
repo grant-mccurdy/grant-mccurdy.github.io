@@ -36,13 +36,15 @@
         <div>
           <p class="section-kicker">Overview</p>
           <h2>From assessment design to decision support</h2>
-          <p>This project demonstrates how a department or school can move from assessment design to analysis and reporting without exposing real student records. The public analytics layer uses SQL-backed synthetic extracts and keeps the core data-generation and warehouse foundation in <code>synthetic-education-data</code>.</p>
+          <p>This project demonstrates how a department or school can move from assessment design to analysis and reporting without exposing real student records. The public analytics layer uses five SQL-backed synthetic extracts with 442 aggregate rows, and keeps the core data-generation and warehouse foundation in <code>synthetic-education-data</code>.</p>
         </div>
         <div class="detail-panel">
           <h2>Current Artifacts</h2>
           <ul class="clean-list">
             <li>Hosted synthetic assessment dashboard</li>
-            <li>SQL-backed extracts from DuckDB star-schema marts</li>
+            <li>Five SQL-backed extract CSVs from DuckDB star-schema marts</li>
+            <li>442 aggregate extract rows across reporting views</li>
+            <li>287 synthetic readiness rows across 25 course-section groups</li>
             <li>Optional hosted Supabase extract reports</li>
             <li>Dry-run OpenAI extract review artifacts</li>
             <li>Decision-question visualization catalog</li>
@@ -77,7 +79,7 @@
         </article>
         <article class="artifact">
           <h3>SQL-backed analysis</h3>
-          <p>The repo now extracts course-section performance, assignment growth, non-participation patterns, LMS reconciliation, and student readiness records from the synthetic DuckDB warehouse.</p>
+          <p>The repo now extracts course-section performance, assignment growth, non-participation patterns, LMS reconciliation, and 287 student readiness records from the synthetic DuckDB warehouse.</p>
         </article>
         <article class="artifact">
           <h3>Hosted serving path</h3>
@@ -85,7 +87,7 @@
         </article>
         <article class="artifact">
           <h3>AI-assisted review</h3>
-          <p>Dry-run OpenAI review artifacts summarize deterministic SQL extracts without querying Supabase directly or transforming source CSVs.</p>
+          <p>Dry-run OpenAI review artifacts summarize the five deterministic SQL extracts without querying Supabase directly or transforming source CSVs.</p>
         </article>
         <article class="artifact">
           <h3>Visualization catalog</h3>

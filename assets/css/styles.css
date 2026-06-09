@@ -262,6 +262,13 @@ img {
   align-items: start;
 }
 
+.intro-grid > *,
+.case-layout > *,
+.detail-grid > *,
+.roadmap-layout > * {
+  min-width: 0;
+}
+
 .intro-grid p,
 .case-layout p,
 .roadmap-layout p {
@@ -277,7 +284,8 @@ img {
 
 h2,
 h3,
-p {
+p,
+code {
   overflow-wrap: anywhere;
 }
 
@@ -297,7 +305,8 @@ h3 {
 
 .project-grid,
 .principle-grid,
-.artifact-list {
+.artifact-list,
+.snapshot-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1rem;
@@ -307,15 +316,48 @@ h3 {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
+.snapshot-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
 .project-card,
 .principle,
 .detail-panel,
 .study,
 .artifact-link-card,
-.roadmap-list article {
+.roadmap-list article,
+.snapshot-card {
   border: 1px solid var(--line);
   border-radius: var(--radius);
   background: var(--surface);
+}
+
+.snapshot-card {
+  min-height: 11rem;
+  padding: 1.1rem;
+}
+
+.snapshot-card span {
+  display: block;
+  color: var(--gold-2);
+  font-size: 0.76rem;
+  font-weight: 850;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.snapshot-card strong {
+  display: block;
+  margin-top: 0.55rem;
+  color: var(--ink);
+  font-size: clamp(1.75rem, 4vw, 2.65rem);
+  line-height: 1;
+}
+
+.snapshot-card p {
+  margin: 0.65rem 0 0;
+  color: var(--muted);
+  font-size: 0.94rem;
 }
 
 .project-card {
@@ -540,6 +582,10 @@ h3 {
   margin: 1rem 0 0;
   padding-left: 1.2rem;
   color: var(--muted);
+}
+
+.clean-list code {
+  word-break: break-word;
 }
 
 .study-stack {
@@ -1445,6 +1491,7 @@ th {
   .principle-grid,
   .artifact-grid,
   .artifact-list,
+  .snapshot-grid,
   .case-study-grid,
   .dashboard-grid,
   .metric-grid,
