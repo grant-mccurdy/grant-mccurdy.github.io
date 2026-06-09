@@ -1,0 +1,14 @@
+{
+  "name": "grant-mccurdy-github-io",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check:links": "python3 scripts/check_links.py",
+    "check:visual": "node scripts/visual_smoke.mjs",
+    "check": "make check"
+  },
+  "devDependencies": {
+    "playwright": "^1.60.0"
+  }
+}

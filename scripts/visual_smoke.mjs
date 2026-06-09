@@ -69,18 +69,7 @@ const cases = [
   ["content-desktop", path.join("projects", "content-intelligence-reporting.html"), 1440, 1000],
 ];
 
-let playwright;
-try {
-  playwright = await loadPlaywright();
-} catch (error) {
-  if (error?.code === "ERR_MODULE_NOT_FOUND") {
-    console.log("Playwright is not installed; skipping visual smoke checks.");
-    process.exit(0);
-  }
-  throw error;
-}
-
-const { chromium } = playwright;
+const { chromium } = await loadPlaywright();
 const browser = await chromium.launch({ headless: true });
 const results = [];
 
