@@ -1,11 +1,11 @@
 <!doctype html>
-<html lang="en" data-asset-version="dashboard-lines-v2">
+<html lang="en" data-asset-version="dashboard-source-v1">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Assessment Dashboard | Grant McCurdy</title>
-    <meta name="description" content="Interactive public-safe synthetic assessment dashboard for GitHub Pages.">
-    <link rel="stylesheet" href="../assets/css/styles.css?v=dashboard-lines-v2">
+    <meta name="description" content="Interactive assessment dashboard powered by assessment-intelligence SQL extract data.">
+    <link rel="stylesheet" href="../assets/css/styles.css?v=dashboard-source-v1">
   </head>
   <body>
     <header class="site-header compact" data-header>
@@ -25,10 +25,36 @@
       <section class="detail-hero dashboard-hero">
         <p class="section-kicker">Interactive Dashboard</p>
         <h1>Assessment Dashboard</h1>
-        <p>Static GitHub Pages dashboard using public-safe synthetic assessment data, local JSON, browser-side aggregation, SVG charts, and no external dependencies.</p>
+        <p>Static GitHub Pages dashboard powered by the same <code>assessment-intelligence</code> SQL extract data used for public-safe reports, browser-side aggregation, SVG charts, and no external dependencies.</p>
       </section>
 
       <section class="dashboard-shell" aria-labelledby="dashboard-heading">
+        <div class="dashboard-source-strip" aria-label="Dashboard data source">
+          <div class="source-summary">
+            <p class="section-kicker">Data Source</p>
+            <h2>Powered by assessment-intelligence</h2>
+            <p>The assessment repo owns the SQL extract build, privacy validation, and static JSON artifact consumed by this portfolio dashboard.</p>
+          </div>
+          <dl class="source-meta-grid">
+            <div>
+              <dt>Project</dt>
+              <dd><a class="text-link" href="../projects/assessment-intelligence.html" id="source-project">assessment-intelligence</a></dd>
+            </div>
+            <div>
+              <dt>Generated</dt>
+              <dd id="source-generated">-</dd>
+            </div>
+            <div>
+              <dt>Rows</dt>
+              <dd id="source-counts">-</dd>
+            </div>
+            <div>
+              <dt>Contract</dt>
+              <dd id="source-contract">-</dd>
+            </div>
+          </dl>
+        </div>
+
         <div class="metric-grid metric-grid-wide" aria-live="polite">
           <article class="metric-card">
             <span>Students</span>
@@ -54,8 +80,8 @@
 
         <div class="dashboard-toolbar dashboard-toolbar-expanded">
           <div>
-            <p class="section-kicker">Calibrated Synthetic Data</p>
-            <h2 id="dashboard-heading">Program Time Series</h2>
+            <p class="section-kicker">SQL Extract Data</p>
+            <h2 id="dashboard-heading">Program Assessment Windows</h2>
           </div>
           <div class="control-row line-control-grid" aria-label="Line chart controls">
             <label>
@@ -128,12 +154,12 @@
             </select>
           </label>
           <label>
-            Season
-            <select id="season-select">
-              <option value="All">Recent Windows</option>
-              <option value="Fall">Fall Only</option>
-              <option value="Spring">Spring Only</option>
-            </select>
+              Window
+              <select id="season-select">
+              <option value="All">All Windows</option>
+              <option value="Beginning">Beginning Only</option>
+              <option value="End">End Only</option>
+              </select>
           </label>
           <label>
             Ribbon Range
@@ -168,7 +194,7 @@
           <div class="panel-heading">
             <div>
               <h3>Historical Assessment Lines</h3>
-              <span id="time-caption">Fall and spring assessment periods</span>
+              <span id="time-caption">Beginning and end assessment windows</span>
             </div>
             <div class="legend" id="time-legend"></div>
           </div>
@@ -203,7 +229,7 @@
 
           <article class="dashboard-panel">
             <div class="panel-heading">
-              <h3>Skill Heatmap</h3>
+              <h3>Extract Heatmap</h3>
               <span id="skill-caption"></span>
             </div>
             <div id="skill-chart" class="chart-frame heatmap-frame" role="img" aria-label="Synthetic skill heatmap"></div>
@@ -273,8 +299,8 @@
                   <th><button type="button" class="table-sort" data-sort="teacher">Teacher <span aria-hidden="true"></span></button></th>
                   <th><button type="button" class="table-sort" data-sort="section">Section <span aria-hidden="true"></span></button></th>
                   <th><button type="button" class="table-sort" data-sort="students">Students <span aria-hidden="true"></span></button></th>
-                  <th><button type="button" class="table-sort" data-sort="first" id="table-first-period">Fall 2022 <span aria-hidden="true"></span></button></th>
-                  <th><button type="button" class="table-sort" data-sort="latest" id="table-latest-period">Spring 2026 <span aria-hidden="true"></span></button></th>
+                  <th><button type="button" class="table-sort" data-sort="first" id="table-first-period">Assignment 01 <span aria-hidden="true"></span></button></th>
+                  <th><button type="button" class="table-sort" data-sort="latest" id="table-latest-period">Assignment 14 <span aria-hidden="true"></span></button></th>
                   <th><button type="button" class="table-sort" data-sort="change">Change <span aria-hidden="true"></span></button></th>
                   <th><button type="button" class="table-sort" data-sort="completion">Completion <span aria-hidden="true"></span></button></th>
                 </tr>
@@ -286,7 +312,7 @@
       </section>
     </main>
 
-    <script src="../assets/js/site.js?v=dashboard-lines-v2"></script>
-    <script src="../assets/js/assessment-dashboard.js?v=dashboard-lines-v2"></script>
+    <script src="../assets/js/site.js?v=dashboard-source-v1"></script>
+    <script src="../assets/js/assessment-dashboard.js?v=dashboard-source-v1"></script>
   </body>
 </html>

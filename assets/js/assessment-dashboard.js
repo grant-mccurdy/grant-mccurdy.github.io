@@ -74,6 +74,10 @@ const els = {
   lineSort: document.querySelector("#line-sort-select"),
   lineFilter: document.querySelector("#line-filter"),
   lineLimit: document.querySelector("#line-limit-select"),
+  sourceProject: document.querySelector("#source-project"),
+  sourceGenerated: document.querySelector("#source-generated"),
+  sourceCounts: document.querySelector("#source-counts"),
+  sourceContract: document.querySelector("#source-contract"),
   students: document.querySelector("#metric-students"),
   latest: document.querySelector("#metric-latest"),
   change: document.querySelector("#metric-change"),
@@ -142,10 +146,44 @@ function currentSliceLabel(plural = false) {
   return plural ? `${label}s` : label;
 }
 
+function periodDisplayLabel(period) {
+  return period.shortLabel ?? period.label;
+}
+
 function formatMetric(value, precision = 0) {
   if (!Number.isFinite(value)) return "-";
   if (state.metric === "growth") return `${value >= 0 ? "+" : ""}${value.toFixed(precision)} pts`;
   return `${value.toFixed(precision)}%`;
+}
+
+function sourceRecordCounts(source) {
+  return source.source?.recordCounts ?? {
+    periods: source.periods?.length ?? 0,
+    sections: source.sections?.length ?? 0,
+    aggregateRecords: source.records?.length ?? 0,
+    syntheticStudentRecords: source.studentRecords?.length ?? 0,
+  };
+}
+
+function formatContract(value) {
+  if (!value) return "Static JSON";
+  if (value === "sql-extract-dashboard-json-v1") return "SQL extract JSON v1";
+  return String(value)
+    .replace("static-assessment-dashboard-json-", "Static JSON ")
+    .replaceAll("-", " ")
+    .replace(/\bv(\d+)\b/i, "v$1");
+}
+
+function renderSourceMetadata(source) {
+  const metadata = source.source ?? {};
+  const counts = sourceRecordCounts(source);
+  const project = metadata.project ?? "assessment-intelligence";
+  if (els.sourceProject) els.sourceProject.textContent = project;
+  if (els.sourceGenerated) els.sourceGenerated.textContent = source.generated ?? "-";
+  if (els.sourceCounts) {
+    els.sourceCounts.textContent = `${counts.sections ?? 0} sections / ${counts.syntheticStudentRecords ?? 0} student-period rows`;
+  }
+  if (els.sourceContract) els.sourceContract.textContent = formatContract(metadata.contract);
 }
 
 function groupKeyFromStudentRecord(record, groupBy = state.groupBy) {
@@ -343,7 +381,8 @@ function renderMetrics(records) {
   const firstValue = first ? first[state.metric] : 0;
   const latestValue = latest ? latest[state.metric] : 0;
   const students = latestRows.reduce((sum, row) => sum + row.students, 0);
-  const targetRows = latestRows.filter((row) => row.score >= 76);
+  const targetScore = state.source.bands?.mastery?.line?.[(latest?.period?.order ?? 1) - 1] ?? 70;
+  const targetRows = latestRows.filter((row) => row.score >= targetScore);
   const completed = latestRows.reduce((sum, row) => sum + (row.completed ?? row.students), 0);
 
   els.students.textContent = students.toLocaleString();
@@ -384,6 +423,9 @@ function pointsToCurvePath(points, firstCommand = "M") {
 }
 
 function visiblePeriodWindow(periodData) {
+  if (state.source?.source?.contract === "sql-extract-dashboard-json-v1") {
+    return periodData;
+  }
   if (state.season === "All" && periodData.length > state.lines.recentWindowCount) {
     return periodData.slice(-state.lines.recentWindowCount);
   }
@@ -598,7 +640,7 @@ function renderTimeSeries(records) {
   const sectionLines = state.toggles.sections ? renderSectionLines(records, periods, x, y) : "";
 
   const xLabels = periods.map((period, index) => `
-    <text x="${x(index)}" y="${height - 34}" class="axis-label x-label" text-anchor="middle">${period.label}</text>
+    <text x="${x(index)}" y="${height - 34}" class="axis-label x-label" text-anchor="middle">${periodDisplayLabel(period)}</text>
   `).join("");
 
   const emptyState = selectedSeries.length ? "" : `
@@ -759,7 +801,7 @@ function renderCompletionChart() {
 
   const points = rows.map((row, index) => ({ x: x(index), y: y(row.completion) }));
   const labels = rows.map((row, index) => `
-    <text x="${x(index)}" y="${height - 13}" class="axis-label mini-x-label" text-anchor="middle">${row.period.label.replace(" ", "\n")}</text>
+    <text x="${x(index)}" y="${height - 13}" class="axis-label mini-x-label" text-anchor="middle">${periodDisplayLabel(row.period)}</text>
   `).join("");
 
   els.completionChart.innerHTML = `
@@ -821,7 +863,7 @@ function renderDistributionChart() {
     y: y(state.visual.center === "median" ? stat.median : stat.mean),
   }));
   const labels = periods.map((period, index) => `
-    <text x="${x(index)}" y="${height - 28}" class="axis-label x-label" text-anchor="end" transform="rotate(-35 ${x(index)} ${height - 28})">${period.label}</text>
+    <text x="${x(index)}" y="${height - 28}" class="axis-label x-label" text-anchor="end" transform="rotate(-35 ${x(index)} ${height - 28})">${periodDisplayLabel(period)}</text>
   `).join("");
 
   els.distributionChart.innerHTML = `
@@ -930,6 +972,7 @@ function renderSkillHeatmap(records) {
   const latest = latestPeriodData(records);
   const rows = latest.rows;
   const skills = unique(rows.flatMap((record) => Object.keys(record.skills)));
+  const absoluteSkills = state.source.source?.skillMode === "absolute";
   const groups = aggregate(rows, state.groupBy);
   const width = Math.max(760, 160 + skills.length * 118);
   const rowHeight = 42;
@@ -947,7 +990,10 @@ function renderSkillHeatmap(records) {
     const label = `<text x="0" y="${y + 25}" class="chart-label">${group.key}</text>`;
     const cells = skills.map((skill, skillIndex) => {
       const skillRows = group.rows.filter((row) => row.skills[skill] !== undefined);
-      const base = skillRows.length ? weightedAverage(skillRows.map((row) => ({ ...row, skillValue: row.score + row.skills[skill] })), "skillValue") : 0;
+      const base = skillRows.length ? weightedAverage(skillRows.map((row) => ({
+        ...row,
+        skillValue: absoluteSkills ? row.skills[skill] : row.score + row.skills[skill],
+      })), "skillValue") : 0;
       const intensity = clamp((base - 45) / 45, 0, 1);
       const fill = heatColor(0.18 + intensity * 0.78);
       return `
@@ -959,7 +1005,7 @@ function renderSkillHeatmap(records) {
   }).join("");
 
   els.skillChart.innerHTML = `<svg viewBox="0 0 ${width} ${height}" aria-hidden="true" focusable="false">${header}${body}</svg>`;
-  els.skillCaption.textContent = `${latest.period?.label ?? ""} synthetic skill scores`;
+  els.skillCaption.textContent = absoluteSkills ? `${latest.period?.label ?? ""} SQL extract indicators` : `${latest.period?.label ?? ""} synthetic skill scores`;
 }
 
 function renderTable(records) {
@@ -1074,13 +1120,16 @@ function renderInsights(records) {
   const completion = weightedAverage(latest.rows, "completion");
   const band = state.source.bands.department;
   const latestTarget = band.lower[(latest.period?.order ?? 1) - 1];
+  const sqlBacked = state.source.source?.contract === "sql-extract-dashboard-json-v1";
 
   const notes = [
     strongest ? `${strongest.key} shows the strongest synthetic trend at ${fmtPts(strongest.change)} since the first selected period.` : "No trend is available for the current filter.",
     watch ? `${watch.key} is the lowest latest group at ${fmtPct(watch.score)}, making it a candidate for item-level review or targeted supports.` : "No watch group is available for the current filter.",
     `Latest completion is ${fmtPct(completion)}, which is ${completion >= 95 ? "above" : "below"} the operating target of 95%.`,
-    `The score ribbons are calibrated from a private assessment score distribution, then regenerated as synthetic 30-question assessment data with declining non-participation over time.`,
-    `The department range lower bound for the latest period is ${fmtPct(latestTarget)}; use the ribbon to compare current performance with the synthetic benchmark corridor.`
+    sqlBacked
+      ? `The score ribbons are computed from the SQL student readiness extract and use the same public-safe source layer as the assessment report artifacts.`
+      : `The score ribbons are calibrated from a private assessment score distribution, then regenerated as synthetic 30-question assessment data with declining non-participation over time.`,
+    `The main range lower bound for the latest period is ${fmtPct(latestTarget)}; use the ribbon to compare current performance with the synthetic benchmark corridor.`
   ];
 
   els.insights.innerHTML = notes.map((note) => `<li>${note}</li>`).join("");
@@ -1357,6 +1406,7 @@ fetch(`../data/synthetic/assessment-dashboard.json?v=${assetVersion}`)
   .then((source) => {
     state.source = source;
     state.records = buildRecords(source);
+    renderSourceMetadata(source);
     initControls();
     render();
   })

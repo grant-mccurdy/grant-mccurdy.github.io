@@ -759,6 +759,60 @@ h3 {
   padding: 0 0 5rem;
 }
 
+.dashboard-source-strip {
+  display: grid;
+  grid-template-columns: minmax(16rem, 1.05fr) minmax(0, 1.6fr);
+  gap: 1rem;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: 0 10px 26px rgba(16, 24, 32, 0.06);
+}
+
+.source-summary h2 {
+  margin: 0.2rem 0 0.45rem;
+  font-size: clamp(1.45rem, 2.4vw, 2rem);
+}
+
+.source-summary p:last-child {
+  margin: 0;
+  color: var(--muted);
+}
+
+.source-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin: 0;
+}
+
+.source-meta-grid div {
+  min-width: 0;
+  padding: 0.8rem;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--surface-soft);
+}
+
+.source-meta-grid dt {
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 850;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.source-meta-grid dd {
+  margin: 0.35rem 0 0;
+  color: var(--ink);
+  font-size: 0.96rem;
+  font-weight: 800;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
 .dashboard-toolbar {
   display: flex;
   align-items: end;
@@ -1603,7 +1657,9 @@ th {
   }
 
   .dashboard-toolbar-expanded,
-  .line-control-grid {
+  .line-control-grid,
+  .dashboard-source-strip,
+  .source-meta-grid {
     grid-template-columns: 1fr;
   }
 
