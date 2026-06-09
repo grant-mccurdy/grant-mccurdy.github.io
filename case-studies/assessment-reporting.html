@@ -25,7 +25,7 @@
       <section class="detail-hero">
         <p class="section-kicker">Case Study</p>
         <h1>Assessment reporting architecture</h1>
-        <p>A public-safe workflow for turning private-reference assessment patterns into synthetic data, validation artifacts, dashboard-ready JSON, and decision-support reporting.</p>
+        <p>A public-safe workflow for turning private-reference assessment patterns into synthetic data, SQL-backed extracts, validation artifacts, dashboard-ready outputs, and decision-support reporting.</p>
         <div class="hero-actions detail-actions">
           <a class="button primary" href="../dashboard/assessment.html">Open Dashboard</a>
           <a class="button outline" href="../projects/assessment-intelligence.html">Project Brief</a>
@@ -54,17 +54,23 @@
         <article class="case-step">
           <span>03</span>
           <h3>Tools and Methods</h3>
-          <p>The source repository uses R for synthesis, modeling, validation, and dashboard JSON export, plus small Python utilities for privacy validation and dry-run AI-assisted memo generation.</p>
+          <p>The source repositories use Python and DuckDB for LMS-to-SQL extraction, star-schema marts, and validation; SQL for assessment extracts; R for synthesis and modeling; and small Python utilities for privacy validation and dry-run AI-assisted memo generation.</p>
         </article>
 
         <article class="case-step">
           <span>04</span>
           <h3>Result and Value</h3>
-          <p>The hosted dashboard demonstrates course, grade, teacher, section, growth, completion, skill, and distribution views using synthetic multi-year assessment records on GitHub Pages without a backend.</p>
+          <p>The hosted dashboard demonstrates course, grade, teacher, section, growth, completion, skill, and distribution views using synthetic assessment records. The source workflow now also produces SQL-backed extracts for course-section performance, growth diagnostics, non-participation analysis, roster QA, and readiness reporting.</p>
         </article>
 
         <article class="case-step">
           <span>05</span>
+          <h3>Serving and Review Layer</h3>
+          <p>DuckDB remains the reproducible local warehouse, while the optional Supabase extract path demonstrates a hosted public-safe serving contract. Dry-run AI review then summarizes deterministic extracts without becoming a data-generation step.</p>
+        </article>
+
+        <article class="case-step">
+          <span>06</span>
           <h3>What I Learned</h3>
           <p>The privacy boundary is strongest when synthetic generation, validation, dashboard export, and reporting language are designed as one pipeline. That makes the public artifact useful without implying it contains real school records.</p>
         </article>

@@ -26,6 +26,7 @@
           <span></span>
         </button>
         <div class="nav-links" data-nav-links>
+          <a href="#map">Map</a>
           <a href="#artifacts">Artifacts</a>
           <a href="#projects">Projects</a>
           <a href="#case-studies">Case Studies</a>
@@ -59,6 +60,36 @@
         </div>
       </section>
 
+      <section class="section-shell" id="map" aria-labelledby="map-heading">
+        <div class="section-heading">
+          <p class="section-kicker">Project Map</p>
+          <h2 id="map-heading">How the public repos fit together</h2>
+        </div>
+
+        <div class="artifact-list">
+          <a class="artifact-link-card" href="projects/synthetic-education-data.html">
+            <span class="artifact-kind">Foundation</span>
+            <strong>Synthetic Education Data</strong>
+            <p>Generates public-safe student, course, assessment, Canvas-style, DuckDB, and star-schema artifacts.</p>
+          </a>
+          <a class="artifact-link-card" href="projects/assessment-intelligence.html">
+            <span class="artifact-kind">Analytics layer</span>
+            <strong>Assessment Intelligence</strong>
+            <p>Consumes warehouse extracts for dashboards, SQL reports, Supabase serving checks, and AI-assisted review.</p>
+          </a>
+          <a class="artifact-link-card" href="projects/content-intelligence-reporting.html">
+            <span class="artifact-kind">Information layer</span>
+            <strong>Content Intelligence</strong>
+            <p>Turns cleaned transcripts, OCR outputs, and notes into source-grounded information objects and method packs.</p>
+          </a>
+          <a class="artifact-link-card" href="projects/instructional-ai-workflows.html">
+            <span class="artifact-kind">Instructional layer</span>
+            <strong>Instructional AI Workflows</strong>
+            <p>Demonstrates teacher-reviewed rubric evidence, feedback, and remediation artifacts on synthetic submissions.</p>
+          </a>
+        </div>
+      </section>
+
       <section class="section-shell" id="artifacts" aria-labelledby="artifacts-heading">
         <div class="section-heading">
           <p class="section-kicker">Featured Artifacts</p>
@@ -74,7 +105,12 @@
           <a class="artifact-link-card" href="projects/synthetic-education-data.html">
             <span class="artifact-kind">Synthetic data engine</span>
             <strong>Synthetic Education Data</strong>
-            <p>Validated students, courses, sections, enrollments, attendance behavior, assessment scores, and Canvas-style artifacts.</p>
+            <p>Validated students, courses, sections, enrollments, attendance behavior, assessment scores, Canvas-style artifacts, and SQL-ready marts.</p>
+          </a>
+          <a class="artifact-link-card" href="projects/assessment-intelligence.html">
+            <span class="artifact-kind">SQL reporting</span>
+            <strong>Assessment Warehouse Extracts</strong>
+            <p>DuckDB and Supabase extracts for growth, non-participation, roster reconciliation, readiness, and AI review.</p>
           </a>
           <a class="artifact-link-card" href="projects/content-intelligence-demo-report.html">
             <span class="artifact-kind">Demo report</span>
@@ -83,7 +119,7 @@
           </a>
           <a class="artifact-link-card" href="case-studies/content-intelligence-reporting.html">
             <span class="artifact-kind">Case study</span>
-            <strong>Content-to-Report Pipeline</strong>
+            <strong>Content Intelligence Pipeline</strong>
             <p>The system story behind manifest records, corpus segments, retrieval, and report generation.</p>
           </a>
           <a class="artifact-link-card" href="projects/assessment-gradebook-synthesis.html">
@@ -112,12 +148,12 @@
               <span class="project-status">Active build</span>
             </div>
             <h3>Synthetic Education Data</h3>
-            <p>Privacy-preserving synthetic education data engine for assessment analytics, dashboard development, and learning-systems prototyping.</p>
-            <p class="inspect-note">Inspect first: the methodology notes, generated state object, assessment gradebook, validation script, and calibration diagnostics.</p>
+            <p>Privacy-preserving synthetic education data engine with Canvas-like artifacts, DuckDB warehouse, LMS-to-SQL reconciliation, and star-schema assessment marts.</p>
+            <p class="inspect-note">Inspect first: the methodology notes, SQL warehouse docs, star-schema ERD, generated marts, validation script, and query examples.</p>
             <ul class="tag-list" aria-label="Synthetic math department tags">
               <li>Synthetic Data</li>
-              <li>Validation</li>
-              <li>Assessment Simulation</li>
+              <li>DuckDB SQL</li>
+              <li>Star Schema</li>
             </ul>
             <div class="link-row">
               <a class="text-link" href="projects/synthetic-education-data.html">Project brief</a>
@@ -131,12 +167,12 @@
               <span class="project-status">Active build</span>
             </div>
             <h3>Assessment Intelligence</h3>
-            <p>Assessment design, analytics, R modeling pipeline, dashboarding, diagnostics, and decision-support reporting.</p>
-            <p class="inspect-note">Inspect first: the hosted dashboard, then the analytics, diagnostics, and reporting workflow in the source repo.</p>
+            <p>Assessment design, analytics, SQL-backed extracts, R modeling, dashboarding, diagnostics, and decision-support reporting.</p>
+            <p class="inspect-note">Inspect first: the hosted dashboard, then the DuckDB extract report, analytics workflow, diagnostics, and reporting artifacts in the source repo.</p>
             <ul class="tag-list" aria-label="Assessment intelligence tags">
               <li>Assessment Design</li>
-              <li>Synthetic Data</li>
-              <li>Reporting</li>
+              <li>SQL Extracts</li>
+              <li>AI Review</li>
             </ul>
             <div class="link-row">
               <a class="text-link" href="dashboard/assessment.html">Open dashboard</a>
@@ -167,22 +203,22 @@
 
           <article class="project-card">
             <div class="project-top">
-              <span class="project-code">CR</span>
-              <span class="project-status">Demo-ready</span>
+            <span class="project-code">CR</span>
+            <span class="project-status">Demo-ready</span>
             </div>
-            <h3>Content Intelligence Reporting</h3>
-            <p>Corpus construction and source-grounded report generation from unstructured text using public-safe or synthetic sources.</p>
-            <p class="inspect-note">Inspect first: the demo report, then the method pack and information-object outputs in the source repo.</p>
+            <h3>Content Intelligence</h3>
+            <p>Corpus construction, transcript enrichment, information-object modeling, and source-grounded report generation from public-safe content.</p>
+            <p class="inspect-note">Inspect first: the demo report, transcript enrichment brief, method pack, and information-object outputs in the source repo.</p>
             <ul class="tag-list" aria-label="Content intelligence tags">
               <li>Corpus Pipeline</li>
+              <li>Transcript Enrichment</li>
               <li>Source Grounding</li>
-              <li>Reports</li>
             </ul>
             <div class="link-row">
               <a class="text-link" href="projects/content-intelligence-demo-report.html">Demo report</a>
               <a class="text-link" href="projects/content-intelligence-reporting.html">Project brief</a>
               <a class="text-link" href="case-studies/content-intelligence-reporting.html">Case study</a>
-              <a class="text-link" href="https://github.com/grant-mccurdy/content-intelligence-reporting">GitHub repo</a>
+              <a class="text-link" href="https://github.com/grant-mccurdy/content-intelligence">GitHub repo</a>
             </div>
           </article>
         </div>
@@ -197,18 +233,18 @@
           <div class="roadmap-list">
             <article>
               <span>Demo-ready</span>
-              <h3>Content Intelligence Reporting</h3>
-              <p>Public scaffold includes synthetic sources, manifest/corpus generation, staged media and OCR demos, method pack, validation, and a hosted sample report.</p>
+              <h3>Content Intelligence</h3>
+              <p>Public scaffold includes synthetic sources, manifest/corpus generation, staged media and OCR demos, transcript enrichment packets, method pack, validation, and a hosted sample report.</p>
             </article>
             <article>
               <span>Active build</span>
               <h3>Synthetic Education Data</h3>
-              <p>Public repo now surfaces the synthetic data engine behind the assessment ecosystem, including beginning- and end-of-year scores, attendance modeling, longitudinal readiness updates, Canvas-style artifacts, and validation checks.</p>
+              <p>Public repo now surfaces the synthetic data engine behind the assessment ecosystem, including beginning- and end-of-year scores, attendance modeling, Canvas-style artifacts, DuckDB SQL warehouse, star-schema marts, and validation checks.</p>
             </article>
             <article>
               <span>Active build</span>
               <h3>Assessment Intelligence</h3>
-              <p>Substantial analytics, reporting, validation, and dashboard assets exist. The portal surfaces the dashboard and gradebook synthesis proof points while the synthetic data foundation remains in its own repo.</p>
+              <p>Substantial analytics, reporting, validation, SQL extract, Supabase serving, AI review, visualization catalog, and dashboard assets exist. The portal surfaces the dashboard, SQL-backed extracts, and gradebook synthesis proof points while the synthetic data foundation remains in its own repo.</p>
             </article>
             <article>
               <span>Active build</span>
@@ -234,9 +270,9 @@
               <span>02</span>
               <strong>Feedback, Review, and Remediation Artifacts</strong>
             </a>
-            <a href="case-studies/content-intelligence-reporting.html">
-              <span>03</span>
-              <strong>Content-to-Report Pipeline</strong>
+          <a href="case-studies/content-intelligence-reporting.html">
+            <span>03</span>
+              <strong>Content Intelligence Pipeline</strong>
             </a>
           </div>
         </div>
@@ -271,7 +307,7 @@
           <a href="projects/synthetic-education-data.html">Synthetic Data</a>
           <a href="projects/assessment-intelligence.html">Assessment</a>
           <a href="projects/instructional-ai-workflows.html">Workflows</a>
-          <a href="projects/content-intelligence-reporting.html">Reporting</a>
+          <a href="projects/content-intelligence-reporting.html">Content Intelligence</a>
         </div>
       </div>
     </footer>

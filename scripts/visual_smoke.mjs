@@ -65,9 +65,22 @@ const cases = [
   ["home-mobile", "index.html", 390, 900],
   ["synthetic-desktop", path.join("projects", "synthetic-education-data.html"), 1440, 1000],
   ["synthetic-mobile", path.join("projects", "synthetic-education-data.html"), 390, 900],
+  ["assessment-desktop", path.join("projects", "assessment-intelligence.html"), 1440, 1000],
+  ["content-desktop", path.join("projects", "content-intelligence-reporting.html"), 1440, 1000],
 ];
 
-const { chromium } = await loadPlaywright();
+let playwright;
+try {
+  playwright = await loadPlaywright();
+} catch (error) {
+  if (error?.code === "ERR_MODULE_NOT_FOUND") {
+    console.log("Playwright is not installed; skipping visual smoke checks.");
+    process.exit(0);
+  }
+  throw error;
+}
+
+const { chromium } = playwright;
 const browser = await chromium.launch({ headless: true });
 const results = [];
 

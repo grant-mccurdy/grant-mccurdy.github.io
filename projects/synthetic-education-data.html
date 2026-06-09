@@ -25,7 +25,7 @@
       <section class="detail-hero">
         <p class="section-kicker">Project Brief</p>
         <h1>Synthetic Education Data</h1>
-        <p>A privacy-preserving synthetic education data engine that simulates a high-school math department for assessment analytics, dashboard development, and learning-systems prototyping.</p>
+        <p>A privacy-preserving synthetic education data engine that simulates a high-school math department for assessment analytics, LMS-to-SQL prototyping, dashboard development, and learning-systems prototyping.</p>
         <div class="hero-actions detail-actions">
           <a class="button primary" href="https://github.com/grant-mccurdy/synthetic-education-data">GitHub Repo</a>
           <a class="button outline" href="assessment-intelligence.html">Assessment Layer</a>
@@ -37,7 +37,7 @@
           <p class="section-kicker">Overview</p>
           <h2>Public-safe data foundation</h2>
           <p>This project demonstrates how to build realistic education analytics infrastructure without publishing protected student data, raw LMS exports, real gradebooks, teacher names, section labels, or school-private records.</p>
-          <p>The generator creates a coherent synthetic department system rather than isolated fake rows: students, teachers, courses, sections, enrollments, assessment scores, attendance behavior, Canvas-style course artifacts, and validation checks.</p>
+          <p>The generator creates a coherent synthetic department system rather than isolated fake rows: students, teachers, courses, sections, enrollments, assessment scores, attendance behavior, Canvas-style course artifacts, SQL warehouse tables, and validation checks.</p>
         </div>
         <div class="detail-panel">
           <h2>Current Artifacts</h2>
@@ -46,6 +46,8 @@
             <li>All-school math assessment gradebook CSV</li>
             <li>Course, section, and enrollment exports</li>
             <li>Canvas-style course profile JSON files</li>
+            <li>DuckDB SQL warehouse and star-schema marts</li>
+            <li>LMS-to-SQL roster reconciliation outputs</li>
             <li>Generation and validation scripts</li>
             <li>Aggregate grade-level calibration diagnostics</li>
           </ul>
@@ -74,23 +76,30 @@
           <h3>Validation boundary</h3>
           <p>The validator checks row counts, schema, enrollment consistency, score bounds, assignment population policy, Canvas-style profile coverage, and banned private/source strings.</p>
         </article>
+        <article class="artifact">
+          <h3>SQL analytics layer</h3>
+          <p>The DuckDB warehouse normalizes Canvas-like JSON into raw LMS tables, reconciles rosters against canonical enrollments, and exports star-schema facts and dimensions for downstream reporting.</p>
+        </article>
       </section>
 
       <section class="section-shell detail-grid">
         <div>
           <p class="section-kicker">Relationship</p>
           <h2>Feeds the assessment portfolio</h2>
-          <p><code>synthetic-education-data</code> is the data generation and validation foundation. <code>assessment-intelligence</code> is the analytics and reporting layer that can consume synthetic artifacts for dashboards, diagnostics, reports, and decision-support workflows.</p>
+          <p><code>synthetic-education-data</code> is the data generation, validation, and SQL warehouse foundation. <code>assessment-intelligence</code> is the analytics and reporting layer that consumes SQL-backed extracts for dashboards, diagnostics, reports, and decision-support workflows.</p>
         </div>
         <div class="detail-panel">
           <h2>Current Scope</h2>
           <ul class="clean-list">
-            <li>Baseline 2025-2026 school year</li>
-            <li>287 synthetic students</li>
-            <li>5 synthetic teachers and 25 sections</li>
-            <li>Assignment 01 as beginning-of-year assessment</li>
-            <li>Assignment 02 as first end-of-year transition</li>
-            <li>Assignments 03-14 reserved for later longitudinal transitions</li>
+            <li>Seven-year horizon from 2025-2026 through 2031-2032</li>
+            <li>696 all-ever synthetic students</li>
+            <li>287 active students per school year</li>
+            <li>5 synthetic teachers per school year</li>
+            <li>174 synthetic sections across the horizon</li>
+            <li>62 synthetic Canvas course JSON profiles</li>
+            <li>14 populated assessment assignment windows</li>
+            <li>4,018 long-form assessment score rows</li>
+            <li>24 DuckDB validation checks across raw, Canvas, mart, and star-schema layers</li>
           </ul>
           <div class="link-row detail-action">
             <a class="text-link" href="assessment-intelligence.html">Assessment brief</a>
@@ -107,6 +116,25 @@
           </div>
           <p>Public artifacts may include fake identifiers, synthetic enrollments, synthetic assignment scores, generalized calibration parameters, and public-safe aggregate diagnostics. They must not include real students, rosters, LMS exports, private assessment artifacts, private teacher names, internal section labels, private paths, or credentials.</p>
         </div>
+      </section>
+
+      <section class="section-shell artifact-grid" aria-labelledby="warehouse-heading">
+        <div class="section-heading">
+          <p class="section-kicker">Warehouse Outputs</p>
+          <h2 id="warehouse-heading">What downstream tools can consume</h2>
+        </div>
+        <article class="artifact">
+          <h3>Analytic marts</h3>
+          <p>Exports include assessment facts, LMS enrollment facts, readiness, growth, missingness, roster reconciliation, teacher-section effects, and validation summaries.</p>
+        </article>
+        <article class="artifact">
+          <h3>Star schema</h3>
+          <p>The SQL layer provides student, course, section, teacher, assignment, assessment-score, and LMS-enrollment dimensions and facts.</p>
+        </article>
+        <article class="artifact">
+          <h3>Hosted path</h3>
+          <p>The repo documents an optional Supabase/Postgres serving layer for public-safe synthetic analytics tables after private credentials are supplied locally.</p>
+        </article>
       </section>
     </main>
   </body>

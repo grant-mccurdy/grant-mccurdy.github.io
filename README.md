@@ -57,7 +57,7 @@ http://127.0.0.1:8765/
 - `synthetic-education-data`: privacy-preserving synthetic education data generation and validation.
 - `assessment-intelligence`: assessment design, analytics, dashboards, diagnostics, and reporting workflows.
 - `instructional-ai-workflows`: teacher-controlled AI-assisted feedback, review, and remediation workflows.
-- `content-intelligence-reporting`: unstructured content processing and source-grounded report generation.
+- `content-intelligence`: unstructured content processing, transcript enrichment, source-grounded information objects, and report generation.
 
 ## Public Safety Rules
 
@@ -65,7 +65,7 @@ Use only public-safe screenshots, synthetic data, generalized case-study languag
 
 ## Current Portal State
 
-- Content Intelligence Reporting is demo-ready and has a hosted sample report and case study.
-- Synthetic Education Data has a public synthetic data engine with methodology, generated artifacts, and validation checks.
-- Assessment Intelligence has a hosted static dashboard and active reporting/modeling source artifacts.
+- Content Intelligence is demo-ready and has a hosted sample report, case study, transcript enrichment examples, and method-pack artifacts.
+- Synthetic Education Data has a public synthetic data engine with methodology, generated artifacts, DuckDB marts, star-schema outputs, and validation checks.
+- Assessment Intelligence has a hosted static dashboard, SQL extract reports, optional Supabase extract reports, AI review artifacts, plot catalog, and active reporting/modeling source artifacts.
 - Instructional AI Workflows has an active synthetic Precalculus FRQ workflow demo in the source repository.
