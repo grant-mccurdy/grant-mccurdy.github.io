@@ -1,11 +1,11 @@
 {
-  "generated": "2026-06-09",
+  "generated": "2026-06-21",
   "source": {
     "project": "assessment-intelligence",
-    "upstreamProject": "synthetic-education-data",
+    "upstreamProject": "education-data-simulation-engine",
     "pipeline": "make dashboard-sync",
     "builder": "scripts/build_sql_dashboard_json.py",
-    "extractDir": "data/external/synthetic-education-data",
+    "extractDir": "data/external/education-data-simulation-engine",
     "contract": "sql-extract-dashboard-json-v1",
     "dataClass": "public-safe synthetic SQL warehouse extracts",
     "skillMode": "absolute",

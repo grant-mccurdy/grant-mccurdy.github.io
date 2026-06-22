@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Assessment-to-Remediation Pipeline | Grant McCurdy</title>
+    <meta name="description" content="Public-safe math diagnostic, review gate, Canvas dry-run export, feedback, remediation, and mastery-evidence project brief.">
+    <link rel="stylesheet" href="../assets/css/styles.css">
+  </head>
+  <body>
+    <header class="site-header compact" data-header>
+      <nav class="nav-shell" aria-label="Primary navigation">
+        <a class="brand" href="../index.html">
+          <span class="brand-mark" aria-hidden="true">GM</span>
+          <span class="brand-text">Grant McCurdy</span>
+        </a>
+        <div class="nav-links static">
+          <a href="../index.html#projects">Projects</a>
+          <a href="../case-studies/index.html">Case Studies</a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="detail-main">
+      <section class="detail-hero">
+        <p class="section-kicker">Project Brief</p>
+        <h1>Assessment-to-Remediation Pipeline</h1>
+        <p>A public-safe prototype for connecting math diagnostic evidence to feedback, remediation, mastery checks, and decision-support reporting.</p>
+        <div class="hero-actions detail-actions">
+          <a class="button primary" href="https://github.com/grant-mccurdy/public-workspace/tree/main/assessment-to-remediation-pipeline">GitHub Folder</a>
+          <a class="button outline" href="assessment-intelligence.html">Assessment Layer</a>
+        </div>
+      </section>
+
+      <section class="section-shell detail-grid">
+        <div>
+          <p class="section-kicker">Overview</p>
+          <h2>From diagnostic design to instructional action</h2>
+          <p>This project shows an inspectable workflow for moving from a standards-aligned math-readiness diagnostic to reviewable instructional artifacts. The current public MVP focuses on assessment authoring, preview generation, automated review, and offline Canvas New Quizzes payloads.</p>
+          <p>The workflow is intentionally local, static, and reproducible. It does not claim to be a validated standardized test, a live LMS deployment, or a production Canvas integration.</p>
+        </div>
+        <div class="detail-panel">
+          <h2>Current Artifacts</h2>
+          <ul class="clean-list">
+            <li>36 original math-readiness diagnostic items</li>
+            <li>Two 30-minute modules scaled to a one-hour form</li>
+            <li>Student-facing HTML preview</li>
+            <li>Instructor review HTML preview</li>
+            <li>Automated review gate with passing public artifact set</li>
+            <li>GPT-5.5 item review marked <code>POLISH_RECOMMENDED</code></li>
+            <li>GPT-5.5 visual review with no presentation blocker</li>
+            <li>Offline Canvas New Quizzes payload with 36 included items</li>
+            <li>Public-safe project brief and portfolio case-study draft</li>
+          </ul>
+          <div class="link-row detail-action">
+            <a class="text-link" href="https://github.com/grant-mccurdy/public-workspace/tree/main/assessment-to-remediation-pipeline">Source folder</a>
+            <a class="text-link" href="https://github.com/grant-mccurdy/public-workspace/blob/main/assessment-to-remediation-pipeline/docs/portfolio-case-study-draft.md">Case-study draft</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section-shell artifact-grid" aria-labelledby="remediation-proof-heading">
+        <div class="section-heading">
+          <p class="section-kicker">System Proof</p>
+          <h2 id="remediation-proof-heading">What this project demonstrates</h2>
+        </div>
+        <article class="artifact">
+          <h3>Assessment architecture</h3>
+          <p>The item bank uses an original math-readiness blueprint with SAT Math domain proportions scaled to Algebra, Advanced Math, Problem-Solving and Data Analysis, and Geometry and Trigonometry.</p>
+        </article>
+        <article class="artifact">
+          <h3>Review-gated release</h3>
+          <p>Generated previews, deterministic checks, GPT-5.5 item review, GPT-5.5 visual review, and an automated review gate create a public-safe release boundary.</p>
+        </article>
+        <article class="artifact">
+          <h3>Canvas dry-run boundary</h3>
+          <p>The project generates offline Canvas New Quizzes payload artifacts and dry-run validation without touching a live LMS or using private course identifiers.</p>
+        </article>
+        <article class="artifact">
+          <h3>Analytics-to-action design</h3>
+          <p>The planned next slice connects synthetic attempts to scoring, item/domain analysis, misconception tags, feedback, remediation recommendations, and mastery-check evidence.</p>
+        </article>
+        <article class="artifact">
+          <h3>Public-safety discipline</h3>
+          <p>The repo forbids real student data, parent data, school-private records, grades, submissions, rosters, emails, API keys, OAuth tokens, and copied commercial assessment items.</p>
+        </article>
+      </section>
+
+      <section class="intro-band" aria-labelledby="remediation-safety-heading">
+        <div class="section-shell intro-grid">
+          <div>
+            <p class="section-kicker">Safety Boundary</p>
+            <h2 id="remediation-safety-heading">Prototype, not production</h2>
+          </div>
+          <p>This is a public-safe assessment-authoring and review-gate MVP. It should be described as an internal math-readiness diagnostic prototype, not a validated standardized test, live LMS deployment, or production Canvas integration.</p>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

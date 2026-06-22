@@ -9,8 +9,10 @@ const requireFromHere = createRequire(import.meta.url);
 const mimeTypes = {
   ".css": "text/css; charset=utf-8",
   ".html": "text/html; charset=utf-8",
+  ".jpg": "image/jpeg",
   ".js": "text/javascript; charset=utf-8",
   ".json": "application/json; charset=utf-8",
+  ".mp4": "video/mp4",
   ".png": "image/png",
   ".txt": "text/plain; charset=utf-8",
   ".xml": "application/xml; charset=utf-8",
@@ -88,7 +90,7 @@ async function inspect(page) {
   const overflow = await page.evaluate(() =>
     Array.from(document.querySelectorAll("body *"))
       .filter((el) => {
-        if (el.classList?.contains("hero-bg")) return false;
+        if (el.closest(".hero-media")) return false;
         if (el.closest(".chart-frame, .table-wrap")) return false;
         const rect = el.getBoundingClientRect();
         return (
@@ -105,13 +107,34 @@ async function inspect(page) {
       })),
   );
 
+  const heroVideo = await page.evaluate(async () => {
+    const video = document.querySelector(".hero-video");
+    if (!video) return null;
+    if (video.readyState < 1) {
+      await new Promise((resolve) => {
+        video.addEventListener("loadedmetadata", resolve, { once: true });
+        window.setTimeout(resolve, 2500);
+      });
+    }
+    return {
+      currentSrc: video.currentSrc,
+      duration: video.duration,
+      loop: video.loop,
+      muted: video.muted,
+      readyState: video.readyState,
+      videoHeight: video.videoHeight,
+      videoWidth: video.videoWidth,
+    };
+  });
+
   return {
     title: await page.title(),
     h1: await page.locator("h1").first().innerText(),
-    syntheticMention: bodyText.includes("Synthetic Education Data"),
+    simulationTitleMention: bodyText.includes("Education Data Simulation Engine"),
     projectCards: await page.locator(".project-card").count(),
     artifactCards: await page.locator(".artifact-link-card").count(),
     dashboardError: bodyText.includes("Dashboard data did not load"),
+    heroVideo,
     overflow,
   };
 }
@@ -119,10 +142,14 @@ async function inspect(page) {
 const cases = [
   ["home-desktop", "index.html", 1440, 1000],
   ["home-mobile", "index.html", 390, 900],
-  ["synthetic-desktop", path.join("projects", "synthetic-education-data.html"), 1440, 1000],
-  ["synthetic-mobile", path.join("projects", "synthetic-education-data.html"), 390, 900],
+  ["synthetic-desktop", path.join("projects", "education-data-simulation-engine.html"), 1440, 1000],
+  ["synthetic-mobile", path.join("projects", "education-data-simulation-engine.html"), 390, 900],
+  ["data-lab-desktop", "data-lab.html", 1440, 1000],
+  ["data-lab-mobile", "data-lab.html", 390, 900],
   ["assessment-desktop", path.join("projects", "assessment-intelligence.html"), 1440, 1000],
   ["assessment-mobile", path.join("projects", "assessment-intelligence.html"), 390, 900],
+  ["remediation-desktop", path.join("projects", "assessment-to-remediation-pipeline.html"), 1440, 1000],
+  ["remediation-mobile", path.join("projects", "assessment-to-remediation-pipeline.html"), 390, 900],
   ["content-desktop", path.join("projects", "content-intelligence.html"), 1440, 1000],
   ["content-mobile", path.join("projects", "content-intelligence.html"), 390, 900],
   ["workflow-desktop", path.join("projects", "instructional-ai-workflows.html"), 1440, 1000],
@@ -149,7 +176,21 @@ try {
   await closeServer(server);
 }
 
-const failures = results.filter((result) => result.overflow.length > 0 || result.dashboardError);
+const heroVideoFailed = (result) => {
+  if (!result.label.startsWith("home-")) return false;
+  return (
+    !result.heroVideo ||
+    !result.heroVideo.currentSrc.includes("assets/video/workflow-hero.mp4") ||
+    !result.heroVideo.loop ||
+    !result.heroVideo.muted ||
+    result.heroVideo.videoWidth < 1 ||
+    result.heroVideo.videoHeight < 1
+  );
+};
+
+const failures = results.filter(
+  (result) => result.overflow.length > 0 || result.dashboardError || heroVideoFailed(result),
+);
 console.log(JSON.stringify(results, null, 2));
 
 if (failures.length) {

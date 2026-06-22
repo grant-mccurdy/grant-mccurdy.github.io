@@ -4,11 +4,11 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Grant McCurdy | Public Project Portal</title>
-    <meta name="description" content="Public project portal for Grant McCurdy's synthetic education data, assessment intelligence, instructional AI workflow, and content intelligence projects.">
+    <meta name="description" content="Public project portal for Grant McCurdy's education data simulation, assessment intelligence, diagnostic-to-remediation, instructional AI workflow, and content intelligence projects.">
     <meta property="og:title" content="Grant McCurdy | Public Project Portal">
-    <meta property="og:description" content="Public-safe demos, project briefs, repositories, and case studies for synthetic education data, assessment, instructional workflow, and content intelligence systems.">
+    <meta property="og:description" content="Public-safe demos, project briefs, repositories, and case studies for education data simulation, assessment, remediation, instructional workflow, and content intelligence systems.">
     <meta property="og:type" content="website">
-    <meta property="og:image" content="assets/images/portfolio-systems-hero.png">
+    <meta property="og:image" content="assets/images/workflow-hero-poster.jpg">
     <link rel="stylesheet" href="assets/css/styles.css">
   </head>
   <body>
@@ -28,6 +28,7 @@
         <div class="nav-links" data-nav-links>
           <a href="#snapshot">Snapshot</a>
           <a href="#map">Map</a>
+          <a href="#evidence">Evidence</a>
           <a href="#artifacts">Artifacts</a>
           <a href="#projects">Projects</a>
           <a href="#case-studies">Case Studies</a>
@@ -38,20 +39,24 @@
 
     <main id="main">
       <section class="hero">
-        <div class="hero-bg" role="img" aria-label="Workspace with dashboards, mathematics notes, and analytical reports"></div>
+        <div class="hero-media" aria-hidden="true">
+          <video class="hero-video" autoplay muted loop playsinline preload="metadata" poster="assets/images/workflow-hero-poster.jpg">
+            <source src="assets/video/workflow-hero.mp4" type="video/mp4">
+          </video>
+        </div>
         <div class="hero-shade" aria-hidden="true"></div>
         <div class="hero-content">
           <p class="eyebrow">Public project portal</p>
           <h1>Grant McCurdy</h1>
-          <p class="hero-copy">A front door into public-safe demos, source repositories, and case studies for synthetic education data, assessment intelligence, instructional AI workflows, and content intelligence.</p>
+          <p class="hero-copy">A front door into public-safe demos, source repositories, and case studies for education data simulation, assessment intelligence, diagnostic-to-remediation workflows, instructional AI systems, and content intelligence.</p>
           <div class="hero-actions">
             <a class="button primary" href="#artifacts">Open Featured Artifacts</a>
             <a class="button secondary" href="#projects">Browse Projects</a>
           </div>
           <div class="hero-snapshot" aria-label="Portfolio highlights">
             <div class="hero-snapshot-item">
-              <span>Repos</span>
-              <strong>4</strong>
+              <span>Projects</span>
+              <strong>5</strong>
             </div>
             <div class="hero-snapshot-item">
               <span>Students</span>
@@ -63,7 +68,7 @@
             </div>
             <div class="hero-snapshot-item">
               <span>Pipelines</span>
-              <strong>3</strong>
+              <strong>4</strong>
             </div>
           </div>
         </div>
@@ -87,12 +92,12 @@
 
         <div class="snapshot-grid">
           <article class="snapshot-card">
-            <span>Repos</span>
-            <strong>4</strong>
-            <p>Active public projects connected through this GitHub Pages portal.</p>
+            <span>Projects</span>
+            <strong>5</strong>
+            <p>Active public projects connected through this GitHub Pages portal or workspace.</p>
           </article>
           <article class="snapshot-card">
-            <span>Synthetic data</span>
+            <span>Simulation</span>
             <strong>696</strong>
             <p>All-ever synthetic students across a seven-year math department simulation.</p>
           </article>
@@ -100,6 +105,11 @@
             <span>Assessment extracts</span>
             <strong>5</strong>
             <p>SQL-backed extract files with 3,020 data rows for reporting and review.</p>
+          </article>
+          <article class="snapshot-card">
+            <span>Diagnostic items</span>
+            <strong>36</strong>
+            <p>Original math-readiness items passing the public automated review gate.</p>
           </article>
           <article class="snapshot-card">
             <span>Content pipelines</span>
@@ -136,15 +146,20 @@
         </div>
 
         <div class="artifact-list">
-          <a class="artifact-link-card" href="projects/synthetic-education-data.html">
+          <a class="artifact-link-card" href="projects/education-data-simulation-engine.html">
             <span class="artifact-kind">Foundation</span>
-            <strong>Synthetic Education Data</strong>
-            <p>Generates public-safe student, course, assessment, Canvas-style, DuckDB, and star-schema artifacts.</p>
+            <strong>Education Data Simulation Engine</strong>
+            <p>Generates a public-safe bootstrap layer of student, course, assessment, Canvas-style, DuckDB, and star-schema artifacts.</p>
           </a>
           <a class="artifact-link-card" href="projects/assessment-intelligence.html">
             <span class="artifact-kind">Analytics layer</span>
             <strong>Assessment Intelligence</strong>
             <p>Consumes warehouse extracts for dashboards, SQL reports, Supabase serving checks, and AI-assisted review.</p>
+          </a>
+          <a class="artifact-link-card" href="projects/assessment-to-remediation-pipeline.html">
+            <span class="artifact-kind">Action layer</span>
+            <strong>Assessment-to-Remediation Pipeline</strong>
+            <p>Connects math diagnostic design to review gates, Canvas dry-run payloads, feedback, remediation, and mastery evidence.</p>
           </a>
           <a class="artifact-link-card" href="projects/content-intelligence.html">
             <span class="artifact-kind">Information layer</span>
@@ -155,6 +170,41 @@
             <span class="artifact-kind">Instructional layer</span>
             <strong>Instructional AI Workflows</strong>
             <p>Demonstrates teacher-reviewed rubric evidence, feedback, and remediation artifacts on synthetic submissions.</p>
+          </a>
+        </div>
+      </section>
+
+      <section class="section-shell" id="evidence" aria-labelledby="evidence-heading">
+        <div class="section-heading">
+          <p class="section-kicker">Positioning Evidence</p>
+          <h2 id="evidence-heading">How the public work supports the profile</h2>
+        </div>
+
+        <div class="artifact-list">
+          <a class="artifact-link-card" href="projects/assessment-intelligence.html">
+            <span class="artifact-kind">Data analytics</span>
+            <strong>Performance data to decision support</strong>
+            <p>SQL extracts, dashboard views, diagnostics, and analyst-facing reports translate assessment records into reviewable decisions.</p>
+          </a>
+          <a class="artifact-link-card" href="projects/education-data-simulation-engine.html">
+            <span class="artifact-kind">Data governance</span>
+            <strong>Public-safe simulation and validation</strong>
+            <p>A reproducible education data foundation shows privacy boundaries, schema checks, LMS-style reconciliation, and warehouse-ready marts.</p>
+          </a>
+          <a class="artifact-link-card" href="projects/assessment-to-remediation-pipeline.html">
+            <span class="artifact-kind">Assessment systems</span>
+            <strong>Diagnostic evidence to instructional action</strong>
+            <p>The math-readiness workflow links item design, automated review gates, feedback, remediation, mastery checks, and reporting.</p>
+          </a>
+          <a class="artifact-link-card" href="projects/instructional-ai-workflows.html">
+            <span class="artifact-kind">AI-enabled workflows</span>
+            <strong>Human-reviewed feedback artifacts</strong>
+            <p>Teacher-controlled rubric workflows demonstrate AI-assisted draft feedback without replacing professional judgment.</p>
+          </a>
+          <a class="artifact-link-card" href="projects/content-intelligence.html">
+            <span class="artifact-kind">Reporting systems</span>
+            <strong>Source-grounded content pipelines</strong>
+            <p>Manifest, corpus, evidence, and method-pack artifacts show how unstructured instructional material becomes auditable reporting context.</p>
           </a>
         </div>
       </section>
@@ -171,15 +221,25 @@
             <strong>Assessment Dashboard</strong>
             <p>Synthetic multi-year assessment data, browser-side aggregation, SVG charts, filters, and decision notes.</p>
           </a>
-          <a class="artifact-link-card" href="projects/synthetic-education-data.html">
-            <span class="artifact-kind">Synthetic data engine</span>
-            <strong>Synthetic Education Data</strong>
+          <a class="artifact-link-card" href="projects/education-data-simulation-engine.html">
+            <span class="artifact-kind">Simulation engine</span>
+            <strong>Education Data Simulation Engine</strong>
             <p>Validated students, courses, sections, enrollments, attendance behavior, assessment scores, Canvas-style artifacts, and SQL-ready marts.</p>
+          </a>
+          <a class="artifact-link-card" href="data-lab.html">
+            <span class="artifact-kind">Analytic chat</span>
+            <strong>Portfolio Data Lab</strong>
+            <p>Structured chat surface for tables, summaries, charts, and cited analysis over the public-safe synthetic warehouse.</p>
           </a>
           <a class="artifact-link-card" href="projects/assessment-intelligence.html">
             <span class="artifact-kind">SQL reporting</span>
             <strong>Assessment Warehouse Extracts</strong>
             <p>Five DuckDB/Supabase extract files covering growth, non-participation, roster reconciliation, readiness, and AI review.</p>
+          </a>
+          <a class="artifact-link-card" href="projects/assessment-to-remediation-pipeline.html">
+            <span class="artifact-kind">Review gate</span>
+            <strong>Math Readiness Diagnostic Pipeline</strong>
+            <p>Thirty-six original items, student and instructor previews, automated review reports, and offline Canvas New Quizzes payloads.</p>
           </a>
           <a class="artifact-link-card" href="projects/content-intelligence-demo-report.html">
             <span class="artifact-kind">Demo report</span>
@@ -207,7 +267,7 @@
       <section class="section-shell" id="projects" aria-labelledby="projects-heading">
         <div class="section-heading">
           <p class="section-kicker">Projects</p>
-          <h2 id="projects-heading">Public repositories</h2>
+          <h2 id="projects-heading">Public projects</h2>
         </div>
 
         <div class="project-grid">
@@ -216,17 +276,36 @@
               <span class="project-code">SD</span>
               <span class="project-status">Validated foundation</span>
             </div>
-            <h3>Synthetic Education Data</h3>
-            <p>Privacy-preserving synthetic education data engine with Canvas-like artifacts, DuckDB warehouse, LMS-to-SQL reconciliation, and star-schema assessment marts.</p>
+            <h3>Education Data Simulation Engine</h3>
+            <p>Public-safe bootstrap layer for assessment analytics, LMS workflow prototyping, decision-support dashboards, and star-schema reporting marts.</p>
             <p class="inspect-note">Inspect first: the methodology notes, SQL warehouse docs, star-schema ERD, generated marts, validation script, and query examples.</p>
             <ul class="tag-list" aria-label="Synthetic math department tags">
-              <li>Synthetic Data</li>
+              <li>Simulation</li>
               <li>DuckDB SQL</li>
               <li>Star Schema</li>
             </ul>
             <div class="link-row">
-              <a class="text-link" href="projects/synthetic-education-data.html">Project brief</a>
-              <a class="text-link" href="https://github.com/grant-mccurdy/synthetic-education-data">GitHub repo</a>
+              <a class="text-link" href="projects/education-data-simulation-engine.html">Project brief</a>
+              <a class="text-link" href="https://github.com/grant-mccurdy/education-data-simulation-engine">GitHub repo</a>
+            </div>
+          </article>
+
+          <article class="project-card">
+            <div class="project-top">
+              <span class="project-code">AR</span>
+              <span class="project-status">Review-gated MVP</span>
+            </div>
+            <h3>Assessment-to-Remediation Pipeline</h3>
+            <p>Math-readiness diagnostic workflow connecting item design, automated review gates, Canvas dry-run export, feedback, remediation, and mastery evidence.</p>
+            <p class="inspect-note">Inspect first: the student and instructor previews, automated review gate, GPT-5.5 item and visual reviews, and portfolio case-study draft.</p>
+            <ul class="tag-list" aria-label="Assessment-to-remediation tags">
+              <li>Diagnostics</li>
+              <li>Canvas Export</li>
+              <li>Remediation</li>
+            </ul>
+            <div class="link-row">
+              <a class="text-link" href="projects/assessment-to-remediation-pipeline.html">Project brief</a>
+              <a class="text-link" href="https://github.com/grant-mccurdy/public-workspace/tree/main/assessment-to-remediation-pipeline">GitHub folder</a>
             </div>
           </article>
 
@@ -302,13 +381,18 @@
           <div class="roadmap-list">
             <article>
               <span>Validated foundation</span>
-              <h3>Synthetic Education Data</h3>
-              <p>Public repo now surfaces the synthetic data engine behind the assessment ecosystem, including beginning- and end-of-year scores, attendance modeling, Canvas-style artifacts, DuckDB SQL warehouse, star-schema marts, and validation checks.</p>
+              <h3>Education Data Simulation Engine</h3>
+              <p>Public repo now surfaces the simulation engine behind the assessment ecosystem, including beginning- and end-of-year scores, attendance modeling, Canvas-style artifacts, DuckDB SQL warehouse, star-schema marts, and validation checks.</p>
             </article>
             <article>
               <span>Warehouse-backed</span>
               <h3>Assessment Intelligence</h3>
-              <p>Substantial analytics, reporting, validation, SQL extract, Supabase serving, AI review, visualization catalog, and dashboard assets exist. The portal surfaces the dashboard, SQL-backed extracts, and gradebook synthesis proof points while the synthetic data foundation remains in its own repo.</p>
+              <p>Substantial analytics, reporting, validation, SQL extract, Supabase serving, AI review, visualization catalog, and dashboard assets exist. The portal surfaces the dashboard, SQL-backed extracts, and gradebook synthesis proof points while the simulation foundation remains in its own repo.</p>
+            </article>
+            <article>
+              <span>Review-gated MVP</span>
+              <h3>Assessment-to-Remediation Pipeline</h3>
+              <p>The public workspace now includes an original 36-item math-readiness diagnostic, student and instructor previews, automated review artifacts, and offline Canvas New Quizzes payloads. Synthetic attempts, scoring, and remediation outputs remain the next build slice.</p>
             </article>
             <article>
               <span>Portfolio-ready</span>
@@ -343,6 +427,10 @@
               <span>03</span>
               <strong>Content Intelligence Pipeline</strong>
             </a>
+            <a href="projects/assessment-to-remediation-pipeline.html">
+              <span>04</span>
+              <strong>Diagnostic Evidence to Remediation</strong>
+            </a>
           </div>
         </div>
       </section>
@@ -373,8 +461,9 @@
       <div class="footer-shell">
         <p>&copy; <span data-year></span> Grant McCurdy</p>
         <div class="footer-links">
-          <a href="projects/synthetic-education-data.html">Synthetic Data</a>
+          <a href="projects/education-data-simulation-engine.html">Simulation Engine</a>
           <a href="projects/assessment-intelligence.html">Assessment</a>
+          <a href="projects/assessment-to-remediation-pipeline.html">Remediation</a>
           <a href="projects/instructional-ai-workflows.html">Workflows</a>
           <a href="projects/content-intelligence.html">Content Intelligence</a>
         </div>

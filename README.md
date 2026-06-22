@@ -2,11 +2,11 @@
 
 GitHub Pages public project portal for Grant McCurdy.
 
-The site summarizes public-facing project work in synthetic education data, assessment systems, AI-assisted instructional workflows, and content intelligence pipelines, and routes reviewers to hosted demos, case studies, and source repositories.
+The site summarizes public-facing project work in education data simulation, assessment systems, diagnostic-to-remediation workflows, AI-assisted instructional workflows, and content intelligence pipelines, and routes reviewers to hosted demos, case studies, source repositories, and workspace project folders.
 
 Suggested homepage message:
 
-> I build synthetic education data systems, assessment analytics, AI-assisted instructional workflows, and content intelligence pipelines at the intersection of mathematics, statistics, education, and software.
+> I build public-safe education data simulation systems, assessment analytics, diagnostic-to-remediation workflows, AI-assisted instructional systems, and content intelligence pipelines at the intersection of mathematics, statistics, education, and software.
 
 ## Role Of This Repo
 
@@ -29,11 +29,14 @@ grant-mccurdy.github.io/
 ## Template Files
 
 - `index.html` is the portfolio homepage.
+- `data-lab.html` is the structured analytic chat surface for the private Worker-backed synthetic warehouse.
 - `projects/*.html` are lightweight project-brief pages.
 - `case-studies/index.html` is a case-study index template.
 - `assets/css/styles.css` controls the visual system.
 - `assets/js/site.js` controls the mobile navigation and header state.
-- `assets/images/portfolio-systems-hero.png` is the current hero image.
+- `assets/js/data-lab.js` renders analytic response blocks from the private backend. Configure the endpoint through the `data-api-endpoint` attribute after Worker deployment, or use an `endpoint` query parameter for local testing.
+- `assets/video/workflow-hero.mp4` is the muted, blurred, sped-up homepage hero loop generated from a local workflow recording.
+- `assets/images/workflow-hero-poster.jpg` is the static poster and reduced-motion fallback for the homepage hero.
 - `.nojekyll` keeps GitHub Pages from applying Jekyll processing.
 - `sitemap.xml` and `robots.txt` expose the public portal pages to crawlers.
 
@@ -67,8 +70,9 @@ make external-links
 
 ## Project Areas
 
-- `synthetic-education-data`: privacy-preserving synthetic education data generation and validation.
+- `education-data-simulation-engine`: public-safe education data simulation, validation, and SQL-ready analytics foundations.
 - `assessment-intelligence`: assessment design, analytics, dashboards, diagnostics, and reporting workflows.
+- `assessment-to-remediation-pipeline`: math-readiness diagnostic authoring, review gates, Canvas dry-run payloads, and remediation workflow design.
 - `instructional-ai-workflows`: teacher-controlled AI-assisted feedback, review, and remediation workflows.
 - `content-intelligence`: unstructured content processing, transcript enrichment, source-grounded information objects, and report generation.
 
@@ -78,8 +82,10 @@ Use only public-safe screenshots, synthetic data, generalized case-study languag
 
 ## Current Portal State
 
-- The homepage includes a portfolio snapshot for four public project repos, current synthetic-data counts, SQL extract counts, content-object counts, and workflow-demo counts.
+- The homepage includes a portfolio snapshot for five public projects, current simulation counts, diagnostic item counts, SQL extract counts, content-object counts, and workflow-demo counts.
+- Portfolio Data Lab is present as a static UI shell. It requires the private `portfolio-rag-api` Worker endpoint and must not contain API keys, Worker secrets, or demo tokens.
 - Content Intelligence is portfolio-ready and has a hosted sample report, case study, transcript enrichment examples, OCR cleanup workflow, information-object map, and method-pack artifacts.
-- Synthetic Education Data has a seven-year public synthetic data engine with methodology, generated artifacts, DuckDB marts, star-schema outputs, Supabase/Postgres serving docs, and current validation summaries.
+- Education Data Simulation Engine has a seven-year public-safe simulation with methodology, generated artifacts, DuckDB marts, star-schema outputs, Supabase/Postgres serving docs, and current validation summaries.
 - Assessment Intelligence has a hosted static dashboard, five SQL extract files, optional Supabase extract reports, AI review artifacts, plot catalog, and active reporting/modeling source artifacts.
+- Assessment-to-Remediation Pipeline has an original 36-item math-readiness diagnostic, student and instructor previews, automated review artifacts, and offline Canvas New Quizzes payloads.
 - Instructional AI Workflows has an active synthetic Precalculus FRQ workflow demo with three evaluated examples, teacher review packets, student-facing feedback, and remediation planning output.
