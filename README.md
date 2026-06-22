@@ -35,7 +35,7 @@ grant-mccurdy.github.io/
 - `assets/css/styles.css` controls the visual system.
 - `assets/js/site.js` controls the mobile navigation and header state.
 - `assets/js/data-lab.js` renders analytic response blocks from the private backend. Configure the endpoint through the `data-api-endpoint` attribute after Worker deployment, or use an `endpoint` query parameter for local testing.
-- `assets/video/workflow-hero.mp4` is the muted, blurred, sped-up homepage hero loop generated from a local workflow recording.
+- `assets/video/workflow-hero.mp4` is the muted, grayscale, slightly sped-up homepage hero loop generated from a local workflow recording.
 - `assets/images/workflow-hero-poster.jpg` is the static poster and reduced-motion fallback for the homepage hero.
 - `.nojekyll` keeps GitHub Pages from applying Jekyll processing.
 - `sitemap.xml` and `robots.txt` expose the public portal pages to crawlers.

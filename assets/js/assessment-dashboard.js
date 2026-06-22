@@ -50,7 +50,7 @@ const sliceLabels = {
   section: "section",
 };
 
-const palette = ["#315f88", "#5e8a78", "#af7162", "#a98f4f", "#8177a6", "#5f9296", "#9b744a", "#7c8798", "#8b637b", "#527d51"];
+const palette = ["#111111", "#333333", "#555555", "#777777", "#999999", "#bbbbbb", "#2a2a2a", "#4a4a4a", "#6a6a6a", "#8a8a8a"];
 const assetVersion = document.documentElement.dataset.assetVersion || "dashboard-views-v1";
 
 const els = {
@@ -248,8 +248,8 @@ function periodDataForTimeSeries(records) {
 }
 
 function heatColor(intensity) {
-  const start = [232, 239, 246];
-  const end = [0, 50, 96];
+  const start = [238, 238, 238];
+  const end = [20, 20, 20];
   const rgb = start.map((channel, index) => Math.round(channel + (end[index] - channel) * intensity));
   return `rgb(${rgb.join(",")})`;
 }

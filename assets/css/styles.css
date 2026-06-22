@@ -1,16 +1,16 @@
 :root {
   color-scheme: light;
-  --ink: #0f2741;
-  --muted: #5e7188;
+  --ink: #0a0a0a;
+  --muted: #555555;
   --surface: #ffffff;
-  --surface-soft: #f5f8fb;
-  --line: #d8e1ea;
-  --navy: #003260;
-  --navy-2: #0a477b;
-  --gold: #c69a36;
-  --gold-2: #a87921;
-  --sky: #d9e8f3;
-  --shadow: 0 18px 48px rgba(0, 50, 96, 0.14);
+  --surface-soft: #f5f5f5;
+  --line: #d9d9d9;
+  --navy: #050505;
+  --navy-2: #333333;
+  --gold: #111111;
+  --gold-2: #333333;
+  --sky: #eeeeee;
+  --shadow: 0 18px 48px rgba(0, 0, 0, 0.14);
   --radius: 8px;
   --max: 1180px;
 }
@@ -150,7 +150,7 @@ img {
   align-items: center;
   overflow: hidden;
   color: #fff;
-  background: var(--navy);
+  background: #000;
 }
 
 .hero-media,
@@ -169,11 +169,11 @@ img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  filter: brightness(0.82) saturate(0.84);
+  filter: grayscale(1) contrast(0.9) brightness(0.78);
 }
 
 .hero-shade {
-  background: linear-gradient(90deg, rgba(0, 50, 96, 0.96) 0%, rgba(0, 50, 96, 0.82) 36%, rgba(0, 50, 96, 0.32) 72%, rgba(0, 50, 96, 0.16) 100%);
+  background: linear-gradient(90deg, rgba(0, 0, 0, 0.96) 0%, rgba(0, 0, 0, 0.8) 38%, rgba(0, 0, 0, 0.3) 72%, rgba(0, 0, 0, 0.12) 100%);
 }
 
 .hero-content {
@@ -191,6 +191,10 @@ img {
   font-weight: 800;
   letter-spacing: 0.08em;
   text-transform: uppercase;
+}
+
+.hero .eyebrow {
+  color: #fff;
 }
 
 .hero h1 {
@@ -227,13 +231,13 @@ img {
   padding: 0.85rem;
   border: 1px solid rgba(255, 255, 255, 0.24);
   border-radius: var(--radius);
-  background: rgba(0, 50, 96, 0.22);
+  background: rgba(0, 0, 0, 0.34);
   backdrop-filter: blur(8px);
 }
 
 .hero-snapshot-item span {
   display: block;
-  color: var(--gold);
+  color: #fff;
   font-size: 0.72rem;
   font-weight: 850;
   letter-spacing: 0.06em;
@@ -260,8 +264,8 @@ img {
 }
 
 .button.primary {
-  background: var(--gold);
-  color: var(--navy);
+  background: #000;
+  color: #fff;
 }
 
 .button.secondary {
@@ -269,9 +273,14 @@ img {
   color: #fff;
 }
 
+.hero .button.primary {
+  background: #fff;
+  color: #000;
+}
+
 .button.outline {
   border-color: var(--line);
-  color: var(--navy);
+  color: var(--ink);
   background: var(--surface);
 }
 
@@ -430,7 +439,7 @@ h3 {
 .artifact-link-card:hover,
 .artifact-link-card:focus-visible {
   border-color: var(--navy-2);
-  box-shadow: 0 12px 28px rgba(0, 50, 96, 0.11);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.11);
   transform: translateY(-1px);
 }
 
@@ -562,7 +571,7 @@ h3 {
 
 .site-footer {
   border-top: 1px solid var(--line);
-  background: var(--navy);
+  background: #000;
   color: #fff;
 }
 
@@ -835,7 +844,7 @@ h3 {
   align-items: end;
   padding: 1rem;
   border: 1px solid var(--line);
-  background: #f6f8fb;
+  background: #f7f7f7;
 }
 
 .control-row {
@@ -890,8 +899,8 @@ h3 {
 
 .line-control-grid label:focus-within select,
 .line-control-grid label:focus-within input {
-  border-color: #2f66c8;
-  box-shadow: 0 0 0 2px rgba(47, 102, 200, 0.14);
+  border-color: #111111;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.14);
 }
 
 .toggle-row {
@@ -1128,11 +1137,11 @@ h3 {
 }
 
 .department-key {
-  background: rgba(198, 154, 54, 0.28);
+  background: rgba(0, 0, 0, 0.24);
 }
 
 .network-key {
-  background: rgba(0, 50, 96, 0.14);
+  background: rgba(0, 0, 0, 0.14);
 }
 
 .benchmark-key {
@@ -1145,11 +1154,11 @@ h3 {
 }
 
 .section-key {
-  border-top-color: #9baabd;
+  border-top-color: #a6a6a6;
 }
 
 .distribution-key {
-  border-top-color: #6f8296;
+  border-top-color: #777777;
 }
 
 .panel-heading span {
@@ -1212,18 +1221,18 @@ h3 {
 }
 
 .axis-grid {
-  stroke: #dfe6ee;
+  stroke: #e5e5e5;
   stroke-width: 1.1;
 }
 
 .axis-line {
-  stroke: #98a9ba;
+  stroke: #9a9a9a;
   stroke-width: 1.3;
 }
 
 .axis-label,
 .axis-title {
-  fill: #667287;
+  fill: #666666;
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   font-size: 14px;
   font-weight: 760;
@@ -1326,7 +1335,7 @@ h3 {
 }
 
 .right-label-text {
-  fill: #677083;
+  fill: #666666;
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   font-size: 15px;
   font-weight: 760;
@@ -1366,24 +1375,24 @@ h3 {
 }
 
 .distribution-whisker {
-  stroke: #6f8296;
+  stroke: #777777;
   stroke-width: 1.25;
 }
 
 .distribution-box-edge {
-  stroke: #6f8296;
+  stroke: #777777;
   stroke-width: 1.7;
   stroke-linecap: round;
 }
 
 .distribution-median {
   fill: #ffffff;
-  stroke: #6f8296;
+  stroke: #777777;
   stroke-width: 1.6;
 }
 
 .distribution-detail-whisker {
-  stroke: #6f8296;
+  stroke: #777777;
   stroke-width: 1.4;
 }
 
@@ -1413,7 +1422,7 @@ h3 {
 
 .section-shadow-line {
   fill: none;
-  stroke: #8092a6;
+  stroke: #999999;
   stroke-width: 1.35;
   opacity: 0.32;
 }
@@ -1685,7 +1694,7 @@ th {
   gap: 0.75rem;
   padding: 1rem;
   border-top: 1px solid var(--line);
-  background: #f8fafc;
+  background: #f7f7f7;
 }
 
 .data-lab-form input {
@@ -1806,7 +1815,7 @@ th {
 }
 
 .chat-chart-axis {
-  stroke: #98a9ba;
+  stroke: #9a9a9a;
   stroke-width: 1.2;
 }
 
@@ -1863,7 +1872,7 @@ th {
 }
 
 .chat-status.error {
-  border-left-color: #a33d2b;
+  border-left-color: #555555;
 }
 
 .chat-status strong {
@@ -1972,7 +1981,7 @@ th {
   }
 
   .hero-shade {
-    background: rgba(0, 50, 96, 0.78);
+    background: rgba(0, 0, 0, 0.78);
   }
 
   .hero-snapshot {
