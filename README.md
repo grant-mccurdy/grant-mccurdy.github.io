@@ -82,10 +82,11 @@ Use only public-safe screenshots, synthetic data, generalized case-study languag
 
 ## Current Portal State
 
-- The homepage includes a portfolio snapshot for five public projects, current simulation counts, diagnostic item counts, SQL extract counts, content-object counts, and workflow-demo counts.
-- Portfolio Data Lab is present as a static UI shell. It requires the private `portfolio-rag-api` Worker endpoint and must not contain API keys, Worker secrets, or demo tokens.
+- The homepage presents a systems-portfolio path: capabilities, selected work, demos, case studies, and operating principles.
+- Portfolio Data Lab is present as a static UI shell connected to the private `portfolio-rag-api` Worker endpoint. It must fail gracefully and must not contain API keys, Worker secrets, or demo tokens.
 - Content Intelligence is portfolio-ready and has a hosted sample report, case study, transcript enrichment examples, OCR cleanup workflow, information-object map, and method-pack artifacts.
 - Education Data Simulation Engine has a seven-year public-safe simulation with methodology, generated artifacts, DuckDB marts, star-schema outputs, Supabase/Postgres serving docs, and current validation summaries.
 - Assessment Intelligence has a hosted static dashboard, five SQL extract files, optional Supabase extract reports, AI review artifacts, plot catalog, and active reporting/modeling source artifacts.
 - Assessment-to-Remediation Pipeline has an original 36-item math-readiness diagnostic, student and instructor previews, automated review artifacts, and offline Canvas New Quizzes payloads.
 - Instructional AI Workflows has an active synthetic Precalculus FRQ workflow demo with three evaluated examples, teacher review packets, student-facing feedback, and remediation planning output.
+- Internal link checks validate both local file paths and same-site HTML fragments.

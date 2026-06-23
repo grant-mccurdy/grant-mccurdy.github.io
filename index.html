@@ -9,7 +9,7 @@
     <meta property="og:description" content="Public-safe demos, project briefs, repositories, and case studies for data systems, analytics products, workflow automation, AI-assisted systems, and content intelligence.">
     <meta property="og:type" content="website">
     <meta property="og:image" content="assets/images/workflow-hero-poster.jpg?v=20260623b">
-    <link rel="stylesheet" href="assets/css/styles.css?v=20260623b">
+    <link rel="stylesheet" href="assets/css/styles.css?v=20260623d">
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
@@ -102,7 +102,7 @@
           <article class="snapshot-card capability-card" data-reveal>
             <span>AI-assisted workflows</span>
             <strong>Automation with review</strong>
-            <p>Human-reviewed feedback, review gates, remediation paths, and workflow automation designed for accountability.</p>
+            <p>Human-reviewed feedback, review gates, action paths, and workflow automation designed for accountability.</p>
           </article>
           <article class="snapshot-card capability-card" data-reveal>
             <span>Content intelligence</span>
@@ -121,18 +121,18 @@
         <div class="artifact-list work-list">
           <a class="artifact-link-card" href="projects/education-data-simulation-engine.html" data-reveal>
             <span class="artifact-kind">Systems data foundation</span>
-            <strong>Education Data Simulation Engine</strong>
+            <strong>Synthetic Data Simulation Engine</strong>
             <p>Public-safe simulation, validation, SQL-ready data, and reporting marts for analytics prototypes.</p>
           </a>
           <a class="artifact-link-card" href="projects/assessment-intelligence.html" data-reveal>
             <span class="artifact-kind">Analytics and decision support</span>
-            <strong>Assessment Intelligence</strong>
+            <strong>Analytics Intelligence</strong>
             <p>SQL/R/Python extracts, dashboards, diagnostics, and reporting patterns that translate records into reviewable decisions.</p>
           </a>
           <a class="artifact-link-card" href="projects/assessment-to-remediation-pipeline.html" data-reveal>
             <span class="artifact-kind">Workflow automation</span>
-            <strong>Assessment-to-Remediation Pipeline</strong>
-            <p>Diagnostic design, review gates, Canvas dry-run payloads, feedback, remediation, and mastery evidence.</p>
+            <strong>Diagnostic-to-Action Pipeline</strong>
+            <p>Diagnostic design, review gates, dry-run payloads, feedback, follow-up actions, and evidence tracking.</p>
           </a>
           <a class="artifact-link-card" href="projects/content-intelligence.html" data-reveal>
             <span class="artifact-kind">Content systems</span>
@@ -141,8 +141,8 @@
           </a>
           <a class="artifact-link-card" href="projects/instructional-ai-workflows.html" data-reveal>
             <span class="artifact-kind">Human-reviewed AI workflows</span>
-            <strong>Instructional AI Workflows</strong>
-            <p>Rubric evidence, review packets, feedback drafts, and remediation artifacts with human judgment kept in the loop.</p>
+            <strong>Human-Reviewed AI Workflows</strong>
+            <p>Rubric evidence, review packets, feedback drafts, and action artifacts with human judgment kept in the loop.</p>
           </a>
         </div>
       </section>
@@ -156,7 +156,7 @@
         <div class="artifact-list">
           <a class="artifact-link-card" href="dashboard/assessment.html" data-reveal>
             <span class="artifact-kind">Interactive dashboard</span>
-            <strong>Assessment Dashboard</strong>
+            <strong>Analytics Dashboard</strong>
             <p>Synthetic multi-year data, browser-side aggregation, SVG charts, filters, and decision notes.</p>
           </a>
           <a class="artifact-link-card" href="data-lab.html" data-reveal>
@@ -166,7 +166,7 @@
           </a>
           <a class="artifact-link-card" href="projects/education-data-simulation-engine.html" data-reveal>
             <span class="artifact-kind">Simulation engine</span>
-            <strong>Education Data Simulation Engine</strong>
+            <strong>Synthetic Data Simulation Engine</strong>
             <p>Validated records, warehouse artifacts, Canvas-style exports, and SQL-ready marts for public demos.</p>
           </a>
           <a class="artifact-link-card" href="projects/content-intelligence-demo-report.html" data-reveal>
@@ -176,13 +176,13 @@
           </a>
           <a class="artifact-link-card" href="projects/assessment-to-remediation-pipeline.html" data-reveal>
             <span class="artifact-kind">Review gate</span>
-            <strong>Assessment-to-Remediation Pipeline</strong>
+            <strong>Diagnostic-to-Action Pipeline</strong>
             <p>Original diagnostic items, preview artifacts, automated review reports, and offline Canvas payloads.</p>
           </a>
           <a class="artifact-link-card" href="projects/instructional-ai-workflows.html" data-reveal>
             <span class="artifact-kind">Workflow demo</span>
-            <strong>Instructional AI Workflows</strong>
-            <p>Synthetic rubric evidence, review checkpoints, approved feedback, and remediation planning.</p>
+            <strong>Human-Reviewed AI Workflows</strong>
+            <p>Synthetic rubric evidence, review checkpoints, approved feedback, and action planning.</p>
           </a>
         </div>
       </section>
@@ -196,11 +196,11 @@
           <div class="case-list">
             <a href="case-studies/assessment-reporting.html">
               <span>01</span>
-              <strong>Assessment Reporting Architecture</strong>
+              <strong>Analytics Reporting Architecture</strong>
             </a>
             <a href="case-studies/instructional-ai-workflows.html">
               <span>02</span>
-              <strong>Feedback, Review, and Remediation Artifacts</strong>
+              <strong>Feedback, Review, and Action Artifacts</strong>
             </a>
             <a href="case-studies/content-intelligence.html">
               <span>03</span>
@@ -208,7 +208,7 @@
             </a>
             <a href="projects/assessment-to-remediation-pipeline.html">
               <span>04</span>
-              <strong>Diagnostic Evidence to Remediation</strong>
+              <strong>Diagnostic Evidence to Action</strong>
             </a>
           </div>
         </div>
@@ -249,6 +249,40 @@
       </div>
     </footer>
 
+    <section
+      class="portfolio-helper"
+      data-portfolio-helper
+      data-api-endpoint="https://portfolio-rag-api.grant-mccurdy.workers.dev/query"
+      aria-label="Portfolio helper"
+    >
+      <button class="portfolio-helper-toggle" type="button" aria-expanded="false" data-helper-toggle>
+        <span aria-hidden="true">?</span>
+        <span>Ask</span>
+      </button>
+      <div class="portfolio-helper-panel" data-helper-panel hidden>
+        <div class="portfolio-helper-header">
+          <div>
+            <strong>Portfolio helper</strong>
+            <span>Ask about projects, demos, or where to start.</span>
+          </div>
+          <button class="portfolio-helper-close" type="button" aria-label="Close portfolio helper" data-helper-close>Close</button>
+        </div>
+        <div class="portfolio-helper-thread" data-helper-thread aria-live="polite"></div>
+        <div class="portfolio-helper-prompts" aria-label="Suggested portfolio helper prompts">
+          <button type="button" data-helper-question="What should I look at first?">Where to start?</button>
+          <button type="button" data-helper-question="Which project shows analytics work?">Analytics work</button>
+          <button type="button" data-helper-question="What does Grant build?">What Grant builds</button>
+          <button type="button" data-helper-question="Where can I ask questions about the data?">Data questions</button>
+        </div>
+        <form class="portfolio-helper-form" data-helper-form>
+          <label class="sr-only" for="portfolio-helper-question">Portfolio helper question</label>
+          <input id="portfolio-helper-question" name="question" type="text" autocomplete="off" placeholder="Ask about this portfolio" data-helper-input>
+          <button type="submit">Send</button>
+        </form>
+      </div>
+    </section>
+
     <script src="assets/js/site.js"></script>
+    <script src="assets/js/portfolio-helper.js?v=20260623d"></script>
   </body>
 </html>

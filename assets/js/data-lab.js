@@ -4,7 +4,9 @@ if (lab) {
   const thread = lab.querySelector("[data-chat-thread]");
   const form = lab.querySelector("[data-chat-form]");
   const input = lab.querySelector("[data-chat-input]");
+  const submitButton = form.querySelector("button");
   const presetButtons = [...lab.querySelectorAll("[data-question]")];
+  const REQUEST_TIMEOUT_MS = 15000;
   const params = new URLSearchParams(window.location.search);
   const endpoint =
     params.get("endpoint") ||
@@ -235,8 +237,11 @@ if (lab) {
   };
 
   const setBusy = (busy) => {
-    form.querySelector("button").disabled = busy;
+    submitButton.disabled = busy;
     input.disabled = busy;
+    presetButtons.forEach((button) => {
+      button.disabled = busy;
+    });
   };
 
   const apiErrorMessage = (status, payload) => {
@@ -261,14 +266,18 @@ if (lab) {
     }
 
     setBusy(true);
+    const controller = new AbortController();
+    const timeoutId = window.setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
     try {
       const headers = { "content-type": "application/json" };
       if (demoToken) headers["x-demo-token"] = demoToken;
       const response = await fetch(endpoint, {
         method: "POST",
         headers,
+        signal: controller.signal,
         body: JSON.stringify({ question: trimmed, topK: 4 })
       });
+      window.clearTimeout(timeoutId);
       const payload = await response.json().catch(() => ({}));
       if (!response.ok) {
         const error = new Error(apiErrorMessage(response.status, payload));
@@ -277,16 +286,23 @@ if (lab) {
       }
       loading.querySelector(".chat-content").innerHTML = renderBlocks(payload);
     } catch (error) {
+      window.clearTimeout(timeoutId);
       const title =
-        error.status === 401
+        error.name === "AbortError"
+          ? "Analytics request timed out"
+          : error.status === 401
           ? "Demo token required"
           : error.status === 429
             ? "Rate limit reached"
             : "Analytics backend unavailable";
+      const message =
+        error.name === "AbortError"
+          ? "The analytics backend did not respond within 15 seconds. Try again in a moment or use another prompt."
+          : error.message || "The analytics request could not be completed.";
       loading.querySelector(".chat-content").innerHTML = renderStatus(
         "error",
         title,
-        error.message || "The analytics request could not be completed."
+        message
       );
     } finally {
       setBusy(false);

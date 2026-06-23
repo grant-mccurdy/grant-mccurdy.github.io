@@ -1,0 +1,87 @@
+{
+  "purpose": "Public-safe structured project map for the homepage portfolio helper.",
+  "site": {
+    "title": "Grant McCurdy Systems Portfolio",
+    "url": "https://grant-mccurdy.github.io/",
+    "summary": "A public portfolio for data systems, analytics products, AI-assisted workflows, workflow automation, and content intelligence."
+  },
+  "projects": [
+    {
+      "id": "education-data-simulation-engine",
+      "title": "Education Data Simulation Engine",
+      "url": "https://grant-mccurdy.github.io/projects/education-data-simulation-engine.html",
+      "summary": "Public-safe simulation foundation for assessment analytics, LMS workflow prototyping, decision-support dashboards, and learning-systems development.",
+      "bestFor": ["data systems", "synthetic education data", "SQL-ready marts", "warehouse validation", "public-safety design"],
+      "evidence": ["seven-year synthetic school horizon", "DuckDB SQL warehouse", "star-schema marts", "20 / 20 validation checks passing", "Data Lab foundation"],
+      "boundary": "Uses synthetic generated records and aggregate diagnostics, not real students, LMS exports, private assessment artifacts, or credentials."
+    },
+    {
+      "id": "assessment-intelligence",
+      "title": "Assessment Intelligence",
+      "url": "https://grant-mccurdy.github.io/projects/assessment-intelligence.html",
+      "summary": "Assessment system work for SQL-backed extracts, analytics, reproducible R processing, dashboarding, diagnostics, and decision-support reporting.",
+      "bestFor": ["analytics products", "SQL extracts", "dashboards", "R reporting", "decision support"],
+      "evidence": ["hosted analytics dashboard", "five SQL-backed extract CSVs", "3,020 local DuckDB extract rows", "2,009 synthetic readiness records", "gradebook synthesis reports"],
+      "boundary": "Public artifacts exclude real student names, emails, IDs, grades, rosters, LMS exports, submissions, and private school reporting artifacts."
+    },
+    {
+      "id": "assessment-to-remediation-pipeline",
+      "title": "Assessment-to-Remediation Pipeline",
+      "url": "https://grant-mccurdy.github.io/projects/assessment-to-remediation-pipeline.html",
+      "summary": "Inspectable prototype connecting math diagnostic evidence to feedback, remediation, mastery checks, and decision-support reporting.",
+      "bestFor": ["assessment design", "workflow automation", "review gates", "Canvas dry-run payloads", "remediation"],
+      "evidence": ["36 original math-readiness diagnostic items", "student and instructor previews", "automated review gate", "offline Canvas New Quizzes payload"],
+      "boundary": "A public-safe assessment-authoring and review-gate MVP, not a validated standardized test, live LMS deployment, or production Canvas integration."
+    },
+    {
+      "id": "instructional-ai-workflows",
+      "title": "Instructional AI Workflows",
+      "url": "https://grant-mccurdy.github.io/projects/instructional-ai-workflows.html",
+      "summary": "LMS-agnostic workflow prototypes for rubric-defined evaluation, draft feedback generation, human review, and student-facing artifacts.",
+      "bestFor": ["human-reviewed AI", "feedback workflows", "rubric evidence", "teacher review", "remediation planning"],
+      "evidence": ["Precalculus FRQ synthetic rubric demo", "three synthetic learner evaluations", "teacher reviewer packet", "reviewed feedback", "remediation planning output"],
+      "boundary": "Uses synthetic submissions, synthetic rubrics, fake course identifiers, and public-safe sample outputs."
+    },
+    {
+      "id": "content-intelligence",
+      "title": "Content Intelligence",
+      "url": "https://grant-mccurdy.github.io/projects/content-intelligence.html",
+      "summary": "Pipeline for converting unstructured content into source-bounded information objects, searchable corpora, transcript enrichment packets, and source-grounded reports.",
+      "bestFor": ["RAG", "source grounding", "corpus construction", "OCR cleanup", "transcript enrichment", "cited reporting"],
+      "evidence": ["20 citation-preserving corpus segments", "9 normalized artifacts", "checksum-backed manifests", "keyword retrieval", "cited sample report", "AI-readable method pack"],
+      "boundary": "Public examples use synthetic, sanitized, public-domain, or clearly licensed source material."
+    },
+    {
+      "id": "portfolio-data-lab",
+      "title": "Portfolio Data Lab",
+      "url": "https://grant-mccurdy.github.io/data-lab.html",
+      "summary": "Structured analytic chat over a public-safe synthetic education warehouse.",
+      "bestFor": ["statistical questions", "tables", "charts", "synthetic warehouse analysis", "follow-up analytic questions"],
+      "evidence": ["Cloudflare Worker analytics route", "D1-backed synthetic education marts", "rendered tables, metrics, notes, and charts"],
+      "boundary": "For synthetic education analytics only; not a source for private student data or private school records."
+    },
+    {
+      "id": "analytics-dashboard",
+      "title": "Analytics Dashboard",
+      "url": "https://grant-mccurdy.github.io/dashboard/assessment.html",
+      "summary": "Static GitHub Pages dashboard over public-safe synthetic warehouse extracts with browser-side aggregation, SVG charts, and filters.",
+      "bestFor": ["interactive demo", "dashboarding", "visual analytics", "assessment reporting", "front-end data product"],
+      "evidence": ["course, grade, teacher, section, growth, completion, skill, and distribution views"],
+      "boundary": "Uses static public-safe synthetic extract data."
+    }
+  ],
+  "routingRules": [
+    {
+      "intent": "visitor wants a quick overview",
+      "recommend": ["homepage", "analytics-dashboard", "portfolio-data-lab"]
+    },
+    {
+      "intent": "visitor asks about statistics or computation over education data",
+      "recommend": ["portfolio-data-lab"]
+    },
+    {
+      "intent": "visitor asks about Grant's technical strengths",
+      "recommend": ["assessment-intelligence", "education-data-simulation-engine", "content-intelligence", "instructional-ai-workflows"]
+    }
+  ]
+}

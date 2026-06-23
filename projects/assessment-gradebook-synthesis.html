@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Assessment Gradebook Synthesis | Grant McCurdy</title>
     <meta name="description" content="Public-safe assessment gradebook synthesis and validation summary.">
-    <link rel="stylesheet" href="../assets/css/styles.css">
+    <link rel="stylesheet" href="../assets/css/styles.css?v=20260623d">
   </head>
   <body>
     <header class="site-header compact" data-header>
@@ -15,7 +15,7 @@
           <span class="brand-text">Grant McCurdy</span>
         </a>
         <div class="nav-links static">
-          <a href="../index.html#projects">Projects</a>
+          <a href="../index.html#work">Work</a>
           <a href="../case-studies/assessment-reporting.html">Assessment Case Study</a>
         </div>
       </nav>
@@ -27,7 +27,8 @@
         <h1>Gradebook synthesis and validation</h1>
         <p>A public-safe summary of the R workflow that reconstructs a synthetic Canvas-style gradebook from private-reference structure without publishing private rows, identifiers, section labels, or assignment names.</p>
         <div class="hero-actions detail-actions">
-          <a class="button primary" href="https://github.com/grant-mccurdy/assessment-intelligence">GitHub Repo</a>
+          <a class="button primary" href="../artifacts/assessment-intelligence/gradebook_synthesis_report.html">Read R Report</a>
+          <a class="button outline" href="../artifacts/assessment-intelligence/gradebook_synthesis_report.pdf">Download PDF</a>
           <a class="button outline" href="../dashboard/assessment.html">Open Dashboard</a>
         </div>
       </section>
@@ -53,6 +54,23 @@
 
       <section class="section-shell detail-grid">
         <div>
+          <p class="section-kicker">Evidence Packet</p>
+          <h2>Rendered artifacts reviewers can inspect</h2>
+          <p>The public packet contains the rendered R synthesis report, the PDF export, the validation summary, and the synthesis method summary. These are copied from public-safe generated outputs; the private reference file and detailed private schema profile are not included.</p>
+        </div>
+        <div class="detail-panel">
+          <h2>Open Artifacts</h2>
+          <ul class="clean-list">
+            <li><a class="text-link" href="../artifacts/assessment-intelligence/gradebook_synthesis_report.html">R synthesis report HTML</a></li>
+            <li><a class="text-link" href="../artifacts/assessment-intelligence/gradebook_synthesis_report.pdf">R synthesis report PDF</a></li>
+            <li><a class="text-link" href="../artifacts/assessment-intelligence/gradebook_reconstruction_validation.md">Validation summary</a></li>
+            <li><a class="text-link" href="../artifacts/assessment-intelligence/advanced_synthetic_gradebook_synthesis.md">Synthesis method summary</a></li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="section-shell detail-grid">
+        <div>
           <p class="section-kicker">Workflow</p>
           <h2>Private-reference shape, public synthetic output</h2>
           <p>The source repo profiles a private reference gradebook locally, generates fake students and assignment records, validates identity separation and distribution fidelity, then renders public-safe reports. The portal summarizes the evidence without copying private inputs or raw table dumps.</p>
@@ -69,6 +87,7 @@
           <div class="link-row detail-action">
             <a class="text-link" href="https://github.com/grant-mccurdy/assessment-intelligence">Source repo</a>
             <a class="text-link" href="assessment-intelligence.html">Assessment brief</a>
+            <a class="text-link" href="../artifacts/assessment-intelligence/gradebook_reconstruction_validation.md">Validation summary</a>
             <a class="text-link" href="../case-studies/assessment-reporting.html">Case study</a>
           </div>
         </div>

@@ -24,6 +24,19 @@ class LinkParser(HTMLParser):
                 self.links.append(value)
 
 
+class TargetParser(HTMLParser):
+    def __init__(self) -> None:
+        super().__init__()
+        self.targets: set[str] = set()
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        attr_map = dict(attrs)
+        for key in ("id", "name"):
+            value = attr_map.get(key)
+            if value:
+                self.targets.add(value)
+
+
 def is_external(link: str) -> bool:
     parsed = urlparse(link)
     return bool(parsed.scheme) or link.startswith("mailto:")
@@ -31,17 +44,26 @@ def is_external(link: str) -> bool:
 
 def main() -> int:
     missing: list[tuple[Path, str]] = []
+    missing_fragments: list[tuple[Path, str]] = []
+    target_cache: dict[Path, set[str]] = {}
+
+    def targets_for(path: Path) -> set[str]:
+        if path not in target_cache:
+            parser = TargetParser()
+            parser.feed(path.read_text(encoding="utf-8"))
+            target_cache[path] = parser.targets
+        return target_cache[path]
 
     for html_path in sorted(ROOT.rglob("*.html")):
         parser = LinkParser()
         parser.feed(html_path.read_text(encoding="utf-8"))
         for link in parser.links:
-            link_without_fragment, _ = urldefrag(link)
+            link_without_fragment, fragment = urldefrag(link)
             parsed = urlparse(link_without_fragment)
-            if not parsed.path or is_external(link_without_fragment):
+            if is_external(link_without_fragment):
                 continue
 
-            target = (html_path.parent / parsed.path).resolve()
+            target = html_path.resolve() if not parsed.path else (html_path.parent / parsed.path).resolve()
             try:
                 target.relative_to(ROOT)
             except ValueError:
@@ -49,10 +71,16 @@ def main() -> int:
 
             if not target.exists():
                 missing.append((html_path.relative_to(ROOT), link))
+                continue
 
-    if missing:
+            if fragment and target.suffix == ".html" and fragment not in targets_for(target):
+                missing_fragments.append((html_path.relative_to(ROOT), link))
+
+    if missing or missing_fragments:
         for source, link in missing:
             print(f"MISSING {source}: {link}")
+        for source, link in missing_fragments:
+            print(f"MISSING_FRAGMENT {source}: {link}")
         return 1
 
     print("All internal HTML links resolve.")

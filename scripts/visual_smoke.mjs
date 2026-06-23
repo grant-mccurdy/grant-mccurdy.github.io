@@ -139,6 +139,32 @@ async function inspect(page) {
   };
 }
 
+async function inspectHelper(page, label) {
+  if (!label.startsWith("home-")) return null;
+  const toggle = page.locator("[data-helper-toggle]");
+  const panel = page.locator("[data-helper-panel]");
+  await toggle.click();
+  await panel.waitFor({ state: "visible", timeout: 1500 });
+  const opened = await panel.isVisible();
+  const initialText = await panel.locator("[data-helper-thread]").innerText();
+  const overflow = await page.evaluate(() => {
+    const panelEl = document.querySelector("[data-helper-panel]");
+    if (!panelEl) return [];
+    const rect = panelEl.getBoundingClientRect();
+    return rect.right > document.documentElement.clientWidth + 2 || rect.left < -2
+      ? [{ className: String(panelEl.className), right: rect.right, left: rect.left }]
+      : [];
+  });
+  await page.locator("[data-helper-close]").click();
+  const closed = await panel.isHidden();
+  return {
+    opened,
+    closed,
+    initialText: initialText.includes("I can help you find the right project"),
+    overflow,
+  };
+}
+
 const cases = [
   ["home-desktop", "index.html", 1440, 1000],
   ["home-mobile", "index.html", 390, 900],
@@ -168,7 +194,7 @@ try {
   for (const [label, file, width, height] of cases) {
     const page = await browser.newPage({ viewport: { width, height } });
     await page.goto(`${baseUrl}/${file.replaceAll(path.sep, "/")}`, { waitUntil: "networkidle" });
-    results.push({ label, ...(await inspect(page)) });
+    results.push({ label, ...(await inspect(page)), helper: await inspectHelper(page, label) });
     await page.close();
   }
 } finally {
@@ -189,7 +215,14 @@ const heroVideoFailed = (result) => {
 };
 
 const failures = results.filter(
-  (result) => result.overflow.length > 0 || result.dashboardError || heroVideoFailed(result),
+  (result) =>
+    result.overflow.length > 0 ||
+    result.dashboardError ||
+    heroVideoFailed(result) ||
+    result.helper?.overflow.length ||
+    result.helper?.opened === false ||
+    result.helper?.closed === false ||
+    result.helper?.initialText === false,
 );
 console.log(JSON.stringify(results, null, 2));
 

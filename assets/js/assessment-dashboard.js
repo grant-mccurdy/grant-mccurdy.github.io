@@ -2,19 +2,19 @@ const state = {
   source: null,
   records: [],
   focus: "All",
-  groupBy: "section",
+  groupBy: "course",
   metric: "score",
   season: "All",
-  preset: "comparison",
+  preset: "trend",
   toggles: {
-    department: false,
+    department: true,
     network: false,
-    mastery: false,
+    mastery: true,
     sections: false,
   },
   visual: {
     center: "mean",
-    ribbonOpacity: 0.1,
+    ribbonOpacity: 0.16,
     ribbonRange: "50",
     ribbonPopulation: "completed",
     smoothCurves: true,
@@ -44,10 +44,10 @@ const metricLabels = {
 };
 
 const sliceLabels = {
-  course: "course",
-  grade: "grade",
-  teacher: "teacher",
-  section: "section",
+  course: "program",
+  grade: "cohort",
+  teacher: "owner",
+  section: "group",
 };
 
 const palette = ["#111111", "#333333", "#555555", "#777777", "#999999", "#bbbbbb", "#2a2a2a", "#4a4a4a", "#6a6a6a", "#8a8a8a"];
@@ -174,6 +174,8 @@ function formatContract(value) {
     .replace(/\bv(\d+)\b/i, "v$1");
 }
 
+const isCompactViewport = () => window.matchMedia("(max-width: 700px)").matches;
+
 function renderSourceMetadata(source) {
   const metadata = source.source ?? {};
   const counts = sourceRecordCounts(source);
@@ -181,7 +183,7 @@ function renderSourceMetadata(source) {
   if (els.sourceProject) els.sourceProject.textContent = project;
   if (els.sourceGenerated) els.sourceGenerated.textContent = source.generated ?? "-";
   if (els.sourceCounts) {
-    els.sourceCounts.textContent = `${counts.sections ?? 0} sections / ${counts.syntheticStudentRecords ?? 0} student-period rows`;
+    els.sourceCounts.textContent = `${counts.sections ?? 0} groups / ${counts.syntheticStudentRecords ?? 0} entity-period rows`;
   }
   if (els.sourceContract) els.sourceContract.textContent = formatContract(metadata.contract);
 }
@@ -575,15 +577,19 @@ function layoutRightLabels(series, y, top, bottom) {
 }
 
 function renderTimeSeries(records) {
-  const width = 1120;
-  const height = 470;
-  const margin = { top: 46, right: 300, bottom: 72, left: 74 };
+  const compact = isCompactViewport();
+  const width = compact ? 620 : 1120;
+  const height = compact ? 400 : 470;
+  const margin = compact
+    ? { top: 42, right: 24, bottom: 58, left: 52 }
+    : { top: 46, right: 300, bottom: 72, left: 74 };
   const innerWidth = width - margin.left - margin.right;
   const innerHeight = height - margin.top - margin.bottom;
-  const periodData = visiblePeriodWindow(periodDataForTimeSeries(records));
+  const allPeriodData = visiblePeriodWindow(periodDataForTimeSeries(records));
+  const periodData = compact ? allPeriodData.slice(-7) : allPeriodData;
   const periods = periodData.map((item) => item.period);
   const lineSeries = sortLineSeries(buildLineSeries(periodData));
-  const selectedSeries = lineSeries.slice(0, lineLimitValue());
+  const selectedSeries = lineSeries.slice(0, compact ? Math.min(lineLimitValue(), 5) : lineLimitValue());
   const domain = lineChartDomain(selectedSeries, periods);
   const yMax = domain.max;
   const yMin = domain.min;
@@ -598,10 +604,10 @@ function renderTimeSeries(records) {
     </g>
   `).join("");
 
-  const departmentBand = state.toggles.department && metricAllowsBands() ? renderBand("department", periods, x, bandScale) : "";
-  const networkBand = state.toggles.network && metricAllowsBands() ? renderBand("network", periods, x, bandScale) : "";
-  const masteryLine = state.toggles.mastery && metricAllowsBands() ? renderBenchmark(periods, x, y) : "";
-  const distributionGlyphs = metricAllowsBands() ? renderDistributionGlyphs(periods, x, y) : "";
+  const departmentBand = !compact && state.toggles.department && metricAllowsBands() ? renderBand("department", periods, x, bandScale) : "";
+  const networkBand = !compact && state.toggles.network && metricAllowsBands() ? renderBand("network", periods, x, bandScale) : "";
+  const masteryLine = !compact && state.toggles.mastery && metricAllowsBands() ? renderBenchmark(periods, x, y) : "";
+  const distributionGlyphs = !compact && metricAllowsBands() ? renderDistributionGlyphs(periods, x, y) : "";
   const overallPoints = periodData.map((periodItem, periodIndex) => ({
     x: x(periodIndex),
     y: y(periodItem ? metricValue(periodItem) : NaN),
@@ -626,18 +632,21 @@ function renderTimeSeries(records) {
     const signedChange = `${line.change >= 0 ? "+" : ""}${line.change.toFixed(2)}`;
     const lineClass = line.hasGap ? "direct-series-line direct-series-gap" : "direct-series-line";
     const circles = points.map((point, index) => `
-      <circle cx="${point.x}" cy="${point.y}" r="${index === points.length - 1 ? 5.2 : 4.6}" fill="${line.color}" class="series-point comparison-series-point"></circle>
+      <circle cx="${point.x}" cy="${point.y}" r="${compact ? (index === points.length - 1 ? 5.4 : 4.4) : (index === points.length - 1 ? 5.2 : 4.6)}" fill="${line.color}" class="series-point comparison-series-point"></circle>
     `).join("");
-    return `
-      <path d="${pointsToCurvePath(points)}" fill="none" stroke="${line.color}" class="series-line comparison-series-line ${lineClass}"></path>
-      ${circles}
+    const directLabel = compact ? "" : `
       <line x1="${lastPoint.x + 9}" x2="${labelDotX - 8}" y1="${lastPoint.y}" y2="${labelPosition}" stroke="${line.color}" class="direct-label-guide"></line>
       <circle cx="${labelDotX}" cy="${labelPosition}" r="4.7" fill="${line.color}" class="right-label-dot"></circle>
       <text x="${labelX}" y="${labelPosition + 5}" class="right-label-text">${line.key} (${signedChange})</text>
     `;
+    return `
+      <path d="${pointsToCurvePath(points)}" fill="none" stroke="${line.color}" class="series-line comparison-series-line ${lineClass}"></path>
+      ${circles}
+      ${directLabel}
+    `;
   }).join("");
 
-  const sectionLines = state.toggles.sections ? renderSectionLines(records, periods, x, y) : "";
+  const sectionLines = !compact && state.toggles.sections ? renderSectionLines(records, periods, x, y) : "";
 
   const xLabels = periods.map((period, index) => `
     <text x="${x(index)}" y="${height - 34}" class="axis-label x-label" text-anchor="middle">${periodDisplayLabel(period)}</text>
@@ -666,8 +675,8 @@ function renderTimeSeries(records) {
     </svg>
   `;
 
-  const lineLabel = `${selectedSeries.length} historical ${currentSliceLabel(true)} line${selectedSeries.length === 1 ? "" : "s"}`;
-  const windowLabel = `${periods.length} assessment window${periods.length === 1 ? "" : "s"}`;
+  const lineLabel = `${selectedSeries.length} ${currentSliceLabel()} line${selectedSeries.length === 1 ? "" : "s"}`;
+  const windowLabel = `${periods.length} reporting window${periods.length === 1 ? "" : "s"}`;
   els.timeCaption.textContent = `${lineLabel} shown from ${windowLabel}. Gaps mean no aggregate score met the minimum-n rule for that group/window.`;
   renderLegend(selectedSeries, periods.length);
 }
@@ -759,12 +768,14 @@ function periodScoreStats(period) {
 }
 
 function renderCompletionChart() {
-  const width = 980;
-  const height = 170;
-  const margin = { top: 18, right: 34, bottom: 42, left: 54 };
+  const compact = isCompactViewport();
+  const width = compact ? 620 : 980;
+  const height = compact ? 210 : 170;
+  const margin = compact ? { top: 20, right: 24, bottom: 46, left: 48 } : { top: 18, right: 34, bottom: 42, left: 54 };
   const innerWidth = width - margin.left - margin.right;
   const innerHeight = height - margin.top - margin.bottom;
-  const periods = state.source.periods.filter((period) => state.season === "All" || period.season === state.season);
+  const allPeriods = state.source.periods.filter((period) => state.season === "All" || period.season === state.season);
+  const periods = compact ? allPeriods.slice(-7) : allPeriods;
   const x = (index) => margin.left + (periods.length <= 1 ? innerWidth / 2 : (index / (periods.length - 1)) * innerWidth);
   const y = (value) => margin.top + innerHeight - (value / 100) * innerHeight;
 
@@ -818,16 +829,18 @@ function renderCompletionChart() {
   `;
 
   const latest = rows[rows.length - 1];
-  els.completionCaption.textContent = latest ? `${latest.period.label}: ${Math.round(latest.completion)}% completed (${latest.completed}/${latest.assigned})` : "Assigned vs completed assessment records";
+  els.completionCaption.textContent = latest ? `${latest.period.label}: ${Math.round(latest.completion)}% completed (${latest.completed}/${latest.assigned})` : "Assigned vs completed records";
 }
 
 function renderDistributionChart() {
-  const width = 980;
-  const height = 320;
-  const margin = { top: 24, right: 34, bottom: 70, left: 54 };
+  const compact = isCompactViewport();
+  const width = compact ? 620 : 980;
+  const height = compact ? 340 : 320;
+  const margin = compact ? { top: 24, right: 24, bottom: 54, left: 48 } : { top: 24, right: 34, bottom: 70, left: 54 };
   const innerWidth = width - margin.left - margin.right;
   const innerHeight = height - margin.top - margin.bottom;
-  const periods = state.source.periods.filter((period) => state.season === "All" || period.season === state.season);
+  const allPeriods = state.source.periods.filter((period) => state.season === "All" || period.season === state.season);
+  const periods = compact ? allPeriods.slice(-7) : allPeriods;
   const stats = periods.map(periodScoreStats);
   const yMin = state.visual.ribbonPopulation === "assigned" ? 0 : 20;
   const x = (index) => margin.left + (periods.length <= 1 ? innerWidth / 2 : (index / (periods.length - 1)) * innerWidth);
@@ -863,7 +876,7 @@ function renderDistributionChart() {
     y: y(state.visual.center === "median" ? stat.median : stat.mean),
   }));
   const labels = periods.map((period, index) => `
-    <text x="${x(index)}" y="${height - 28}" class="axis-label x-label" text-anchor="end" transform="rotate(-35 ${x(index)} ${height - 28})">${periodDisplayLabel(period)}</text>
+    <text x="${x(index)}" y="${height - (compact ? 25 : 28)}" class="axis-label x-label" text-anchor="${compact ? "middle" : "end"}"${compact ? "" : ` transform="rotate(-35 ${x(index)} ${height - 28})"`}>${periodDisplayLabel(period)}</text>
   `).join("");
 
   els.distributionChart.innerHTML = `
@@ -915,9 +928,10 @@ function renderLegend(series, periodCount) {
 }
 
 function renderBars(container, items, options = {}) {
-  const width = 720;
-  const rowHeight = 46;
-  const labelWidth = options.labelWidth ?? 210;
+  const compact = isCompactViewport();
+  const width = compact ? 620 : 720;
+  const rowHeight = compact ? 42 : 46;
+  const labelWidth = options.labelWidth ?? (compact ? 170 : 210);
   const chartWidth = width - labelWidth - 68;
   const height = Math.max(82, items.length * rowHeight + 28);
   const max = options.max ?? 100;
@@ -952,7 +966,7 @@ function renderComparisonBars(records) {
     max: state.metric === "growth" ? 42 : 100,
     format: state.metric === "growth" ? fmtPts : fmtPct,
   });
-  els.barCaption.textContent = `${latest.period?.label ?? ""} by ${state.groupBy}`;
+  els.barCaption.textContent = `${latest.period?.label ?? ""} by ${currentSliceLabel()}`;
 }
 
 function renderGrowthBars(records) {
@@ -1252,8 +1266,8 @@ function render() {
 
 function initControls() {
   const courses = unique(state.source.sections.map((section) => section.course));
-  els.focus.innerHTML = [`<option value="All">All Courses</option>`, ...courses.map((course) => `<option value="${course}">${course}</option>`)].join("");
-  els.tableCourse.innerHTML = [`<option value="All">All Courses</option>`, ...courses.map((course) => `<option value="${course}">${course}</option>`)].join("");
+  els.focus.innerHTML = [`<option value="All">All Segments</option>`, ...courses.map((course) => `<option value="${course}">${course}</option>`)].join("");
+  els.tableCourse.innerHTML = [`<option value="All">All Segments</option>`, ...courses.map((course) => `<option value="${course}">${course}</option>`)].join("");
   els.tableGrade.innerHTML = [`<option value="All">All Grades</option>`, ...unique(state.source.sections.map((section) => section.grade)).map((grade) => `<option value="${grade}">${grade}</option>`)].join("");
   els.tableTeacher.innerHTML = [`<option value="All">All Teachers</option>`, ...unique(state.source.sections.map((section) => section.teacher)).map((teacher) => `<option value="${teacher}">${teacher}</option>`)].join("");
 
@@ -1397,6 +1411,13 @@ function initControls() {
 
   syncControls();
 }
+
+let resizeTimer = null;
+window.addEventListener("resize", () => {
+  if (!state.source) return;
+  window.clearTimeout(resizeTimer);
+  resizeTimer = window.setTimeout(render, 150);
+}, { passive: true });
 
 fetch(`../data/synthetic/assessment-dashboard.json?v=${assetVersion}`)
   .then((response) => {

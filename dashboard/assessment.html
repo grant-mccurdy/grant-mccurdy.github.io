@@ -1,11 +1,11 @@
 <!doctype html>
-<html lang="en" data-asset-version="dashboard-source-v1">
+<html lang="en" data-asset-version="20260623d">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Assessment Dashboard | Grant McCurdy</title>
-    <meta name="description" content="Interactive assessment dashboard powered by assessment-intelligence SQL extract data.">
-    <link rel="stylesheet" href="../assets/css/styles.css?v=dashboard-source-v1">
+    <title>Analytics Dashboard | Grant McCurdy</title>
+    <meta name="description" content="Interactive public-safe analytics dashboard powered by static SQL extract data.">
+    <link rel="stylesheet" href="../assets/css/styles.css?v=20260623d">
   </head>
   <body>
     <header class="site-header compact" data-header>
@@ -15,8 +15,8 @@
           <span class="brand-text">Grant McCurdy</span>
         </a>
         <div class="nav-links static">
-          <a href="../index.html#projects">Projects</a>
-          <a href="../projects/assessment-intelligence.html">Assessment Brief</a>
+          <a href="../index.html#work">Work</a>
+          <a href="../projects/assessment-intelligence.html">Analytics Brief</a>
         </div>
       </nav>
     </header>
@@ -24,16 +24,16 @@
     <main class="detail-main dashboard-main">
       <section class="detail-hero dashboard-hero">
         <p class="section-kicker">Interactive Dashboard</p>
-        <h1>Assessment Dashboard</h1>
-        <p>Static GitHub Pages dashboard powered by the same <code>assessment-intelligence</code> SQL extract data used for public-safe reports, browser-side aggregation, SVG charts, and no external dependencies.</p>
+        <h1>Analytics Dashboard</h1>
+        <p>Static GitHub Pages dashboard over a public-safe synthetic warehouse, with browser-side aggregation, SVG charts, filters, and no external dependencies.</p>
       </section>
 
       <section class="dashboard-shell" aria-labelledby="dashboard-heading">
         <div class="dashboard-source-strip" aria-label="Dashboard data source">
           <div class="source-summary">
             <p class="section-kicker">Data Source</p>
-            <h2>Powered by assessment-intelligence</h2>
-            <p>The assessment repo owns the SQL extract build, privacy validation, and static JSON artifact consumed by this portfolio dashboard.</p>
+            <h2>Public-safe SQL extract</h2>
+            <p>The source repo owns the extract build, privacy validation, and static JSON artifact consumed by this portfolio dashboard.</p>
           </div>
           <dl class="source-meta-grid">
             <div>
@@ -80,17 +80,17 @@
 
         <div class="dashboard-toolbar dashboard-toolbar-expanded">
           <div>
-            <p class="section-kicker">SQL Extract Data</p>
-            <h2 id="dashboard-heading">Program Assessment Windows</h2>
+            <p class="section-kicker">Analytics Surface</p>
+            <h2 id="dashboard-heading">Program Windows</h2>
           </div>
           <div class="control-row line-control-grid" aria-label="Line chart controls">
             <label>
               Slice
               <select id="group-select">
-                <option value="course">Courses</option>
-                <option value="grade">Grades</option>
-                <option value="teacher">Teachers</option>
-                <option value="section">Sections</option>
+                <option value="course">Programs</option>
+                <option value="grade">Cohorts</option>
+                <option value="teacher">Owners</option>
+                <option value="section">Groups</option>
               </select>
             </label>
             <label>
@@ -134,7 +134,7 @@
 
         <div class="preset-row" aria-label="Dashboard presets">
           <button type="button" class="preset-button is-active" data-preset="trend">Program Trend</button>
-          <button type="button" class="preset-button" data-preset="comparison">Course Comparison</button>
+          <button type="button" class="preset-button" data-preset="comparison">Segment Comparison</button>
           <button type="button" class="preset-button" data-preset="rollout">Completion Rollout</button>
           <button type="button" class="preset-button" data-preset="distribution">Distribution Analysis</button>
         </div>
@@ -150,7 +150,7 @@
           <label>
             Focus
             <select id="focus-select">
-              <option value="All">All Courses</option>
+              <option value="All">All Segments</option>
             </select>
           </label>
           <label>
@@ -193,18 +193,18 @@
         <article class="dashboard-panel time-panel">
           <div class="panel-heading">
             <div>
-              <h3>Historical Assessment Lines</h3>
-              <span id="time-caption">Beginning and end assessment windows</span>
+              <h3>Historical Analytics Lines</h3>
+              <span id="time-caption">Beginning and end reporting windows</span>
             </div>
             <div class="legend" id="time-legend"></div>
           </div>
-          <div id="time-chart" class="chart-frame time-chart" role="img" aria-label="Assessment performance time-series chart"></div>
+          <div id="time-chart" class="chart-frame time-chart" role="img" aria-label="Analytics time-series chart"></div>
           <div class="mini-chart-block">
             <div class="mini-chart-heading">
               <h4>Completion Rollout</h4>
-              <span id="completion-caption">Assigned vs completed assessment records</span>
+              <span id="completion-caption">Assigned vs completed records</span>
             </div>
-            <div id="completion-chart" class="chart-frame mini-chart" role="img" aria-label="Assessment completion rollout chart"></div>
+            <div id="completion-chart" class="chart-frame mini-chart" role="img" aria-label="Completion rollout chart"></div>
           </div>
         </article>
 
@@ -212,7 +212,7 @@
           <div class="panel-heading">
             <div>
               <h3>Distribution Detail</h3>
-              <span id="distribution-caption">Student-level synthetic score spread by period</span>
+              <span id="distribution-caption">Synthetic score spread by period</span>
             </div>
           </div>
           <div id="distribution-chart" class="chart-frame distribution-chart" role="img" aria-label="Distribution detail chart"></div>
@@ -263,7 +263,7 @@
             <label>
               Course
               <select id="table-course-filter">
-                <option value="All">All Courses</option>
+                <option value="All">All Segments</option>
               </select>
             </label>
             <label>
@@ -313,6 +313,6 @@
     </main>
 
     <script src="../assets/js/site.js?v=dashboard-source-v1"></script>
-    <script src="../assets/js/assessment-dashboard.js?v=dashboard-source-v1"></script>
+    <script src="../assets/js/assessment-dashboard.js?v=20260623d"></script>
   </body>
 </html>
