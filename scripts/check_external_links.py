@@ -11,7 +11,8 @@ from urllib.request import Request, urlopen
 
 
 ROOT = Path(__file__).resolve().parents[1]
-TIMEOUT_SECONDS = 12
+TIMEOUT_SECONDS = 20
+SKIP_DIRS = {".git", "node_modules"}
 
 
 class LinkParser(HTMLParser):
@@ -61,6 +62,8 @@ def main() -> int:
     links_by_url: dict[str, set[Path]] = {}
 
     for html_path in sorted(ROOT.rglob("*.html")):
+        if SKIP_DIRS.intersection(html_path.relative_to(ROOT).parts):
+            continue
         parser = LinkParser()
         parser.feed(html_path.read_text(encoding="utf-8"))
         for link in parser.links:
