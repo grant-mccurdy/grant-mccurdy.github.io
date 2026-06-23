@@ -74,6 +74,7 @@ make external-links
 
 - `education-data-simulation-engine`: public-safe education data simulation, validation, and SQL-ready analytics foundations.
 - `assessment-intelligence`: assessment design, analytics, dashboards, diagnostics, and reporting workflows.
+- `statistical-risk-modeling-r`: public-safe R risk modeling, GLM validation, calibration diagnostics, threshold economics, and model-card reporting.
 - `assessment-to-remediation-pipeline`: math-readiness diagnostic authoring, review gates, Canvas dry-run payloads, and remediation workflow design.
 - `instructional-ai-workflows`: teacher-controlled AI-assisted feedback, review, and remediation workflows.
 - `content-intelligence`: unstructured content processing, transcript enrichment, source-grounded information objects, and report generation.
@@ -89,6 +90,7 @@ Use only public-safe screenshots, synthetic data, generalized case-study languag
 - Content Intelligence is portfolio-ready and has a hosted sample report, case study, transcript enrichment examples, OCR cleanup workflow, information-object map, and method-pack artifacts.
 - Education Data Simulation Engine has a seven-year public-safe simulation with methodology, generated artifacts, DuckDB marts, star-schema outputs, Supabase/Postgres serving docs, and current validation summaries.
 - Assessment Intelligence has a hosted static dashboard, five SQL extract files, optional Supabase extract reports, AI review artifacts, plot catalog, and active reporting/modeling source artifacts.
+- Statistical Risk Modeling in R has a public-safe synthetic account-risk model, repeated cross-validation model comparison, holdout validation metrics, calibration diagnostics, threshold economics, scenario profiles, and a model card.
 - Assessment-to-Remediation Pipeline has an original 36-item math-readiness diagnostic, student and instructor previews, automated review artifacts, and offline Canvas New Quizzes payloads.
 - Instructional AI Workflows has an active synthetic Precalculus FRQ workflow demo with three evaluated examples, teacher review packets, student-facing feedback, and remediation planning output.
 - Internal link checks validate both local file paths and same-site HTML fragments.

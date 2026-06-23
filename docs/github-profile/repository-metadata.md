@@ -30,9 +30,10 @@ Suggested pinned repository order:
 
 1. `education-data-simulation-engine`
 2. `assessment-intelligence`
-3. `grant-mccurdy.github.io`
-4. `content-intelligence-reporting`
-5. `instructional-ai-workflows`
+3. `statistical-risk-modeling-r`
+4. `grant-mccurdy.github.io`
+5. `content-intelligence-reporting`
+6. `instructional-ai-workflows`
 
 Keep `public-workspace` unpinned unless it is intentionally presented as a staging workspace.
 
@@ -50,6 +51,10 @@ gh repo edit grant-mccurdy/assessment-intelligence \
 gh repo edit grant-mccurdy/education-data-simulation-engine \
   --description "Synthetic education data generator for public-safe Canvas-style analytics, validation, and warehouse demos." \
   --homepage "https://grant-mccurdy.github.io/projects/education-data-simulation-engine.html"
+
+gh repo edit grant-mccurdy/statistical-risk-modeling-r \
+  --description "Public-safe R risk modeling project with GLM validation, calibration diagnostics, and executive decision support." \
+  --homepage "https://grant-mccurdy.github.io/projects/statistical-risk-modeling-r.html"
 
 gh repo edit grant-mccurdy/content-intelligence-reporting \
   --description "Source-grounded content intelligence workflow for evidence-labeled reporting and searchable document analysis." \
@@ -89,6 +94,14 @@ gh repo edit grant-mccurdy/education-data-simulation-engine \
   --add-topic duckdb \
   --add-topic data-generation \
   --add-topic privacy-safe
+
+gh repo edit grant-mccurdy/statistical-risk-modeling-r \
+  --add-topic r \
+  --add-topic statistical-modeling \
+  --add-topic risk-modeling \
+  --add-topic glm \
+  --add-topic calibration \
+  --add-topic decision-support
 
 gh repo edit grant-mccurdy/content-intelligence-reporting \
   --add-topic content-intelligence \

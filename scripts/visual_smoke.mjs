@@ -174,6 +174,8 @@ const cases = [
   ["data-lab-mobile", "data-lab.html", 390, 900],
   ["assessment-desktop", path.join("projects", "assessment-intelligence.html"), 1440, 1000],
   ["assessment-mobile", path.join("projects", "assessment-intelligence.html"), 390, 900],
+  ["risk-desktop", path.join("projects", "statistical-risk-modeling-r.html"), 1440, 1000],
+  ["risk-mobile", path.join("projects", "statistical-risk-modeling-r.html"), 390, 900],
   ["remediation-desktop", path.join("projects", "assessment-to-remediation-pipeline.html"), 1440, 1000],
   ["remediation-mobile", path.join("projects", "assessment-to-remediation-pipeline.html"), 390, 900],
   ["content-desktop", path.join("projects", "content-intelligence.html"), 1440, 1000],

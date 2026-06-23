@@ -9,12 +9,14 @@ My portfolio focuses on systems that make complex education and analytics work i
 - [Systems Portfolio](https://grant-mccurdy.github.io/) - public entry point for project briefs, demos, case studies, dashboards, and source repositories.
 - [Education Data Simulation Engine](https://github.com/grant-mccurdy/education-data-simulation-engine) - synthetic education data generator with Canvas-style artifacts, validation reports, warehouse-ready outputs, and public-safe demo data.
 - [Assessment Intelligence](https://github.com/grant-mccurdy/assessment-intelligence) - assessment analytics workflow using synthetic gradebook data, SQL extracts, R reporting, modeling artifacts, and static dashboard outputs.
+- [Statistical Risk Modeling in R](https://github.com/grant-mccurdy/statistical-risk-modeling-r) - public-safe R project for GLM probability modeling, cross-validation, calibration diagnostics, threshold economics, and executive decision support.
 - [Content Intelligence Reporting](https://github.com/grant-mccurdy/content-intelligence-reporting) - source-grounded reporting workflow for structured summaries, evidence labels, and auditable content artifacts.
 - [Instructional AI Workflows](https://github.com/grant-mccurdy/instructional-ai-workflows) - teacher-controlled AI workflow prototypes with rubric evidence, review gates, feedback drafts, and remediation planning outputs.
 
 ## Evidence To Inspect
 
 - [Assessment dashboard](https://grant-mccurdy.github.io/dashboard/assessment.html)
+- [Statistical risk modeling brief](https://grant-mccurdy.github.io/projects/statistical-risk-modeling-r.html)
 - [Gradebook synthesis brief](https://grant-mccurdy.github.io/projects/assessment-gradebook-synthesis.html)
 - [Assessment reporting case study](https://grant-mccurdy.github.io/case-studies/assessment-reporting.html)
 - [Content intelligence demo report](https://grant-mccurdy.github.io/projects/content-intelligence-demo-report.html)
