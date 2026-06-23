@@ -161,7 +161,6 @@ img {
 
 .hero-media {
   background: url("../images/workflow-hero-poster.jpg") center / cover no-repeat;
-  transform: scale(1.01);
 }
 
 .hero-video {
