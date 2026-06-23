@@ -167,7 +167,7 @@ img {
 }
 
 .hero-media {
-  background: url("../images/workflow-hero-poster.jpg?v=20260623g") center / cover no-repeat;
+  background: url("../images/workflow-hero-poster.jpg?v=20260623h") center / cover no-repeat;
 }
 
 .hero-video {
@@ -1255,6 +1255,10 @@ h3 {
   border-top-color: var(--dash-orange);
 }
 
+.violin-key {
+  background: var(--dash-orange);
+}
+
 .panel-heading span {
   color: var(--muted);
   font-size: 0.84rem;
@@ -1464,8 +1468,34 @@ h3 {
   stroke-width: 2;
 }
 
+.violin-plot,
 .distribution-glyph {
   opacity: 1;
+}
+
+.violin-shape {
+  fill: var(--dash-orange);
+  opacity: 0.16;
+  stroke: var(--dash-orange);
+  stroke-width: 1.2;
+}
+
+.violin-whisker {
+  stroke: var(--dash-orange);
+  stroke-width: 1.25;
+  stroke-linecap: round;
+}
+
+.violin-iqr {
+  stroke: var(--dash-red);
+  stroke-width: 1.8;
+  stroke-linecap: round;
+}
+
+.violin-median {
+  fill: #ffffff;
+  stroke: var(--dash-red);
+  stroke-width: 1.6;
 }
 
 .distribution-whisker {

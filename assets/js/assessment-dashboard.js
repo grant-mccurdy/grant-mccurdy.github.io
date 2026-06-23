@@ -10,6 +10,7 @@ const state = {
     department: true,
     network: false,
     mastery: true,
+    violins: true,
     sections: false,
   },
   visual: {
@@ -62,6 +63,7 @@ const els = {
   departmentBand: document.querySelector("#toggle-department-band"),
   networkBand: document.querySelector("#toggle-network-band"),
   masteryLine: document.querySelector("#toggle-mastery-line"),
+  violinPlots: document.querySelector("#toggle-violin-plots"),
   sectionLines: document.querySelector("#toggle-section-lines"),
   ribbonRange: document.querySelector("#ribbon-range-select"),
   center: document.querySelector("#center-select"),
@@ -628,7 +630,7 @@ function renderTimeSeries(records) {
   const departmentBand = !compact && state.toggles.department && metricAllowsBands() ? renderBand("department", periods, x, bandScale) : "";
   const networkBand = !compact && state.toggles.network && metricAllowsBands() ? renderBand("network", periods, x, bandScale) : "";
   const masteryLine = !compact && state.toggles.mastery && metricAllowsBands() ? renderBenchmark(periods, x, y) : "";
-  const distributionGlyphs = !compact && metricAllowsBands() ? renderDistributionGlyphs(periods, x, y) : "";
+  const violinPlots = !compact && state.toggles.violins && metricAllowsBands() ? renderViolinPlots(periods, x, y, yMin, yMax) : "";
   const overallPoints = periodData.map((periodItem, periodIndex) => ({
     x: x(periodIndex),
     y: y(periodItem ? metricValue(periodItem) : NaN),
@@ -688,7 +690,7 @@ function renderTimeSeries(records) {
       ${networkBand}
       ${departmentBand}
       ${masteryLine}
-      ${distributionGlyphs}
+      ${violinPlots}
       ${sectionLines}
       ${groupLines}
       ${overallLine}
@@ -747,9 +749,11 @@ function renderBenchmark(periods, x, y) {
   return `<path d="${pointsToCurvePath(points)}" class="benchmark-line"></path>`;
 }
 
-function renderDistributionGlyphs(periods, x, y) {
+function renderViolinPlots(periods, x, y, yMin, yMax) {
   const studentRecords = filterStudentRecords();
   if (!studentRecords.length) return "";
+  const periodSpacing = periods.length > 1 ? Math.abs(x(1) - x(0)) : 48;
+  const maxHalfWidth = clamp(periodSpacing * 0.15, 8, 18);
 
   return periods.map((period, index) => {
     const rows = studentRecords.filter((record) => {
@@ -763,14 +767,38 @@ function renderDistributionGlyphs(periods, x, y) {
     const median = quantile(scores, 0.5);
     const p75 = quantile(scores, 0.75);
     const p90 = quantile(scores, 0.9);
+    const minScore = Math.max(yMin, p10 - 4);
+    const maxScore = Math.min(yMax, p90 + 4);
+    const span = Math.max(1, maxScore - minScore);
+    const bandwidth = Math.max(2.5, span / 7);
+    const steps = 18;
+    const density = Array.from({ length: steps }, (_, step) => {
+      const value = minScore + (span * step) / (steps - 1);
+      const scoreDensity = scores.reduce((sum, score) => {
+        const z = (score - value) / bandwidth;
+        return sum + Math.exp(-0.5 * z * z);
+      }, 0);
+      return { value, density: scoreDensity };
+    });
+    const maxDensity = Math.max(...density.map((point) => point.density));
+    if (!maxDensity) return "";
     const px = x(index);
+    const leftPoints = density.map((point) => {
+      const halfWidth = 2 + (point.density / maxDensity) * maxHalfWidth;
+      return `${px - halfWidth},${y(point.value)}`;
+    });
+    const rightPoints = [...density].reverse().map((point) => {
+      const halfWidth = 2 + (point.density / maxDensity) * maxHalfWidth;
+      return `${px + halfWidth},${y(point.value)}`;
+    });
     return `
-      <g class="distribution-glyph">
+      <g class="violin-plot">
         <title>${period.label}: p25 ${Math.round(p25)}%, median ${Math.round(median)}%, p75 ${Math.round(p75)}%, n=${scores.length}</title>
-        <line x1="${px}" x2="${px}" y1="${y(p10)}" y2="${y(p90)}" class="distribution-whisker"></line>
-        <line x1="${px - 7}" x2="${px + 7}" y1="${y(p25)}" y2="${y(p25)}" class="distribution-box-edge"></line>
-        <line x1="${px - 7}" x2="${px + 7}" y1="${y(p75)}" y2="${y(p75)}" class="distribution-box-edge"></line>
-        <circle cx="${px}" cy="${y(median)}" r="3.2" class="distribution-median"></circle>
+        <polygon points="${leftPoints.concat(rightPoints).join(" ")}" class="violin-shape"></polygon>
+        <line x1="${px}" x2="${px}" y1="${y(p10)}" y2="${y(p90)}" class="violin-whisker"></line>
+        <line x1="${px - maxHalfWidth * 0.56}" x2="${px + maxHalfWidth * 0.56}" y1="${y(p25)}" y2="${y(p25)}" class="violin-iqr"></line>
+        <line x1="${px - maxHalfWidth * 0.56}" x2="${px + maxHalfWidth * 0.56}" y1="${y(p75)}" y2="${y(p75)}" class="violin-iqr"></line>
+        <circle cx="${px}" cy="${y(median)}" r="3.3" class="violin-median"></circle>
       </g>
     `;
   }).join("");
@@ -945,7 +973,7 @@ function renderLegend(series, periodCount) {
     state.toggles.department && metricAllowsBands() ? `<span><i class="legend-swatch ribbon-key department-key"></i>${departmentLabel}</span>` : "",
     state.toggles.network && metricAllowsBands() ? `<span><i class="legend-swatch ribbon-key network-key"></i>${networkLabel}</span>` : "",
     state.toggles.mastery && metricAllowsBands() ? `<span><i class="legend-line benchmark-key"></i>${masteryLabel}</span>` : "",
-    metricAllowsBands() ? `<span><i class="legend-line distribution-key"></i>Period distribution</span>` : "",
+    state.toggles.violins && metricAllowsBands() ? `<span><i class="legend-swatch violin-key"></i>Violin plots</span>` : "",
     state.toggles.sections ? `<span><i class="legend-line section-key"></i>Section lines</span>` : "",
   ].filter(Boolean).join("");
 
@@ -1182,6 +1210,7 @@ function syncControls() {
   els.departmentBand.checked = state.toggles.department;
   els.networkBand.checked = state.toggles.network;
   els.masteryLine.checked = state.toggles.mastery;
+  els.violinPlots.checked = state.toggles.violins;
   els.sectionLines.checked = state.toggles.sections;
   els.ribbonRange.value = state.visual.ribbonRange;
   els.center.value = state.visual.center;
@@ -1216,6 +1245,7 @@ function applyPreset(preset) {
     state.toggles.department = true;
     state.toggles.network = false;
     state.toggles.mastery = true;
+    state.toggles.violins = true;
     state.toggles.sections = false;
     state.visual.center = "mean";
     state.visual.ribbonRange = "50";
@@ -1231,6 +1261,7 @@ function applyPreset(preset) {
     state.toggles.department = false;
     state.toggles.network = false;
     state.toggles.mastery = false;
+    state.toggles.violins = false;
     state.toggles.sections = false;
     state.visual.center = "mean";
     state.visual.ribbonRange = "50";
@@ -1248,6 +1279,7 @@ function applyPreset(preset) {
     state.toggles.department = false;
     state.toggles.network = false;
     state.toggles.mastery = false;
+    state.toggles.violins = false;
     state.toggles.sections = false;
     state.visual.center = "mean";
     state.visual.ribbonRange = "50";
@@ -1263,6 +1295,7 @@ function applyPreset(preset) {
     state.toggles.department = true;
     state.toggles.network = true;
     state.toggles.mastery = true;
+    state.toggles.violins = true;
     state.toggles.sections = false;
     state.visual.center = "median";
     state.visual.ribbonRange = "80";
@@ -1400,6 +1433,11 @@ function initControls() {
 
   els.masteryLine.addEventListener("change", (event) => {
     state.toggles.mastery = event.target.checked;
+    render();
+  });
+
+  els.violinPlots.addEventListener("change", (event) => {
+    state.toggles.violins = event.target.checked;
     render();
   });
 
