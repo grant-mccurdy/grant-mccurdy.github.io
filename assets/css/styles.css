@@ -160,7 +160,7 @@ img {
 }
 
 .hero-media {
-  background: url("../images/workflow-hero-poster.jpg") center / cover no-repeat;
+  background: url("../images/workflow-hero-poster.jpg?v=20260623f") center / cover no-repeat;
 }
 
 .hero-video {
