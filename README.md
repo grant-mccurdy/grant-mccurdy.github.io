@@ -32,6 +32,8 @@ grant-mccurdy.github.io/
 - `data-lab.html` is the structured analytic chat surface for the private Worker-backed synthetic warehouse.
 - `projects/*.html` are lightweight project-brief pages.
 - `case-studies/index.html` is a case-study index template.
+- `docs/github-profile/README.md` is a ready-to-use GitHub profile README draft.
+- `docs/github-profile/repository-metadata.md` records the recommended public repo descriptions, topics, homepages, and profile setup commands.
 - `assets/css/styles.css` controls the visual system.
 - `assets/js/site.js` controls the mobile navigation and header state.
 - `assets/js/data-lab.js` renders analytic response blocks from the private backend. Configure the endpoint through the `data-api-endpoint` attribute after Worker deployment, or use an `endpoint` query parameter for local testing.
