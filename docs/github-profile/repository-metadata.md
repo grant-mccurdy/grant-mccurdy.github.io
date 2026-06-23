@@ -14,6 +14,18 @@ Suggested website:
 https://grant-mccurdy.github.io/
 ```
 
+The GitHub profile bio and website can be changed from the GitHub profile UI. From `gh`, they require the `user` OAuth scope:
+
+```bash
+gh auth refresh -h github.com -s user
+
+gh api --method PATCH /user \
+  -f bio="Mathematics/statistics professional building synthetic-data systems, assessment analytics, and AI-assisted reporting workflows." \
+  -f blog="https://grant-mccurdy.github.io/"
+```
+
+Review the company/employer field manually before changing it; leaving it visible is a personal profile decision.
+
 Suggested pinned repository order:
 
 1. `education-data-simulation-engine`
