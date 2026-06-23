@@ -2,6 +2,9 @@ const navToggle = document.querySelector("[data-nav-toggle]");
 const navLinks = document.querySelector("[data-nav-links]");
 const year = document.querySelector("[data-year]");
 const header = document.querySelector("[data-header]");
+const revealItems = Array.from(document.querySelectorAll("[data-reveal]"));
+
+document.documentElement.classList.add("js-reveal");
 
 if (year) {
   year.textContent = new Date().getFullYear();
@@ -13,6 +16,13 @@ if (navToggle && navLinks) {
     navToggle.setAttribute("aria-expanded", String(!isOpen));
     navLinks.classList.toggle("is-open", !isOpen);
   });
+
+  navLinks.addEventListener("click", (event) => {
+    if (event.target instanceof HTMLAnchorElement) {
+      navToggle.setAttribute("aria-expanded", "false");
+      navLinks.classList.remove("is-open");
+    }
+  });
 }
 
 if (header) {
@@ -22,4 +32,24 @@ if (header) {
 
   updateHeader();
   window.addEventListener("scroll", updateHeader, { passive: true });
+}
+
+if (revealItems.length) {
+  if ("IntersectionObserver" in window) {
+    const revealObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+            revealObserver.unobserve(entry.target);
+          }
+        });
+      },
+      { rootMargin: "0px 0px -12% 0px", threshold: 0.08 },
+    );
+
+    revealItems.forEach((item) => revealObserver.observe(item));
+  } else {
+    revealItems.forEach((item) => item.classList.add("is-visible"));
+  }
 }

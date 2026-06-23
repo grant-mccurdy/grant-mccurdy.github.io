@@ -1,12 +1,12 @@
 # grant-mccurdy.github.io
 
-GitHub Pages public project portal for Grant McCurdy.
+GitHub Pages systems portfolio for Grant McCurdy.
 
-The site summarizes public-facing project work in education data simulation, assessment systems, diagnostic-to-remediation workflows, AI-assisted instructional workflows, and content intelligence pipelines, and routes reviewers to hosted demos, case studies, source repositories, and workspace project folders.
+The site summarizes public-facing project work in data systems, analytics products, workflow automation, AI-assisted systems, and content intelligence pipelines, and routes reviewers to hosted demos, case studies, source repositories, and workspace project folders.
 
 Suggested homepage message:
 
-> I build public-safe education data simulation systems, assessment analytics, diagnostic-to-remediation workflows, AI-assisted instructional systems, and content intelligence pipelines at the intersection of mathematics, statistics, education, and software.
+> I build data systems, analytics products, AI-assisted workflows, and source-grounded tools that turn messy information into usable decisions, artifacts, and operations.
 
 ## Role Of This Repo
 
@@ -35,7 +35,7 @@ grant-mccurdy.github.io/
 - `assets/css/styles.css` controls the visual system.
 - `assets/js/site.js` controls the mobile navigation and header state.
 - `assets/js/data-lab.js` renders analytic response blocks from the private backend. Configure the endpoint through the `data-api-endpoint` attribute after Worker deployment, or use an `endpoint` query parameter for local testing.
-- `assets/video/workflow-hero.mp4` is the muted, grayscale, slightly sped-up homepage hero loop generated from a local workflow recording.
+- `assets/video/workflow-hero.mp4` is the muted, grayscale, faster homepage hero loop generated from a local workflow recording.
 - `assets/images/workflow-hero-poster.jpg` is the static poster and reduced-motion fallback for the homepage hero.
 - `.nojekyll` keeps GitHub Pages from applying Jekyll processing.
 - `sitemap.xml` and `robots.txt` expose the public portal pages to crawlers.
