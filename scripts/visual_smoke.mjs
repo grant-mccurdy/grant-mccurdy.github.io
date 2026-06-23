@@ -45,6 +45,30 @@ function staticServer() {
   return http.createServer((request, response) => {
     const requestUrl = new URL(request.url ?? "/", "http://127.0.0.1");
     const pathname = decodeURIComponent(requestUrl.pathname);
+    if (pathname === "/mock-analytics") {
+      response.writeHead(200, { "Content-Type": "application/json; charset=utf-8" });
+      response.end(
+        JSON.stringify({
+          answer: "I cannot do that exact request from this public demo, but I can suggest a supported analysis.",
+          blocks: [
+            { type: "text", content: "I cannot do that exact request from this public demo, but I can suggest a supported analysis." },
+            {
+              type: "capability_note",
+              title: "Supported scope",
+              status: "warning",
+              content: "Data Lab can analyze the bundled synthetic education warehouse, but cannot browse live repos.",
+              nextBestAction: "Run a supported aggregate analysis over the synthetic warehouse."
+            },
+            {
+              type: "suggestions",
+              title: "Suggested follow-ups",
+              questions: ["How does average observed growth change by school year?"]
+            }
+          ]
+        }),
+      );
+      return;
+    }
     const relativePath = pathname === "/" ? "index.html" : pathname.replace(/^\/+/, "");
     const target = path.resolve(root, relativePath);
 
@@ -121,7 +145,24 @@ async function inspect(page) {
       duration: video.duration,
       loop: video.loop,
       muted: video.muted,
+      objectFit: window.getComputedStyle(video).objectFit,
+      playbackRate: video.playbackRate,
       readyState: video.readyState,
+      rect: (() => {
+        const rect = video.getBoundingClientRect();
+        return {
+          width: rect.width,
+          height: rect.height,
+          left: rect.left,
+          right: rect.right,
+          top: rect.top,
+          bottom: rect.bottom,
+        };
+      })(),
+      viewport: {
+        width: document.documentElement.clientWidth,
+        height: window.innerHeight,
+      },
       videoHeight: video.videoHeight,
       videoWidth: video.videoWidth,
     };
@@ -147,6 +188,13 @@ async function inspectHelper(page, label) {
   await panel.waitFor({ state: "visible", timeout: 1500 });
   const opened = await panel.isVisible();
   const initialText = await panel.locator("[data-helper-thread]").innerText();
+  await panel.locator("[data-helper-input]").fill("create a trend line");
+  await panel.locator("[data-helper-form] button[type='submit']").click();
+  const handoffLink = panel.locator(".portfolio-helper-status.info a").last();
+  await handoffLink.waitFor({ state: "visible", timeout: 1500 });
+  const handoffHref = await handoffLink.getAttribute("href");
+  const handoffUrl = handoffHref ? new URL(handoffHref, page.url()) : null;
+  const handoffText = await panel.locator("[data-helper-thread]").innerText();
   const overflow = await page.evaluate(() => {
     const panelEl = document.querySelector("[data-helper-panel]");
     if (!panelEl) return [];
@@ -161,17 +209,43 @@ async function inspectHelper(page, label) {
     opened,
     closed,
     initialText: initialText.includes("I can help you find the right project"),
+    handoff:
+      handoffText.includes("Open Data Lab") &&
+      Boolean(handoffUrl?.pathname.endsWith("/data-lab.html")) &&
+      handoffUrl?.searchParams.get("question") === "create a trend line" &&
+      handoffUrl?.searchParams.get("autorun") === "1",
     overflow,
+  };
+}
+
+async function inspectDataLabPrefill(page, label) {
+  if (label !== "data-lab-prefill") return null;
+  return {
+    prefilled: (await page.locator("[data-chat-input]").inputValue()) === "create a trend line",
+  };
+}
+
+async function inspectDataLabCapability(page, label) {
+  if (label !== "data-lab-capability") return null;
+  const thread = page.locator("[data-chat-thread]");
+  await thread.getByText("Supported scope").waitFor({ state: "visible", timeout: 1500 });
+  const text = await thread.innerText();
+  return {
+    capabilityNote: text.includes("cannot browse live repos") && text.includes("How does average observed growth change by school year?"),
   };
 }
 
 const cases = [
   ["home-desktop", "index.html", 1440, 1000],
   ["home-mobile", "index.html", 390, 900],
+  ["projects-directory-desktop", path.join("projects", "index.html"), 1440, 1000],
+  ["projects-directory-mobile", path.join("projects", "index.html"), 390, 900],
   ["synthetic-desktop", path.join("projects", "education-data-simulation-engine.html"), 1440, 1000],
   ["synthetic-mobile", path.join("projects", "education-data-simulation-engine.html"), 390, 900],
   ["data-lab-desktop", "data-lab.html", 1440, 1000],
   ["data-lab-mobile", "data-lab.html", 390, 900],
+  ["data-lab-prefill", "data-lab.html?question=create%20a%20trend%20line", 390, 900],
+  ["data-lab-capability", "data-lab.html?endpoint=/mock-analytics&question=Can%20you%20query%20the%20GitHub%20repo%20directly%3F&autorun=1", 390, 900],
   ["assessment-desktop", path.join("projects", "assessment-intelligence.html"), 1440, 1000],
   ["assessment-mobile", path.join("projects", "assessment-intelligence.html"), 390, 900],
   ["risk-desktop", path.join("projects", "statistical-risk-modeling-r.html"), 1440, 1000],
@@ -196,7 +270,13 @@ try {
   for (const [label, file, width, height] of cases) {
     const page = await browser.newPage({ viewport: { width, height } });
     await page.goto(`${baseUrl}/${file.replaceAll(path.sep, "/")}`, { waitUntil: "networkidle" });
-    results.push({ label, ...(await inspect(page)), helper: await inspectHelper(page, label) });
+    results.push({
+      label,
+      ...(await inspect(page)),
+      helper: await inspectHelper(page, label),
+      dataLab: await inspectDataLabPrefill(page, label),
+      capability: await inspectDataLabCapability(page, label),
+    });
     await page.close();
   }
 } finally {
@@ -211,6 +291,10 @@ const heroVideoFailed = (result) => {
     !result.heroVideo.currentSrc.includes("assets/video/workflow-hero.mp4") ||
     !result.heroVideo.loop ||
     !result.heroVideo.muted ||
+    result.heroVideo.objectFit !== "cover" ||
+    result.heroVideo.playbackRate < 2.5 ||
+    result.heroVideo.rect.width < result.heroVideo.viewport.width ||
+    result.heroVideo.rect.height < result.heroVideo.viewport.height ||
     result.heroVideo.videoWidth < 1 ||
     result.heroVideo.videoHeight < 1
   );
@@ -224,7 +308,10 @@ const failures = results.filter(
     result.helper?.overflow.length ||
     result.helper?.opened === false ||
     result.helper?.closed === false ||
-    result.helper?.initialText === false,
+    result.helper?.initialText === false ||
+    result.helper?.handoff === false ||
+    result.dataLab?.prefilled === false ||
+    result.capability?.capabilityNote === false,
 );
 console.log(JSON.stringify(results, null, 2));
 

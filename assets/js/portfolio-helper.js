@@ -11,6 +11,8 @@ if (helper) {
   const presetButtons = [...helper.querySelectorAll("[data-helper-question]")];
   const submitButton = form.querySelector("button[type='submit']");
   const REQUEST_TIMEOUT_MS = 15000;
+  const ANALYTICS_HANDOFF_PATTERN =
+    /\b(sql|warehouse|database|average|avg|median|mean|count|compare|correlation|relationship|trend\s*line|trendline|trend|line\s+chart|time\s+series|visuali[sz]e|chart|graph|plot|figure|growth|readiness|attendance|validation|nonparticipation|non-participation|missingness|course\s+track)\b/i;
 
   const escapeHtml = (value) =>
     String(value ?? "")
@@ -48,13 +50,43 @@ if (helper) {
     });
   };
 
-  const answerHtml = (payload) => {
-    const paragraphs = String(payload.answer || "I could not find a supported answer in the public portfolio sources.")
-      .split(/\n{2,}/)
-      .map((paragraph) => paragraph.trim())
-      .filter(Boolean)
-      .map((paragraph) => `<p>${escapeHtml(paragraph)}</p>`)
+  const renderTextBlock = (block) => `<p>${escapeHtml(block.content || "")}</p>`;
+
+  const renderCapabilityNote = (block) => {
+    const nextBestAction = block.nextBestAction ? `<p>Next best action: ${escapeHtml(block.nextBestAction)}</p>` : "";
+    return `<div class="portfolio-helper-status ${escapeHtml(block.status || "info")}"><strong>${escapeHtml(block.title || "Supported scope")}</strong><p>${escapeHtml(block.content || "")}</p>${nextBestAction}</div>`;
+  };
+
+  const renderSuggestions = (block) => {
+    const questions = block.questions || [];
+    if (!questions.length) return "";
+    return `<div class="portfolio-helper-suggestions"><strong>${escapeHtml(block.title || "Suggested questions")}</strong>${questions
+      .map(
+        (question) =>
+          `<button type="button" data-helper-suggested-question="${escapeHtml(question)}">${escapeHtml(question)}</button>`
+      )
+      .join("")}</div>`;
+  };
+
+  const renderBlocks = (blocks) =>
+    blocks
+      .map((block) => {
+        if (block.type === "text") return renderTextBlock(block);
+        if (block.type === "capability_note") return renderCapabilityNote(block);
+        if (block.type === "suggestions") return renderSuggestions(block);
+        return "";
+      })
       .join("");
+
+  const answerHtml = (payload) => {
+    const body = payload.blocks?.length
+      ? renderBlocks(payload.blocks)
+      : String(payload.answer || "I could not find a supported answer in the public portfolio sources.")
+          .split(/\n{2,}/)
+          .map((paragraph) => paragraph.trim())
+          .filter(Boolean)
+          .map((paragraph) => `<p>${escapeHtml(paragraph)}</p>`)
+          .join("");
     const citations = (payload.citations || [])
       .slice(0, 3)
       .map((citation) => {
@@ -63,11 +95,22 @@ if (helper) {
         return `<li><a href="${escapeHtml(href)}">${escapeHtml(title)}</a></li>`;
       })
       .join("");
-    return `${paragraphs}${citations ? `<div class="portfolio-helper-sources"><strong>Sources</strong><ul>${citations}</ul></div>` : ""}`;
+    return `${body}${citations ? `<div class="portfolio-helper-sources"><strong>Sources</strong><ul>${citations}</ul></div>` : ""}`;
   };
 
   const statusHtml = (kind, title, content) =>
     `<div class="portfolio-helper-status ${escapeHtml(kind)}"><strong>${escapeHtml(title)}</strong><p>${escapeHtml(content)}</p></div>`;
+
+  const analyticsHandoffHref = (question) => {
+    if (!ANALYTICS_HANDOFF_PATTERN.test(question)) return "";
+    const url = new URL("data-lab.html", window.location.href);
+    url.searchParams.set("question", question);
+    url.searchParams.set("autorun", "1");
+    return url.href;
+  };
+
+  const dataLabHandoffHtml = (href) =>
+    `<div class="portfolio-helper-status info"><strong>Open Data Lab</strong><p>That looks like an analytics or visualization request for the synthetic education warehouse.</p><p><a class="text-link" href="${escapeHtml(href)}">Open Data Lab with this prompt</a></p></div>`;
 
   const addMessage = (role, content) => {
     const article = document.createElement("article");
@@ -90,6 +133,12 @@ if (helper) {
     if (panel.hidden) openPanel();
     addMessage("user", `<p>${escapeHtml(trimmed)}</p>`);
     const loading = addMessage("assistant", "<p>Checking the public portfolio sources...</p>");
+    const dataLabHref = analyticsHandoffHref(trimmed);
+
+    if (dataLabHref) {
+      loading.querySelector(".portfolio-helper-content").innerHTML = dataLabHandoffHtml(dataLabHref);
+      return;
+    }
 
     if (!endpoint) {
       loading.querySelector(".portfolio-helper-content").innerHTML = statusHtml(
@@ -147,6 +196,13 @@ if (helper) {
       input.value = button.dataset.helperQuestion || "";
       ask(input.value);
     });
+  });
+
+  thread.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-helper-suggested-question]");
+    if (!button) return;
+    input.value = button.dataset.helperSuggestedQuestion || "";
+    ask(input.value);
   });
 
   form.addEventListener("submit", (event) => {

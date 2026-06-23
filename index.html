@@ -26,10 +26,10 @@
           <span></span>
         </button>
         <div class="nav-links" data-nav-links>
-          <a href="#capabilities">Capabilities</a>
-          <a href="#work">Work</a>
-          <a href="#artifacts">Demos</a>
-          <a href="#case-studies">Case Studies</a>
+          <a href="projects/index.html">Projects</a>
+          <a href="#demos">Demos</a>
+          <a href="case-studies/index.html">Case Studies</a>
+          <a href="data-lab.html">Data Lab</a>
           <a href="https://github.com/grant-mccurdy">GitHub</a>
         </div>
       </nav>
@@ -38,7 +38,7 @@
     <main id="main">
       <section class="hero">
         <div class="hero-media" aria-hidden="true">
-          <video class="hero-video" autoplay muted loop playsinline preload="metadata" poster="assets/images/workflow-hero-poster.jpg?v=20260623h">
+          <video class="hero-video" autoplay muted loop playsinline preload="metadata" poster="assets/images/workflow-hero-poster.jpg?v=20260623h" data-playback-rate="2.6">
             <source src="assets/video/workflow-hero.mp4?v=20260623h" type="video/mp4">
           </video>
         </div>
@@ -48,8 +48,8 @@
           <h1>Grant McCurdy</h1>
           <p class="hero-copy">I build data systems, analytics products, AI-assisted workflows, and source-grounded tools that turn messy information into usable decisions, artifacts, and operations.</p>
           <div class="hero-actions">
-            <a class="button primary" href="#work">View Selected Work</a>
-            <a class="button secondary" href="#artifacts">Open Live Demos</a>
+            <a class="button primary" href="projects/index.html">Explore Projects</a>
+            <a class="button secondary" href="#demos">Open Demos</a>
           </div>
           <div class="hero-snapshot" aria-label="Portfolio capabilities">
             <div class="hero-snapshot-item">
@@ -72,61 +72,31 @@
         </div>
       </section>
 
-      <section class="intro-band" aria-labelledby="focus-heading" data-reveal>
+      <section class="intro-band" id="start" aria-labelledby="focus-heading" data-reveal>
         <div class="section-shell intro-grid">
           <div>
-            <p class="section-kicker">Working Surface</p>
-            <h2 id="focus-heading">Systems that make complex work inspectable</h2>
+            <p class="section-kicker">Start Here</p>
+            <h2 id="focus-heading">A simple map of the public work</h2>
           </div>
-          <p>This site collects public-safe demos, project briefs, dashboards, and case studies. The common thread is turning source material, data, and workflows into clearer systems people can inspect, question, and use.</p>
+          <p>Use the project directory for the full portfolio, open the demos for working artifacts, or read the case studies for the system story behind selected builds. Source links live with each project so the homepage stays navigable.</p>
         </div>
       </section>
 
-      <section class="section-shell" id="capabilities" aria-labelledby="capabilities-heading">
+      <section class="section-shell" id="projects" aria-labelledby="projects-heading">
         <div class="section-heading" data-reveal>
-          <p class="section-kicker">Capabilities</p>
-          <h2 id="capabilities-heading">What this portfolio is meant to show</h2>
-        </div>
-
-        <div class="snapshot-grid capability-grid">
-          <article class="snapshot-card capability-card" data-reveal>
-            <span>Data systems</span>
-            <strong>Reliable foundations</strong>
-            <p>Synthetic data foundations, validation checks, warehouse-style marts, and reproducible reporting paths.</p>
-          </article>
-          <article class="snapshot-card capability-card" data-reveal>
-            <span>Analytics products</span>
-            <strong>Decisions from records</strong>
-            <p>Dashboards, SQL/R/Python extracts, diagnostics, and decision-support views that make data easier to act on.</p>
-          </article>
-          <article class="snapshot-card capability-card" data-reveal>
-            <span>AI-assisted workflows</span>
-            <strong>Automation with review</strong>
-            <p>Human-reviewed feedback, review gates, action paths, and workflow automation designed for accountability.</p>
-          </article>
-          <article class="snapshot-card capability-card" data-reveal>
-            <span>Content intelligence</span>
-            <strong>Evidence into reports</strong>
-            <p>Source-grounded corpus, transcript, OCR, and reporting pipelines that preserve visible evidence trails.</p>
-          </article>
-        </div>
-      </section>
-
-      <section class="section-shell" id="work" aria-labelledby="work-heading">
-        <div class="section-heading" data-reveal>
-          <p class="section-kicker">Selected Work</p>
-          <h2 id="work-heading">Projects as evidence</h2>
+          <p class="section-kicker">Project Portfolio</p>
+          <h2 id="projects-heading">Six public systems to inspect</h2>
         </div>
 
         <div class="artifact-list work-list">
           <a class="artifact-link-card" href="projects/education-data-simulation-engine.html" data-reveal>
             <span class="artifact-kind">Systems data foundation</span>
-            <strong>Synthetic Data Simulation Engine</strong>
+            <strong>Education Data Simulation Engine</strong>
             <p>Public-safe simulation, validation, SQL-ready data, and reporting marts for analytics prototypes.</p>
           </a>
           <a class="artifact-link-card" href="projects/assessment-intelligence.html" data-reveal>
             <span class="artifact-kind">Analytics and decision support</span>
-            <strong>Analytics Intelligence</strong>
+            <strong>Assessment Intelligence</strong>
             <p>SQL/R/Python extracts, dashboards, diagnostics, and reporting patterns that translate records into reviewable decisions.</p>
           </a>
           <a class="artifact-link-card" href="projects/statistical-risk-modeling-r.html" data-reveal>
@@ -136,7 +106,7 @@
           </a>
           <a class="artifact-link-card" href="projects/assessment-to-remediation-pipeline.html" data-reveal>
             <span class="artifact-kind">Workflow automation</span>
-            <strong>Diagnostic-to-Action Pipeline</strong>
+            <strong>Assessment-to-Remediation Pipeline</strong>
             <p>Diagnostic design, review gates, dry-run payloads, feedback, follow-up actions, and evidence tracking.</p>
           </a>
           <a class="artifact-link-card" href="projects/content-intelligence.html" data-reveal>
@@ -146,98 +116,36 @@
           </a>
           <a class="artifact-link-card" href="projects/instructional-ai-workflows.html" data-reveal>
             <span class="artifact-kind">Human-reviewed AI workflows</span>
-            <strong>Human-Reviewed AI Workflows</strong>
+            <strong>Instructional AI Workflows</strong>
             <p>Rubric evidence, review packets, feedback drafts, and action artifacts with human judgment kept in the loop.</p>
           </a>
         </div>
+        <div class="section-actions" data-reveal>
+          <a class="button outline" href="projects/index.html">Open Project Directory</a>
+        </div>
       </section>
 
-      <section class="section-shell" id="artifacts" aria-labelledby="artifacts-heading">
+      <section class="section-shell" id="demos" aria-labelledby="demos-heading">
         <div class="section-heading" data-reveal>
-          <p class="section-kicker">Demos and Artifacts</p>
-          <h2 id="artifacts-heading">Open these first</h2>
+          <p class="section-kicker">Demos</p>
+          <h2 id="demos-heading">Open these first</h2>
         </div>
 
         <div class="artifact-list">
           <a class="artifact-link-card" href="dashboard/assessment.html" data-reveal>
             <span class="artifact-kind">Interactive dashboard</span>
-            <strong>Analytics Dashboard</strong>
-            <p>Synthetic multi-year data, browser-side aggregation, SVG charts, filters, and decision notes.</p>
+            <strong>Assessment Analytics Dashboard</strong>
+            <p>SQL-extract-backed synthetic assessment data, browser-side aggregation, SVG charts, filters, and decision notes.</p>
           </a>
           <a class="artifact-link-card" href="data-lab.html" data-reveal>
             <span class="artifact-kind">Analytic workspace</span>
             <strong>Portfolio Data Lab</strong>
             <p>Structured chat surface for tables, summaries, charts, and cited analysis over a public-safe warehouse.</p>
           </a>
-          <a class="artifact-link-card" href="projects/education-data-simulation-engine.html" data-reveal>
-            <span class="artifact-kind">Simulation engine</span>
-            <strong>Synthetic Data Simulation Engine</strong>
-            <p>Validated records, warehouse artifacts, Canvas-style exports, and SQL-ready marts for public demos.</p>
-          </a>
           <a class="artifact-link-card" href="projects/content-intelligence-demo-report.html" data-reveal>
             <span class="artifact-kind">Demo report</span>
             <strong>Content Intelligence Demo Report</strong>
             <p>A source-grounded reporting pattern built from synthetic notes and visible evidence labels.</p>
-          </a>
-          <a class="artifact-link-card" href="projects/statistical-risk-modeling-r.html" data-reveal>
-            <span class="artifact-kind">Model report</span>
-            <strong>Statistical Risk Modeling in R</strong>
-            <p>Synthetic account-risk model with cross-validation, holdout metrics, calibration, lift, threshold tables, and a model card.</p>
-          </a>
-          <a class="artifact-link-card" href="projects/assessment-to-remediation-pipeline.html" data-reveal>
-            <span class="artifact-kind">Review gate</span>
-            <strong>Diagnostic-to-Action Pipeline</strong>
-            <p>Original diagnostic items, preview artifacts, automated review reports, and offline Canvas payloads.</p>
-          </a>
-          <a class="artifact-link-card" href="projects/instructional-ai-workflows.html" data-reveal>
-            <span class="artifact-kind">Workflow demo</span>
-            <strong>Human-Reviewed AI Workflows</strong>
-            <p>Synthetic rubric evidence, review checkpoints, approved feedback, and action planning.</p>
-          </a>
-        </div>
-      </section>
-
-      <section class="section-shell" id="repositories" aria-labelledby="repositories-heading">
-        <div class="section-heading" data-reveal>
-          <p class="section-kicker">Source Repositories</p>
-          <h2 id="repositories-heading">GitHub entry points</h2>
-        </div>
-
-        <div class="artifact-list">
-          <a class="artifact-link-card" href="https://github.com/grant-mccurdy/education-data-simulation-engine" data-reveal>
-            <span class="artifact-kind">Synthetic data</span>
-            <strong>education-data-simulation-engine</strong>
-            <p>Canvas-style synthetic data, validation checks, DuckDB outputs, and public-safe analytics foundations.</p>
-          </a>
-          <a class="artifact-link-card" href="https://github.com/grant-mccurdy/assessment-intelligence" data-reveal>
-            <span class="artifact-kind">Assessment analytics</span>
-            <strong>assessment-intelligence</strong>
-            <p>SQL extracts, R synthesis reports, dashboard data, modeling artifacts, and assessment decision support.</p>
-          </a>
-          <a class="artifact-link-card" href="https://github.com/grant-mccurdy/statistical-risk-modeling-r" data-reveal>
-            <span class="artifact-kind">Risk modeling</span>
-            <strong>statistical-risk-modeling-r</strong>
-            <p>Base-R synthetic account-risk modeling, GLM validation, calibration diagnostics, and executive-ready reporting.</p>
-          </a>
-          <a class="artifact-link-card" href="https://github.com/grant-mccurdy/grant-mccurdy.github.io" data-reveal>
-            <span class="artifact-kind">Portfolio site</span>
-            <strong>grant-mccurdy.github.io</strong>
-            <p>Static GitHub Pages portal that connects project briefs, case studies, reports, dashboards, and demos.</p>
-          </a>
-          <a class="artifact-link-card" href="https://github.com/grant-mccurdy/content-intelligence-reporting" data-reveal>
-            <span class="artifact-kind">Content systems</span>
-            <strong>content-intelligence-reporting</strong>
-            <p>Source-grounded reporting workflows, evidence labels, searchable corpora, and auditable summaries.</p>
-          </a>
-          <a class="artifact-link-card" href="https://github.com/grant-mccurdy/instructional-ai-workflows" data-reveal>
-            <span class="artifact-kind">AI workflow controls</span>
-            <strong>instructional-ai-workflows</strong>
-            <p>Teacher-reviewed feedback workflows, rubric evidence, review packets, and remediation planning outputs.</p>
-          </a>
-          <a class="artifact-link-card" href="https://github.com/grant-mccurdy" data-reveal>
-            <span class="artifact-kind">Profile</span>
-            <strong>grant-mccurdy on GitHub</strong>
-            <p>Public repository index for the portfolio projects and their supporting source artifacts.</p>
           </a>
         </div>
       </section>
@@ -260,10 +168,6 @@
             <a href="case-studies/content-intelligence.html">
               <span>03</span>
               <strong>Content Intelligence Pipeline</strong>
-            </a>
-            <a href="projects/assessment-to-remediation-pipeline.html">
-              <span>04</span>
-              <strong>Diagnostic Evidence to Action</strong>
             </a>
           </div>
         </div>
@@ -295,12 +199,11 @@
       <div class="footer-shell">
         <p>&copy; <span data-year></span> Grant McCurdy</p>
         <div class="footer-links">
-          <a href="projects/education-data-simulation-engine.html">Data Systems</a>
-          <a href="projects/assessment-intelligence.html">Analytics</a>
+          <a href="projects/index.html">Projects</a>
+          <a href="dashboard/assessment.html">Dashboard</a>
+          <a href="data-lab.html">Data Lab</a>
           <a href="projects/statistical-risk-modeling-r.html">Risk Modeling</a>
-          <a href="projects/assessment-to-remediation-pipeline.html">Workflow Automation</a>
-          <a href="projects/instructional-ai-workflows.html">AI Workflows</a>
-          <a href="projects/content-intelligence.html">Content Intelligence</a>
+          <a href="case-studies/index.html">Case Studies</a>
           <a href="https://github.com/grant-mccurdy">GitHub</a>
         </div>
       </div>

@@ -15,8 +15,11 @@
           <span class="brand-text">Grant McCurdy</span>
         </a>
         <div class="nav-links static">
-          <a href="../index.html#work">Work</a>
+          <a href="../projects/index.html">Projects</a>
+          <a href="../index.html#demos">Demos</a>
           <a href="../case-studies/index.html">Case Studies</a>
+          <a href="../data-lab.html">Data Lab</a>
+          <a href="https://github.com/grant-mccurdy">GitHub</a>
         </div>
       </nav>
     </header>
@@ -36,28 +39,23 @@
       <section class="section-shell detail-grid">
         <div>
           <p class="section-kicker">Overview</p>
-          <h2>From assessment design to decision support</h2>
-          <p>This project demonstrates how a department or school can move from assessment design to analysis and reporting without exposing real student records. The local DuckDB analytics layer uses five SQL-backed synthetic extracts with 3,020 data rows, including 2,009 readiness records, and keeps the core data-generation and warehouse foundation in <code>education-data-simulation-engine</code>.</p>
+          <h2>Analytics layer for synthetic assessment records</h2>
+          <p>This project demonstrates how assessment records can become dashboard views, reproducible reports, diagnostics, and decision-support notes without publishing real student data. The current local DuckDB analytics layer uses five SQL-backed synthetic extracts with 3,020 rows, including 2,009 readiness records across 174 course-section groups.</p>
         </div>
         <div class="detail-panel">
-          <h2>Current Artifacts</h2>
+          <h2>Inspect First</h2>
           <ul class="clean-list">
             <li>Hosted synthetic assessment dashboard</li>
-            <li>Five SQL-backed extract CSVs from DuckDB star-schema marts</li>
-            <li>3,020 local DuckDB extract rows across reporting views</li>
-            <li>2,009 synthetic readiness records across 174 course-section groups</li>
-            <li>Optional hosted Supabase extract reports over a smaller public subset</li>
-            <li>Dry-run OpenAI extract review artifacts</li>
-            <li>Decision-question visualization catalog</li>
-            <li>R synthetic-data and modeling pipeline</li>
-            <li>Connection to the synthetic math department data foundation</li>
-            <li>Synthetic Canvas-style gradebook workflow</li>
-            <li>Privacy validation script</li>
-            <li>Dry-run leadership memo generator</li>
+            <li>Rendered R gradebook synthesis report and PDF export</li>
+            <li>Validation summary for the synthetic gradebook reconstruction</li>
+            <li>SQL warehouse assessment report in the source repository</li>
+            <li>Dashboard data extracts generated from public-safe synthetic marts</li>
+            <li>Assessment reporting case study</li>
           </ul>
           <div class="link-row detail-action">
             <a class="text-link" href="../dashboard/assessment.html">Dashboard</a>
-            <a class="text-link" href="education-data-simulation-engine.html">Simulation foundation</a>
+            <a class="text-link" href="../artifacts/assessment-intelligence/gradebook_synthesis_report.html">R report</a>
+            <a class="text-link" href="../artifacts/assessment-intelligence/gradebook_reconstruction_validation.md">Validation summary</a>
             <a class="text-link" href="assessment-gradebook-synthesis.html">Gradebook synthesis</a>
             <a class="text-link" href="../case-studies/assessment-reporting.html">Case study</a>
             <a class="text-link" href="https://github.com/grant-mccurdy/assessment-intelligence">Source repo</a>
@@ -67,7 +65,7 @@
 
       <section class="section-shell artifact-grid" aria-labelledby="assessment-proof-heading">
         <div class="section-heading">
-          <p class="section-kicker">Portal Notes</p>
+          <p class="section-kicker">Proof Lanes</p>
           <h2 id="assessment-proof-heading">Three proof lanes</h2>
         </div>
         <article class="artifact">
@@ -82,64 +80,9 @@
         </article>
         <article class="artifact">
           <h3>Warehouse reporting</h3>
-          <p>The repo extracts course-section performance, assignment growth, non-participation, LMS reconciliation, and readiness records from the synthetic DuckDB warehouse.</p>
+          <p>The repo extracts course-section performance, assignment growth, non-participation, LMS reconciliation, and readiness records from the synthetic DuckDB warehouse. DuckDB remains the reproducible local baseline, while hosted extracts are treated as a serving layer.</p>
           <a class="text-link" href="education-data-simulation-engine.html">Simulation foundation</a>
         </article>
-        <article class="artifact">
-          <h3>Hosted serving path</h3>
-          <p>The optional Supabase extract path demonstrates a public-safe serving layer while keeping DuckDB as the reproducible local baseline.</p>
-        </article>
-        <article class="artifact">
-          <h3>AI-assisted review</h3>
-          <p>Dry-run OpenAI review artifacts summarize the five deterministic SQL extracts without querying Supabase directly or transforming source CSVs.</p>
-        </article>
-        <article class="artifact">
-          <h3>Visualization catalog</h3>
-          <p>The source repo now includes raincloud, hexbin, and calibration plot patterns for assessment decision questions.</p>
-        </article>
-      </section>
-
-      <section class="section-shell detail-grid">
-        <div>
-          <p class="section-kicker">Evidence Packet</p>
-          <h2>Rendered proof without digging through the repo</h2>
-          <p>The strongest Assessment Intelligence artifacts are now available directly from the portfolio site: the rendered R report, PDF export, validation summary, and synthesis method note.</p>
-        </div>
-        <div class="detail-panel">
-          <h2>Open Assessment Artifacts</h2>
-          <ul class="clean-list">
-            <li><a class="text-link" href="../artifacts/assessment-intelligence/gradebook_synthesis_report.html">Gradebook synthesis report</a></li>
-            <li><a class="text-link" href="../artifacts/assessment-intelligence/gradebook_synthesis_report.pdf">Gradebook synthesis PDF</a></li>
-            <li><a class="text-link" href="../artifacts/assessment-intelligence/gradebook_reconstruction_validation.md">Validation summary</a></li>
-            <li><a class="text-link" href="../artifacts/assessment-intelligence/advanced_synthetic_gradebook_synthesis.md">Synthesis method summary</a></li>
-          </ul>
-          <div class="link-row detail-action">
-            <a class="text-link" href="assessment-gradebook-synthesis.html">Gradebook synthesis brief</a>
-            <a class="text-link" href="../case-studies/assessment-reporting.html">Case study</a>
-          </div>
-        </div>
-      </section>
-
-      <section class="section-shell detail-grid">
-        <div>
-          <p class="section-kicker">Inspect Next</p>
-          <h2>SQL, hosted extracts, and review artifacts</h2>
-          <p>The assessment layer now has a stronger analytics contract: deterministic DuckDB extracts first, optional Supabase serving views second, and AI-assisted narrative review last. This keeps extraction, serving, and interpretation separate.</p>
-        </div>
-        <div class="detail-panel">
-          <h2>Source Repo Artifacts</h2>
-          <ul class="clean-list">
-            <li><code>reports/sql_warehouse_assessment_report.md</code></li>
-            <li><code>reports/supabase_assessment_report.md</code></li>
-            <li><code>reports/ai-extract-review.md</code></li>
-            <li><code>docs/plot_catalog.qmd</code></li>
-            <li><code>docs/synthetic-warehouse-integration.md</code></li>
-          </ul>
-          <div class="link-row detail-action">
-            <a class="text-link" href="https://github.com/grant-mccurdy/assessment-intelligence">Source repo</a>
-            <a class="text-link" href="education-data-simulation-engine.html">Simulation foundation</a>
-          </div>
-        </div>
       </section>
 
       <section class="intro-band" aria-labelledby="assessment-safety-heading">

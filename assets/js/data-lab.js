@@ -14,6 +14,8 @@ if (lab) {
     window.PORTFOLIO_ANALYTICS_ENDPOINT ||
     "";
   const demoToken = params.get("demo_token") || lab.dataset.demoToken || window.PORTFOLIO_ANALYTICS_TOKEN || "";
+  const initialQuestion = String(params.get("question") || params.get("prompt") || "").trim();
+  const autorunInitialQuestion = params.get("autorun") === "1";
 
   const escapeHtml = (value) =>
     String(value ?? "")
@@ -200,6 +202,11 @@ if (lab) {
   const renderAnalysisNote = (block) =>
     `<div class="chat-note"><strong>${escapeHtml(block.title || "Analysis")}</strong><p>${escapeHtml(block.content || "")}</p></div>`;
 
+  const renderCapabilityNote = (block) => {
+    const nextBestAction = block.nextBestAction ? `<p>Next best action: ${escapeHtml(block.nextBestAction)}</p>` : "";
+    return `<div class="chat-status ${escapeHtml(block.status || "info")}"><strong>${escapeHtml(block.title || "Supported scope")}</strong><p>${escapeHtml(block.content || "")}</p>${nextBestAction}</div>`;
+  };
+
   const renderStatus = (kind, title, content) =>
     `<div class="chat-status ${escapeHtml(kind)}"><strong>${escapeHtml(title)}</strong><p>${escapeHtml(content)}</p></div>`;
 
@@ -229,6 +236,7 @@ if (lab) {
         if (block.type === "table") return renderTable(block);
         if (block.type === "chart") return renderChart(block);
         if (block.type === "analysis_note") return renderAnalysisNote(block);
+        if (block.type === "capability_note") return renderCapabilityNote(block);
         if (block.type === "suggestions") return renderSuggestions(block);
         if (block.type === "sql_debug") return renderSqlDebug(block);
         return renderUnknown(block);
@@ -332,4 +340,11 @@ if (lab) {
   });
 
   message("assistant", "<p>Ready.</p>");
+  if (initialQuestion) {
+    input.value = initialQuestion;
+    if (autorunInitialQuestion) {
+      runQuestion(initialQuestion);
+      if (endpoint) input.value = "";
+    }
+  }
 }

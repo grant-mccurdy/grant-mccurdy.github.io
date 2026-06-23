@@ -19,6 +19,17 @@
   --dash-purple: #7c3aed;
   --dash-pink: #db2777;
   --dash-indigo: #4f46e5;
+  --viz-score: #2563eb;
+  --viz-completion: #16a34a;
+  --viz-completion-line: #15803d;
+  --viz-growth: #7c3aed;
+  --viz-overall: #4f46e5;
+  --viz-main-range: #2563eb;
+  --viz-context-range: #0891b2;
+  --viz-benchmark: #dc2626;
+  --viz-distribution: #ea580c;
+  --viz-section-context: #64748b;
+  --viz-track: #e5e7eb;
   --radius: 8px;
   --max: 1180px;
 }
@@ -152,12 +163,12 @@ img {
 
 .hero {
   position: relative;
-  min-height: 82vh;
+  min-height: 100svh;
   display: grid;
   align-items: center;
   overflow: hidden;
   color: #fff;
-  background: #000;
+  background: #050505;
 }
 
 .hero-media,
@@ -175,6 +186,9 @@ img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center;
+  transform: scale(1.55);
+  transform-origin: center;
 }
 
 .hero-shade {
@@ -292,6 +306,12 @@ img {
   border-color: var(--line);
   color: var(--ink);
   background: var(--surface);
+}
+
+.section-actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 1.4rem;
 }
 
 .button:hover,
@@ -934,8 +954,9 @@ h3 {
 
 .dashboard-toolbar-expanded {
   display: grid;
-  grid-template-columns: minmax(11rem, 15rem) minmax(0, 1fr);
-  align-items: end;
+  grid-template-columns: 1fr;
+  align-items: start;
+  gap: 1rem;
   padding: 1rem;
   border: 1px solid var(--line);
   background: #fff;
@@ -951,6 +972,12 @@ h3 {
   display: grid;
   grid-template-columns: minmax(9rem, 1fr) minmax(9rem, 1fr) minmax(12rem, 1.12fr) minmax(10rem, 1fr) minmax(10rem, 1.05fr) minmax(7rem, 0.7fr);
   width: 100%;
+}
+
+@media (max-width: 1120px) {
+  .line-control-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 }
 
 .control-row label {
@@ -1221,7 +1248,7 @@ h3 {
 .legend-line {
   width: 1.35rem;
   height: 0;
-  border-top: 3px solid var(--legend-color, var(--navy));
+  border-top: 3px solid var(--legend-color, var(--viz-overall));
 }
 
 .legend-swatch {
@@ -1231,32 +1258,32 @@ h3 {
 }
 
 .department-key {
-  background: var(--dash-blue);
+  background: var(--viz-main-range);
 }
 
 .network-key {
-  background: var(--dash-green);
+  background: var(--viz-context-range);
 }
 
 .benchmark-key {
   border-top-style: dashed;
-  border-top-color: var(--dash-red);
+  border-top-color: var(--viz-benchmark);
 }
 
 .overall-key {
-  border-top-color: var(--dash-indigo);
+  border-top-color: var(--viz-overall);
 }
 
 .section-key {
-  border-top-color: var(--dash-purple);
+  border-top-color: var(--viz-section-context);
 }
 
 .distribution-key {
-  border-top-color: var(--dash-orange);
+  border-top-color: var(--viz-distribution);
 }
 
 .violin-key {
-  background: var(--dash-orange);
+  background: var(--viz-distribution);
 }
 
 .panel-heading span {
@@ -1359,11 +1386,23 @@ h3 {
 }
 
 .chart-track {
-  fill: var(--sky);
+  fill: var(--viz-track);
 }
 
 .chart-bar {
-  fill: var(--dash-blue);
+  fill: var(--viz-score);
+}
+
+.chart-bar-score {
+  fill: var(--viz-score);
+}
+
+.chart-bar-completion {
+  fill: var(--viz-completion);
+}
+
+.chart-bar-growth {
+  fill: var(--viz-growth);
 }
 
 .ribbon {
@@ -1371,16 +1410,16 @@ h3 {
 }
 
 .ribbon-department {
-  fill: var(--dash-blue);
+  fill: var(--viz-main-range);
 }
 
 .ribbon-network {
-  fill: var(--dash-green);
+  fill: var(--viz-context-range);
 }
 
 .benchmark-line {
   fill: none;
-  stroke: var(--dash-red);
+  stroke: var(--viz-benchmark);
   stroke-width: 2.4;
   stroke-dasharray: 7 6;
 }
@@ -1395,12 +1434,12 @@ h3 {
 }
 
 .overall-series-line {
-  stroke: var(--dash-indigo);
+  stroke: var(--viz-overall);
   stroke-width: 4;
 }
 
 .overall-series-point {
-  fill: var(--dash-indigo);
+  fill: var(--viz-overall);
 }
 
 .comparison-series-line {
@@ -1447,23 +1486,23 @@ h3 {
 }
 
 .completion-track {
-  fill: var(--sky);
+  fill: var(--viz-track);
   opacity: 0.42;
 }
 
 .completion-bar {
-  fill: var(--dash-cyan);
+  fill: var(--viz-completion);
   opacity: 1;
 }
 
 .completion-line {
   fill: none;
-  stroke: var(--dash-orange);
+  stroke: var(--viz-completion-line);
   stroke-width: 3;
 }
 
 .completion-point {
-  fill: var(--dash-orange);
+  fill: var(--viz-completion-line);
   stroke: #fff;
   stroke-width: 2;
 }
@@ -1474,79 +1513,79 @@ h3 {
 }
 
 .violin-shape {
-  fill: var(--dash-orange);
+  fill: var(--viz-distribution);
   opacity: 0.16;
-  stroke: var(--dash-orange);
+  stroke: var(--viz-distribution);
   stroke-width: 1.2;
 }
 
 .violin-whisker {
-  stroke: var(--dash-orange);
+  stroke: var(--viz-distribution);
   stroke-width: 1.25;
   stroke-linecap: round;
 }
 
 .violin-iqr {
-  stroke: var(--dash-red);
+  stroke: var(--viz-benchmark);
   stroke-width: 1.8;
   stroke-linecap: round;
 }
 
 .violin-median {
   fill: #ffffff;
-  stroke: var(--dash-red);
+  stroke: var(--viz-benchmark);
   stroke-width: 1.6;
 }
 
 .distribution-whisker {
-  stroke: var(--dash-orange);
+  stroke: var(--viz-distribution);
   stroke-width: 1.25;
 }
 
 .distribution-box-edge {
-  stroke: var(--dash-orange);
+  stroke: var(--viz-distribution);
   stroke-width: 1.7;
   stroke-linecap: round;
 }
 
 .distribution-median {
   fill: #ffffff;
-  stroke: var(--dash-orange);
+  stroke: var(--viz-distribution);
   stroke-width: 1.6;
 }
 
 .distribution-detail-whisker {
-  stroke: var(--dash-orange);
+  stroke: var(--viz-distribution);
   stroke-width: 1.4;
 }
 
 .distribution-detail-box {
-  fill: var(--dash-cyan);
+  fill: var(--viz-distribution);
   opacity: 0.42;
-  stroke: var(--dash-blue);
+  stroke: var(--viz-distribution);
   stroke-width: 1.2;
 }
 
 .distribution-detail-median {
-  stroke: var(--dash-red);
+  stroke: var(--viz-benchmark);
   stroke-width: 2.2;
 }
 
 .distribution-detail-center {
-  fill: var(--dash-red);
+  fill: var(--viz-benchmark);
   stroke: #fff;
   stroke-width: 2;
 }
 
 .distribution-center-line {
   fill: none;
-  stroke: var(--dash-red);
+  stroke: var(--viz-benchmark);
   stroke-width: 2.6;
 }
 
 .section-shadow-line {
   fill: none;
-  stroke: var(--dash-purple);
+  stroke: var(--viz-section-context);
   stroke-width: 1.35;
   opacity: 0.45;
 }
@@ -2236,6 +2275,39 @@ th {
   border-left-color: var(--gold);
 }
 
+.portfolio-helper-status.info {
+  border-left-color: var(--dash-blue);
+}
+
+.portfolio-helper-suggestions {
+  display: grid;
+  gap: 0.45rem;
+  margin-top: 0.65rem;
+}
+
+.portfolio-helper-suggestions strong {
+  color: var(--navy);
+  font-size: 0.78rem;
+}
+
+.portfolio-helper-suggestions button {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 0.52rem 0.6rem;
+  background: #fff;
+  color: var(--navy);
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 760;
+  text-align: left;
+  cursor: pointer;
+}
+
+.portfolio-helper-suggestions button:hover {
+  border-color: var(--navy-2);
+}
+
 .portfolio-helper-prompts {
   display: flex;
   flex-wrap: wrap;
@@ -2330,7 +2402,7 @@ th {
   }
 
   .hero {
-    min-height: 78vh;
+    min-height: 100svh;
   }
 
   .hero-media {

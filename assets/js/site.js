@@ -3,6 +3,7 @@ const navLinks = document.querySelector("[data-nav-links]");
 const year = document.querySelector("[data-year]");
 const header = document.querySelector("[data-header]");
 const revealItems = Array.from(document.querySelectorAll("[data-reveal]"));
+const playbackVideos = Array.from(document.querySelectorAll("video[data-playback-rate]"));
 
 document.documentElement.classList.add("js-reveal");
 
@@ -33,6 +34,21 @@ if (header) {
   updateHeader();
   window.addEventListener("scroll", updateHeader, { passive: true });
 }
+
+playbackVideos.forEach((video) => {
+  const playbackRate = Number.parseFloat(video.dataset.playbackRate || "");
+
+  if (!Number.isFinite(playbackRate) || playbackRate <= 0) {
+    return;
+  }
+
+  const applyPlaybackRate = () => {
+    video.playbackRate = playbackRate;
+  };
+
+  applyPlaybackRate();
+  video.addEventListener("loadedmetadata", applyPlaybackRate, { once: true });
+});
 
 if (revealItems.length) {
   if ("IntersectionObserver" in window) {

@@ -2,23 +2,27 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://grant-mccurdy.github.io/</loc>
-    <lastmod>2026-06-09</lastmod>
+    <lastmod>2026-06-23</lastmod>
   </url>
   <url>
     <loc>https://grant-mccurdy.github.io/dashboard/assessment.html</loc>
-    <lastmod>2026-06-09</lastmod>
+    <lastmod>2026-06-23</lastmod>
   </url>
   <url>
     <loc>https://grant-mccurdy.github.io/data-lab.html</loc>
-    <lastmod>2026-06-21</lastmod>
+    <lastmod>2026-06-23</lastmod>
+  </url>
+  <url>
+    <loc>https://grant-mccurdy.github.io/projects/</loc>
+    <lastmod>2026-06-23</lastmod>
   </url>
   <url>
     <loc>https://grant-mccurdy.github.io/projects/education-data-simulation-engine.html</loc>
-    <lastmod>2026-06-09</lastmod>
+    <lastmod>2026-06-23</lastmod>
   </url>
   <url>
     <loc>https://grant-mccurdy.github.io/projects/assessment-intelligence.html</loc>
-    <lastmod>2026-06-09</lastmod>
+    <lastmod>2026-06-23</lastmod>
   </url>
   <url>
     <loc>https://grant-mccurdy.github.io/projects/statistical-risk-modeling-r.html</loc>
@@ -26,38 +30,38 @@
   </url>
   <url>
     <loc>https://grant-mccurdy.github.io/projects/assessment-to-remediation-pipeline.html</loc>
-    <lastmod>2026-06-21</lastmod>
+    <lastmod>2026-06-23</lastmod>
   </url>
   <url>
     <loc>https://grant-mccurdy.github.io/projects/instructional-ai-workflows.html</loc>
-    <lastmod>2026-06-09</lastmod>
+    <lastmod>2026-06-23</lastmod>
   </url>
   <url>
     <loc>https://grant-mccurdy.github.io/projects/content-intelligence.html</loc>
-    <lastmod>2026-06-09</lastmod>
+    <lastmod>2026-06-23</lastmod>
   </url>
   <url>
     <loc>https://grant-mccurdy.github.io/projects/content-intelligence-demo-report.html</loc>
-    <lastmod>2026-06-09</lastmod>
+    <lastmod>2026-06-23</lastmod>
   </url>
   <url>
     <loc>https://grant-mccurdy.github.io/projects/assessment-gradebook-synthesis.html</loc>
-    <lastmod>2026-06-09</lastmod>
+    <lastmod>2026-06-23</lastmod>
   </url>
   <url>
     <loc>https://grant-mccurdy.github.io/case-studies/</loc>
-    <lastmod>2026-06-09</lastmod>
+    <lastmod>2026-06-23</lastmod>
   </url>
   <url>
     <loc>https://grant-mccurdy.github.io/case-studies/assessment-reporting.html</loc>
-    <lastmod>2026-06-09</lastmod>
+    <lastmod>2026-06-23</lastmod>
   </url>
   <url>
     <loc>https://grant-mccurdy.github.io/case-studies/instructional-ai-workflows.html</loc>
-    <lastmod>2026-06-09</lastmod>
+    <lastmod>2026-06-23</lastmod>
   </url>
   <url>
     <loc>https://grant-mccurdy.github.io/case-studies/content-intelligence.html</loc>
-    <lastmod>2026-06-09</lastmod>
+    <lastmod>2026-06-23</lastmod>
   </url>
 </urlset>
