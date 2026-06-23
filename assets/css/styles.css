@@ -1373,6 +1373,12 @@ h3 {
   font-size: 14px;
 }
 
+.x-label-sub {
+  fill: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+}
+
 .chart-label,
 .chart-value {
   fill: var(--ink);

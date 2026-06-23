@@ -152,6 +152,66 @@ function periodDisplayLabel(period) {
   return period.shortLabel ?? period.label;
 }
 
+function periodWindowNumber(period) {
+  const order = Number(period.order);
+  return Number.isFinite(order) && order > 0 ? Math.ceil(order / 2) : null;
+}
+
+function periodPhaseLabel(period, compact = false) {
+  const phase = String(period.assessmentWindow ?? period.season ?? "").toLowerCase();
+  if (phase.includes("beginning")) return compact ? "B" : "Begin";
+  if (phase.includes("end")) return compact ? "E" : "End";
+  return compact ? (period.shortLabel ?? period.label) : (period.season ?? period.shortLabel ?? period.label);
+}
+
+function periodAxisLabelParts(period) {
+  const windowNumber = periodWindowNumber(period);
+  const phase = periodPhaseLabel(period);
+
+  if (windowNumber && (phase === "Begin" || phase === "End")) {
+    return {
+      primary: `W${windowNumber}`,
+      secondary: phase,
+      title: `${phase} assessment window ${windowNumber}`,
+    };
+  }
+
+  return {
+    primary: period.shortLabel ?? period.label,
+    secondary: "",
+    title: period.label ?? period.shortLabel ?? "",
+  };
+}
+
+function periodCompactAxisLabel(period) {
+  const windowNumber = periodWindowNumber(period);
+  const phase = periodPhaseLabel(period, true);
+  return windowNumber && (phase === "B" || phase === "E") ? `${phase}${windowNumber}` : periodDisplayLabel(period);
+}
+
+function periodAxisLabel(period, x, y, options = {}) {
+  const {
+    anchor = "middle",
+    className = "axis-label x-label",
+    compact = false,
+    rotate = "",
+  } = options;
+
+  if (compact || rotate) {
+    const label = compact ? periodCompactAxisLabel(period) : `${periodAxisLabelParts(period).primary} ${periodAxisLabelParts(period).secondary}`.trim();
+    return `<text x="${x}" y="${y}" class="${className}" text-anchor="${anchor}"${rotate}>${escapeSvgText(label)}<title>${escapeSvgText(periodAxisLabelParts(period).title)}</title></text>`;
+  }
+
+  const label = periodAxisLabelParts(period);
+  return `
+    <text x="${x}" y="${y}" class="${className}" text-anchor="${anchor}">
+      <title>${escapeSvgText(label.title)}</title>
+      <tspan x="${x}">${escapeSvgText(label.primary)}</tspan>
+      ${label.secondary ? `<tspan x="${x}" dy="16" class="x-label-sub">${escapeSvgText(label.secondary)}</tspan>` : ""}
+    </text>
+  `;
+}
+
 function escapeSvgText(value) {
   return String(value)
     .replaceAll("&", "&amp;")
@@ -675,9 +735,9 @@ function renderTimeSeries(records) {
 
   const sectionLines = !compact && state.toggles.sections ? renderSectionLines(records, periods, x, y) : "";
 
-  const xLabels = periods.map((period, index) => `
-    <text x="${x(index)}" y="${height - 34}" class="axis-label x-label" text-anchor="middle">${periodDisplayLabel(period)}</text>
-  `).join("");
+  const xLabels = periods.map((period, index) =>
+    periodAxisLabel(period, x(index), height - 47),
+  ).join("");
 
   const emptyState = selectedSeries.length ? "" : `
     <text x="${margin.left + innerWidth / 2}" y="${margin.top + innerHeight / 2}" class="empty-chart-text" text-anchor="middle">No lines match the current filters.</text>
@@ -863,9 +923,9 @@ function renderCompletionChart() {
   }).join("");
 
   const points = rows.map((row, index) => ({ x: x(index), y: y(row.completion) }));
-  const labels = rows.map((row, index) => `
-    <text x="${x(index)}" y="${height - 13}" class="axis-label mini-x-label" text-anchor="middle">${periodDisplayLabel(row.period)}</text>
-  `).join("");
+  const labels = rows.map((row, index) =>
+    periodAxisLabel(row.period, x(index), height - 13, { className: "axis-label mini-x-label", compact: true }),
+  ).join("");
 
   els.completionChart.innerHTML = `
     <svg viewBox="0 0 ${width} ${height}" aria-hidden="true" focusable="false">
@@ -927,9 +987,13 @@ function renderDistributionChart() {
     x: x(index),
     y: y(state.visual.center === "median" ? stat.median : stat.mean),
   }));
-  const labels = periods.map((period, index) => `
-    <text x="${x(index)}" y="${height - (compact ? 25 : 28)}" class="axis-label x-label" text-anchor="${compact ? "middle" : "end"}"${compact ? "" : ` transform="rotate(-35 ${x(index)} ${height - 28})"`}>${periodDisplayLabel(period)}</text>
-  `).join("");
+  const labels = periods.map((period, index) =>
+    periodAxisLabel(period, x(index), height - (compact ? 25 : 28), {
+      anchor: compact ? "middle" : "end",
+      compact: true,
+      rotate: compact ? "" : ` transform="rotate(-35 ${x(index)} ${height - 28})"`,
+    }),
+  ).join("");
 
   els.distributionChart.innerHTML = `
     <svg viewBox="0 0 ${width} ${height}" aria-hidden="true" focusable="false">
