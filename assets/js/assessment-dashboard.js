@@ -50,7 +50,7 @@ const sliceLabels = {
   section: "group",
 };
 
-const palette = ["#111111", "#333333", "#555555", "#777777", "#999999", "#bbbbbb", "#2a2a2a", "#4a4a4a", "#6a6a6a", "#8a8a8a"];
+const palette = ["#2563eb", "#dc2626", "#16a34a", "#7c3aed", "#ea580c", "#0891b2", "#db2777", "#65a30d", "#4f46e5", "#0d9488"];
 const assetVersion = document.documentElement.dataset.assetVersion || "dashboard-views-v1";
 
 const els = {
@@ -148,6 +148,19 @@ function currentSliceLabel(plural = false) {
 
 function periodDisplayLabel(period) {
   return period.shortLabel ?? period.label;
+}
+
+function escapeSvgText(value) {
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;");
+}
+
+function compactDirectLabel(value, maxLength = 18) {
+  const label = String(value);
+  return label.length > maxLength ? `${label.slice(0, maxLength - 3)}...` : label;
 }
 
 function formatMetric(value, precision = 0) {
@@ -250,9 +263,17 @@ function periodDataForTimeSeries(records) {
 }
 
 function heatColor(intensity) {
-  const start = [238, 238, 238];
-  const end = [20, 20, 20];
-  const rgb = start.map((channel, index) => Math.round(channel + (end[index] - channel) * intensity));
+  const stops = [
+    [37, 99, 235],
+    [8, 145, 178],
+    [22, 163, 74],
+    [220, 38, 38],
+  ];
+  const scaled = clamp(intensity, 0, 1) * (stops.length - 1);
+  const left = Math.floor(scaled);
+  const right = Math.min(stops.length - 1, left + 1);
+  const mix = scaled - left;
+  const rgb = stops[left].map((channel, index) => Math.round(channel + (stops[right][index] - channel) * mix));
   return `rgb(${rgb.join(",")})`;
 }
 
@@ -630,14 +651,18 @@ function renderTimeSeries(records) {
     const labelPosition = labelY.get(line.key) ?? y(line.latest.value);
     const lastPoint = points[points.length - 1];
     const signedChange = `${line.change >= 0 ? "+" : ""}${line.change.toFixed(2)}`;
+    const labelText = `${compactDirectLabel(line.key)} (${signedChange})`;
     const lineClass = line.hasGap ? "direct-series-line direct-series-gap" : "direct-series-line";
     const circles = points.map((point, index) => `
       <circle cx="${point.x}" cy="${point.y}" r="${compact ? (index === points.length - 1 ? 5.4 : 4.4) : (index === points.length - 1 ? 5.2 : 4.6)}" fill="${line.color}" class="series-point comparison-series-point"></circle>
     `).join("");
     const directLabel = compact ? "" : `
-      <line x1="${lastPoint.x + 9}" x2="${labelDotX - 8}" y1="${lastPoint.y}" y2="${labelPosition}" stroke="${line.color}" class="direct-label-guide"></line>
-      <circle cx="${labelDotX}" cy="${labelPosition}" r="4.7" fill="${line.color}" class="right-label-dot"></circle>
-      <text x="${labelX}" y="${labelPosition + 5}" class="right-label-text">${line.key} (${signedChange})</text>
+      <g>
+        <title>${escapeSvgText(line.key)} (${signedChange})</title>
+        <line x1="${lastPoint.x + 9}" x2="${labelDotX - 8}" y1="${lastPoint.y}" y2="${labelPosition}" stroke="${line.color}" class="direct-label-guide"></line>
+        <circle cx="${labelDotX}" cy="${labelPosition}" r="4.7" fill="${line.color}" class="right-label-dot"></circle>
+        <text x="${labelX}" y="${labelPosition + 5}" class="right-label-text">${escapeSvgText(labelText)}</text>
+      </g>
     `;
     return `
       <path d="${pointsToCurvePath(points)}" fill="none" stroke="${line.color}" class="series-line comparison-series-line ${lineClass}"></path>

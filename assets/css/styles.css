@@ -1,16 +1,24 @@
 :root {
   color-scheme: light;
-  --ink: #0a0a0a;
-  --muted: #555555;
+  --ink: #000000;
+  --muted: #000000;
   --surface: #ffffff;
-  --surface-soft: #f5f5f5;
-  --line: #d9d9d9;
-  --navy: #050505;
-  --navy-2: #333333;
-  --gold: #111111;
-  --gold-2: #333333;
-  --sky: #eeeeee;
-  --shadow: 0 18px 48px rgba(0, 0, 0, 0.14);
+  --surface-soft: #ffffff;
+  --line: #000000;
+  --navy: #000000;
+  --navy-2: #000000;
+  --gold: #000000;
+  --gold-2: #000000;
+  --sky: #ffffff;
+  --shadow: none;
+  --dash-blue: #2563eb;
+  --dash-cyan: #0891b2;
+  --dash-green: #16a34a;
+  --dash-orange: #ea580c;
+  --dash-red: #dc2626;
+  --dash-purple: #7c3aed;
+  --dash-pink: #db2777;
+  --dash-indigo: #4f46e5;
   --radius: 8px;
   --max: 1180px;
 }
@@ -68,9 +76,8 @@ img {
 .site-header.compact,
 .site-header.is-scrolled {
   color: var(--ink);
-  background: rgba(255, 255, 255, 0.94);
+  background: #fff;
   border-bottom: 1px solid var(--line);
-  backdrop-filter: blur(14px);
 }
 
 .nav-shell {
@@ -160,7 +167,7 @@ img {
 }
 
 .hero-media {
-  background: url("../images/workflow-hero-poster.jpg?v=20260623f") center / cover no-repeat;
+  background: url("../images/workflow-hero-poster.jpg?v=20260623g") center / cover no-repeat;
 }
 
 .hero-video {
@@ -168,7 +175,6 @@ img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  filter: grayscale(1) contrast(1.05) brightness(1.02);
 }
 
 .hero-shade {
@@ -210,7 +216,7 @@ img {
 .hero-copy {
   max-width: 720px;
   margin: 1.35rem 0 0;
-  color: rgba(255, 255, 255, 0.86);
+  color: #fff;
   font-size: clamp(1.1rem, 2.2vw, 1.35rem);
 }
 
@@ -232,16 +238,15 @@ img {
 .hero-snapshot-item {
   min-height: 7rem;
   padding: 1rem;
-  border: 1px solid rgba(255, 255, 255, 0.24);
+  border: 1px solid #fff;
   border-radius: var(--radius);
-  background: rgba(0, 0, 0, 0.34);
-  backdrop-filter: blur(8px);
+  background: #000;
 }
 
 .hero-snapshot-item span {
   display: block;
   margin-top: 0.55rem;
-  color: rgba(255, 255, 255, 0.74);
+  color: #fff;
   font-size: 0.78rem;
   font-weight: 650;
   letter-spacing: 0;
@@ -274,7 +279,7 @@ img {
 }
 
 .button.secondary {
-  border-color: rgba(255, 255, 255, 0.46);
+  border-color: #fff;
   color: #fff;
 }
 
@@ -308,11 +313,11 @@ img {
 
 .case-band .section-kicker,
 .case-band .case-list span {
-  color: rgba(255, 255, 255, 0.68);
+  color: #fff;
 }
 
 .case-band p {
-  color: rgba(255, 255, 255, 0.72);
+  color: #fff;
 }
 
 .section-shell {
@@ -491,7 +496,7 @@ h3 {
 .artifact-link-card:hover,
 .artifact-link-card:focus-visible {
   border-color: var(--navy-2);
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.11);
+  box-shadow: none;
   transform: translateY(-1px);
 }
 
@@ -612,7 +617,7 @@ h3 {
 }
 
 .case-band .case-list a {
-  border-bottom-color: rgba(255, 255, 255, 0.22);
+  border-bottom-color: #fff;
 }
 
 .case-list a:hover,
@@ -628,7 +633,7 @@ h3 {
 }
 
 .case-band .case-list span {
-  color: rgba(255, 255, 255, 0.62);
+  color: #fff;
 }
 
 .principle {
@@ -643,7 +648,7 @@ h3 {
 .snapshot-card:hover,
 .principle:hover {
   border-color: var(--navy-2);
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
+  box-shadow: none;
   transform: translateY(-1px);
 }
 
@@ -667,7 +672,7 @@ h3 {
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
-  color: rgba(255, 255, 255, 0.76);
+  color: #fff;
   font-weight: 650;
 }
 
@@ -874,7 +879,7 @@ h3 {
   border: 1px solid var(--line);
   border-radius: var(--radius);
   background: var(--surface);
-  box-shadow: 0 10px 26px rgba(16, 24, 32, 0.06);
+  box-shadow: none;
 }
 
 .source-summary h2 {
@@ -933,7 +938,7 @@ h3 {
   align-items: end;
   padding: 1rem;
   border: 1px solid var(--line);
-  background: #f7f7f7;
+  background: #fff;
 }
 
 .control-row {
@@ -988,8 +993,8 @@ h3 {
 
 .line-control-grid label:focus-within select,
 .line-control-grid label:focus-within input {
-  border-color: #111111;
-  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.14);
+  border-color: #000;
+  box-shadow: none;
 }
 
 .toggle-row {
@@ -1057,7 +1062,7 @@ h3 {
   padding: 0.75rem;
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  background: rgba(255, 255, 255, 0.74);
+  background: #fff;
 }
 
 .viz-control-row label {
@@ -1132,7 +1137,7 @@ h3 {
   border: 1px solid var(--line);
   border-radius: var(--radius);
   background: var(--surface);
-  box-shadow: 0 10px 26px rgba(16, 24, 32, 0.06);
+  box-shadow: none;
 }
 
 .metric-card {
@@ -1226,28 +1231,28 @@ h3 {
 }
 
 .department-key {
-  background: rgba(0, 0, 0, 0.24);
+  background: var(--dash-blue);
 }
 
 .network-key {
-  background: rgba(0, 0, 0, 0.14);
+  background: var(--dash-green);
 }
 
 .benchmark-key {
   border-top-style: dashed;
-  border-top-color: var(--gold-2);
+  border-top-color: var(--dash-red);
 }
 
 .overall-key {
-  border-top-color: var(--navy);
+  border-top-color: var(--dash-indigo);
 }
 
 .section-key {
-  border-top-color: #a6a6a6;
+  border-top-color: var(--dash-purple);
 }
 
 .distribution-key {
-  border-top-color: #777777;
+  border-top-color: var(--dash-orange);
 }
 
 .panel-heading span {
@@ -1310,18 +1315,18 @@ h3 {
 }
 
 .axis-grid {
-  stroke: #e5e5e5;
+  stroke: #000;
   stroke-width: 1.1;
 }
 
 .axis-line {
-  stroke: #9a9a9a;
+  stroke: #000;
   stroke-width: 1.3;
 }
 
 .axis-label,
 .axis-title {
-  fill: #666666;
+  fill: #000;
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   font-size: 14px;
   font-weight: 760;
@@ -1354,7 +1359,7 @@ h3 {
 }
 
 .chart-bar {
-  fill: var(--navy);
+  fill: var(--dash-blue);
 }
 
 .ribbon {
@@ -1362,16 +1367,16 @@ h3 {
 }
 
 .ribbon-department {
-  fill: var(--gold);
+  fill: var(--dash-blue);
 }
 
 .ribbon-network {
-  fill: var(--navy);
+  fill: var(--dash-green);
 }
 
 .benchmark-line {
   fill: none;
-  stroke: var(--gold-2);
+  stroke: var(--dash-red);
   stroke-width: 2.4;
   stroke-dasharray: 7 6;
 }
@@ -1386,12 +1391,12 @@ h3 {
 }
 
 .overall-series-line {
-  stroke: var(--navy);
+  stroke: var(--dash-indigo);
   stroke-width: 4;
 }
 
 .overall-series-point {
-  fill: var(--navy);
+  fill: var(--dash-indigo);
 }
 
 .comparison-series-line {
@@ -1424,7 +1429,7 @@ h3 {
 }
 
 .right-label-text {
-  fill: #666666;
+  fill: #000;
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   font-size: 15px;
   font-weight: 760;
@@ -1443,77 +1448,77 @@ h3 {
 }
 
 .completion-bar {
-  fill: var(--gold);
-  opacity: 0.58;
+  fill: var(--dash-cyan);
+  opacity: 1;
 }
 
 .completion-line {
   fill: none;
-  stroke: var(--navy);
+  stroke: var(--dash-orange);
   stroke-width: 3;
 }
 
 .completion-point {
-  fill: var(--navy);
+  fill: var(--dash-orange);
   stroke: #fff;
   stroke-width: 2;
 }
 
 .distribution-glyph {
-  opacity: 0.58;
+  opacity: 1;
 }
 
 .distribution-whisker {
-  stroke: #777777;
+  stroke: var(--dash-orange);
   stroke-width: 1.25;
 }
 
 .distribution-box-edge {
-  stroke: #777777;
+  stroke: var(--dash-orange);
   stroke-width: 1.7;
   stroke-linecap: round;
 }
 
 .distribution-median {
   fill: #ffffff;
-  stroke: #777777;
+  stroke: var(--dash-orange);
   stroke-width: 1.6;
 }
 
 .distribution-detail-whisker {
-  stroke: #777777;
+  stroke: var(--dash-orange);
   stroke-width: 1.4;
 }
 
 .distribution-detail-box {
-  fill: var(--gold);
-  opacity: 0.22;
-  stroke: var(--gold-2);
+  fill: var(--dash-cyan);
+  opacity: 0.42;
+  stroke: var(--dash-blue);
   stroke-width: 1.2;
 }
 
 .distribution-detail-median {
-  stroke: var(--navy);
+  stroke: var(--dash-red);
   stroke-width: 2.2;
 }
 
 .distribution-detail-center {
-  fill: var(--navy);
+  fill: var(--dash-red);
   stroke: #fff;
   stroke-width: 2;
 }
 
 .distribution-center-line {
   fill: none;
-  stroke: var(--navy);
+  stroke: var(--dash-red);
   stroke-width: 2.6;
 }
 
 .section-shadow-line {
   fill: none;
-  stroke: #999999;
+  stroke: var(--dash-purple);
   stroke-width: 1.35;
-  opacity: 0.32;
+  opacity: 0.45;
 }
 
 .heatmap-frame svg {
@@ -1537,7 +1542,7 @@ h3 {
 }
 
 .heat-cell {
-  stroke: rgba(255, 255, 255, 0.7);
+  stroke: #fff;
   stroke-width: 1;
 }
 
@@ -1555,7 +1560,7 @@ h3 {
 
 .insight-list li {
   padding: 0.85rem;
-  border-left: 4px solid var(--gold);
+  border-left: 4px solid var(--dash-blue);
   border-radius: 0 var(--radius) var(--radius) 0;
   background: var(--surface-soft);
   color: var(--ink);
@@ -1720,7 +1725,7 @@ th {
   border: 1px solid var(--line);
   border-radius: var(--radius);
   background: var(--surface);
-  box-shadow: 0 10px 26px rgba(16, 24, 32, 0.06);
+  box-shadow: none;
 }
 
 .data-lab-prompts {
@@ -1783,7 +1788,7 @@ th {
   gap: 0.75rem;
   padding: 1rem;
   border-top: 1px solid var(--line);
-  background: #f7f7f7;
+  background: #fff;
 }
 
 .data-lab-form input {
@@ -1904,23 +1909,23 @@ th {
 }
 
 .chat-chart-axis {
-  stroke: #9a9a9a;
+  stroke: #000;
   stroke-width: 1.2;
 }
 
 .chat-chart-bar {
-  fill: var(--navy);
+  fill: var(--dash-blue);
 }
 
 .chat-chart-line {
   fill: none;
-  stroke: var(--navy);
+  stroke: var(--dash-orange);
   stroke-width: 3;
 }
 
 .chat-chart-dot {
-  fill: var(--gold);
-  stroke: var(--navy);
+  fill: var(--dash-red);
+  stroke: #000;
   stroke-width: 1.2;
 }
 
@@ -1933,7 +1938,7 @@ th {
 
 .chat-note {
   padding: 0.85rem;
-  border-left: 4px solid var(--gold);
+  border-left: 4px solid var(--dash-blue);
   border-radius: 0 4px 4px 0;
   background: var(--surface-soft);
 }
@@ -1961,7 +1966,7 @@ th {
 }
 
 .chat-status.error {
-  border-left-color: #555555;
+  border-left-color: #000;
 }
 
 .chat-status strong {
@@ -2088,7 +2093,7 @@ th {
   gap: 1rem;
   padding: 0.9rem;
   border-bottom: 1px solid var(--line);
-  background: #f8fafc;
+  background: #fff;
 }
 
 .portfolio-helper-header strong,
@@ -2194,7 +2199,7 @@ th {
 }
 
 .portfolio-helper-status.error {
-  border-left-color: #a33d2b;
+  border-left-color: #000;
 }
 
 .portfolio-helper-status.warning {
@@ -2233,7 +2238,7 @@ th {
   gap: 0.55rem;
   padding: 0.9rem;
   border-top: 1px solid var(--line);
-  background: #f8fafc;
+  background: #fff;
 }
 
 .portfolio-helper-form input {
