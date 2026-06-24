@@ -984,26 +984,56 @@ h3 {
 }
 
 .dashboard-source-strip {
-  display: grid;
-  grid-template-columns: minmax(16rem, 1.05fr) minmax(0, 1.6fr);
-  gap: 0.8rem;
   margin-bottom: 0.75rem;
-  padding: 0.85rem;
   border: 1px solid var(--line);
   border-radius: var(--radius);
   background: var(--surface);
   box-shadow: none;
 }
 
-.source-summary h2 {
-  margin: 0.2rem 0 0.45rem;
+.dashboard-source-strip summary {
+  cursor: pointer;
+  list-style: none;
+}
+
+.dashboard-source-strip summary::-webkit-details-marker {
+  display: none;
+}
+
+.dashboard-source-strip summary::after {
+  content: "+";
+  justify-self: end;
+  color: var(--ink);
+  font-size: 1.05rem;
+  font-weight: 850;
+  line-height: 1;
+}
+
+.dashboard-source-strip[open] summary {
+  border-bottom: 1px solid var(--line);
+}
+
+.dashboard-source-strip[open] summary::after {
+  content: "-";
+}
+
+.source-summary {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.7rem 0.85rem;
+}
+
+.source-summary strong {
   font-size: clamp(1.3rem, 2.1vw, 1.7rem);
 }
 
-.source-summary p:last-child {
+.source-summary small {
   margin: 0;
   color: var(--muted);
-  font-size: 0.96rem;
+  font-size: 0.82rem;
+  font-weight: 700;
   line-height: 1.45;
 }
 
@@ -1012,6 +1042,7 @@ h3 {
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 0.75rem;
   margin: 0;
+  padding: 0.85rem;
 }
 
 .source-meta-grid div {
@@ -1065,9 +1096,10 @@ h3 {
 
 .line-control-grid {
   display: grid;
-  grid-template-columns: minmax(9rem, 0.85fr) minmax(13rem, 1.15fr) minmax(9rem, 0.9fr) minmax(11rem, 1fr) minmax(9rem, 0.75fr);
+  grid-template-columns: minmax(10rem, 0.9fr) minmax(16rem, 1.2fr);
   align-items: end;
   width: 100%;
+  max-width: 42rem;
 }
 
 .line-control-grid label {
@@ -1080,7 +1112,7 @@ h3 {
 
 @media (max-width: 1180px) {
   .line-control-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
@@ -1424,6 +1456,11 @@ h3 {
   background: var(--surface-soft);
 }
 
+.advanced-dashboard-controls .advanced-line-controls {
+  margin-top: 0.75rem;
+  background: #fff;
+}
+
 .viz-control-row {
   display: flex;
   flex-wrap: wrap;
@@ -1447,11 +1484,13 @@ h3 {
 }
 
 .viz-control-row select,
+.viz-control-row input[type="search"],
 .viz-control-row input[type="range"] {
   min-width: 11rem;
 }
 
-.viz-control-row select {
+.viz-control-row select,
+.viz-control-row input[type="search"] {
   min-height: 2.45rem;
   border: 1px solid var(--line);
   border-radius: var(--radius);
@@ -2845,16 +2884,26 @@ th {
   }
 
   .dashboard-source-strip {
-    gap: 0.65rem;
     margin-bottom: 0.75rem;
-    padding: 0.65rem;
   }
 
-  .source-summary h2 {
-    font-size: 1.25rem;
+  .source-summary {
+    grid-template-columns: 1fr auto;
+    gap: 0.4rem 0.75rem;
   }
 
-  .source-summary p:last-child {
+  .source-summary .section-kicker,
+  .source-summary strong {
+    grid-column: 1;
+  }
+
+  .source-summary::after {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    align-self: center;
+  }
+
+  .source-summary small {
     display: none;
   }
 

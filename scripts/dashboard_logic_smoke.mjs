@@ -91,9 +91,16 @@ function fmtPct(value) {
   return `${Math.round(value)}%`;
 }
 
-function fmtPts(value) {
-  const rounded = Math.round(value);
-  return `${rounded > 0 ? "+" : ""}${rounded} pts`;
+function fmtPts(value, precision = 0) {
+  if (!Number.isFinite(value)) return "-";
+  const rounded = Number(value.toFixed(precision));
+  const displayValue = Object.is(rounded, -0) ? 0 : rounded;
+  return `${displayValue > 0 ? "+" : ""}${displayValue.toFixed(precision)} pts`;
+}
+
+function fmtPtsAuto(value) {
+  const precision = Math.abs(value) > 0 && Math.abs(value) < 1 ? 1 : 0;
+  return fmtPts(value, precision);
 }
 
 function weightedAverage(rows, key) {
@@ -102,14 +109,75 @@ function weightedAverage(rows, key) {
   return rows.reduce((sum, row) => sum + row[key] * row.students, 0) / students;
 }
 
+function mean(values) {
+  const numeric = values.filter((value) => Number.isFinite(value));
+  if (!numeric.length) return 0;
+  return numeric.reduce((sum, value) => sum + value, 0) / numeric.length;
+}
+
+function averageFinite(values) {
+  const numeric = values.filter((value) => Number.isFinite(value));
+  return numeric.length ? numeric.reduce((sum, value) => sum + value, 0) / numeric.length : NaN;
+}
+
+function periodWindowText(period) {
+  return `${period.assessmentWindow ?? ""} ${period.season ?? ""} ${period.label ?? ""}`.toLowerCase();
+}
+
+function isBeginningWindow(period) {
+  const text = periodWindowText(period);
+  return text.includes("beginning") || /\bboy\b/.test(text);
+}
+
+function isEndWindow(period) {
+  const text = periodWindowText(period);
+  return text.includes("end") || /\beoy\b/.test(text);
+}
+
+function boyEoyPairs(periods) {
+  const sorted = [...periods].sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+  const pairs = [];
+  sorted.forEach((period, index) => {
+    if (!isBeginningWindow(period)) return;
+    for (let nextIndex = index + 1; nextIndex < sorted.length; nextIndex += 1) {
+      const candidate = sorted[nextIndex];
+      if (isBeginningWindow(candidate)) break;
+      if (isEndWindow(candidate)) {
+        pairs.push({ begin: period, end: candidate });
+        break;
+      }
+    }
+  });
+  return pairs;
+}
+
+function aggregateScorePeriodData(source) {
+  return source.periods.map((period) => {
+    const rows = source.studentRecords.filter((row) => row.periodId === period.id && row.completed);
+    return {
+      period,
+      rows,
+      score: mean(rows.map((row) => row.score)),
+    };
+  });
+}
+
+function averageBoyEoyDeltaForPeriodData(periodData, metricKey = "score") {
+  const periodById = new Map(periodData.map((periodItem) => [periodItem.period.id, periodItem]));
+  const deltas = boyEoyPairs(periodData.map((periodItem) => periodItem.period)).map(({ begin, end }) => {
+    const beginValue = periodById.get(begin.id)?.[metricKey];
+    const endValue = periodById.get(end.id)?.[metricKey];
+    return Number.isFinite(beginValue) && Number.isFinite(endValue) ? endValue - beginValue : NaN;
+  });
+  return averageFinite(deltas);
+}
+
 function sourceExpectations(source) {
   const { periods, records, studentRecords } = source;
-  const firstPeriod = periods[0];
   const latestPeriod = periods[periods.length - 1];
-  const firstRows = records.filter((row) => row.periodId === firstPeriod.id);
   const latestRows = records.filter((row) => row.periodId === latestPeriod.id);
   const latestScore = weightedAverage(latestRows, "score");
-  const firstScore = weightedAverage(firstRows, "score");
+  const averageBoyEoyDelta = averageBoyEoyDeltaForPeriodData(aggregateScorePeriodData(source));
   const completed = latestRows.reduce((sum, row) => sum + (Number(row.completed) || 0), 0);
   const targetScore = source.bands.mastery.line[latestPeriod.order - 1];
   const targetCompleted = latestRows
@@ -133,7 +201,7 @@ function sourceExpectations(source) {
     cards: {
       students: latestRows.reduce((sum, row) => sum + (Number(row.students) || 0), 0).toLocaleString(),
       latest: fmtPct(latestScore),
-      change: fmtPts(latestScore - firstScore),
+      change: fmtPtsAuto(averageBoyEoyDelta),
       completion: fmtPct(weightedAverage(latestRows, "completion")),
       target: completed ? fmtPct((targetCompleted / completed) * 100) : "-",
     },
@@ -181,6 +249,16 @@ async function setRange(page, selector, value) {
   await page.waitForTimeout(80);
 }
 
+async function setInput(page, selector, value) {
+  await page.evaluate(({ selector, value }) => {
+    const element = document.querySelector(selector);
+    if (!element) throw new Error(`Missing input ${selector}`);
+    element.value = value;
+    element.dispatchEvent(new Event("input", { bubbles: true }));
+  }, { selector, value });
+  await page.waitForTimeout(80);
+}
+
 async function checkValue(page, containerSelector, value) {
   await page.evaluate(({ containerSelector, value }) => {
     const input = [...document.querySelectorAll(`${containerSelector} input[type="checkbox"]`)]
@@ -194,7 +272,7 @@ async function checkValue(page, containerSelector, value) {
 
 async function resetDashboard(page) {
   await page.locator("#slice-filter-clear").click();
-  await page.locator("#line-filter").fill("");
+  await setInput(page, "#line-filter", "");
   await setSelect(page, "#metric-select", "score");
   await setSelect(page, "#season-select", "All");
   await setSelect(page, "#line-sort-select", "latest");
@@ -228,6 +306,7 @@ async function snapshot(page) {
       dashboardError: pageText.includes("Dashboard data did not load"),
       badTextValue: /NaN|undefined|Infinity/.test(pageText),
       badSvgValue: /NaN|undefined|Infinity/.test(svgText),
+      legacyGrowthCopy: /Growth From Baseline|Growth Ranking|first selected period|score change from Assignment 01/.test(pageText),
       assetVersion: document.documentElement.dataset.assetVersion,
       cssHref: document.querySelector("link[rel='stylesheet']")?.href ?? "",
       dashboardScriptSrc: [...document.scripts].map((script) => script.src).find((src) => src.includes("assessment-dashboard")) ?? "",
@@ -241,6 +320,7 @@ async function snapshot(page) {
         checked: input.checked,
       })),
       summary: document.querySelector("#slice-filter-summary")?.textContent ?? "",
+      metricOptions: [...document.querySelectorAll("#metric-select option")].map((option) => option.value),
       cards: {
         students: document.querySelector("#metric-students")?.textContent.trim() ?? "",
         latest: document.querySelector("#metric-latest")?.textContent.trim() ?? "",
@@ -249,7 +329,9 @@ async function snapshot(page) {
         target: document.querySelector("#metric-target")?.textContent.trim() ?? "",
       },
       timeCaption: document.querySelector("#time-caption")?.textContent ?? "",
+      movementCaption: document.querySelector("#growth-caption")?.textContent ?? "",
       lineCount: document.querySelectorAll(".comparison-series-line").length,
+      lineLabels: [...document.querySelectorAll(".right-label-text")].map((node) => node.textContent.trim()).slice(0, 8),
       violinCount: document.querySelectorAll(".violin-plot").length,
       violinTitles: [...document.querySelectorAll(".violin-plot title")].map((node) => node.textContent.trim()).slice(0, 8),
       emptyChartText: [...document.querySelectorAll(".empty-chart-text")].map((node) => node.textContent.trim()),
@@ -295,47 +377,51 @@ async function runDesktopChecks(page, expected, emptyCombo) {
   assertCondition(failures, base.dashboardScriptSrc.includes(`?v=${expected.assetVersion}`), "dashboard JS cache key matches asset version", base.dashboardScriptSrc);
   assertCondition(failures, base.oldControls.groupSelects === 0 && base.oldControls.presetRows === 0 && base.oldControls.sliceMenus === 0, "old controls absent", base.oldControls);
   assertCondition(failures, base.compareRadios.length === 3 && base.compareRadios.find((item) => item.value === "course")?.checked, "compare radios default to subject", base.compareRadios);
+  assertCondition(failures, !base.metricOptions.includes("growth"), "growth baseline metric option removed", base.metricOptions);
+  assertCondition(failures, base.summary.includes("Comparing all subjects") && base.summary.includes("filters: all teachers, all sections"), "default comparison summary is simplified", base.summary);
+  assertCondition(failures, !base.legacyGrowthCopy, "old growth copy absent", base);
   assertCondition(failures, cardsMatch(base.cards, expected.cards), "metric cards match source JSON", { actual: base.cards, expected: expected.cards });
+  assertCondition(failures, base.movementCaption.includes("average End-minus-Beginning delta"), "movement caption uses BOY/EOY language", base.movementCaption);
   assertCondition(failures, base.lineCount === expected.subjectLineCount, "default subject line count matches source JSON", base);
   assertCondition(failures, base.tableRows === expected.tableRows, "default table rows match source JSON", base);
   assertCondition(failures, base.violinCount === expected.subjectViolinCount, "default violin count matches source JSON", base);
   assertCondition(failures, base.violinTitles.every((title) => title.includes("subject score distribution")), "default violins are subject distributions", base.violinTitles);
 
-  await page.locator("input[name='compare-by'][value='teacher']").check();
   const selectedTeachers = await checkFirstN(page, "#teacher-filter-options input[type='checkbox']", 2);
   const teacher = await snapshot(page);
-  assertCondition(failures, teacher.summary.includes(`Compare ${selectedTeachers} teachers`), "teacher selection summary", teacher.summary);
+  assertCondition(failures, teacher.compareRadios.find((item) => item.value === "teacher")?.checked, "teacher checkbox auto-switches comparison mode", teacher.compareRadios);
+  assertCondition(failures, teacher.summary.includes(`Comparing ${selectedTeachers} teachers`), "teacher selection summary", teacher.summary);
   assertCondition(failures, teacher.lineCount === selectedTeachers, "teacher selected line count", teacher);
   assertCondition(failures, teacher.violinTitles.length > 0 && teacher.violinTitles.every((title) => title.includes("teacher score distribution")), "teacher violins are teacher distributions", teacher.violinTitles);
 
   await resetDashboard(page);
-  await page.locator("input[name='compare-by'][value='course']").check();
   const selectedSubjects = await checkFirstN(page, "#course-filter-options input[type='checkbox']", 2);
   const subject = await snapshot(page);
-  assertCondition(failures, subject.summary.includes(`Compare ${selectedSubjects} subjects`), "subject selection summary", subject.summary);
+  assertCondition(failures, subject.compareRadios.find((item) => item.value === "course")?.checked, "subject checkbox keeps subject comparison mode", subject.compareRadios);
+  assertCondition(failures, subject.summary.includes(`Comparing ${selectedSubjects} subjects`), "subject selection summary", subject.summary);
   assertCondition(failures, subject.lineCount === selectedSubjects, "subject selected line count", subject);
   assertCondition(failures, subject.violinTitles.length > 0 && subject.violinTitles.every((title) => title.includes("subject score distribution")), "subject violins are subject distributions", subject.violinTitles);
 
   await resetDashboard(page);
-  await page.locator("input[name='compare-by'][value='section']").check();
   const selectedSections = await checkFirstN(page, "#section-filter-options input[type='checkbox']", 2);
   const section = await snapshot(page);
-  assertCondition(failures, section.summary.includes(`Compare ${selectedSections} sections`), "section selection summary", section.summary);
+  assertCondition(failures, section.compareRadios.find((item) => item.value === "section")?.checked, "section checkbox auto-switches comparison mode", section.compareRadios);
+  assertCondition(failures, section.summary.includes(`Comparing ${selectedSections} sections`), "section selection summary", section.summary);
   assertCondition(failures, section.lineCount === selectedSections, "section selected line count", section);
   assertCondition(failures, section.violinTitles.length > 0 && section.violinTitles.every((title) => title.includes("section score distribution")), "section violins are section distributions", section.violinTitles);
 
   await resetDashboard(page);
-  await page.locator("input[name='compare-by'][value='teacher']").check();
   await page.locator("#course-filter-options input[type='checkbox']").first().check();
+  await page.locator("input[name='compare-by'][value='teacher']").check();
   await page.waitForTimeout(160);
   const crossFiltered = await snapshot(page);
-  assertCondition(failures, crossFiltered.summary.includes("filter 1 subject") && crossFiltered.summary.includes("Compare all teachers"), "non-active subject filter summary", crossFiltered.summary);
+  assertCondition(failures, crossFiltered.summary.includes("1 subject") && crossFiltered.summary.includes("Comparing all teachers"), "non-active subject filter summary", crossFiltered.summary);
   assertCondition(failures, crossFiltered.lineCount > 0 && crossFiltered.lineCount <= 5, "non-active filter constrains teacher comparisons", crossFiltered);
 
   for (const compareBy of ["course", "teacher", "section"]) {
     await resetDashboard(page);
     await page.locator(`input[name='compare-by'][value='${compareBy}']`).check();
-    for (const metric of ["score", "proficiency", "growth", "completion"]) {
+    for (const metric of ["score", "proficiency", "completion"]) {
       await setSelect(page, "#metric-select", metric);
       const state = await snapshot(page);
       assertCondition(failures, !state.dashboardError && !state.badTextValue && !state.badSvgValue, `${compareBy}/${metric} renders cleanly`, state);
@@ -349,9 +435,11 @@ async function runDesktopChecks(page, expected, emptyCombo) {
   await setSelect(page, "#season-select", "Beginning");
   const beginning = await snapshot(page);
   assertCondition(failures, beginning.timeCaption.includes("7 reporting windows"), "Beginning season limits to 7 windows", beginning.timeCaption);
+  assertCondition(failures, beginning.cards.change === "-" && beginning.movementCaption.includes("No complete BOY/EOY pairs"), "Beginning-only window shows no BOY/EOY delta", beginning);
   await setSelect(page, "#season-select", "End");
   const ending = await snapshot(page);
   assertCondition(failures, ending.timeCaption.includes("7 reporting windows"), "End season limits to 7 windows", ending.timeCaption);
+  assertCondition(failures, ending.cards.change === "-" && ending.movementCaption.includes("No complete BOY/EOY pairs"), "End-only window shows no BOY/EOY delta", ending);
 
   await page.locator("#section-filter-search").fill("01-01");
   await page.waitForTimeout(160);

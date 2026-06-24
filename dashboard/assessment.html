@@ -1,11 +1,11 @@
 <!doctype html>
-<html lang="en" data-asset-version="20260624a">
+<html lang="en" data-asset-version="20260624b">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Analytics Dashboard | Grant McCurdy</title>
     <meta name="description" content="Interactive public-safe analytics dashboard powered by static SQL extract data.">
-    <link rel="stylesheet" href="../assets/css/styles.css?v=20260624a">
+    <link rel="stylesheet" href="../assets/css/styles.css?v=20260624b">
   </head>
   <body>
     <header class="site-header compact" data-header>
@@ -32,12 +32,12 @@
       </section>
 
       <section class="dashboard-shell" aria-labelledby="dashboard-heading">
-        <div class="dashboard-source-strip" aria-label="Dashboard data source">
-          <div class="source-summary">
-            <p class="section-kicker">Data Source</p>
-            <h2>Public-safe SQL extract</h2>
-            <p>The source repo owns the extract build, privacy validation, and static JSON used here.</p>
-          </div>
+        <details class="dashboard-source-strip" aria-label="Dashboard data source">
+          <summary class="source-summary">
+            <span class="section-kicker">Data Source</span>
+            <strong>Public-safe SQL extract</strong>
+            <small>Build, privacy validation, and static JSON details</small>
+          </summary>
           <dl class="source-meta-grid">
             <div>
               <dt>Project</dt>
@@ -56,7 +56,7 @@
               <dd id="source-contract">-</dd>
             </div>
           </dl>
-        </div>
+        </details>
 
         <div class="metric-grid metric-grid-wide" aria-live="polite">
           <article class="metric-card">
@@ -64,11 +64,11 @@
             <strong id="metric-students">-</strong>
           </article>
           <article class="metric-card">
-            <span>Latest Score</span>
+            <span>Latest Value</span>
             <strong id="metric-latest">-</strong>
           </article>
           <article class="metric-card">
-            <span>Change</span>
+            <span>Avg BOY/EOY</span>
             <strong id="metric-change">-</strong>
           </article>
           <article class="metric-card">
@@ -90,7 +90,7 @@
             <div class="slice-filter-header">
               <div>
                 <span>Comparison builder</span>
-                <strong id="slice-filter-summary">Compare all subjects / filter all teachers / filter all sections</strong>
+                <strong id="slice-filter-summary">Comparing all subjects; filters: all teachers, all sections</strong>
               </div>
               <button type="button" id="slice-filter-clear">Clear selections</button>
             </div>
@@ -127,7 +127,6 @@
               <select id="metric-select">
                 <option value="score">Mean Score</option>
                 <option value="proficiency">Proficiency</option>
-                <option value="growth">Growth From Baseline</option>
                 <option value="completion">Completion</option>
               </select>
             </label>
@@ -135,12 +134,29 @@
               <span>Minimum window n <output id="line-min-n-value">5</output></span>
               <input type="range" id="line-min-n" min="1" max="35" step="1" value="5">
             </label>
+          </div>
+        </div>
+
+        <details class="advanced-dashboard-controls">
+          <summary>
+            <span>Advanced controls</span>
+            <small>Line filters, windows, ribbons, and display settings</small>
+          </summary>
+          <div class="viz-control-row advanced-line-controls" aria-label="Advanced line controls">
+            <label>
+              Window
+              <select id="season-select">
+                <option value="All">All Windows</option>
+                <option value="Beginning">Beginning Only</option>
+                <option value="End">End Only</option>
+              </select>
+            </label>
             <label>
               Sort / cut
               <select id="line-sort-select">
                 <option value="latest">Latest value</option>
-                <option value="gain">Largest gain</option>
-                <option value="decline">Needs attention</option>
+                <option value="gain">Largest BOY/EOY gain</option>
+                <option value="decline">Lowest BOY/EOY movement</option>
                 <option value="name">Name A-Z</option>
               </select>
             </label>
@@ -159,13 +175,7 @@
               </select>
             </label>
           </div>
-        </div>
 
-        <details class="advanced-dashboard-controls">
-          <summary>
-            <span>Advanced display controls</span>
-            <small>Ribbons, population, smoothing, and section line settings</small>
-          </summary>
           <div class="toggle-row" aria-label="Dashboard display toggles">
             <label><input type="checkbox" id="toggle-department-band" checked> Main ribbon</label>
             <label><input type="checkbox" id="toggle-network-band" checked> Context ribbon</label>
@@ -175,14 +185,6 @@
           </div>
 
           <div class="viz-control-row" aria-label="Ribbon controls">
-            <label>
-              Window
-              <select id="season-select">
-                <option value="All">All Windows</option>
-                <option value="Beginning">Beginning Only</option>
-                <option value="End">End Only</option>
-              </select>
-            </label>
             <label>
               Ribbon Range
               <select id="ribbon-range-select">
@@ -262,10 +264,10 @@
         <div class="dashboard-grid">
           <article class="dashboard-panel">
             <div class="panel-heading">
-              <h3>Growth Ranking</h3>
+              <h3>BOY/EOY Movement</h3>
               <span id="growth-caption"></span>
             </div>
-            <div id="growth-chart" class="chart-frame" role="img" aria-label="Growth ranking chart"></div>
+            <div id="growth-chart" class="chart-frame" role="img" aria-label="BOY EOY movement chart"></div>
           </article>
 
           <article class="dashboard-panel insight-panel">
@@ -324,7 +326,7 @@
                   <th><button type="button" class="table-sort" data-sort="students">Students <span aria-hidden="true"></span></button></th>
                   <th><button type="button" class="table-sort" data-sort="first" id="table-first-period">Assignment 01 <span aria-hidden="true"></span></button></th>
                   <th><button type="button" class="table-sort" data-sort="latest" id="table-latest-period">Assignment 14 <span aria-hidden="true"></span></button></th>
-                  <th><button type="button" class="table-sort" data-sort="change">Change <span aria-hidden="true"></span></button></th>
+                  <th><button type="button" class="table-sort" data-sort="change">Avg BOY/EOY <span aria-hidden="true"></span></button></th>
                   <th><button type="button" class="table-sort" data-sort="completion">Completion <span aria-hidden="true"></span></button></th>
                 </tr>
               </thead>
@@ -336,6 +338,6 @@
     </main>
 
     <script src="../assets/js/site.js?v=dashboard-source-v1"></script>
-    <script src="../assets/js/assessment-dashboard.js?v=20260624a"></script>
+    <script src="../assets/js/assessment-dashboard.js?v=20260624b"></script>
   </body>
 </html>

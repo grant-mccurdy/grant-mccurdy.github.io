@@ -44,7 +44,6 @@ const state = {
 const metricLabels = {
   score: "Mean Score",
   proficiency: "Proficiency",
-  growth: "Growth From Baseline",
   completion: "Completion",
 };
 
@@ -156,6 +155,129 @@ function mean(values) {
 
 function centerValue(values) {
   return state.visual.center === "median" ? quantile(values, 0.5) : mean(values);
+}
+
+function averageFinite(values) {
+  const numeric = values.filter((value) => Number.isFinite(value));
+  return numeric.length ? numeric.reduce((sum, value) => sum + value, 0) / numeric.length : NaN;
+}
+
+function periodWindowText(period) {
+  return `${period.assessmentWindow ?? ""} ${period.season ?? ""} ${period.label ?? ""}`.toLowerCase();
+}
+
+function isBeginningWindow(period) {
+  const text = periodWindowText(period);
+  return text.includes("beginning") || /\bboy\b/.test(text);
+}
+
+function isEndWindow(period) {
+  const text = periodWindowText(period);
+  return text.includes("end") || /\beoy\b/.test(text);
+}
+
+function boyEoyPairs(periods) {
+  const sorted = [...periods].sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+  const pairs = [];
+
+  sorted.forEach((period, index) => {
+    if (!isBeginningWindow(period)) return;
+    for (let nextIndex = index + 1; nextIndex < sorted.length; nextIndex += 1) {
+      const candidate = sorted[nextIndex];
+      if (isBeginningWindow(candidate)) break;
+      if (isEndWindow(candidate)) {
+        pairs.push({ begin: period, end: candidate });
+        break;
+      }
+    }
+  });
+
+  return pairs;
+}
+
+function averageBoyEoyDeltaForRows(rows, metricKey = state.metric, pairs = null) {
+  const rowByPeriod = new Map(rows.map((row) => [row.periodId, row]));
+  const sourcePeriods = pairs ?? boyEoyPairs(rows.map((row) => ({
+    id: row.periodId,
+    label: row.periodLabel,
+    season: row.season,
+    assessmentWindow: row.assessmentWindow,
+    order: row.order,
+  })));
+  const deltas = sourcePeriods.map(({ begin, end }) => {
+    const beginValue = rowByPeriod.get(begin.id)?.[metricKey];
+    const endValue = rowByPeriod.get(end.id)?.[metricKey];
+    return Number.isFinite(beginValue) && Number.isFinite(endValue) ? endValue - beginValue : NaN;
+  });
+  const numeric = deltas.filter((value) => Number.isFinite(value));
+
+  return {
+    value: averageFinite(numeric),
+    count: numeric.length,
+    pairCount: sourcePeriods.length,
+  };
+}
+
+function averageBoyEoyDeltaForPeriodData(periodData, metricKey = state.metric) {
+  const periodById = new Map(periodData.map((periodItem) => [periodItem.period.id, periodItem]));
+  const pairs = boyEoyPairs(periodData.map((periodItem) => periodItem.period));
+  const deltas = pairs.map(({ begin, end }) => {
+    const beginValue = periodById.get(begin.id)?.[metricKey];
+    const endValue = periodById.get(end.id)?.[metricKey];
+    return Number.isFinite(beginValue) && Number.isFinite(endValue) ? endValue - beginValue : NaN;
+  });
+  const numeric = deltas.filter((value) => Number.isFinite(value));
+
+  return {
+    value: averageFinite(numeric),
+    count: numeric.length,
+    pairCount: pairs.length,
+  };
+}
+
+function averageBoyEoyDeltaFromLineValues(values) {
+  const valueByPeriod = new Map(values.map((value) => [value.period.id, value.value]));
+  const pairs = boyEoyPairs(values.map((value) => value.period));
+  const deltas = pairs.map(({ begin, end }) => {
+    const beginValue = valueByPeriod.get(begin.id);
+    const endValue = valueByPeriod.get(end.id);
+    return Number.isFinite(beginValue) && Number.isFinite(endValue) ? endValue - beginValue : NaN;
+  });
+  const numeric = deltas.filter((value) => Number.isFinite(value));
+
+  return {
+    value: averageFinite(numeric),
+    count: numeric.length,
+    pairCount: pairs.length,
+  };
+}
+
+function boyEoyDeltasByGroup(periodData, metricKey = state.metric) {
+  const pairs = boyEoyPairs(periodData.map((periodItem) => periodItem.period));
+  const groupsByPeriod = new Map(periodData.map((periodItem) => [
+    periodItem.period.id,
+    new Map(periodItem.groups.map((group) => [group.key, group])),
+  ]));
+  const keys = unique(periodData.flatMap((periodItem) => periodItem.groups.map((group) => group.key)));
+
+  return keys.map((key) => {
+    const deltas = pairs.map(({ begin, end }) => {
+      const beginValue = groupsByPeriod.get(begin.id)?.get(key)?.[metricKey];
+      const endValue = groupsByPeriod.get(end.id)?.get(key)?.[metricKey];
+      return Number.isFinite(beginValue) && Number.isFinite(endValue) ? endValue - beginValue : NaN;
+    });
+    const numeric = deltas.filter((value) => Number.isFinite(value));
+    return {
+      key,
+      value: averageFinite(numeric),
+      count: numeric.length,
+      pairCount: pairs.length,
+    };
+  }).filter((item) => item.count > 0 && Number.isFinite(item.value));
+}
+
+function deltaSortValue(value, fallback = Number.NEGATIVE_INFINITY) {
+  return Number.isFinite(value) ? value : fallback;
 }
 
 function currentMetricLabel() {
@@ -275,12 +397,6 @@ function escapeHtml(value) {
 function compactDirectLabel(value, maxLength = 18) {
   const label = String(value);
   return label.length > maxLength ? `${label.slice(0, maxLength - 3)}...` : label;
-}
-
-function formatMetric(value, precision = 0) {
-  if (!Number.isFinite(value)) return "-";
-  if (state.metric === "growth") return `${value >= 0 ? "+" : ""}${value.toFixed(precision)} pts`;
-  return `${value.toFixed(precision)}%`;
 }
 
 function sourceRecordCounts(source) {
@@ -525,29 +641,6 @@ function latestPeriodData(records = filterRecords()) {
   return [...periods].reverse().find((period) => period.rows.length || period.groups.length) ?? periods[periods.length - 1] ?? { groups: [], rows: [] };
 }
 
-function firstPeriodData(records = filterRecords()) {
-  const periods = aggregateByPeriod(records);
-  return periods.find((period) => period.rows.length || period.groups.length) ?? periods[0] ?? { groups: [], rows: [] };
-}
-
-function growthPeriodData(records = filterRecords()) {
-  const scorePeriods = state.source?.studentRecords?.length ? aggregateScoreByPeriod() : [];
-  const periodData = scorePeriods.some((periodItem) => periodItem.groups.length) ? scorePeriods : aggregateByPeriod(records);
-  const baselinePeriod = periodData.find((periodItem) => periodItem.groups.length);
-  const baselineByKey = new Map((baselinePeriod?.groups ?? []).map((group) => [group.key, group.score]));
-
-  return periodData.map((periodItem) => ({
-    ...periodItem,
-    groups: periodItem.groups.map((group) => {
-      const baseline = baselineByKey.get(group.key);
-      return {
-        ...group,
-        growth: Number.isFinite(baseline) && Number.isFinite(group.score) ? group.score - baseline : NaN,
-      };
-    }),
-  }));
-}
-
 function metricValue(item) {
   return item[state.metric] ?? 0;
 }
@@ -557,7 +650,6 @@ function metricAllowsBands() {
 }
 
 function renderMetrics(records) {
-  const first = firstPeriodData(records);
   const latest = latestPeriodData(records);
   const latestRows = latest?.rows ?? [];
 
@@ -570,16 +662,16 @@ function renderMetrics(records) {
     return;
   }
 
-  const firstValue = first ? first[state.metric] : 0;
   const latestValue = latest ? latest[state.metric] : 0;
+  const averageDelta = averageBoyEoyDeltaForPeriodData(periodDataForTimeSeries(records));
   const students = latestRows.reduce((sum, row) => sum + row.students, 0);
   const targetScore = state.source.bands?.mastery?.line?.[(latest?.period?.order ?? 1) - 1] ?? 70;
   const targetRows = latestRows.filter((row) => row.score >= targetScore);
   const completed = latestRows.reduce((sum, row) => sum + (row.completed ?? row.students), 0);
 
   els.students.textContent = students.toLocaleString();
-  els.latest.textContent = state.metric === "growth" ? fmtPts(latestValue) : fmtPct(latestValue);
-  els.change.textContent = fmtPts(latestValue - firstValue);
+  els.latest.textContent = fmtPct(latestValue);
+  els.change.textContent = Number.isFinite(averageDelta.value) ? fmtPtsAuto(averageDelta.value) : "-";
   els.completion.textContent = fmtPct(weightedAverage(latestRows, "completion"));
   els.target.textContent = completed ? fmtPct((targetRows.reduce((sum, row) => sum + (row.completed ?? row.students), 0) / completed) * 100) : "-";
 }
@@ -648,13 +740,15 @@ function buildLineSeries(periodData) {
     if (values.length < 2) return null;
     const first = values[0];
     const latest = values[values.length - 1];
+    const averageDelta = averageBoyEoyDeltaFromLineValues(values);
     return {
       key: group,
       color: palette[groupIndex % palette.length],
       values,
       first,
       latest,
-      change: latest.value - first.value,
+      change: averageDelta.value,
+      deltaPairCount: averageDelta.count,
       hasGap: values.some((value, index) => index > 0 && value.periodIndex - values[index - 1].periodIndex > 1),
     };
   }).filter(Boolean);
@@ -663,10 +757,10 @@ function buildLineSeries(periodData) {
 function sortLineSeries(series) {
   const sorted = [...series];
   if (state.lines.sortCut === "gain") {
-    return sorted.sort((a, b) => b.change - a.change || b.latest.value - a.latest.value);
+    return sorted.sort((a, b) => deltaSortValue(b.change) - deltaSortValue(a.change) || b.latest.value - a.latest.value);
   }
   if (state.lines.sortCut === "decline") {
-    return sorted.sort((a, b) => a.latest.value - b.latest.value || a.change - b.change);
+    return sorted.sort((a, b) => deltaSortValue(a.change, Number.POSITIVE_INFINITY) - deltaSortValue(b.change, Number.POSITIVE_INFINITY) || a.latest.value - b.latest.value);
   }
   if (state.lines.sortCut === "name") {
     return sorted.sort((a, b) => a.key.localeCompare(b.key, undefined, { numeric: true }));
@@ -703,7 +797,6 @@ function niceTicks(rawMin, rawMax, targetCount = 5) {
 
 function lineChartDomain(series, periods) {
   const values = series.flatMap((line) => line.values.map((value) => value.value));
-  if (state.metric === "growth") values.push(0);
 
   if (metricAllowsBands()) {
     periods.forEach((period) => {
@@ -732,9 +825,9 @@ function lineChartDomain(series, periods) {
   if (!numeric.length) return { min: 0, max: 100, ticks: [0, 25, 50, 75, 100] };
   const minValue = Math.min(...numeric);
   const maxValue = Math.max(...numeric);
-  const padding = Math.max(state.metric === "growth" ? 2 : 4, (maxValue - minValue) * 0.14);
-  const floor = state.metric === "growth" ? minValue - padding : clamp(minValue - padding, 0, 100);
-  const ceiling = state.metric === "growth" ? maxValue + padding : clamp(maxValue + padding, 0, 100);
+  const padding = Math.max(4, (maxValue - minValue) * 0.14);
+  const floor = clamp(minValue - padding, 0, 100);
+  const ceiling = clamp(maxValue + padding, 0, 100);
   return niceTicks(floor, ceiling, 5);
 }
 
@@ -776,7 +869,8 @@ function renderTimeSeries(records) {
   const innerWidth = width - margin.left - margin.right;
   const innerHeight = height - margin.top - margin.bottom;
   const allPeriodData = visiblePeriodWindow(periodDataForTimeSeries(records));
-  const periodData = compact ? allPeriodData.slice(-7) : allPeriodData;
+  const preserveSparseSqlWindows = state.source?.source?.contract === "sql-extract-dashboard-json-v1";
+  const periodData = compact && !preserveSparseSqlWindows ? allPeriodData.slice(-7) : allPeriodData;
   const periods = periodData.map((item) => item.period);
   const lineSeries = sortLineSeries(buildLineSeries(periodData));
   const explicitComparison = hasExplicitComparisonSelection();
@@ -787,12 +881,12 @@ function renderTimeSeries(records) {
   const yMin = domain.min;
   const x = (index) => margin.left + (periods.length <= 1 ? innerWidth / 2 : (index / (periods.length - 1)) * innerWidth);
   const y = (value) => margin.top + innerHeight - ((value - yMin) / (yMax - yMin)) * innerHeight;
-  const bandScale = (value) => y(state.metric === "growth" ? value - state.source.sections[0].baseline : value);
+  const bandScale = (value) => y(value);
 
   const grid = domain.ticks.filter((tick) => tick >= yMin && tick <= yMax).map((tick) => `
     <g>
       <line x1="${margin.left}" x2="${width - margin.right}" y1="${y(tick)}" y2="${y(tick)}" class="axis-grid"></line>
-      <text x="${margin.left - 12}" y="${y(tick) + 5}" class="axis-label" text-anchor="end">${state.metric === "growth" ? tick : tick.toFixed(0)}</text>
+      <text x="${margin.left - 12}" y="${y(tick) + 5}" class="axis-label" text-anchor="end">${tick.toFixed(0)}</text>
     </g>
   `).join("");
 
@@ -812,15 +906,15 @@ function renderTimeSeries(records) {
     }));
     const labelPosition = labelY.get(line.key) ?? y(line.latest.value);
     const lastPoint = points[points.length - 1];
-    const signedChange = `${line.change >= 0 ? "+" : ""}${line.change.toFixed(2)}`;
-    const labelText = `${compactDirectLabel(line.key)} (${signedChange})`;
+    const deltaLabel = Number.isFinite(line.change) ? fmtPtsAuto(line.change) : "no B/E";
+    const labelText = `${compactDirectLabel(line.key)} (${deltaLabel})`;
     const lineClass = line.hasGap ? "direct-series-line direct-series-gap" : "direct-series-line";
     const circles = points.map((point, index) => `
       <circle cx="${point.x}" cy="${point.y}" r="${compact ? (index === points.length - 1 ? 5.4 : 4.4) : (index === points.length - 1 ? 5.2 : 4.6)}" fill="${line.color}" class="series-point comparison-series-point"></circle>
     `).join("");
     const directLabel = compact ? "" : `
       <g>
-        <title>${escapeSvgText(line.key)} (${signedChange})</title>
+        <title>${escapeSvgText(line.key)} average BOY/EOY delta ${escapeSvgText(deltaLabel)}</title>
         <line x1="${lastPoint.x + 9}" x2="${labelDotX - 8}" y1="${lastPoint.y}" y2="${labelPosition}" stroke="${line.color}" class="direct-label-guide"></line>
         <circle cx="${labelDotX}" cy="${labelPosition}" r="4.7" fill="${line.color}" class="right-label-dot"></circle>
         <text x="${labelX}" y="${labelPosition + 5}" class="right-label-text">${escapeSvgText(labelText)}</text>
@@ -863,7 +957,11 @@ function renderTimeSeries(records) {
 
   const lineLabel = `${selectedSeries.length} ${currentSliceLabel()} line${selectedSeries.length === 1 ? "" : "s"}`;
   const windowLabel = `${periods.length} reporting window${periods.length === 1 ? "" : "s"}`;
-  els.timeCaption.textContent = `${lineLabel} shown from ${windowLabel}. Gaps mean no aggregate score met the minimum-n rule for that comparison/window.`;
+  const pairCount = boyEoyPairs(periods).length;
+  const deltaNote = pairCount
+    ? `Labels show average End-minus-Beginning delta across ${pairCount} complete pair${pairCount === 1 ? "" : "s"}.`
+    : "No complete BOY/EOY pairs are available for the current window filter.";
+  els.timeCaption.textContent = `${lineLabel} shown from ${windowLabel}. ${deltaNote}`;
   renderLegend(selectedSeries, periods.length);
 }
 
@@ -996,7 +1094,8 @@ function renderCompletionChart() {
   const innerWidth = width - margin.left - margin.right;
   const innerHeight = height - margin.top - margin.bottom;
   const allPeriods = state.source.periods.filter((period) => state.season === "All" || period.season === state.season);
-  const periods = compact ? allPeriods.slice(-7) : allPeriods;
+  const preserveSparseSqlWindows = state.source?.source?.contract === "sql-extract-dashboard-json-v1";
+  const periods = compact && !preserveSparseSqlWindows ? allPeriods.slice(-7) : allPeriods;
   const matchingStudentRecords = filterStudentRecords();
 
   if (!matchingStudentRecords.length) {
@@ -1069,7 +1168,8 @@ function renderDistributionChart() {
   const innerWidth = width - margin.left - margin.right;
   const innerHeight = height - margin.top - margin.bottom;
   const allPeriods = state.source.periods.filter((period) => state.season === "All" || period.season === state.season);
-  const periods = compact ? allPeriods.slice(-7) : allPeriods;
+  const preserveSparseSqlWindows = state.source?.source?.contract === "sql-extract-dashboard-json-v1";
+  const periods = compact && !preserveSparseSqlWindows ? allPeriods.slice(-7) : allPeriods;
   if (!filterStudentRecords().length) {
     els.distributionChart.innerHTML = `<svg viewBox="0 0 ${width} ${height}" aria-hidden="true" focusable="false"><text x="${width / 2}" y="${height / 2}" class="empty-chart-text" text-anchor="middle">No score records match the selected slice filters.</text></svg>`;
     els.distributionCaption.textContent = "No score records match the selected slice filters.";
@@ -1127,12 +1227,12 @@ function renderDistributionChart() {
       <line x1="${margin.left}" x2="${width - margin.right}" y1="${margin.top + innerHeight}" y2="${margin.top + innerHeight}" class="axis-line"></line>
       <line x1="${margin.left}" x2="${margin.left}" y1="${margin.top}" y2="${margin.top + innerHeight}" class="axis-line"></line>
       ${labels}
-      <text x="${margin.left}" y="18" class="axis-title">${currentMetricLabel()}</text>
+      <text x="${margin.left}" y="18" class="axis-title">Score Distribution</text>
     </svg>
   `;
 
   const population = state.visual.ribbonPopulation === "completed" ? "completed assessments" : "assigned records";
-  els.distributionCaption.textContent = `${currentMetricLabel()} with p10-p90 whiskers and p25-p75 boxes for ${population}`;
+  els.distributionCaption.textContent = `Score distribution with p10-p90 whiskers and p25-p75 boxes for ${population}`;
 }
 
 function renderSectionLines(records, periods, x, y) {
@@ -1216,20 +1316,18 @@ function renderComparisonBars(records) {
     .sort((a, b) => b.value - a.value);
 
   renderBars(els.barChart, items, {
-    min: state.metric === "growth" ? -4 : 0,
-    max: state.metric === "growth" ? 42 : 100,
-    format: state.metric === "growth" ? fmtPts : fmtPct,
-    barClass: state.metric === "growth" ? "chart-bar-growth" : state.metric === "completion" ? "chart-bar-completion" : "chart-bar-score",
+    min: 0,
+    max: 100,
+    format: fmtPct,
+    barClass: state.metric === "completion" ? "chart-bar-completion" : "chart-bar-score",
   });
   els.barCaption.textContent = `${latest.period?.label ?? ""} by ${currentSliceLabel()}`;
 }
 
-function renderGrowthBars(records) {
-  const periods = growthPeriodData(records).filter((periodItem) => periodItem.groups.length);
-  const first = periods[0];
-  const latest = periods[periods.length - 1] ?? { groups: [] };
-  const items = latest.groups.map((group) => ({ label: group.key, value: group.growth }))
-    .filter((item) => Number.isFinite(item.value))
+function renderBoyEoyMovementBars(records) {
+  const periodData = periodDataForTimeSeries(records);
+  const pairs = boyEoyPairs(periodData.map((periodItem) => periodItem.period));
+  const items = boyEoyDeltasByGroup(periodData).map((group) => ({ label: group.key, value: group.value, count: group.count }))
     .sort((a, b) => b.value - a.value);
   const values = items.map((item) => item.value);
   const minValue = Math.min(0, ...values);
@@ -1244,10 +1342,11 @@ function renderGrowthBars(records) {
     format: fmtPtsAuto,
     barClass: (item) => item.value < 0 ? "chart-bar-decline" : "chart-bar-growth",
     zeroBaseline: true,
+    emptyLabel: "No complete BOY/EOY pairs match the selected filters.",
   });
-  els.growthCaption.textContent = first?.period && latest.period
-    ? `${latest.period.label} score change from ${first.period.label}; comparison segments without a first-window baseline are omitted.`
-    : "Score change from the first available window.";
+  els.growthCaption.textContent = pairs.length
+    ? `${currentMetricLabel()} average End-minus-Beginning delta across ${pairs.length} complete pair${pairs.length === 1 ? "" : "s"} by ${currentSliceLabel()}.`
+    : "No complete BOY/EOY pairs match the current window filter.";
 }
 
 function renderSkillHeatmap(records) {
@@ -1302,8 +1401,9 @@ function renderTable(records) {
   const lastOrder = Math.max(...displayedPeriods.map((period) => period.order));
   const firstLabel = periodByOrder(firstOrder).label;
   const lastLabel = periodByOrder(lastOrder).label;
+  const pairs = boyEoyPairs(displayedPeriods);
   const sections = aggregate(records, "section");
-  const sectionRows = buildSectionTableRows(sections, firstOrder, lastOrder);
+  const sectionRows = buildSectionTableRows(sections, firstOrder, lastOrder, pairs);
   const filteredSectionRows = filterTableRows(sectionRows);
   const summaryMode = state.table.course === "All";
   const displayRows = summaryMode ? buildSegmentSummaryRows(filteredSectionRows) : filteredSectionRows;
@@ -1338,11 +1438,12 @@ function renderTable(records) {
   renderTableSortState();
 }
 
-function buildSectionTableRows(sections, firstOrder, lastOrder) {
+function buildSectionTableRows(sections, firstOrder, lastOrder, pairs) {
   return sections.map((section) => {
     const first = section.rows.find((row) => row.order === firstOrder);
     const latest = section.rows.find((row) => row.order === lastOrder);
     const fallback = latest ?? first ?? section.rows[section.rows.length - 1] ?? section.rows[0] ?? {};
+    const averageDelta = averageBoyEoyDeltaForRows(section.rows, "score", pairs);
     return {
       course: fallback.course ?? "",
       grade: fallback.grade ?? "",
@@ -1351,7 +1452,7 @@ function buildSectionTableRows(sections, firstOrder, lastOrder) {
       students: latest?.students ?? fallback.students ?? 0,
       first: first?.score,
       latest: latest?.score,
-      change: first && latest ? latest.score - first.score : null,
+      change: averageDelta.value,
       completion: latest?.completion,
     };
   });
@@ -1433,21 +1534,16 @@ function renderTableSortState() {
 
 function renderInsights(records) {
   const latest = latestPeriodData(records);
-  const first = firstPeriodData(records);
   if (!records.length || !latest.rows?.length) {
     els.insights.innerHTML = `<li>No records match the selected slice filters.</li>`;
     return;
   }
 
   const latestGroups = latest.groups;
-  const firstGroups = new Map(first.groups.map((group) => [group.key, group]));
-  const rankedGrowth = latestGroups.map((group) => {
-    const start = firstGroups.get(group.key);
-    return { key: group.key, change: start ? group.score - start.score : 0, score: group.score };
-  }).sort((a, b) => b.change - a.change);
-
-  const strongest = rankedGrowth[0];
-  const watch = [...rankedGrowth].sort((a, b) => a.score - b.score)[0];
+  const rankedMovement = boyEoyDeltasByGroup(periodDataForTimeSeries(records))
+    .sort((a, b) => b.value - a.value);
+  const strongest = rankedMovement[0];
+  const watch = [...latestGroups].sort((a, b) => a.score - b.score)[0];
   const completion = weightedAverage(latest.rows, "completion");
   const completionLabel = completion < 95 && Math.round(completion) === 95 ? `${completion.toFixed(1)}%` : fmtPct(completion);
   const completionPosition = completion >= 95 ? "at or above" : "below";
@@ -1456,7 +1552,7 @@ function renderInsights(records) {
   const sqlBacked = state.source.source?.contract === "sql-extract-dashboard-json-v1";
 
   const notes = [
-    strongest ? `${strongest.key} shows the strongest synthetic trend at ${fmtPts(strongest.change)} since the first selected period.` : "No trend is available for the current filter.",
+    strongest ? `${strongest.key} has the strongest average BOY/EOY movement at ${fmtPtsAuto(strongest.value)} across ${strongest.count} complete pair${strongest.count === 1 ? "" : "s"}.` : "No complete BOY/EOY movement is available for the current filter.",
     watch ? `${watch.key} is the lowest latest comparison at ${fmtPct(watch.score)}, making it a candidate for item-level review or targeted supports.` : "No watch segment is available for the current filter.",
     `Latest completion is ${completionLabel}, which is ${completionPosition} the operating target of 95%.`,
     sqlBacked
@@ -1511,6 +1607,16 @@ const filterDescriptors = [
   { key: "sections", groupBy: "section", singular: "section", plural: "sections" },
 ];
 
+function descriptorForFilterKey(key) {
+  return filterDescriptors.find((descriptor) => descriptor.key === key);
+}
+
+function syncCompareControls() {
+  els.compareBy.forEach((input) => {
+    input.checked = input.value === state.groupBy;
+  });
+}
+
 function selectedCountLabel(key, allLabel, singular, plural) {
   const count = state.filters[key].length;
   if (!count) return allLabel;
@@ -1518,14 +1624,18 @@ function selectedCountLabel(key, allLabel, singular, plural) {
 }
 
 function renderSliceSummary() {
-  els.sliceSummary.textContent = filterDescriptors.map((descriptor) => {
+  const active = filterDescriptors.find((descriptor) => descriptor.groupBy === state.groupBy) ?? filterDescriptors[0];
+  const activeCount = state.filters[active.key].length;
+  const activeTarget = activeCount
+    ? `${activeCount} ${activeCount === 1 ? active.singular : active.plural}`
+    : `all ${active.plural}`;
+  const filters = filterDescriptors.filter((descriptor) => descriptor.key !== active.key).map((descriptor) => {
     const selected = state.filters[descriptor.key].length;
-    const verb = descriptor.groupBy === state.groupBy ? "Compare" : "filter";
-    const target = selected
+    return selected
       ? `${selected} ${selected === 1 ? descriptor.singular : descriptor.plural}`
       : `all ${descriptor.plural}`;
-    return `${verb} ${target}`;
-  }).join(" / ");
+  }).join(", ");
+  els.sliceSummary.textContent = `Comparing ${activeTarget}; filters: ${filters}`;
   els.sectionFilterCount.textContent = selectedCountLabel("sections", "All sections", "section", "sections");
 }
 
@@ -1568,8 +1678,14 @@ function setSliceFilter(key, value, checked) {
 function handleSliceCheckboxChange(event) {
   const checkbox = event.target.closest("input[data-slice-filter]");
   if (!checkbox) return;
-  setSliceFilter(checkbox.dataset.sliceFilter, checkbox.value, checkbox.checked);
-  renderSliceSummary();
+  const filterKey = checkbox.dataset.sliceFilter;
+  setSliceFilter(filterKey, checkbox.value, checkbox.checked);
+  if (checkbox.checked) {
+    const descriptor = descriptorForFilterKey(filterKey);
+    if (descriptor) state.groupBy = descriptor.groupBy;
+  }
+  syncCompareControls();
+  renderSliceFilters();
   render();
 }
 
@@ -1594,14 +1710,14 @@ function selectVisibleSections() {
   const selected = new Set(state.filters.sections);
   visibleSectionOptions().forEach((option) => selected.add(option.value));
   state.filters.sections = [...selected].sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
-  renderSectionFilters();
+  state.groupBy = "section";
+  syncCompareControls();
+  renderSliceFilters();
   render();
 }
 
 function syncControls() {
-  els.compareBy.forEach((input) => {
-    input.checked = input.value === state.groupBy;
-  });
+  syncCompareControls();
   els.metric.value = state.metric;
   els.season.value = state.season;
   els.departmentBand.checked = state.toggles.department;
@@ -1630,7 +1746,7 @@ function render() {
   renderCompletionChart();
   renderDistributionChart();
   renderComparisonBars(records);
-  renderGrowthBars(records);
+  renderBoyEoyMovementBars(records);
   renderSkillHeatmap(records);
   renderTable(records);
   renderInsights(records);
