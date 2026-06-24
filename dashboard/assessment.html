@@ -87,15 +87,43 @@
             <h2 id="dashboard-heading">Program Windows</h2>
           </div>
           <div class="control-row line-control-grid" aria-label="Line chart controls">
-            <label>
-              Slice
-              <select id="group-select">
-                <option value="course">Programs</option>
-                <option value="grade">Cohorts</option>
-                <option value="teacher">Owners</option>
-                <option value="section">Groups</option>
-              </select>
-            </label>
+            <details class="slice-filter-menu">
+              <summary>
+                <span>Slice selection</span>
+                <strong id="slice-filter-summary">All subjects / all teachers / all sections</strong>
+              </summary>
+              <div class="slice-filter-panel" aria-label="Slice filters">
+                <div class="slice-filter-header">
+                  <div>
+                    <span>Slice filters</span>
+                    <strong>Choose records to include</strong>
+                  </div>
+                  <button type="button" id="slice-filter-clear">Clear filters</button>
+                </div>
+                <div class="slice-filter-grid">
+                  <fieldset class="slice-filter-group">
+                    <legend>Subject</legend>
+                    <div class="slice-checklist" id="course-filter-options"></div>
+                  </fieldset>
+                  <fieldset class="slice-filter-group">
+                    <legend>Teacher</legend>
+                    <div class="slice-checklist" id="teacher-filter-options"></div>
+                  </fieldset>
+                  <details class="slice-filter-group slice-filter-sections">
+                    <summary>
+                      <span>Section</span>
+                      <small id="section-filter-count">All sections</small>
+                    </summary>
+                    <input type="search" id="section-filter-search" placeholder="Search sections" aria-label="Search sections">
+                    <div class="slice-filter-actions">
+                      <button type="button" id="section-filter-select-visible">Select visible</button>
+                      <button type="button" id="section-filter-clear">Clear sections</button>
+                    </div>
+                    <div class="slice-checklist slice-checklist-scroll" id="section-filter-options"></div>
+                  </details>
+                </div>
+              </div>
+            </details>
             <label>
               Metric
               <select id="metric-select">
@@ -133,37 +161,6 @@
               </select>
             </label>
           </div>
-          <div class="slice-filter-panel" aria-label="Slice filters">
-            <div class="slice-filter-header">
-              <div>
-                <span>Slice filters</span>
-                <strong id="slice-filter-summary">All subjects / all teachers / all sections</strong>
-              </div>
-              <button type="button" id="slice-filter-clear">Clear filters</button>
-            </div>
-            <div class="slice-filter-grid">
-              <fieldset class="slice-filter-group">
-                <legend>Subject</legend>
-                <div class="slice-checklist" id="course-filter-options"></div>
-              </fieldset>
-              <fieldset class="slice-filter-group">
-                <legend>Teacher</legend>
-                <div class="slice-checklist" id="teacher-filter-options"></div>
-              </fieldset>
-              <details class="slice-filter-group slice-filter-sections">
-                <summary>
-                  <span>Section</span>
-                  <small id="section-filter-count">All sections</small>
-                </summary>
-                <input type="search" id="section-filter-search" placeholder="Search sections" aria-label="Search sections">
-                <div class="slice-filter-actions">
-                  <button type="button" id="section-filter-select-visible">Select visible</button>
-                  <button type="button" id="section-filter-clear">Clear sections</button>
-                </div>
-                <div class="slice-checklist slice-checklist-scroll" id="section-filter-options"></div>
-              </details>
-            </div>
-          </div>
         </div>
 
         <div class="preset-row" aria-label="Dashboard presets">
@@ -187,6 +184,15 @@
           </div>
 
           <div class="viz-control-row" aria-label="Ribbon controls">
+            <label>
+              Group lines by
+              <select id="group-select">
+                <option value="course">Programs</option>
+                <option value="grade">Cohorts</option>
+                <option value="teacher">Owners</option>
+                <option value="section">Groups</option>
+              </select>
+            </label>
             <label>
               Window
               <select id="season-select">
