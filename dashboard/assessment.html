@@ -84,46 +84,44 @@
         <div class="dashboard-toolbar dashboard-toolbar-expanded">
           <div>
             <p class="section-kicker">Analytics Surface</p>
-            <h2 id="dashboard-heading">Program Windows</h2>
+            <h2 id="dashboard-heading">Comparison Windows</h2>
           </div>
-          <div class="control-row line-control-grid" aria-label="Line chart controls">
-            <details class="slice-filter-menu">
-              <summary>
-                <span>Slice selection</span>
-                <strong id="slice-filter-summary">All subjects / all teachers / all sections</strong>
-              </summary>
-              <div class="slice-filter-panel" aria-label="Slice filters">
-                <div class="slice-filter-header">
-                  <div>
-                    <span>Slice filters</span>
-                    <strong>Choose records to include</strong>
-                  </div>
-                  <button type="button" id="slice-filter-clear">Clear filters</button>
-                </div>
-                <div class="slice-filter-grid">
-                  <fieldset class="slice-filter-group">
-                    <legend>Subject</legend>
-                    <div class="slice-checklist" id="course-filter-options"></div>
-                  </fieldset>
-                  <fieldset class="slice-filter-group">
-                    <legend>Teacher</legend>
-                    <div class="slice-checklist" id="teacher-filter-options"></div>
-                  </fieldset>
-                  <details class="slice-filter-group slice-filter-sections">
-                    <summary>
-                      <span>Section</span>
-                      <small id="section-filter-count">All sections</small>
-                    </summary>
-                    <input type="search" id="section-filter-search" placeholder="Search sections" aria-label="Search sections">
-                    <div class="slice-filter-actions">
-                      <button type="button" id="section-filter-select-visible">Select visible</button>
-                      <button type="button" id="section-filter-clear">Clear sections</button>
-                    </div>
-                    <div class="slice-checklist slice-checklist-scroll" id="section-filter-options"></div>
-                  </details>
-                </div>
+          <div class="comparison-builder" aria-label="Comparison builder">
+            <div class="slice-filter-header">
+              <div>
+                <span>Comparison builder</span>
+                <strong id="slice-filter-summary">Compare all subjects / filter all teachers / filter all sections</strong>
               </div>
-            </details>
+              <button type="button" id="slice-filter-clear">Clear selections</button>
+            </div>
+            <fieldset class="compare-by-control">
+              <legend>Compare by</legend>
+              <label><input type="radio" name="compare-by" value="course" checked> Subject</label>
+              <label><input type="radio" name="compare-by" value="teacher"> Teacher</label>
+              <label><input type="radio" name="compare-by" value="section"> Section</label>
+            </fieldset>
+            <div class="slice-filter-grid">
+              <fieldset class="slice-filter-group">
+                <legend>Subject</legend>
+                <div class="slice-checklist" id="course-filter-options"></div>
+              </fieldset>
+              <fieldset class="slice-filter-group">
+                <legend>Teacher</legend>
+                <div class="slice-checklist" id="teacher-filter-options"></div>
+              </fieldset>
+              <fieldset class="slice-filter-group slice-filter-sections">
+                <legend>Section <small id="section-filter-count">All sections</small></legend>
+                <input type="search" id="section-filter-search" placeholder="Search sections" aria-label="Search sections">
+                <div class="slice-filter-actions">
+                  <button type="button" id="section-filter-select-visible">Select visible</button>
+                  <button type="button" id="section-filter-clear">Clear sections</button>
+                </div>
+                <div class="slice-checklist slice-checklist-scroll" id="section-filter-options"></div>
+              </fieldset>
+            </div>
+          </div>
+
+          <div class="control-row line-control-grid" aria-label="Line chart controls">
             <label>
               Metric
               <select id="metric-select">
@@ -163,13 +161,6 @@
           </div>
         </div>
 
-        <div class="preset-row" aria-label="Dashboard presets">
-          <button type="button" class="preset-button is-active" data-preset="trend">Program Trend</button>
-          <button type="button" class="preset-button" data-preset="comparison">Segment Comparison</button>
-          <button type="button" class="preset-button" data-preset="rollout">Completion Rollout</button>
-          <button type="button" class="preset-button" data-preset="distribution">Distribution Analysis</button>
-        </div>
-
         <details class="advanced-dashboard-controls">
           <summary>
             <span>Advanced display controls</span>
@@ -184,15 +175,6 @@
           </div>
 
           <div class="viz-control-row" aria-label="Ribbon controls">
-            <label>
-              Group lines by
-              <select id="group-select">
-                <option value="course">Programs</option>
-                <option value="grade">Cohorts</option>
-                <option value="teacher">Owners</option>
-                <option value="section">Groups</option>
-              </select>
-            </label>
             <label>
               Window
               <select id="season-select">
@@ -265,7 +247,7 @@
               <h3>Latest Comparison</h3>
               <span id="bar-caption"></span>
             </div>
-            <div id="bar-chart" class="chart-frame" role="img" aria-label="Latest group comparison bar chart"></div>
+            <div id="bar-chart" class="chart-frame" role="img" aria-label="Latest comparison bar chart"></div>
           </article>
 
           <article class="dashboard-panel">
@@ -302,9 +284,9 @@
           </div>
           <div class="table-control-row" aria-label="Section detail filters">
             <label>
-              Course
+              Subject
               <select id="table-course-filter">
-                <option value="All">All Segments</option>
+                <option value="All">All Subjects</option>
               </select>
             </label>
             <label>
@@ -335,7 +317,7 @@
             <table>
               <thead>
                 <tr>
-                  <th><button type="button" class="table-sort" data-sort="course">Course <span aria-hidden="true"></span></button></th>
+                  <th><button type="button" class="table-sort" data-sort="course">Subject <span aria-hidden="true"></span></button></th>
                   <th><button type="button" class="table-sort" data-sort="grade">Grade <span aria-hidden="true"></span></button></th>
                   <th><button type="button" class="table-sort" data-sort="teacher">Teacher <span aria-hidden="true"></span></button></th>
                   <th><button type="button" class="table-sort" data-sort="section">Section <span aria-hidden="true"></span></button></th>

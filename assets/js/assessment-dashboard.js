@@ -4,7 +4,6 @@ const state = {
   groupBy: "course",
   metric: "score",
   season: "All",
-  preset: "trend",
   toggles: {
     department: true,
     network: false,
@@ -50,18 +49,17 @@ const metricLabels = {
 };
 
 const sliceLabels = {
-  course: "program",
-  grade: "cohort",
-  teacher: "owner",
-  section: "group",
+  course: "subject",
+  grade: "grade",
+  teacher: "teacher",
+  section: "section",
 };
 
 const palette = ["#2563eb", "#0891b2", "#16a34a", "#7c3aed", "#db2777", "#4f46e5", "#0d9488", "#65a30d", "#0284c7", "#9333ea"];
 const assetVersion = document.documentElement.dataset.assetVersion || "dashboard-views-v1";
 
 const els = {
-  presetButtons: [...document.querySelectorAll(".preset-button")],
-  group: document.querySelector("#group-select"),
+  compareBy: [...document.querySelectorAll("input[name='compare-by']")],
   metric: document.querySelector("#metric-select"),
   season: document.querySelector("#season-select"),
   departmentBand: document.querySelector("#toggle-department-band"),
@@ -312,7 +310,7 @@ function renderSourceMetadata(source) {
   if (els.sourceProject) els.sourceProject.textContent = project;
   if (els.sourceGenerated) els.sourceGenerated.textContent = source.generated ?? "-";
   if (els.sourceCounts) {
-    els.sourceCounts.textContent = `${counts.sections ?? 0} groups / ${counts.syntheticStudentRecords ?? 0} entity-period rows`;
+    els.sourceCounts.textContent = `${counts.sections ?? 0} sections / ${counts.syntheticStudentRecords ?? 0} entity-period rows`;
   }
   if (els.sourceContract) els.sourceContract.textContent = formatContract(metadata.contract);
 }
@@ -438,6 +436,19 @@ function sectionFilterValue(item) {
 function selectedFilterIncludes(key, value) {
   const selected = state.filters[key] ?? [];
   return !selected.length || selected.includes(value);
+}
+
+function filterKeyForGroupBy(groupBy = state.groupBy) {
+  return {
+    course: "courses",
+    teacher: "teachers",
+    section: "sections",
+  }[groupBy] ?? null;
+}
+
+function hasExplicitComparisonSelection() {
+  const key = filterKeyForGroupBy();
+  return Boolean(key && state.filters[key]?.length);
 }
 
 function recordMatchesSliceFilters(record) {
@@ -615,7 +626,7 @@ function visiblePeriodWindow(periodData) {
 
 function buildLineSeries(periodData) {
   const minN = Math.max(1, Number(state.lines.minN) || 1);
-  const filter = state.lines.filter.trim().toLowerCase();
+  const filter = hasExplicitComparisonSelection() ? "" : state.lines.filter.trim().toLowerCase();
   const groups = unique(periodData.flatMap((item) => item.groups.map((group) => group.key)));
 
   return groups.map((group, groupIndex) => {
@@ -768,7 +779,9 @@ function renderTimeSeries(records) {
   const periodData = compact ? allPeriodData.slice(-7) : allPeriodData;
   const periods = periodData.map((item) => item.period);
   const lineSeries = sortLineSeries(buildLineSeries(periodData));
-  const selectedSeries = lineSeries.slice(0, compact ? Math.min(lineLimitValue(), 5) : lineLimitValue());
+  const explicitComparison = hasExplicitComparisonSelection();
+  const maxLines = explicitComparison ? Number.POSITIVE_INFINITY : lineLimitValue();
+  const selectedSeries = lineSeries.slice(0, compact && !explicitComparison ? Math.min(maxLines, 5) : maxLines);
   const domain = lineChartDomain(selectedSeries, periods);
   const yMax = domain.max;
   const yMin = domain.min;
@@ -786,16 +799,7 @@ function renderTimeSeries(records) {
   const departmentBand = !compact && state.toggles.department && metricAllowsBands() ? renderBand("department", periods, x, bandScale) : "";
   const networkBand = !compact && state.toggles.network && metricAllowsBands() ? renderBand("network", periods, x, bandScale) : "";
   const masteryLine = !compact && state.toggles.mastery && metricAllowsBands() ? renderBenchmark(periods, x, y) : "";
-  const violinPlots = !compact && state.toggles.violins && metricAllowsBands() ? renderViolinPlots(periods, selectedSeries, records, x, y, yMin, yMax) : "";
-  const overallPoints = periodData.map((periodItem, periodIndex) => ({
-    x: x(periodIndex),
-    y: y(periodItem ? metricValue(periodItem) : NaN),
-  })).filter((point) => Number.isFinite(point.y));
-
-  const overallLine = state.preset === "trend" && overallPoints.length > 1 ? `
-    <path d="${pointsToCurvePath(overallPoints)}" fill="none" class="series-line overall-series-line"></path>
-    ${overallPoints.map((point) => `<circle cx="${point.x}" cy="${point.y}" r="5" class="series-point overall-series-point"></circle>`).join("")}
-  ` : "";
+  const violinPlots = !compact && state.toggles.violins && metricAllowsBands() ? renderViolinPlots(periods, selectedSeries, x, y, yMin, yMax) : "";
 
   const labelY = layoutRightLabels(selectedSeries, y, margin.top + 12, margin.top + innerHeight - 10);
   const labelX = width - margin.right + 44;
@@ -849,7 +853,6 @@ function renderTimeSeries(records) {
       ${violinPlots}
       ${sectionLines}
       ${groupLines}
-      ${overallLine}
       ${emptyState}
       <line x1="${margin.left}" x2="${width - margin.right}" y1="${margin.top + innerHeight}" y2="${margin.top + innerHeight}" class="axis-line"></line>
       <line x1="${margin.left}" x2="${margin.left}" y1="${margin.top}" y2="${margin.top + innerHeight}" class="axis-line"></line>
@@ -860,7 +863,7 @@ function renderTimeSeries(records) {
 
   const lineLabel = `${selectedSeries.length} ${currentSliceLabel()} line${selectedSeries.length === 1 ? "" : "s"}`;
   const windowLabel = `${periods.length} reporting window${periods.length === 1 ? "" : "s"}`;
-  els.timeCaption.textContent = `${lineLabel} shown from ${windowLabel}. Gaps mean no aggregate score met the minimum-n rule for that group/window.`;
+  els.timeCaption.textContent = `${lineLabel} shown from ${windowLabel}. Gaps mean no aggregate score met the minimum-n rule for that comparison/window.`;
   renderLegend(selectedSeries, periods.length);
 }
 
@@ -905,57 +908,67 @@ function renderBenchmark(periods, x, y) {
   return `<path d="${pointsToCurvePath(points)}" class="benchmark-line"></path>`;
 }
 
-function renderViolinPlots(periods, selectedSeries, records, x, y, yMin, yMax) {
-  const visibleKeys = new Set(selectedSeries.map((line) => line.key));
-  if (!visibleKeys.size) return "";
+function renderViolinPlots(periods, selectedSeries, x, y, yMin, yMax) {
+  if (!selectedSeries.length) return "";
   const periodSpacing = periods.length > 1 ? Math.abs(x(1) - x(0)) : 48;
-  const maxHalfWidth = clamp(periodSpacing * 0.15, 8, 18);
+  const visibleCount = selectedSeries.length;
+  const clusterWidth = visibleCount > 1 ? clamp(periodSpacing * 0.64, 34, 132) : 0;
+  const offsetStep = visibleCount > 1 ? clusterWidth / (visibleCount - 1) : 0;
+  const maxHalfWidth = visibleCount > 1 ? clamp(offsetStep * 0.28, 2.2, 7) : clamp(periodSpacing * 0.13, 8, 16);
+  const minScoresForViolin = Math.max(4, Math.max(1, Number(state.lines.minN) || 1));
+  const comparisonLabel = currentSliceLabel();
 
   return periods.map((period, index) => {
-    const scores = records
-      .filter((record) => record.periodId === period.id && visibleKeys.has(groupKey(record, state.groupBy)))
-      .map((record) => record.score)
-      .filter((score) => Number.isFinite(score));
-    if (scores.length < 4) return "";
-    const p10 = quantile(scores, 0.1);
-    const p25 = quantile(scores, 0.25);
-    const median = quantile(scores, 0.5);
-    const p75 = quantile(scores, 0.75);
-    const p90 = quantile(scores, 0.9);
-    const minScore = Math.max(yMin, p10 - 4);
-    const maxScore = Math.min(yMax, p90 + 4);
-    const span = Math.max(1, maxScore - minScore);
-    const bandwidth = Math.max(2.5, span / 7);
-    const steps = 18;
-    const density = Array.from({ length: steps }, (_, step) => {
-      const value = minScore + (span * step) / (steps - 1);
-      const scoreDensity = scores.reduce((sum, score) => {
-        const z = (score - value) / bandwidth;
-        return sum + Math.exp(-0.5 * z * z);
-      }, 0);
-      return { value, density: scoreDensity };
-    });
-    const maxDensity = Math.max(...density.map((point) => point.density));
-    if (!maxDensity) return "";
-    const px = x(index);
-    const leftPoints = density.map((point) => {
-      const halfWidth = 2 + (point.density / maxDensity) * maxHalfWidth;
-      return `${px - halfWidth},${y(point.value)}`;
-    });
-    const rightPoints = [...density].reverse().map((point) => {
-      const halfWidth = 2 + (point.density / maxDensity) * maxHalfWidth;
-      return `${px + halfWidth},${y(point.value)}`;
-    });
-    return `
-      <g class="violin-plot">
-        <title>${period.label}: visible section scores p25 ${Math.round(p25)}%, median ${Math.round(median)}%, p75 ${Math.round(p75)}%, n=${scores.length}</title>
-        <polygon points="${leftPoints.concat(rightPoints).join(" ")}" class="violin-shape"></polygon>
-        <line x1="${px}" x2="${px}" y1="${y(p10)}" y2="${y(p90)}" class="violin-whisker"></line>
-        <line x1="${px - maxHalfWidth * 0.56}" x2="${px + maxHalfWidth * 0.56}" y1="${y(p25)}" y2="${y(p25)}" class="violin-iqr"></line>
-        <line x1="${px - maxHalfWidth * 0.56}" x2="${px + maxHalfWidth * 0.56}" y1="${y(p75)}" y2="${y(p75)}" class="violin-iqr"></line>
-        <circle cx="${px}" cy="${y(median)}" r="3.3" class="violin-median"></circle>
-      </g>
-    `;
+    const periodRows = scoreRowsForPeriod(period.id);
+    return selectedSeries.map((line, lineIndex) => {
+      if (!line.values.some((value) => value.period.id === period.id)) return "";
+      const scores = periodRows
+        .filter((record) => groupKeyFromStudentRecord(record, state.groupBy) === line.key)
+        .map((record) => record.score)
+        .filter((score) => Number.isFinite(score));
+      if (scores.length < minScoresForViolin) return "";
+      const p10 = quantile(scores, 0.1);
+      const p25 = quantile(scores, 0.25);
+      const median = quantile(scores, 0.5);
+      const p75 = quantile(scores, 0.75);
+      const p90 = quantile(scores, 0.9);
+      const minScore = Math.max(yMin, p10 - 4);
+      const maxScore = Math.min(yMax, p90 + 4);
+      const span = Math.max(1, maxScore - minScore);
+      const bandwidth = Math.max(2.5, span / 7);
+      const steps = 18;
+      const density = Array.from({ length: steps }, (_, step) => {
+        const value = minScore + (span * step) / (steps - 1);
+        const scoreDensity = scores.reduce((sum, score) => {
+          const z = (score - value) / bandwidth;
+          return sum + Math.exp(-0.5 * z * z);
+        }, 0);
+        return { value, density: scoreDensity };
+      });
+      const maxDensity = Math.max(...density.map((point) => point.density));
+      if (!maxDensity) return "";
+      const offset = visibleCount > 1 ? (lineIndex - (visibleCount - 1) / 2) * offsetStep : 0;
+      const px = x(index) + offset;
+      const leftPoints = density.map((point) => {
+        const halfWidth = 1.2 + (point.density / maxDensity) * maxHalfWidth;
+        return `${px - halfWidth},${y(point.value)}`;
+      });
+      const rightPoints = [...density].reverse().map((point) => {
+        const halfWidth = 1.2 + (point.density / maxDensity) * maxHalfWidth;
+        return `${px + halfWidth},${y(point.value)}`;
+      });
+      const iqrWidth = maxHalfWidth * 0.72;
+      return `
+        <g class="violin-plot" style="--violin-color: ${line.color}">
+          <title>${escapeSvgText(period.label)} / ${escapeSvgText(line.key)}: ${comparisonLabel} score distribution p25 ${Math.round(p25)}%, median ${Math.round(median)}%, p75 ${Math.round(p75)}%, n=${scores.length}</title>
+          <polygon points="${leftPoints.concat(rightPoints).join(" ")}" class="violin-shape"></polygon>
+          <line x1="${px}" x2="${px}" y1="${y(p10)}" y2="${y(p90)}" class="violin-whisker"></line>
+          <line x1="${px - iqrWidth}" x2="${px + iqrWidth}" y1="${y(p25)}" y2="${y(p25)}" class="violin-iqr"></line>
+          <line x1="${px - iqrWidth}" x2="${px + iqrWidth}" y1="${y(p75)}" y2="${y(p75)}" class="violin-iqr"></line>
+          <circle cx="${px}" cy="${y(median)}" r="3.1" class="violin-median"></circle>
+        </g>
+      `;
+    }).join("");
   }).join("");
 }
 
@@ -1142,11 +1155,10 @@ function renderLegend(series, periodCount) {
   const lineSummary = `<span>${series.length} ${currentSliceLabel(true)} from ${periodCount} windows</span>`;
   const ribbonItems = [
     lineSummary,
-    state.preset === "trend" ? `<span><i class="legend-line overall-key"></i>Overall trend</span>` : "",
     state.toggles.department && metricAllowsBands() ? `<span><i class="legend-swatch ribbon-key department-key"></i>${departmentLabel}</span>` : "",
     state.toggles.network && metricAllowsBands() ? `<span><i class="legend-swatch ribbon-key network-key"></i>${networkLabel}</span>` : "",
     state.toggles.mastery && metricAllowsBands() ? `<span><i class="legend-line benchmark-key"></i>${masteryLabel}</span>` : "",
-    state.toggles.violins && metricAllowsBands() ? `<span><i class="legend-swatch violin-key"></i>Violin plots</span>` : "",
+    state.toggles.violins && metricAllowsBands() ? `<span><i class="legend-swatch violin-key"></i>Group score distributions</span>` : "",
     state.toggles.sections ? `<span><i class="legend-line section-key"></i>Section lines</span>` : "",
   ].filter(Boolean).join("");
 
@@ -1167,7 +1179,7 @@ function renderBars(container, items, options = {}) {
   const zeroX = labelWidth + ((clamp(0, min, max) - min) / range) * chartWidth;
 
   if (!items.length) {
-    const emptyLabel = options.emptyLabel ?? "No groups match the selected slice filters.";
+    const emptyLabel = options.emptyLabel ?? "No comparison segments match the selected filters.";
     container.innerHTML = `<svg viewBox="0 0 ${width} ${height}" aria-hidden="true" focusable="false"><text x="${width / 2}" y="${height / 2}" class="empty-chart-text" text-anchor="middle">${emptyLabel}</text></svg>`;
     return;
   }
@@ -1234,7 +1246,7 @@ function renderGrowthBars(records) {
     zeroBaseline: true,
   });
   els.growthCaption.textContent = first?.period && latest.period
-    ? `${latest.period.label} score change from ${first.period.label}; groups without a first-window baseline are omitted.`
+    ? `${latest.period.label} score change from ${first.period.label}; comparison segments without a first-window baseline are omitted.`
     : "Score change from the first available window.";
 }
 
@@ -1445,7 +1457,7 @@ function renderInsights(records) {
 
   const notes = [
     strongest ? `${strongest.key} shows the strongest synthetic trend at ${fmtPts(strongest.change)} since the first selected period.` : "No trend is available for the current filter.",
-    watch ? `${watch.key} is the lowest latest group at ${fmtPct(watch.score)}, making it a candidate for item-level review or targeted supports.` : "No watch group is available for the current filter.",
+    watch ? `${watch.key} is the lowest latest comparison at ${fmtPct(watch.score)}, making it a candidate for item-level review or targeted supports.` : "No watch segment is available for the current filter.",
     `Latest completion is ${completionLabel}, which is ${completionPosition} the operating target of 95%.`,
     sqlBacked
       ? `The score ribbons are computed from the SQL student readiness extract and use the same public-safe source layer as the assessment report artifacts.`
@@ -1468,7 +1480,7 @@ function countedOptions(items, key) {
     .map(([value, count]) => ({
       value,
       label: value,
-      meta: `${count} ${count === 1 ? "group" : "groups"}`,
+      meta: `${count} ${count === 1 ? "section" : "sections"}`,
     }));
 }
 
@@ -1493,6 +1505,12 @@ function visibleSectionOptions() {
   return query ? options.filter((option) => option.searchText.includes(query)) : options;
 }
 
+const filterDescriptors = [
+  { key: "courses", groupBy: "course", singular: "subject", plural: "subjects" },
+  { key: "teachers", groupBy: "teacher", singular: "teacher", plural: "teachers" },
+  { key: "sections", groupBy: "section", singular: "section", plural: "sections" },
+];
+
 function selectedCountLabel(key, allLabel, singular, plural) {
   const count = state.filters[key].length;
   if (!count) return allLabel;
@@ -1500,17 +1518,21 @@ function selectedCountLabel(key, allLabel, singular, plural) {
 }
 
 function renderSliceSummary() {
-  els.sliceSummary.textContent = [
-    selectedCountLabel("courses", "All subjects", "subject", "subjects"),
-    selectedCountLabel("teachers", "all teachers", "teacher", "teachers"),
-    selectedCountLabel("sections", "all sections", "section", "sections"),
-  ].join(" / ");
-
+  els.sliceSummary.textContent = filterDescriptors.map((descriptor) => {
+    const selected = state.filters[descriptor.key].length;
+    const verb = descriptor.groupBy === state.groupBy ? "Compare" : "filter";
+    const target = selected
+      ? `${selected} ${selected === 1 ? descriptor.singular : descriptor.plural}`
+      : `all ${descriptor.plural}`;
+    return `${verb} ${target}`;
+  }).join(" / ");
   els.sectionFilterCount.textContent = selectedCountLabel("sections", "All sections", "section", "sections");
 }
 
 function renderCheckboxOptions(container, key, options) {
   const selected = new Set(state.filters[key]);
+  const descriptor = filterDescriptors.find((item) => item.key === key);
+  container.closest(".slice-filter-group")?.classList.toggle("is-active", descriptor?.groupBy === state.groupBy);
   container.innerHTML = options.length ? options.map((option) => `
     <label class="slice-check-option">
       <input type="checkbox" data-slice-filter="${key}" value="${escapeHtml(option.value)}"${selected.has(option.value) ? " checked" : ""}>
@@ -1577,7 +1599,9 @@ function selectVisibleSections() {
 }
 
 function syncControls() {
-  els.group.value = state.groupBy;
+  els.compareBy.forEach((input) => {
+    input.checked = input.value === state.groupBy;
+  });
   els.metric.value = state.metric;
   els.season.value = state.season;
   els.departmentBand.checked = state.toggles.department;
@@ -1596,88 +1620,6 @@ function syncControls() {
   els.lineSort.value = state.lines.sortCut;
   els.lineFilter.value = state.lines.filter;
   els.lineLimit.value = state.lines.limit;
-  renderPresetState();
-}
-
-function renderPresetState() {
-  els.presetButtons.forEach((button) => {
-    const active = button.dataset.preset === state.preset;
-    button.classList.toggle("is-active", active);
-    button.setAttribute("aria-pressed", String(active));
-  });
-}
-
-function applyPreset(preset) {
-  state.preset = preset;
-
-  if (preset === "trend") {
-    state.groupBy = "course";
-    state.metric = "score";
-    state.season = "All";
-    state.toggles.department = true;
-    state.toggles.network = false;
-    state.toggles.mastery = true;
-    state.toggles.violins = true;
-    state.toggles.sections = false;
-    state.visual.center = "mean";
-    state.visual.ribbonRange = "50";
-    state.visual.ribbonPopulation = "completed";
-    state.visual.ribbonOpacity = 0.16;
-    state.visual.smoothCurves = true;
-  }
-
-  if (preset === "comparison") {
-    state.groupBy = "section";
-    state.metric = "score";
-    state.season = "All";
-    state.toggles.department = false;
-    state.toggles.network = false;
-    state.toggles.mastery = false;
-    state.toggles.violins = false;
-    state.toggles.sections = false;
-    state.visual.center = "mean";
-    state.visual.ribbonRange = "50";
-    state.visual.ribbonPopulation = "completed";
-    state.visual.ribbonOpacity = 0.1;
-    state.visual.smoothCurves = true;
-    state.lines.sortCut = "latest";
-    state.lines.limit = "10";
-  }
-
-  if (preset === "rollout") {
-    state.groupBy = "course";
-    state.metric = "completion";
-    state.season = "All";
-    state.toggles.department = false;
-    state.toggles.network = false;
-    state.toggles.mastery = false;
-    state.toggles.violins = false;
-    state.toggles.sections = false;
-    state.visual.center = "mean";
-    state.visual.ribbonRange = "50";
-    state.visual.ribbonPopulation = "assigned";
-    state.visual.ribbonOpacity = 0.1;
-    state.visual.smoothCurves = true;
-  }
-
-  if (preset === "distribution") {
-    state.groupBy = "course";
-    state.metric = "score";
-    state.season = "All";
-    state.toggles.department = true;
-    state.toggles.network = true;
-    state.toggles.mastery = true;
-    state.toggles.violins = true;
-    state.toggles.sections = false;
-    state.visual.center = "median";
-    state.visual.ribbonRange = "80";
-    state.visual.ribbonPopulation = "completed";
-    state.visual.ribbonOpacity = 0.12;
-    state.visual.smoothCurves = true;
-  }
-
-  syncControls();
-  render();
 }
 
 function render() {
@@ -1692,23 +1634,22 @@ function render() {
   renderSkillHeatmap(records);
   renderTable(records);
   renderInsights(records);
-  renderPresetState();
 }
 
 function initControls() {
   const courses = unique(state.source.sections.map((section) => section.course));
-  els.tableCourse.innerHTML = [`<option value="All">All Segments</option>`, ...courses.map((course) => `<option value="${course}">${course}</option>`)].join("");
+  els.tableCourse.innerHTML = [`<option value="All">All Subjects</option>`, ...courses.map((course) => `<option value="${course}">${course}</option>`)].join("");
   els.tableGrade.innerHTML = [`<option value="All">All Grades</option>`, ...unique(state.source.sections.map((section) => section.grade)).map((grade) => `<option value="${grade}">${grade}</option>`)].join("");
   els.tableTeacher.innerHTML = [`<option value="All">All Teachers</option>`, ...unique(state.source.sections.map((section) => section.teacher)).map((teacher) => `<option value="${teacher}">${teacher}</option>`)].join("");
   renderSliceFilters();
 
-  els.presetButtons.forEach((button) => {
-    button.addEventListener("click", () => applyPreset(button.dataset.preset));
-  });
-
-  els.group.addEventListener("change", (event) => {
-    state.groupBy = event.target.value;
-    render();
+  els.compareBy.forEach((input) => {
+    input.addEventListener("change", (event) => {
+      if (!event.target.checked) return;
+      state.groupBy = event.target.value;
+      renderSliceFilters();
+      render();
+    });
   });
 
   [els.courseFilters, els.teacherFilters, els.sectionFilters].forEach((container) => {
