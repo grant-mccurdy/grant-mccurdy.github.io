@@ -1065,11 +1065,20 @@ h3 {
 
 .line-control-grid {
   display: grid;
-  grid-template-columns: minmax(9rem, 1fr) minmax(9rem, 1fr) minmax(12rem, 1.12fr) minmax(10rem, 1fr) minmax(10rem, 1.05fr) minmax(7rem, 0.7fr);
+  grid-template-columns: minmax(8.5rem, 0.9fr) minmax(9rem, 0.95fr) minmax(13rem, 1.25fr) minmax(9rem, 0.95fr) minmax(11rem, 1.05fr) minmax(9rem, 0.8fr);
+  align-items: end;
   width: 100%;
 }
 
-@media (max-width: 1120px) {
+.line-control-grid label {
+  min-width: 0;
+}
+
+.line-limit-control {
+  min-width: 9rem;
+}
+
+@media (max-width: 1180px) {
   .line-control-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
@@ -1117,6 +1126,189 @@ h3 {
 .line-control-grid label:focus-within input {
   border-color: #000;
   box-shadow: none;
+}
+
+.slice-filter-panel {
+  display: grid;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.slice-filter-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.slice-filter-header span,
+.slice-filter-group legend,
+.slice-filter-sections summary span {
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 850;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.slice-filter-header strong {
+  display: block;
+  margin-top: 0.2rem;
+  color: var(--ink);
+  font-size: 0.95rem;
+  font-weight: 850;
+}
+
+.slice-filter-header button,
+.slice-filter-actions button {
+  min-height: 2.15rem;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: #fff;
+  color: var(--ink);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 800;
+  padding: 0.38rem 0.65rem;
+}
+
+.slice-filter-header button:hover,
+.slice-filter-header button:focus-visible,
+.slice-filter-actions button:hover,
+.slice-filter-actions button:focus-visible {
+  border-color: #000;
+}
+
+.slice-filter-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.85fr) minmax(16rem, 1.35fr);
+  gap: 0.75rem;
+}
+
+.slice-filter-group {
+  min-width: 0;
+  margin: 0;
+  padding: 0.72rem;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: #fff;
+}
+
+.slice-filter-group legend {
+  padding: 0 0.2rem;
+}
+
+.slice-filter-sections {
+  padding-top: 0.55rem;
+}
+
+.slice-filter-sections summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  cursor: pointer;
+  list-style: none;
+}
+
+.slice-filter-sections summary::-webkit-details-marker {
+  display: none;
+}
+
+.slice-filter-sections summary::after {
+  content: "+";
+  color: var(--ink);
+  font-size: 1rem;
+  font-weight: 850;
+}
+
+.slice-filter-sections[open] summary {
+  margin-bottom: 0.55rem;
+}
+
+.slice-filter-sections[open] summary::after {
+  content: "-";
+}
+
+.slice-filter-sections summary small {
+  color: var(--ink);
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.slice-filter-sections input[type="search"] {
+  width: 100%;
+  min-height: 2.35rem;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: #fff;
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 650;
+  padding: 0 0.65rem;
+}
+
+.slice-filter-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin: 0.55rem 0;
+}
+
+.slice-checklist {
+  display: grid;
+  gap: 0.38rem;
+}
+
+.slice-checklist-scroll {
+  max-height: 14rem;
+  overflow: auto;
+  padding-right: 0.25rem;
+}
+
+.slice-check-option {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  column-gap: 0.45rem;
+  align-items: start;
+  color: var(--ink);
+  font-size: 0.86rem;
+  font-weight: 750;
+  line-height: 1.25;
+}
+
+.slice-check-option input {
+  grid-row: span 2;
+  margin-top: 0.16rem;
+  accent-color: #000;
+}
+
+.slice-check-option span,
+.slice-check-option small {
+  min-width: 0;
+}
+
+.slice-check-option small {
+  color: var(--muted);
+  font-size: 0.74rem;
+  font-weight: 700;
+}
+
+.slice-empty {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.84rem;
+  font-weight: 750;
+}
+
+@media (max-width: 980px) {
+  .slice-filter-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .toggle-row {
@@ -1564,6 +1756,17 @@ h3 {
 
 .chart-bar-growth {
   fill: var(--viz-growth);
+}
+
+.chart-bar-decline {
+  fill: var(--viz-benchmark);
+}
+
+.chart-zero-line {
+  stroke: #111;
+  stroke-dasharray: 3 4;
+  stroke-width: 1.2;
+  opacity: 0.52;
 }
 
 .ribbon {
