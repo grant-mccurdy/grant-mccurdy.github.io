@@ -7,6 +7,7 @@
     "check:links": "python3 scripts/check_links.py",
     "check:external": "python3 scripts/check_external_links.py",
     "check:visual": "node scripts/visual_smoke.mjs",
+    "check:dashboard": "node scripts/dashboard_logic_smoke.mjs",
     "check": "make check"
   },
   "devDependencies": {
