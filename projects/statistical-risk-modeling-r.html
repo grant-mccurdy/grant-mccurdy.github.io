@@ -3,9 +3,9 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Statistical Risk Modeling in R | Grant McCurdy</title>
-    <meta name="description" content="Public-safe R risk modeling project with validation, calibration, lift, threshold economics, and executive decision support.">
-    <link rel="stylesheet" href="../assets/css/styles.css?v=20260623h">
+    <title>Assessment Growth Analytics in R | Grant McCurdy</title>
+    <meta name="description" content="Public-safe R analytics project for BOY/EOY assessment growth, adjusted section signals, validation diagnostics, and stakeholder reporting.">
+    <link rel="stylesheet" href="../assets/css/styles.css?v=20260623k">
   </head>
   <body>
     <header class="site-header compact" data-header>
@@ -27,33 +27,33 @@
     <main class="detail-main">
       <section class="detail-hero">
         <p class="section-kicker">Project Brief</p>
-        <h1>Statistical Risk Modeling in R</h1>
-        <p>Public-safe business analytics project that turns synthetic account-risk records into an interpretable probability model, validation diagnostics, calibration checks, lift analysis, threshold economics, and executive-ready decision notes.</p>
+        <h1>Assessment Growth Analytics in R</h1>
+        <p>Public-safe education analytics project that evaluates BOY-to-EOY assessment growth and identifies section-level improvement signals after accounting for starting performance, readiness, attendance, course track, grade level, and school-year context.</p>
         <div class="hero-actions detail-actions">
           <a class="button primary" href="https://github.com/grant-mccurdy/statistical-risk-modeling-r">GitHub Repo</a>
-          <a class="button outline" href="https://github.com/grant-mccurdy/statistical-risk-modeling-r/blob/main/reports/executive_brief.md">Executive Brief</a>
+          <a class="button outline" href="https://github.com/grant-mccurdy/statistical-risk-modeling-r/blob/main/reports/assessment_growth_section_performance_report.pdf">PDF Report</a>
           <a class="button outline" href="https://github.com/grant-mccurdy/statistical-risk-modeling-r/blob/main/docs/model-card.md">Model Card</a>
         </div>
       </section>
 
       <section class="section-shell detail-grid">
         <div>
-          <p class="section-kicker">Risk Modeling Surface</p>
-          <h2>Interpretable model, operational decision support</h2>
-          <p>The project uses base R to generate synthetic B2B account-risk data, compare candidate models, validate holdout performance, quantify uncertainty, and translate model output into human-review prioritization guidance.</p>
+          <p class="section-kicker">Growth Analytics Surface</p>
+          <h2>Adjusted section signals, decision support</h2>
+          <p>The project uses base R to generate public-safe assessment data, compare expected-growth model families, validate holdout performance, and translate section-level growth signals into instructional review guidance.</p>
         </div>
         <div class="detail-panel">
           <h2>Evidence Packet</h2>
           <ul class="clean-list">
-            <li>1,400-row synthetic account-risk dataset</li>
-            <li>Logistic regression / GLM probability modeling</li>
-            <li>Repeated stratified cross-validation</li>
-            <li>Flexible spline benchmark comparison</li>
-            <li>Holdout AUC, log loss, and Brier score</li>
-            <li>Bootstrap metric uncertainty intervals</li>
-            <li>ROC, lift, calibration, and subgroup diagnostics</li>
-            <li>Threshold economics and risk-category interpretation</li>
-            <li>Executive brief, model card, methodology, and public-safety notes</li>
+            <li>1,737 paired BOY/EOY assessment records</li>
+            <li>174 section-year groups</li>
+            <li>Readiness-augmented expected-growth model</li>
+            <li>Context-only, linear, quadratic, piecewise, readiness, and spline candidates</li>
+            <li>Repeated 5-fold cross-validation with 6 repeats</li>
+            <li>Holdout RMSE, MAE, and R-squared diagnostics</li>
+            <li>Reliability-weighted section signal flags</li>
+            <li>Teacher/course summary views for instructional review</li>
+            <li>PDF report, executive brief, model card, methodology, and public-safety notes</li>
           </ul>
         </div>
       </section>
@@ -65,15 +65,15 @@
         </div>
         <article class="artifact">
           <h3>Model Selection</h3>
-          <p>Candidate models are compared against validation metrics, with a spline benchmark used as a stress test before choosing the interpretable operating model.</p>
+          <p>Candidate expected-growth models are compared with repeated cross-validation, with the readiness-augmented model selected as the simplest non-benchmark option within one standard error of the best RMSE.</p>
         </article>
         <article class="artifact">
           <h3>Decision Metrics</h3>
-          <p>The executive brief reports holdout AUC 0.719, log loss 0.422, Brier score 0.129, top-decile lift 2.71x, and threshold-level operating tradeoffs.</p>
+          <p>The evidence packet reports average raw BOY/EOY gain of 5.72 points across 1,737 paired records, holdout RMSE 4.399, holdout R-squared 0.181, and 8 section-year groups above expected growth with 5 below expected growth.</p>
         </article>
         <article class="artifact">
-          <h3>Calibration And Lift</h3>
-          <p>The evidence packet includes calibration diagnostics, decile lift, subgroup calibration, sensitivity checks, and scenario profiles for communication.</p>
+          <h3>Growth Diagnostics</h3>
+          <p>The report compares raw gains with adjusted gains, reviews residual diagnostics, checks section sizes, and separates pattern-finding views from personnel decisions.</p>
         </article>
         <article class="artifact">
           <h3>Public-Safe R Pipeline</h3>
@@ -90,7 +90,8 @@
         <div class="detail-panel">
           <h2>Open Artifacts</h2>
           <ul class="clean-list">
-            <li><a class="text-link" href="https://github.com/grant-mccurdy/statistical-risk-modeling-r/blob/main/reports/statistical_risk_modeling_report.md">Rendered report</a></li>
+            <li><a class="text-link" href="https://github.com/grant-mccurdy/statistical-risk-modeling-r/blob/main/reports/assessment_growth_section_performance_report.pdf">PDF report</a></li>
+            <li><a class="text-link" href="https://github.com/grant-mccurdy/statistical-risk-modeling-r/blob/main/reports/assessment_growth_section_performance_report.md">Rendered Markdown report</a></li>
             <li><a class="text-link" href="https://github.com/grant-mccurdy/statistical-risk-modeling-r/blob/main/reports/executive_brief.md">Executive brief</a></li>
             <li><a class="text-link" href="https://github.com/grant-mccurdy/statistical-risk-modeling-r/blob/main/docs/model-card.md">Model card</a></li>
             <li><a class="text-link" href="https://github.com/grant-mccurdy/statistical-risk-modeling-r/blob/main/docs/methodology.md">Methodology</a></li>
@@ -105,7 +106,7 @@
             <p class="section-kicker">Safety Boundary</p>
             <h2 id="risk-boundary-heading">Synthetic records, human review</h2>
           </div>
-          <p>The project is not a real account-scoring system and is not for automated customer, credit, employment, clinical, or private-data decisions. It is a public-safe demonstration of statistical modeling judgment, validation, and decision-support communication.</p>
+          <p>The project is not a real teacher-evaluation, student-placement, grading, or personnel system. It is a public-safe demonstration of statistical modeling judgment, validation, and decision-support communication for instructional review.</p>
         </div>
       </section>
     </main>

@@ -12,7 +12,8 @@ if (helper) {
   const submitButton = form.querySelector("button[type='submit']");
   const REQUEST_TIMEOUT_MS = 15000;
   const ANALYTICS_HANDOFF_PATTERN =
-    /\b(sql|warehouse|database|average|avg|median|mean|count|compare|correlation|relationship|trend\s*line|trendline|trend|line\s+chart|time\s+series|visuali[sz]e|chart|graph|plot|figure|growth|readiness|attendance|validation|nonparticipation|non-participation|missingness|course\s+track)\b/i;
+    /\b(sql|warehouse|database|average|avg|median|mean|count|compare|correlation|relationship|trend\s*line|trendline|trend|line\s+chart|time\s+series|visuali[sz]e|chart|graph|plot|figure|growth|readiness|attendance|validation|nonparticipation|non-participation|missingness|course\s+track|expected\s+growth|section\s+performance)\b/i;
+  const PROJECT_ROUTING_PATTERN = /\b(which\s+project|what\s+project|where\s+should|project|portfolio|grant|demonstrate|evidence)\b/i;
 
   const escapeHtml = (value) =>
     String(value ?? "")
@@ -103,6 +104,7 @@ if (helper) {
 
   const analyticsHandoffHref = (question) => {
     if (!ANALYTICS_HANDOFF_PATTERN.test(question)) return "";
+    if (PROJECT_ROUTING_PATTERN.test(question)) return "";
     const url = new URL("data-lab.html", window.location.href);
     url.searchParams.set("question", question);
     url.searchParams.set("autorun", "1");

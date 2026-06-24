@@ -23,8 +23,8 @@ Grant's public portfolio emphasizes:
 
 - public-safe synthetic data foundations for education analytics prototypes;
 - SQL-ready warehouse and reporting marts;
-- statistical risk modeling in R with interpretable probability models,
-  validation, calibration, uncertainty intervals, and threshold economics;
+- assessment-growth analytics in R with expected-growth modeling,
+  validation, section signal diagnostics, and stakeholder reporting;
 - static dashboards and decision-support views;
 - assessment, remediation, and instructional workflow prototypes;
 - human-reviewed AI-assisted feedback and analysis workflows;
@@ -40,8 +40,8 @@ publicly supported themes:
   preparation.
 - SQL and DuckDB-style warehouse modeling for facts, dimensions, marts,
   extracts, and validation.
-- R for gradebook synthesis, statistical risk modeling, GLM validation,
-  calibration diagnostics, and rendered reporting artifacts.
+- R for gradebook synthesis, assessment-growth modeling, validation
+  diagnostics, section signal review, and rendered reporting artifacts.
 - Browser-side JavaScript for static dashboards, visual smoke checks, and
   interactive portfolio surfaces.
 - AI-assisted workflows with explicit human review, source grounding, and
@@ -53,7 +53,7 @@ publicly supported themes:
 
 Use restrained public wording. The helper may say that Grant's portfolio shows
 work in data systems, analytics products, education-data simulation,
-statistical risk modeling, assessment/reporting workflows, instructional AI
+assessment-growth analytics, assessment/reporting workflows, instructional AI
 workflows, and source-grounded content intelligence.
 
 The helper should not infer private employment history, private school details,
@@ -68,7 +68,7 @@ that the public helper can only answer from the portfolio sources.
 - Analytics dashboard: https://grant-mccurdy.github.io/dashboard/assessment.html
 - Education Data Simulation Engine: https://grant-mccurdy.github.io/projects/education-data-simulation-engine.html
 - Assessment Intelligence: https://grant-mccurdy.github.io/projects/assessment-intelligence.html
-- Statistical Risk Modeling in R: https://grant-mccurdy.github.io/projects/statistical-risk-modeling-r.html
+- Assessment Growth Analytics in R: https://grant-mccurdy.github.io/projects/statistical-risk-modeling-r.html
 - Assessment-to-Remediation Pipeline: https://grant-mccurdy.github.io/projects/assessment-to-remediation-pipeline.html
 - Instructional AI Workflows: https://grant-mccurdy.github.io/projects/instructional-ai-workflows.html
 - Content Intelligence: https://grant-mccurdy.github.io/projects/content-intelligence.html

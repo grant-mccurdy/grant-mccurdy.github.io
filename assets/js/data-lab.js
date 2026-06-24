@@ -68,6 +68,7 @@ if (lab) {
   const field = (channel) => channel?.field;
   const markType = (mark) => (typeof mark === "string" ? mark : mark?.type);
   const isNumber = (value) => typeof value === "number" && Number.isFinite(value);
+  const chartPalette = ["#2563eb", "#0f766e", "#b45309", "#7c3aed", "#be123c", "#15803d", "#4338ca", "#a16207"];
 
   const renderChart = (block) => {
     const spec = block.spec || {};
@@ -115,6 +116,8 @@ if (lab) {
     const xField = field(spec.encoding?.x);
     const yField = field(spec.encoding?.y);
     if (!xField || !yField) return "";
+    const seriesField = field(spec.encoding?.color);
+    if (seriesField) return renderGroupedLineChart(spec, values, xField, yField, seriesField);
     const nums = values.map((row) => Number(row[yField]) || 0);
     const max = Math.max(...nums, 1);
     const min = Math.min(...nums, 0);
@@ -136,6 +139,56 @@ if (lab) {
     return chartShell(
       spec.title,
       `<svg viewBox="0 0 ${chartBounds.width} ${chartBounds.height}" role="img">${chartAxis(max)}<polyline class="chat-chart-line" points="${path}"></polyline>${dots}</svg>`
+    );
+  };
+
+  const renderGroupedLineChart = (spec, values, xField, yField, seriesField) => {
+    const nums = values.map((row) => Number(row[yField])).filter(isNumber);
+    if (!nums.length) return "";
+    const xValues = [...new Set(values.map((row) => row[xField]))];
+    const seriesValues = [...new Set(values.map((row) => row[seriesField]))].slice(0, chartPalette.length);
+    if (xValues.length < 2 || seriesValues.length < 2) return "";
+    const max = Math.max(...nums, 1);
+    const min = Math.min(...nums, 0);
+    const innerW = chartBounds.width - chartBounds.left - chartBounds.right;
+    const innerH = chartBounds.height - chartBounds.top - chartBounds.bottom;
+    const span = Math.max(max - min, 1);
+    const xPosition = (value) => chartBounds.left + (xValues.indexOf(value) / Math.max(xValues.length - 1, 1)) * innerW;
+    const yPosition = (value) => chartBounds.top + innerH - ((Number(value) - min) / span) * innerH;
+    const lines = seriesValues
+      .map((series, seriesIndex) => {
+        const color = chartPalette[seriesIndex % chartPalette.length];
+        const points = values
+          .filter((row) => row[seriesField] === series && isNumber(Number(row[yField])))
+          .sort((a, b) => xValues.indexOf(a[xField]) - xValues.indexOf(b[xField]))
+          .map((row) => ({ x: xPosition(row[xField]), y: yPosition(row[yField]), label: row[xField], value: row[yField] }));
+        if (points.length < 2) return "";
+        const path = points.map((point) => `${point.x},${point.y}`).join(" ");
+        const dots = points
+          .map(
+            (point) =>
+              `<circle class="chat-chart-dot" cx="${point.x}" cy="${point.y}" r="3.5" style="fill:${color}"><title>${escapeHtml(series)} ${escapeHtml(point.label)}: ${escapeHtml(formatValue(point.value))}</title></circle>`
+          )
+          .join("");
+        return `<polyline class="chat-chart-line" points="${path}" style="stroke:${color}"></polyline>${dots}`;
+      })
+      .join("");
+    const labels = xValues
+      .map(
+        (label) =>
+          `<text class="chat-chart-label" x="${xPosition(label)}" y="${chartBounds.top + innerH + 20}" text-anchor="middle">${escapeHtml(String(label).slice(0, 12))}</text>`
+      )
+      .join("");
+    const legend = seriesValues
+      .map((series, index) => {
+        const y = chartBounds.top + index * 18;
+        const color = chartPalette[index % chartPalette.length];
+        return `<g><rect x="${chartBounds.left + 8}" y="${y - 9}" width="10" height="10" fill="${color}"></rect><text class="chat-chart-label" x="${chartBounds.left + 24}" y="${y}">${escapeHtml(String(series).slice(0, 18))}</text></g>`;
+      })
+      .join("");
+    return chartShell(
+      spec.title,
+      `<svg viewBox="0 0 ${chartBounds.width} ${chartBounds.height}" role="img">${chartAxis(max)}${legend}${lines}${labels}</svg>`
     );
   };
 
@@ -220,6 +273,28 @@ if (lab) {
       )
       .join("")}</div></div>`;
   };
+
+  const renderInitialLabIntro = () =>
+    [
+      renderStatus(
+        "info",
+        "What this lab can answer",
+        "Ask about the public-safe synthetic warehouse, assessment growth patterns, course and cohort comparisons, readiness mix, validation checks, or the source data behind the dashboard."
+      ),
+      renderAnalysisNote({
+        title: "Good first pass",
+        content:
+          "Start with Segment growth or Validation checks to see how the same extract family supports the dashboard, reports, and portfolio evidence."
+      }),
+      renderSuggestions({
+        title: "Try one of these",
+        questions: [
+          "Which courses show the strongest average observed growth?",
+          "What warehouse validation checks passed?",
+          "How does average observed growth change by school year?"
+        ]
+      })
+    ].join("");
 
   const renderSqlDebug = (block) =>
     `<details class="chat-debug"><summary>${escapeHtml(block.title || "Query")}</summary><pre>${escapeHtml(block.sql || "")}</pre></details>`;
@@ -339,7 +414,7 @@ if (lab) {
     input.value = "";
   });
 
-  message("assistant", "<p>Ready.</p>");
+  message("assistant", renderInitialLabIntro());
   if (initialQuestion) {
     input.value = initialQuestion;
     if (autorunInitialQuestion) {

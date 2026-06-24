@@ -26,12 +26,12 @@
     },
     {
       "id": "statistical-risk-modeling-r",
-      "title": "Statistical Risk Modeling in R",
+      "title": "Assessment Growth Analytics in R",
       "url": "https://grant-mccurdy.github.io/projects/statistical-risk-modeling-r.html",
-      "summary": "Public-safe R risk modeling project for interpretable probability modeling, validation diagnostics, calibration, lift, threshold economics, and executive decision support.",
-      "bestFor": ["statistical modeling", "R", "risk modeling", "cross-validation", "calibration", "executive decision support"],
-      "evidence": ["1,400 synthetic account-risk rows", "base-R GLM probability model", "holdout AUC 0.719", "log loss 0.422", "Brier score 0.129", "top-decile lift 2.71x", "model card and executive brief"],
-      "boundary": "Uses synthetic account-risk records only and is not intended for automated customer, credit, employment, clinical, or private-data decisions."
+      "summary": "Public-safe R analytics project for BOY/EOY assessment growth, adjusted expected-growth modeling, section signal diagnostics, validation, and stakeholder decision support.",
+      "bestFor": ["statistical modeling", "R", "assessment growth", "section performance", "cross-validation", "executive decision support"],
+      "evidence": ["1,737 paired BOY/EOY records", "174 section-year groups", "readiness-augmented expected-growth model", "holdout RMSE 4.399", "holdout R-squared 0.181", "8 section-year groups above expected growth and 5 below", "model card and PDF report"],
+      "boundary": "Uses public-safe synthetic education assessment records only and is not intended for teacher evaluation, compensation, discipline, grading, student placement, or personnel decisions."
     },
     {
       "id": "assessment-to-remediation-pipeline",
@@ -93,7 +93,7 @@
       "recommend": ["assessment-intelligence", "statistical-risk-modeling-r", "education-data-simulation-engine", "content-intelligence", "instructional-ai-workflows"]
     },
     {
-      "intent": "visitor asks about R, statistics, validation, calibration, or risk models",
+      "intent": "visitor asks about R, statistics, validation, expected growth, or section performance models",
       "recommend": ["statistical-risk-modeling-r", "assessment-intelligence", "analytics-dashboard"]
     }
   ]

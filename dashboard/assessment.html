@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Analytics Dashboard | Grant McCurdy</title>
     <meta name="description" content="Interactive public-safe analytics dashboard powered by static SQL extract data.">
-    <link rel="stylesheet" href="../assets/css/styles.css?v=20260623h">
+    <link rel="stylesheet" href="../assets/css/styles.css?v=20260623k">
   </head>
   <body>
     <header class="site-header compact" data-header>
@@ -28,7 +28,7 @@
       <section class="detail-hero dashboard-hero">
         <p class="section-kicker">Interactive Dashboard</p>
         <h1>Analytics Dashboard</h1>
-        <p>Static GitHub Pages dashboard over a public-safe synthetic warehouse, with browser-side aggregation, SVG charts, filters, and no external dependencies.</p>
+        <p>Static GitHub Pages dashboard over the assessment-intelligence SQL extract, with browser-side aggregation, SVG charts, and filters.</p>
       </section>
 
       <section class="dashboard-shell" aria-labelledby="dashboard-heading">
@@ -36,7 +36,7 @@
           <div class="source-summary">
             <p class="section-kicker">Data Source</p>
             <h2>Public-safe SQL extract</h2>
-            <p>The source repo owns the extract build, privacy validation, and static JSON artifact consumed by this portfolio dashboard.</p>
+            <p>The source repo owns the extract build, privacy validation, and static JSON used here.</p>
           </div>
           <dl class="source-meta-grid">
             <div>
@@ -142,57 +142,63 @@
           <button type="button" class="preset-button" data-preset="distribution">Distribution Analysis</button>
         </div>
 
-        <div class="toggle-row" aria-label="Dashboard display toggles">
-          <label><input type="checkbox" id="toggle-department-band" checked> Main ribbon</label>
-          <label><input type="checkbox" id="toggle-network-band" checked> Context ribbon</label>
-          <label><input type="checkbox" id="toggle-mastery-line" checked> Mastery benchmark</label>
-          <label><input type="checkbox" id="toggle-violin-plots" checked> Violin plots</label>
-          <label><input type="checkbox" id="toggle-section-lines"> Section lines</label>
-        </div>
+        <details class="advanced-dashboard-controls">
+          <summary>
+            <span>Advanced display controls</span>
+            <small>Ribbons, population, smoothing, and section line settings</small>
+          </summary>
+          <div class="toggle-row" aria-label="Dashboard display toggles">
+            <label><input type="checkbox" id="toggle-department-band" checked> Main ribbon</label>
+            <label><input type="checkbox" id="toggle-network-band" checked> Context ribbon</label>
+            <label><input type="checkbox" id="toggle-mastery-line" checked> Mastery benchmark</label>
+            <label><input type="checkbox" id="toggle-violin-plots" checked> Violin plots</label>
+            <label><input type="checkbox" id="toggle-section-lines"> Section lines</label>
+          </div>
 
-        <div class="viz-control-row" aria-label="Ribbon controls">
-          <label>
-            Focus
-            <select id="focus-select">
-              <option value="All">All Segments</option>
-            </select>
-          </label>
-          <label>
+          <div class="viz-control-row" aria-label="Ribbon controls">
+            <label>
+              Focus
+              <select id="focus-select">
+                <option value="All">All Segments</option>
+              </select>
+            </label>
+            <label>
               Window
               <select id="season-select">
-              <option value="All">All Windows</option>
-              <option value="Beginning">Beginning Only</option>
-              <option value="End">End Only</option>
+                <option value="All">All Windows</option>
+                <option value="Beginning">Beginning Only</option>
+                <option value="End">End Only</option>
               </select>
-          </label>
-          <label>
-            Ribbon Range
-            <select id="ribbon-range-select">
-              <option value="50">Middle 50%</option>
-              <option value="60">Middle 60%</option>
-              <option value="80">Middle 80%</option>
-            </select>
-          </label>
-          <label>
-            Center
-            <select id="center-select">
-              <option value="mean">Mean</option>
-              <option value="median">Median</option>
-            </select>
-          </label>
-          <label>
-            Population
-            <select id="ribbon-population-select">
-              <option value="completed">Completed Only</option>
-              <option value="assigned">Assigned + Missing</option>
-            </select>
-          </label>
-          <label class="range-control">
-            <span>Ribbon Opacity <output id="ribbon-opacity-value">20%</output></span>
-            <input type="range" id="ribbon-opacity" min="0.08" max="0.42" step="0.02" value="0.2">
-          </label>
-          <label class="checkbox-control"><input type="checkbox" id="toggle-smooth-curves" checked> Smooth curves</label>
-        </div>
+            </label>
+            <label>
+              Ribbon Range
+              <select id="ribbon-range-select">
+                <option value="50">Middle 50%</option>
+                <option value="60">Middle 60%</option>
+                <option value="80">Middle 80%</option>
+              </select>
+            </label>
+            <label>
+              Center
+              <select id="center-select">
+                <option value="mean">Mean</option>
+                <option value="median">Median</option>
+              </select>
+            </label>
+            <label>
+              Population
+              <select id="ribbon-population-select">
+                <option value="completed">Completed Only</option>
+                <option value="assigned">Assigned + Missing</option>
+              </select>
+            </label>
+            <label class="range-control">
+              <span>Ribbon Opacity <output id="ribbon-opacity-value">20%</output></span>
+              <input type="range" id="ribbon-opacity" min="0.08" max="0.42" step="0.02" value="0.2">
+            </label>
+            <label class="checkbox-control"><input type="checkbox" id="toggle-smooth-curves" checked> Smooth curves</label>
+          </div>
+        </details>
 
         <article class="dashboard-panel time-panel">
           <div class="panel-heading">

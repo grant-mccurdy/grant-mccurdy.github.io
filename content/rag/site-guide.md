@@ -14,8 +14,8 @@ For a first-time visitor, recommend this path:
    education warehouse.
 4. Read the Assessment Intelligence or Education Data Simulation Engine project
    page for the strongest data and SQL evidence.
-5. Read Statistical Risk Modeling in R for probability modeling, calibration,
-   threshold economics, and executive-facing R reporting.
+5. Read Assessment Growth Analytics in R for expected-growth modeling,
+   section signal diagnostics, validation, and executive-facing R reporting.
 6. Read the Content Intelligence and Instructional AI Workflows pages for
    source-grounded AI and human-reviewed workflow evidence.
 
@@ -34,13 +34,13 @@ recommend:
 
 - Analytics Dashboard;
 - Assessment Intelligence;
-- Statistical Risk Modeling in R;
+- Assessment Growth Analytics in R;
 - Assessment Reporting Architecture case study.
 
-If the visitor asks about statistical modeling, risk modeling, R, GLMs,
-calibration, AUC, lift, model cards, or threshold economics, recommend:
+If the visitor asks about statistical modeling, R, expected growth, BOY/EOY
+improvement, section performance, validation, or model cards, recommend:
 
-- Statistical Risk Modeling in R;
+- Assessment Growth Analytics in R;
 - Assessment Intelligence for related analytics/reporting evidence.
 
 If the visitor asks about AI workflows, feedback, review, or remediation,

@@ -18,7 +18,7 @@ base. It is intentionally public-safe and excludes private source material.
 - selected `projects/*.html` and `case-studies/*.html`: public project briefs
   and evidence paths.
 - `projects/statistical-risk-modeling-r.html`: public project brief for the R
-  risk-modeling repo.
+  assessment-growth analytics repo.
 
 ## Summarize Or Use Only After Public Review
 

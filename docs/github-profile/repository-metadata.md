@@ -53,7 +53,7 @@ gh repo edit grant-mccurdy/education-data-simulation-engine \
   --homepage "https://grant-mccurdy.github.io/projects/education-data-simulation-engine.html"
 
 gh repo edit grant-mccurdy/statistical-risk-modeling-r \
-  --description "Public-safe R risk modeling project with GLM validation, calibration diagnostics, and executive decision support." \
+  --description "Public-safe R assessment growth analytics with expected-growth validation and adjusted section signals." \
   --homepage "https://grant-mccurdy.github.io/projects/statistical-risk-modeling-r.html"
 
 gh repo edit grant-mccurdy/content-intelligence-reporting \
