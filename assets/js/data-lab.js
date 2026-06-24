@@ -37,7 +37,6 @@ if (lab) {
     const label = role === "user" ? "You" : "Analysis";
     article.innerHTML = `<div class="chat-role">${label}</div><div class="chat-content">${content}</div>`;
     thread.append(article);
-    thread.scrollTop = thread.scrollHeight;
     return article;
   };
 
@@ -389,8 +388,6 @@ if (lab) {
       );
     } finally {
       setBusy(false);
-      input.focus();
-      thread.scrollTop = thread.scrollHeight;
     }
   };
 

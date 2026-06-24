@@ -119,7 +119,6 @@ if (helper) {
     article.className = `portfolio-helper-message ${role}`;
     article.innerHTML = `<div class="portfolio-helper-role">${role === "user" ? "You" : "Helper"}</div><div class="portfolio-helper-content">${content}</div>`;
     thread.append(article);
-    thread.scrollTop = thread.scrollHeight;
     return article;
   };
 
@@ -178,8 +177,6 @@ if (helper) {
       );
     } finally {
       setBusy(false);
-      input.focus();
-      thread.scrollTop = thread.scrollHeight;
     }
   };
 
