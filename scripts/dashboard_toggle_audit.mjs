@@ -312,6 +312,9 @@ function evaluateScenario(scenario, snap, messages) {
   if (snap.rightLabels.some((label) => /\([+-]?\d+(\.\d+)?\)$/.test(label))) {
     add("Right-side line label is missing point units", snap.rightLabels);
   }
+  if (!snap.compact && snap.rightLabels.length && snap.rightLabels.some((label) => !label.includes("x\u0304\u03b4"))) {
+    add("Right-side line labels are missing visible average-delta notation", snap.rightLabels);
+  }
   return issues;
 }
 

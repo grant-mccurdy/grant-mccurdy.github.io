@@ -907,7 +907,8 @@ function renderTimeSeries(records) {
     const labelPosition = labelY.get(line.key) ?? y(line.latest.value);
     const lastPoint = points[points.length - 1];
     const deltaLabel = Number.isFinite(line.change) ? fmtPtsAuto(line.change) : "no B/E";
-    const labelText = `${compactDirectLabel(line.key)} (${deltaLabel})`;
+    const lineLabel = compactDirectLabel(line.key);
+    const deltaSymbol = `<tspan class="delta-symbol">x&#772;</tspan><tspan class="delta-symbol-sub" dy="0.34em">&#948;</tspan>`;
     const lineClass = line.hasGap ? "direct-series-line direct-series-gap" : "direct-series-line";
     const circles = points.map((point, index) => `
       <circle cx="${point.x}" cy="${point.y}" r="${compact ? (index === points.length - 1 ? 5.4 : 4.4) : (index === points.length - 1 ? 5.2 : 4.6)}" fill="${line.color}" class="series-point comparison-series-point"></circle>
@@ -917,7 +918,9 @@ function renderTimeSeries(records) {
         <title>${escapeSvgText(line.key)} average BOY/EOY delta ${escapeSvgText(deltaLabel)}</title>
         <line x1="${lastPoint.x + 9}" x2="${labelDotX - 8}" y1="${lastPoint.y}" y2="${labelPosition}" stroke="${line.color}" class="direct-label-guide"></line>
         <circle cx="${labelDotX}" cy="${labelPosition}" r="4.7" fill="${line.color}" class="right-label-dot"></circle>
-        <text x="${labelX}" y="${labelPosition + 5}" class="right-label-text">${escapeSvgText(labelText)}</text>
+        <text x="${labelX}" y="${labelPosition + 5}" class="right-label-text">
+          <tspan>${escapeSvgText(lineLabel)}</tspan><tspan> (</tspan>${deltaSymbol}<tspan dy="-0.34em"> ${escapeSvgText(deltaLabel)})</tspan>
+        </text>
       </g>
     `;
     return `

@@ -383,6 +383,7 @@ async function runDesktopChecks(page, expected, emptyCombo) {
   assertCondition(failures, cardsMatch(base.cards, expected.cards), "metric cards match source JSON", { actual: base.cards, expected: expected.cards });
   assertCondition(failures, base.movementCaption.includes("average End-minus-Beginning delta"), "movement caption uses BOY/EOY language", base.movementCaption);
   assertCondition(failures, base.lineCount === expected.subjectLineCount, "default subject line count matches source JSON", base);
+  assertCondition(failures, base.lineLabels.length > 0 && base.lineLabels.every((label) => label.includes("x\u0304\u03b4")), "line labels show visible average delta notation", base.lineLabels);
   assertCondition(failures, base.tableRows === expected.tableRows, "default table rows match source JSON", base);
   assertCondition(failures, base.violinCount === expected.subjectViolinCount, "default violin count matches source JSON", base);
   assertCondition(failures, base.violinTitles.every((title) => title.includes("subject score distribution")), "default violins are subject distributions", base.violinTitles);
