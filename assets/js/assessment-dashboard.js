@@ -1,7 +1,6 @@
 const state = {
   source: null,
   records: [],
-  focus: "All",
   groupBy: "course",
   metric: "score",
   season: "All",
@@ -26,6 +25,12 @@ const state = {
     filter: "",
     limit: "10",
     recentWindowCount: 4,
+  },
+  filters: {
+    courses: [],
+    teachers: [],
+    sections: [],
+    sectionQuery: "",
   },
   table: {
     course: "All",
@@ -56,7 +61,6 @@ const assetVersion = document.documentElement.dataset.assetVersion || "dashboard
 
 const els = {
   presetButtons: [...document.querySelectorAll(".preset-button")],
-  focus: document.querySelector("#focus-select"),
   group: document.querySelector("#group-select"),
   metric: document.querySelector("#metric-select"),
   season: document.querySelector("#season-select"),
@@ -76,6 +80,15 @@ const els = {
   lineSort: document.querySelector("#line-sort-select"),
   lineFilter: document.querySelector("#line-filter"),
   lineLimit: document.querySelector("#line-limit-select"),
+  sliceSummary: document.querySelector("#slice-filter-summary"),
+  sliceClear: document.querySelector("#slice-filter-clear"),
+  courseFilters: document.querySelector("#course-filter-options"),
+  teacherFilters: document.querySelector("#teacher-filter-options"),
+  sectionFilters: document.querySelector("#section-filter-options"),
+  sectionFilterCount: document.querySelector("#section-filter-count"),
+  sectionFilterSearch: document.querySelector("#section-filter-search"),
+  sectionFilterSelectVisible: document.querySelector("#section-filter-select-visible"),
+  sectionFilterClear: document.querySelector("#section-filter-clear"),
   sourceProject: document.querySelector("#source-project"),
   sourceGenerated: document.querySelector("#source-generated"),
   sourceCounts: document.querySelector("#source-counts"),
@@ -113,8 +126,19 @@ const els = {
 
 const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
 const fmtPct = (value) => `${Math.round(value)}%`;
-const fmtPts = (value) => `${value >= 0 ? "+" : ""}${Math.round(value)} pts`;
 const unique = (items) => [...new Set(items)].sort((a, b) => String(a).localeCompare(String(b), undefined, { numeric: true }));
+
+function fmtPts(value, precision = 0) {
+  if (!Number.isFinite(value)) return "-";
+  const rounded = Number(value.toFixed(precision));
+  const displayValue = Object.is(rounded, -0) ? 0 : rounded;
+  return `${displayValue > 0 ? "+" : ""}${displayValue.toFixed(precision)} pts`;
+}
+
+function fmtPtsAuto(value) {
+  const precision = Math.abs(value) > 0 && Math.abs(value) < 1 ? 1 : 0;
+  return fmtPts(value, precision);
+}
 
 function quantile(values, pct) {
   const sorted = values.filter((value) => Number.isFinite(value)).sort((a, b) => a - b);
@@ -152,6 +176,21 @@ function periodDisplayLabel(period) {
   return period.shortLabel ?? period.label;
 }
 
+function assignmentLabelParts(period) {
+  const rawLabel = String(period.label ?? period.shortLabel ?? "");
+  const compactLabel = String(period.shortLabel ?? "");
+  const match = rawLabel.match(/\bassignment\s*0*(\d+)\b/i) ?? compactLabel.match(/^A\s*0*(\d+)$/i);
+  if (!match) return null;
+
+  const assignmentNumber = match[1].padStart(2, "0");
+  return {
+    primary: "Task",
+    secondary: assignmentNumber,
+    compact: `Task ${assignmentNumber}`,
+    title: `Assignment ${assignmentNumber}`,
+  };
+}
+
 function periodWindowNumber(period) {
   const order = Number(period.order);
   return Number.isFinite(order) && order > 0 ? Math.ceil(order / 2) : null;
@@ -165,6 +204,9 @@ function periodPhaseLabel(period, compact = false) {
 }
 
 function periodAxisLabelParts(period) {
+  const assignmentLabel = assignmentLabelParts(period);
+  if (assignmentLabel) return assignmentLabel;
+
   const windowNumber = periodWindowNumber(period);
   const phase = periodPhaseLabel(period);
 
@@ -184,6 +226,9 @@ function periodAxisLabelParts(period) {
 }
 
 function periodCompactAxisLabel(period) {
+  const assignmentLabel = assignmentLabelParts(period);
+  if (assignmentLabel) return assignmentLabel.compact;
+
   const windowNumber = periodWindowNumber(period);
   const phase = periodPhaseLabel(period, true);
   return windowNumber && (phase === "B" || phase === "E") ? `${phase}${windowNumber}` : periodDisplayLabel(period);
@@ -218,6 +263,15 @@ function escapeSvgText(value) {
     .replaceAll("<", "&lt;")
     .replaceAll(">", "&gt;")
     .replaceAll('"', "&quot;");
+}
+
+function escapeHtml(value) {
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
 }
 
 function compactDirectLabel(value, maxLength = 18) {
@@ -377,19 +431,34 @@ function buildRecords(source) {
   });
 }
 
+function sectionFilterValue(item) {
+  return item.sectionId ?? item.id ?? item.section ?? "";
+}
+
+function selectedFilterIncludes(key, value) {
+  const selected = state.filters[key] ?? [];
+  return !selected.length || selected.includes(value);
+}
+
+function recordMatchesSliceFilters(record) {
+  return (
+    selectedFilterIncludes("courses", record.course) &&
+    selectedFilterIncludes("teachers", record.teacher) &&
+    selectedFilterIncludes("sections", sectionFilterValue(record))
+  );
+}
+
 function filterRecords(records = state.records) {
   return records.filter((record) => {
-    const focusMatch = state.focus === "All" || record.course === state.focus;
     const seasonMatch = state.season === "All" || record.season === state.season;
-    return focusMatch && seasonMatch;
+    return seasonMatch && recordMatchesSliceFilters(record);
   });
 }
 
 function filterStudentRecords(records = state.source?.studentRecords ?? []) {
   return records.filter((record) => {
-    const focusMatch = state.focus === "All" || record.course === state.focus;
     const seasonMatch = state.season === "All" || record.season === state.season;
-    return focusMatch && seasonMatch;
+    return seasonMatch && recordMatchesSliceFilters(record);
   });
 }
 
@@ -442,12 +511,30 @@ function aggregateByPeriod(records, groupBy = state.groupBy) {
 
 function latestPeriodData(records = filterRecords()) {
   const periods = aggregateByPeriod(records);
-  return periods[periods.length - 1] ?? { groups: [], rows: [] };
+  return [...periods].reverse().find((period) => period.rows.length || period.groups.length) ?? periods[periods.length - 1] ?? { groups: [], rows: [] };
 }
 
 function firstPeriodData(records = filterRecords()) {
   const periods = aggregateByPeriod(records);
-  return periods[0] ?? { groups: [], rows: [] };
+  return periods.find((period) => period.rows.length || period.groups.length) ?? periods[0] ?? { groups: [], rows: [] };
+}
+
+function growthPeriodData(records = filterRecords()) {
+  const scorePeriods = state.source?.studentRecords?.length ? aggregateScoreByPeriod() : [];
+  const periodData = scorePeriods.some((periodItem) => periodItem.groups.length) ? scorePeriods : aggregateByPeriod(records);
+  const baselinePeriod = periodData.find((periodItem) => periodItem.groups.length);
+  const baselineByKey = new Map((baselinePeriod?.groups ?? []).map((group) => [group.key, group.score]));
+
+  return periodData.map((periodItem) => ({
+    ...periodItem,
+    groups: periodItem.groups.map((group) => {
+      const baseline = baselineByKey.get(group.key);
+      return {
+        ...group,
+        growth: Number.isFinite(baseline) && Number.isFinite(group.score) ? group.score - baseline : NaN,
+      };
+    }),
+  }));
 }
 
 function metricValue(item) {
@@ -459,10 +546,19 @@ function metricAllowsBands() {
 }
 
 function renderMetrics(records) {
-  const periods = aggregateByPeriod(records);
-  const first = periods[0];
-  const latest = periods[periods.length - 1];
+  const first = firstPeriodData(records);
+  const latest = latestPeriodData(records);
   const latestRows = latest?.rows ?? [];
+
+  if (!latestRows.length) {
+    els.students.textContent = "0";
+    els.latest.textContent = "-";
+    els.change.textContent = "-";
+    els.completion.textContent = "-";
+    els.target.textContent = "-";
+    return;
+  }
+
   const firstValue = first ? first[state.metric] : 0;
   const latestValue = latest ? latest[state.metric] : 0;
   const students = latestRows.reduce((sum, row) => sum + row.students, 0);
@@ -888,11 +984,19 @@ function renderCompletionChart() {
   const innerHeight = height - margin.top - margin.bottom;
   const allPeriods = state.source.periods.filter((period) => state.season === "All" || period.season === state.season);
   const periods = compact ? allPeriods.slice(-7) : allPeriods;
+  const matchingStudentRecords = filterStudentRecords();
+
+  if (!matchingStudentRecords.length) {
+    els.completionChart.innerHTML = `<svg viewBox="0 0 ${width} ${height}" aria-hidden="true" focusable="false"><text x="${width / 2}" y="${height / 2}" class="empty-chart-text" text-anchor="middle">No completion records match the selected slice filters.</text></svg>`;
+    els.completionCaption.textContent = "No completion records match the selected slice filters.";
+    return;
+  }
+
   const x = (index) => margin.left + (periods.length <= 1 ? innerWidth / 2 : (index / (periods.length - 1)) * innerWidth);
   const y = (value) => margin.top + innerHeight - (value / 100) * innerHeight;
 
   const rows = periods.map((period) => {
-    const assigned = filterStudentRecords().filter((record) => record.periodId === period.id);
+    const assigned = matchingStudentRecords.filter((record) => record.periodId === period.id);
     const completed = assigned.filter((record) => record.completed);
     return {
       period,
@@ -953,6 +1057,12 @@ function renderDistributionChart() {
   const innerHeight = height - margin.top - margin.bottom;
   const allPeriods = state.source.periods.filter((period) => state.season === "All" || period.season === state.season);
   const periods = compact ? allPeriods.slice(-7) : allPeriods;
+  if (!filterStudentRecords().length) {
+    els.distributionChart.innerHTML = `<svg viewBox="0 0 ${width} ${height}" aria-hidden="true" focusable="false"><text x="${width / 2}" y="${height / 2}" class="empty-chart-text" text-anchor="middle">No score records match the selected slice filters.</text></svg>`;
+    els.distributionCaption.textContent = "No score records match the selected slice filters.";
+    return;
+  }
+
   const stats = periods.map(periodScoreStats);
   const yMin = state.visual.ribbonPopulation === "assigned" ? 0 : 20;
   const x = (index) => margin.left + (periods.length <= 1 ? innerWidth / 2 : (index / (periods.length - 1)) * innerWidth);
@@ -1052,25 +1162,40 @@ function renderBars(container, items, options = {}) {
   const height = Math.max(82, items.length * rowHeight + 28);
   const max = options.max ?? 100;
   const min = options.min ?? 0;
-  const range = max - min;
+  const range = Math.max(1, max - min);
+  const zeroBaseline = Boolean(options.zeroBaseline && min < 0 && max > 0);
+  const zeroX = labelWidth + ((clamp(0, min, max) - min) / range) * chartWidth;
+
+  if (!items.length) {
+    const emptyLabel = options.emptyLabel ?? "No groups match the selected slice filters.";
+    container.innerHTML = `<svg viewBox="0 0 ${width} ${height}" aria-hidden="true" focusable="false"><text x="${width / 2}" y="${height / 2}" class="empty-chart-text" text-anchor="middle">${emptyLabel}</text></svg>`;
+    return;
+  }
 
   const barClass = options.barClass ?? "chart-bar-score";
   const rows = items.map((item, index) => {
     const y = 20 + index * rowHeight;
     const value = clamp(item.value, min, max);
-    const barWidth = Math.max(2, ((value - min) / range) * chartWidth);
+    const valueX = labelWidth + ((value - min) / range) * chartWidth;
+    const barX = zeroBaseline ? Math.min(zeroX, valueX) : labelWidth;
+    const barWidth = zeroBaseline ? Math.max(2, Math.abs(valueX - zeroX)) : Math.max(2, ((value - min) / range) * chartWidth);
     const label = options.format ? options.format(item.value) : fmtPct(item.value);
+    const itemBarClass = typeof barClass === "function" ? barClass(item) : barClass;
     return `
       <g>
         <text x="0" y="${y + 19}" class="chart-label">${item.label}</text>
         <rect x="${labelWidth}" y="${y}" width="${chartWidth}" height="24" rx="4" class="chart-track"></rect>
-        <rect x="${labelWidth}" y="${y}" width="${barWidth}" height="24" rx="4" class="chart-bar ${barClass}"></rect>
+        <rect x="${barX}" y="${y}" width="${barWidth}" height="24" rx="4" class="chart-bar ${itemBarClass}"></rect>
         <text x="${labelWidth + chartWidth + 14}" y="${y + 18}" class="chart-value">${label}</text>
       </g>
     `;
   }).join("");
 
-  container.innerHTML = `<svg viewBox="0 0 ${width} ${height}" aria-hidden="true" focusable="false">${rows}</svg>`;
+  const zeroLine = zeroBaseline
+    ? `<line x1="${zeroX}" x2="${zeroX}" y1="12" y2="${height - 8}" class="chart-zero-line"></line>`
+    : "";
+
+  container.innerHTML = `<svg viewBox="0 0 ${width} ${height}" aria-hidden="true" focusable="false">${rows}${zeroLine}</svg>`;
 }
 
 function renderComparisonBars(records) {
@@ -1088,22 +1213,40 @@ function renderComparisonBars(records) {
 }
 
 function renderGrowthBars(records) {
-  const latest = latestPeriodData(records);
+  const periods = growthPeriodData(records).filter((periodItem) => periodItem.groups.length);
+  const first = periods[0];
+  const latest = periods[periods.length - 1] ?? { groups: [] };
   const items = latest.groups.map((group) => ({ label: group.key, value: group.growth }))
+    .filter((item) => Number.isFinite(item.value))
     .sort((a, b) => b.value - a.value);
+  const values = items.map((item) => item.value);
+  const minValue = Math.min(0, ...values);
+  const maxValue = Math.max(0, ...values);
+  const padding = Math.max(1, (maxValue - minValue) * 0.12);
+  const min = minValue < 0 ? Math.floor(minValue - padding) : 0;
+  const max = Math.ceil(maxValue + padding);
 
   renderBars(els.growthChart, items, {
-    min: -2,
-    max: 42,
-    format: fmtPts,
-    barClass: "chart-bar-growth",
+    min,
+    max,
+    format: fmtPtsAuto,
+    barClass: (item) => item.value < 0 ? "chart-bar-decline" : "chart-bar-growth",
+    zeroBaseline: true,
   });
-  els.growthCaption.textContent = `${latest.period?.label ?? ""} change from first baseline`;
+  els.growthCaption.textContent = first?.period && latest.period
+    ? `${latest.period.label} score change from ${first.period.label}; groups without a first-window baseline are omitted.`
+    : "Score change from the first available window.";
 }
 
 function renderSkillHeatmap(records) {
   const latest = latestPeriodData(records);
   const rows = latest.rows;
+  if (!rows.length) {
+    els.skillChart.innerHTML = `<svg viewBox="0 0 760 96" aria-hidden="true" focusable="false"><text x="380" y="52" class="empty-chart-text" text-anchor="middle">No skill rows match the selected slice filters.</text></svg>`;
+    els.skillCaption.textContent = "No skill rows match the selected slice filters.";
+    return;
+  }
+
   const skills = unique(rows.flatMap((record) => Object.keys(record.skills)));
   const absoluteSkills = state.source.source?.skillMode === "absolute";
   const groups = aggregate(rows, state.groupBy);
@@ -1279,6 +1422,11 @@ function renderTableSortState() {
 function renderInsights(records) {
   const latest = latestPeriodData(records);
   const first = firstPeriodData(records);
+  if (!records.length || !latest.rows?.length) {
+    els.insights.innerHTML = `<li>No records match the selected slice filters.</li>`;
+    return;
+  }
+
   const latestGroups = latest.groups;
   const firstGroups = new Map(first.groups.map((group) => [group.key, group]));
   const rankedGrowth = latestGroups.map((group) => {
@@ -1289,6 +1437,8 @@ function renderInsights(records) {
   const strongest = rankedGrowth[0];
   const watch = [...rankedGrowth].sort((a, b) => a.score - b.score)[0];
   const completion = weightedAverage(latest.rows, "completion");
+  const completionLabel = completion < 95 && Math.round(completion) === 95 ? `${completion.toFixed(1)}%` : fmtPct(completion);
+  const completionPosition = completion >= 95 ? "at or above" : "below";
   const band = state.source.bands.department;
   const latestTarget = band.lower[(latest.period?.order ?? 1) - 1];
   const sqlBacked = state.source.source?.contract === "sql-extract-dashboard-json-v1";
@@ -1296,7 +1446,7 @@ function renderInsights(records) {
   const notes = [
     strongest ? `${strongest.key} shows the strongest synthetic trend at ${fmtPts(strongest.change)} since the first selected period.` : "No trend is available for the current filter.",
     watch ? `${watch.key} is the lowest latest group at ${fmtPct(watch.score)}, making it a candidate for item-level review or targeted supports.` : "No watch group is available for the current filter.",
-    `Latest completion is ${fmtPct(completion)}, which is ${completion >= 95 ? "above" : "below"} the operating target of 95%.`,
+    `Latest completion is ${completionLabel}, which is ${completionPosition} the operating target of 95%.`,
     sqlBacked
       ? `The score ribbons are computed from the SQL student readiness extract and use the same public-safe source layer as the assessment report artifacts.`
       : `The score ribbons are calibrated from a private assessment score distribution, then regenerated as synthetic 30-question assessment data with declining non-participation over time.`,
@@ -1306,8 +1456,127 @@ function renderInsights(records) {
   els.insights.innerHTML = notes.map((note) => `<li>${note}</li>`).join("");
 }
 
+function countedOptions(items, key) {
+  const counts = new Map();
+  items.forEach((item) => {
+    const value = item[key];
+    if (!value) return;
+    counts.set(value, (counts.get(value) ?? 0) + 1);
+  });
+  return [...counts.entries()]
+    .sort((a, b) => a[0].localeCompare(b[0], undefined, { numeric: true }))
+    .map(([value, count]) => ({
+      value,
+      label: value,
+      meta: `${count} ${count === 1 ? "group" : "groups"}`,
+    }));
+}
+
+function sectionFilterOptions() {
+  return [...state.source.sections]
+    .sort((a, b) => {
+      const courseCompare = a.course.localeCompare(b.course, undefined, { numeric: true });
+      if (courseCompare) return courseCompare;
+      return a.section.localeCompare(b.section, undefined, { numeric: true });
+    })
+    .map((section) => ({
+      value: sectionFilterValue(section),
+      label: section.section,
+      meta: `${section.course} / ${section.teacher}`,
+      searchText: `${section.section} ${section.course} ${section.teacher} ${section.grade}`.toLowerCase(),
+    }));
+}
+
+function visibleSectionOptions() {
+  const query = state.filters.sectionQuery.trim().toLowerCase();
+  const options = sectionFilterOptions();
+  return query ? options.filter((option) => option.searchText.includes(query)) : options;
+}
+
+function selectedCountLabel(key, allLabel, singular, plural) {
+  const count = state.filters[key].length;
+  if (!count) return allLabel;
+  return `${count} ${count === 1 ? singular : plural}`;
+}
+
+function renderSliceSummary() {
+  els.sliceSummary.textContent = [
+    selectedCountLabel("courses", "All subjects", "subject", "subjects"),
+    selectedCountLabel("teachers", "all teachers", "teacher", "teachers"),
+    selectedCountLabel("sections", "all sections", "section", "sections"),
+  ].join(" / ");
+
+  els.sectionFilterCount.textContent = selectedCountLabel("sections", "All sections", "section", "sections");
+}
+
+function renderCheckboxOptions(container, key, options) {
+  const selected = new Set(state.filters[key]);
+  container.innerHTML = options.length ? options.map((option) => `
+    <label class="slice-check-option">
+      <input type="checkbox" data-slice-filter="${key}" value="${escapeHtml(option.value)}"${selected.has(option.value) ? " checked" : ""}>
+      <span>${escapeHtml(option.label)}</span>
+      ${option.meta ? `<small>${escapeHtml(option.meta)}</small>` : ""}
+    </label>
+  `).join("") : `<p class="slice-empty">No matching options.</p>`;
+}
+
+function renderSectionFilters() {
+  renderCheckboxOptions(els.sectionFilters, "sections", visibleSectionOptions());
+  renderSliceSummary();
+}
+
+function renderSliceFilters() {
+  if (!state.source) return;
+  renderCheckboxOptions(els.courseFilters, "courses", countedOptions(state.source.sections, "course"));
+  renderCheckboxOptions(els.teacherFilters, "teachers", countedOptions(state.source.sections, "teacher"));
+  renderSectionFilters();
+  els.sectionFilterSearch.value = state.filters.sectionQuery;
+}
+
+function setSliceFilter(key, value, checked) {
+  const selected = new Set(state.filters[key]);
+  if (checked) {
+    selected.add(value);
+  } else {
+    selected.delete(value);
+  }
+  state.filters[key] = [...selected].sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+}
+
+function handleSliceCheckboxChange(event) {
+  const checkbox = event.target.closest("input[data-slice-filter]");
+  if (!checkbox) return;
+  setSliceFilter(checkbox.dataset.sliceFilter, checkbox.value, checkbox.checked);
+  renderSliceSummary();
+  render();
+}
+
+function clearAllSliceFilters() {
+  state.filters.courses = [];
+  state.filters.teachers = [];
+  state.filters.sections = [];
+  state.filters.sectionQuery = "";
+  renderSliceFilters();
+  render();
+}
+
+function clearSectionFilters() {
+  state.filters.sections = [];
+  state.filters.sectionQuery = "";
+  renderSectionFilters();
+  els.sectionFilterSearch.value = "";
+  render();
+}
+
+function selectVisibleSections() {
+  const selected = new Set(state.filters.sections);
+  visibleSectionOptions().forEach((option) => selected.add(option.value));
+  state.filters.sections = [...selected].sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+  renderSectionFilters();
+  render();
+}
+
 function syncControls() {
-  els.focus.value = state.focus;
   els.group.value = state.groupBy;
   els.metric.value = state.metric;
   els.season.value = state.season;
@@ -1342,7 +1611,6 @@ function applyPreset(preset) {
   state.preset = preset;
 
   if (preset === "trend") {
-    state.focus = "All";
     state.groupBy = "course";
     state.metric = "score";
     state.season = "All";
@@ -1413,6 +1681,7 @@ function applyPreset(preset) {
 }
 
 function render() {
+  renderSliceSummary();
   const records = filterRecords();
   renderMetrics(records);
   renderTimeSeries(records);
@@ -1428,24 +1697,32 @@ function render() {
 
 function initControls() {
   const courses = unique(state.source.sections.map((section) => section.course));
-  els.focus.innerHTML = [`<option value="All">All Segments</option>`, ...courses.map((course) => `<option value="${course}">${course}</option>`)].join("");
   els.tableCourse.innerHTML = [`<option value="All">All Segments</option>`, ...courses.map((course) => `<option value="${course}">${course}</option>`)].join("");
   els.tableGrade.innerHTML = [`<option value="All">All Grades</option>`, ...unique(state.source.sections.map((section) => section.grade)).map((grade) => `<option value="${grade}">${grade}</option>`)].join("");
   els.tableTeacher.innerHTML = [`<option value="All">All Teachers</option>`, ...unique(state.source.sections.map((section) => section.teacher)).map((teacher) => `<option value="${teacher}">${teacher}</option>`)].join("");
+  renderSliceFilters();
 
   els.presetButtons.forEach((button) => {
     button.addEventListener("click", () => applyPreset(button.dataset.preset));
-  });
-
-  els.focus.addEventListener("change", (event) => {
-    state.focus = event.target.value;
-    render();
   });
 
   els.group.addEventListener("change", (event) => {
     state.groupBy = event.target.value;
     render();
   });
+
+  [els.courseFilters, els.teacherFilters, els.sectionFilters].forEach((container) => {
+    container.addEventListener("change", handleSliceCheckboxChange);
+  });
+
+  els.sectionFilterSearch.addEventListener("input", (event) => {
+    state.filters.sectionQuery = event.target.value;
+    renderSectionFilters();
+  });
+
+  els.sectionFilterSelectVisible.addEventListener("click", selectVisibleSections);
+  els.sectionFilterClear.addEventListener("click", clearSectionFilters);
+  els.sliceClear.addEventListener("click", clearAllSliceFilters);
 
   els.metric.addEventListener("change", (event) => {
     state.metric = event.target.value;

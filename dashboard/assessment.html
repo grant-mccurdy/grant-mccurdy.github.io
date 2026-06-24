@@ -105,7 +105,7 @@
                 <option value="completion">Completion</option>
               </select>
             </label>
-            <label class="range-control">
+            <label class="range-control line-min-control">
               <span>Minimum window n <output id="line-min-n-value">5</output></span>
               <input type="range" id="line-min-n" min="1" max="35" step="1" value="5">
             </label>
@@ -118,11 +118,11 @@
                 <option value="name">Name A-Z</option>
               </select>
             </label>
-            <label>
+            <label class="line-filter-control">
               Filter
               <input type="search" id="line-filter" placeholder="Filter lines">
             </label>
-            <label>
+            <label class="line-limit-control">
               Lines shown
               <select id="line-limit-select">
                 <option value="5">5</option>
@@ -132,6 +132,37 @@
                 <option value="all">All</option>
               </select>
             </label>
+          </div>
+          <div class="slice-filter-panel" aria-label="Slice filters">
+            <div class="slice-filter-header">
+              <div>
+                <span>Slice filters</span>
+                <strong id="slice-filter-summary">All subjects / all teachers / all sections</strong>
+              </div>
+              <button type="button" id="slice-filter-clear">Clear filters</button>
+            </div>
+            <div class="slice-filter-grid">
+              <fieldset class="slice-filter-group">
+                <legend>Subject</legend>
+                <div class="slice-checklist" id="course-filter-options"></div>
+              </fieldset>
+              <fieldset class="slice-filter-group">
+                <legend>Teacher</legend>
+                <div class="slice-checklist" id="teacher-filter-options"></div>
+              </fieldset>
+              <details class="slice-filter-group slice-filter-sections">
+                <summary>
+                  <span>Section</span>
+                  <small id="section-filter-count">All sections</small>
+                </summary>
+                <input type="search" id="section-filter-search" placeholder="Search sections" aria-label="Search sections">
+                <div class="slice-filter-actions">
+                  <button type="button" id="section-filter-select-visible">Select visible</button>
+                  <button type="button" id="section-filter-clear">Clear sections</button>
+                </div>
+                <div class="slice-checklist slice-checklist-scroll" id="section-filter-options"></div>
+              </details>
+            </div>
           </div>
         </div>
 
@@ -156,12 +187,6 @@
           </div>
 
           <div class="viz-control-row" aria-label="Ribbon controls">
-            <label>
-              Focus
-              <select id="focus-select">
-                <option value="All">All Segments</option>
-              </select>
-            </label>
             <label>
               Window
               <select id="season-select">
