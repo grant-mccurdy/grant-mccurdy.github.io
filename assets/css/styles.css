@@ -1065,7 +1065,7 @@ h3 {
 
 .line-control-grid {
   display: grid;
-  grid-template-columns: minmax(8.5rem, 0.9fr) minmax(9rem, 0.95fr) minmax(13rem, 1.25fr) minmax(9rem, 0.95fr) minmax(11rem, 1.05fr) minmax(9rem, 0.8fr);
+  grid-template-columns: minmax(16rem, 1.25fr) minmax(9rem, 0.85fr) minmax(13rem, 1.05fr) minmax(9rem, 0.85fr) minmax(10rem, 1fr) minmax(9rem, 0.75fr);
   align-items: end;
   width: 100%;
 }
@@ -1126,6 +1126,74 @@ h3 {
 .line-control-grid label:focus-within input {
   border-color: #000;
   box-shadow: none;
+}
+
+.slice-filter-menu {
+  position: relative;
+  min-width: 0;
+}
+
+.slice-filter-menu > summary {
+  display: grid;
+  gap: 0.22rem;
+  min-height: 2.65rem;
+  padding: 0.45rem 2rem 0.45rem 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--surface);
+  color: var(--ink);
+  cursor: pointer;
+  list-style: none;
+  position: relative;
+}
+
+.slice-filter-menu > summary::-webkit-details-marker {
+  display: none;
+}
+
+.slice-filter-menu > summary::after {
+  content: "+";
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  color: var(--ink);
+  font-size: 1.05rem;
+  font-weight: 900;
+  line-height: 1;
+  transform: translateY(-50%);
+}
+
+.slice-filter-menu[open] > summary::after {
+  content: "-";
+}
+
+.slice-filter-menu > summary span {
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 850;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.slice-filter-menu > summary strong {
+  display: block;
+  overflow: hidden;
+  color: var(--ink);
+  font-size: 0.88rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.slice-filter-menu[open] > .slice-filter-panel {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  left: 0;
+  z-index: 30;
+  width: min(72rem, calc(100vw - 2rem));
+  max-width: calc(100vw - 2rem);
 }
 
 .slice-filter-panel {
@@ -1306,8 +1374,19 @@ h3 {
 }
 
 @media (max-width: 980px) {
+  .slice-filter-menu {
+    grid-column: 1 / -1;
+  }
+
   .slice-filter-grid {
     grid-template-columns: 1fr;
+  }
+
+  .slice-filter-menu[open] > .slice-filter-panel {
+    position: static;
+    width: 100%;
+    max-width: none;
+    margin-top: 0.55rem;
   }
 }
 
