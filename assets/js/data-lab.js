@@ -24,6 +24,72 @@ if (lab) {
       .replace(/>/g, "&gt;")
       .replace(/"/g, "&quot;");
 
+  const renderInlineMarkdown = (value) =>
+    escapeHtml(value)
+      .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
+      .replace(/`([^`]+)`/g, "<code>$1</code>");
+
+  const orderedMarkerPattern = /(^|\s)(\d+)\.\s+/g;
+  const orderedLinePattern = /^\d+\.\s+/;
+  const bulletLinePattern = /^[-*]\s+/;
+
+  const renderList = (items, ordered) => {
+    const tag = ordered ? "ol" : "ul";
+    return `<${tag}>${items.map((item) => `<li>${renderInlineMarkdown(item)}</li>`).join("")}</${tag}>`;
+  };
+
+  const renderInlineOrderedList = (block) => {
+    const markers = [];
+    let match = orderedMarkerPattern.exec(block);
+    while (match) {
+      markers.push({
+        number: Number(match[2]),
+        markerStart: match.index + match[1].length,
+        contentStart: orderedMarkerPattern.lastIndex
+      });
+      match = orderedMarkerPattern.exec(block);
+    }
+    orderedMarkerPattern.lastIndex = 0;
+    if (markers.length < 2 || !markers.every((marker, index) => marker.number === markers[0].number + index)) {
+      return "";
+    }
+
+    const prefix = block.slice(0, markers[0].markerStart).trim();
+    const items = markers.map((marker, index) =>
+      block.slice(marker.contentStart, markers[index + 1]?.markerStart ?? block.length).trim()
+    );
+    let suffix = "";
+    const lastIndex = items.length - 1;
+    const suffixMatch = items[lastIndex].match(/\s+(These|This|The results?|Results?|They|It)\b/);
+    if (suffixMatch && suffixMatch.index > 20) {
+      suffix = items[lastIndex].slice(suffixMatch.index).trim();
+      items[lastIndex] = items[lastIndex].slice(0, suffixMatch.index).trim();
+    }
+
+    return [
+      prefix ? `<p>${renderInlineMarkdown(prefix)}</p>` : "",
+      renderList(items, true),
+      suffix ? `<p>${renderInlineMarkdown(suffix)}</p>` : ""
+    ].join("");
+  };
+
+  const renderMarkdownText = (value) =>
+    String(value || "")
+      .split(/\n{2,}/)
+      .map((block) => block.trim())
+      .filter(Boolean)
+      .map((block) => {
+        const lines = block.split(/\n+/).map((line) => line.trim()).filter(Boolean);
+        if (lines.length && lines.every((line) => orderedLinePattern.test(line))) {
+          return renderList(lines.map((line) => line.replace(orderedLinePattern, "")), true);
+        }
+        if (lines.length && lines.every((line) => bulletLinePattern.test(line))) {
+          return renderList(lines.map((line) => line.replace(bulletLinePattern, "")), false);
+        }
+        return renderInlineOrderedList(block) || `<p>${renderInlineMarkdown(block).replace(/\n/g, "<br>")}</p>`;
+      })
+      .join("");
+
   const formatValue = (value) => {
     if (typeof value === "number" && Number.isFinite(value)) {
       return value.toLocaleString("en-US", { maximumFractionDigits: Math.abs(value) >= 100 ? 1 : 2 });
@@ -40,7 +106,7 @@ if (lab) {
     return article;
   };
 
-  const renderText = (block) => `<p>${escapeHtml(block.content || "")}</p>`;
+  const renderText = (block) => renderMarkdownText(block.content || "");
 
   const renderMetric = (block) => {
     const metrics = (block.metrics || [])
