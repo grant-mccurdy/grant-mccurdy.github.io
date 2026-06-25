@@ -47,9 +47,9 @@ if (helper) {
       patterns: [/\bassessment\s+growth\s+analytics\s+in\s+r\b/i, /\bexpected-growth\s+model/i, /\bsection\s+signal\b/i]
     },
     {
-      title: "Graduate Statistics Portfolio",
+      title: "Statistical Methods Evidence",
       href: "projects/graduate-statistics-portfolio.html",
-      patterns: [/\bgraduate\s+statistics\s+portfolio\b/i, /\bgraduate\s+statistics\s+work\b/i, /\bexam\s+1\b/i, /\bfinal\s+project\b/i]
+      patterns: [/\bstatistical\s+methods\s+evidence\b/i, /\bgraduate\s+statistics\s+portfolio\b/i, /\bgraduate\s+statistics\s+work\b/i, /\bexam\s+1\b/i, /\bfinal\s+project\b/i]
     },
     {
       title: "Content Intelligence",
