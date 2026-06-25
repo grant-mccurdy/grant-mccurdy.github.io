@@ -373,6 +373,7 @@ img {
 }
 
 .intro-band,
+.statistical-methods-band,
 .roadmap-band {
   background: var(--surface-soft);
   border-block: 1px solid var(--line);
@@ -400,7 +401,8 @@ img {
 }
 
 .section-shell[id],
-.case-band[id] {
+.case-band[id],
+.statistical-methods-band[id] {
   scroll-margin-top: 84px;
 }
 
@@ -411,6 +413,7 @@ main > .section-shell + .section-shell {
 .intro-grid,
 .case-layout,
 .detail-grid,
+.statistical-methods-layout,
 .roadmap-layout {
   display: grid;
   grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
@@ -421,16 +424,73 @@ main > .section-shell + .section-shell {
 .intro-grid > *,
 .case-layout > *,
 .detail-grid > *,
+.statistical-methods-layout > *,
 .roadmap-layout > * {
   min-width: 0;
 }
 
 .intro-grid p,
 .case-layout p,
+.statistical-methods-layout p,
 .roadmap-layout p {
   margin: 0;
   color: var(--muted);
   font-size: 1.08rem;
+}
+
+.statistical-methods-layout {
+  align-items: center;
+}
+
+.statistical-methods-layout .link-row {
+  margin-top: 1.35rem;
+  align-items: center;
+}
+
+.statistical-methods-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.statistical-methods-grid article {
+  min-height: 10.5rem;
+  padding: 1rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  transition:
+    background-color var(--motion-fast) var(--ease-flow),
+    border-color var(--motion-fast) var(--ease-flow),
+    transform var(--motion-fast) var(--ease-flow);
+}
+
+.statistical-methods-grid article:hover {
+  border-color: var(--navy-2);
+  transform: translateY(-1px);
+}
+
+.statistical-methods-grid span {
+  display: block;
+  color: var(--gold-2);
+  font-size: 0.72rem;
+  font-weight: 850;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.statistical-methods-grid strong {
+  display: block;
+  margin-top: 0.35rem;
+  color: var(--ink);
+  font-size: 1.05rem;
+  line-height: 1.15;
+}
+
+.statistical-methods-grid p {
+  margin-top: 0.55rem;
+  font-size: 0.92rem;
+  line-height: 1.4;
 }
 
 .section-heading {
@@ -3119,6 +3179,7 @@ th {
   .intro-grid,
   .case-layout,
   .detail-grid,
+  .statistical-methods-layout,
   .roadmap-layout,
   .project-grid,
   .principle-grid,
@@ -3130,6 +3191,10 @@ th {
   .dashboard-grid,
   .metric-grid,
   .metric-grid-wide {
+    grid-template-columns: 1fr;
+  }
+
+  .statistical-methods-grid {
     grid-template-columns: 1fr;
   }
 
@@ -3340,6 +3405,7 @@ th {
   .case-list a,
   .compare-by-control label,
   .portfolio-helper-panel,
+  .statistical-methods-grid article,
   .snapshot-card,
   .principle,
   .portfolio-helper-link,
@@ -3387,6 +3453,7 @@ th {
   .portfolio-helper-form button:hover,
   .portfolio-helper-form button:focus-visible,
   .portfolio-helper-suggestions button:hover,
+  .statistical-methods-grid article:hover,
   .slice-filter-header button:hover,
   .slice-filter-header button:focus-visible,
   .slice-filter-actions button:hover,
