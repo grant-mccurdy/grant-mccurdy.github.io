@@ -226,9 +226,12 @@
       data-api-endpoint="https://portfolio-rag-api.grant-mccurdy.workers.dev/query"
       aria-label="Portfolio helper"
     >
-      <button class="portfolio-helper-toggle" type="button" aria-expanded="false" data-helper-toggle>
-        <span aria-hidden="true">?</span>
-        <span>Ask</span>
+      <button class="portfolio-helper-toggle" type="button" aria-expanded="false" aria-label="Open portfolio navigator" data-helper-toggle>
+        <span class="portfolio-helper-toggle-icon" aria-hidden="true">?</span>
+        <span class="portfolio-helper-toggle-copy">
+          <strong>Ask</strong>
+          <small>Site guide</small>
+        </span>
       </button>
       <div class="portfolio-helper-panel" data-helper-panel hidden>
         <div class="portfolio-helper-header">
@@ -254,6 +257,6 @@
     </section>
 
     <script src="assets/js/site.js"></script>
-    <script src="assets/js/portfolio-helper.js?v=20260624b"></script>
+    <script src="assets/js/portfolio-helper.js?v=20260625a"></script>
   </body>
 </html>
