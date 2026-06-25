@@ -11,6 +11,7 @@ if (helper) {
   const presetButtons = [...helper.querySelectorAll("[data-helper-question]")];
   const submitButton = form.querySelector("button[type='submit']");
   const REQUEST_TIMEOUT_MS = 15000;
+  const PANEL_TRANSITION_MS = 260;
   const ANALYTICS_HANDOFF_PATTERN =
     /\b(sql|warehouse|database|average|avg|median|mean|count|compare|correlation|relationship|trend\s*line|trendline|trend|line\s+chart|time\s+series|visuali[sz]e|chart|graph|plot|figure|growth|readiness|attendance|validation|nonparticipation|non-participation|missingness|course\s+track|expected\s+growth|section\s+performance)\b/i;
   const PROJECT_ROUTING_PATTERN = /\b(which\s+project|what\s+project|where\s+should|project|portfolio|grant|demonstrate|evidence)\b/i;
@@ -212,18 +213,68 @@ if (helper) {
       .join("")}</div></div>`;
   };
 
+  let closeTimer = 0;
+  let closeTransitionHandler = null;
+  let openFrame = 0;
+
+  const prefersReducedMotion = () =>
+    window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const clearCloseState = () => {
+    window.clearTimeout(closeTimer);
+    closeTimer = 0;
+    if (openFrame) {
+      window.cancelAnimationFrame(openFrame);
+      openFrame = 0;
+    }
+    if (closeTransitionHandler) {
+      panel.removeEventListener("transitionend", closeTransitionHandler);
+      closeTransitionHandler = null;
+    }
+    helper.classList.remove("is-closing");
+  };
+
   const openPanel = () => {
+    clearCloseState();
     panel.hidden = false;
     toggle.setAttribute("aria-expanded", "true");
     toggle.setAttribute("aria-label", "Close portfolio navigator");
-    window.setTimeout(() => input.focus(), 0);
+    if (prefersReducedMotion()) {
+      helper.classList.add("is-open");
+      input.focus();
+      return;
+    }
+    openFrame = window.requestAnimationFrame(() => {
+      openFrame = 0;
+      helper.classList.add("is-open");
+    });
+    window.setTimeout(() => input.focus(), 160);
   };
 
   const closePanel = () => {
-    panel.hidden = true;
+    if (panel.hidden) return;
+    clearCloseState();
     toggle.setAttribute("aria-expanded", "false");
     toggle.setAttribute("aria-label", "Open portfolio navigator");
-    toggle.focus();
+    helper.classList.remove("is-open");
+
+    const finishClose = () => {
+      clearCloseState();
+      panel.hidden = true;
+      toggle.focus();
+    };
+
+    if (prefersReducedMotion()) {
+      finishClose();
+      return;
+    }
+
+    helper.classList.add("is-closing");
+    closeTransitionHandler = (event) => {
+      if (event.target === panel) finishClose();
+    };
+    panel.addEventListener("transitionend", closeTransitionHandler);
+    closeTimer = window.setTimeout(finishClose, PANEL_TRANSITION_MS);
   };
 
   const setBusy = (busy) => {

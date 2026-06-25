@@ -239,6 +239,7 @@ async function inspectHelper(page, label) {
       : [];
   });
   await page.locator("[data-helper-close]").click();
+  await panel.waitFor({ state: "hidden", timeout: 1500 });
   const closed = await panel.isHidden();
   return {
     opened,
