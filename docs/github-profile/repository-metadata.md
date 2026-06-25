@@ -30,10 +30,10 @@ Suggested pinned repository order:
 
 1. `education-data-simulation-engine`
 2. `assessment-intelligence`
-3. `statistical-risk-modeling-r`
-4. `grant-mccurdy.github.io`
-5. `content-intelligence-reporting`
-6. `instructional-ai-workflows`
+3. `graduate-statistics-portfolio`
+4. `statistical-risk-modeling-r`
+5. `grant-mccurdy.github.io`
+6. `content-intelligence-reporting`
 
 Keep `public-workspace` unpinned unless it is intentionally presented as a staging workspace.
 
@@ -55,6 +55,10 @@ gh repo edit grant-mccurdy/education-data-simulation-engine \
 gh repo edit grant-mccurdy/statistical-risk-modeling-r \
   --description "Public-safe R assessment growth analytics with expected-growth validation and adjusted section signals." \
   --homepage "https://grant-mccurdy.github.io/projects/statistical-risk-modeling-r.html"
+
+gh repo edit grant-mccurdy/graduate-statistics-portfolio \
+  --description "Curated graduate statistics portfolio in R featuring nonlinear model search, GLMs, cross-validation, calibration, and threshold analysis." \
+  --homepage "https://grant-mccurdy.github.io/projects/graduate-statistics-portfolio.html"
 
 gh repo edit grant-mccurdy/content-intelligence-reporting \
   --description "Source-grounded content intelligence workflow for evidence-labeled reporting and searchable document analysis." \
@@ -102,6 +106,16 @@ gh repo edit grant-mccurdy/statistical-risk-modeling-r \
   --add-topic glm \
   --add-topic calibration \
   --add-topic decision-support
+
+gh repo edit grant-mccurdy/graduate-statistics-portfolio \
+  --add-topic r \
+  --add-topic statistics \
+  --add-topic statistical-modeling \
+  --add-topic glm \
+  --add-topic cross-validation \
+  --add-topic calibration \
+  --add-topic regression \
+  --add-topic portfolio
 
 gh repo edit grant-mccurdy/content-intelligence-reporting \
   --add-topic content-intelligence \
