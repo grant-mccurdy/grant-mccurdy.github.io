@@ -32,6 +32,10 @@
   --viz-track: #e5e7eb;
   --radius: 8px;
   --max: 1180px;
+  --motion-fast: 160ms;
+  --motion-medium: 240ms;
+  --motion-slow: 360ms;
+  --ease-flow: cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 * {
@@ -81,7 +85,10 @@ img {
   inset: 0 0 auto 0;
   z-index: 10;
   color: #fff;
-  transition: background-color 160ms ease, border-color 160ms ease;
+  transition:
+    background-color var(--motion-medium) var(--ease-flow),
+    border-color var(--motion-medium) var(--ease-flow),
+    color var(--motion-medium) var(--ease-flow);
 }
 
 .site-header.compact,
@@ -107,6 +114,15 @@ img {
   gap: 0.75rem;
   font-weight: 750;
   letter-spacing: 0;
+  transition:
+    opacity var(--motion-fast) var(--ease-flow),
+    transform var(--motion-fast) var(--ease-flow);
+}
+
+.brand:hover,
+.brand:focus-visible {
+  opacity: 0.86;
+  transform: translateY(-1px);
 }
 
 .brand-mark {
@@ -116,7 +132,14 @@ img {
   place-items: center;
   border: 1px solid currentColor;
   border-radius: 50%;
-  font-size: 0.82rem;
+  overflow: hidden;
+  background: #fff;
+}
+
+.brand-mark img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .brand-text {
@@ -133,6 +156,10 @@ img {
 
 .nav-links a {
   opacity: 0.9;
+  transition:
+    opacity var(--motion-fast) var(--ease-flow),
+    text-underline-offset var(--motion-fast) var(--ease-flow),
+    transform var(--motion-fast) var(--ease-flow);
 }
 
 .nav-links a:hover,
@@ -140,6 +167,7 @@ img {
   opacity: 1;
   text-decoration: underline;
   text-underline-offset: 0.32rem;
+  transform: translateY(-1px);
 }
 
 .nav-toggle {
@@ -151,6 +179,15 @@ img {
   background: transparent;
   color: inherit;
   cursor: pointer;
+  transition:
+    background-color var(--motion-fast) var(--ease-flow),
+    color var(--motion-fast) var(--ease-flow),
+    transform var(--motion-fast) var(--ease-flow);
+}
+
+.nav-toggle:hover,
+.nav-toggle:focus-visible {
+  transform: translateY(-1px);
 }
 
 .nav-toggle span {
@@ -159,6 +196,9 @@ img {
   height: 2px;
   margin: 4px auto;
   background: currentColor;
+  transition:
+    opacity var(--motion-fast) var(--ease-flow),
+    transform var(--motion-fast) var(--ease-flow);
 }
 
 .hero {
@@ -292,7 +332,12 @@ img {
   border-radius: var(--radius);
   border: 1px solid transparent;
   font-weight: 760;
-  transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+  transition:
+    background-color var(--motion-fast) var(--ease-flow),
+    border-color var(--motion-fast) var(--ease-flow),
+    box-shadow var(--motion-fast) var(--ease-flow),
+    color var(--motion-fast) var(--ease-flow),
+    transform var(--motion-fast) var(--ease-flow);
 }
 
 .button.primary {
@@ -510,7 +555,11 @@ h3 {
   display: flex;
   flex-direction: column;
   gap: 0.7rem;
-  transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+  transition:
+    background-color var(--motion-fast) var(--ease-flow),
+    border-color var(--motion-fast) var(--ease-flow),
+    box-shadow var(--motion-fast) var(--ease-flow),
+    transform var(--motion-fast) var(--ease-flow);
 }
 
 .work-list .artifact-link-card {
@@ -604,6 +653,14 @@ h3 {
   font-weight: 800;
   text-decoration: underline;
   text-underline-offset: 0.3rem;
+  transition:
+    color var(--motion-fast) var(--ease-flow),
+    text-underline-offset var(--motion-fast) var(--ease-flow);
+}
+
+.text-link:hover,
+.text-link:focus-visible {
+  text-underline-offset: 0.45rem;
 }
 
 .link-row {
@@ -642,6 +699,9 @@ h3 {
   align-items: center;
   padding: 1rem 0;
   border-bottom: 1px solid var(--line);
+  transition:
+    border-color var(--motion-fast) var(--ease-flow),
+    transform var(--motion-fast) var(--ease-flow);
 }
 
 .case-band .case-list a {
@@ -652,6 +712,7 @@ h3 {
 .case-list a:focus-visible {
   text-decoration: underline;
   text-underline-offset: 0.3rem;
+  transform: translateX(0.18rem);
 }
 
 .case-list span,
@@ -670,7 +731,11 @@ h3 {
 
 .snapshot-card,
 .principle {
-  transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+  transition:
+    background-color var(--motion-fast) var(--ease-flow),
+    border-color var(--motion-fast) var(--ease-flow),
+    box-shadow var(--motion-fast) var(--ease-flow),
+    transform var(--motion-fast) var(--ease-flow);
 }
 
 .snapshot-card:hover,
@@ -729,6 +794,19 @@ h3 {
 
 .detail-panel {
   padding: 1.35rem;
+}
+
+.artifact-list + .methods-evidence {
+  margin-top: 1rem;
+}
+
+.methods-evidence h2,
+.methods-evidence h3 {
+  font-size: clamp(1.35rem, 2vw, 1.7rem);
+}
+
+.methods-evidence p:not(.section-kicker) {
+  color: var(--muted);
 }
 
 .detail-action {
@@ -1200,6 +1278,16 @@ h3 {
   cursor: pointer;
   font-size: 0.84rem;
   font-weight: 850;
+  transition:
+    background-color var(--motion-fast) var(--ease-flow),
+    border-color var(--motion-fast) var(--ease-flow),
+    color var(--motion-fast) var(--ease-flow),
+    transform var(--motion-fast) var(--ease-flow);
+}
+
+.compare-by-control label:hover,
+.compare-by-control label:focus-within {
+  transform: translateY(-1px);
 }
 
 .compare-by-control label:has(input:checked) {
@@ -1248,6 +1336,10 @@ h3 {
   font-size: 0.82rem;
   font-weight: 800;
   padding: 0.38rem 0.65rem;
+  transition:
+    background-color var(--motion-fast) var(--ease-flow),
+    border-color var(--motion-fast) var(--ease-flow),
+    transform var(--motion-fast) var(--ease-flow);
 }
 
 .slice-filter-header button:hover,
@@ -1255,6 +1347,7 @@ h3 {
 .slice-filter-actions button:hover,
 .slice-filter-actions button:focus-visible {
   border-color: #000;
+  transform: translateY(-1px);
 }
 
 .slice-filter-grid {
@@ -2083,6 +2176,15 @@ h3 {
   font-weight: 650;
   letter-spacing: 0;
   padding: 0 0.65rem;
+  transition:
+    border-color var(--motion-fast) var(--ease-flow),
+    box-shadow var(--motion-fast) var(--ease-flow);
+}
+
+.table-control-row select:focus {
+  border-color: var(--navy);
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.08);
+  outline: 0;
 }
 
 .table-reset {
@@ -2096,11 +2198,15 @@ h3 {
   font: inherit;
   font-size: 0.9rem;
   font-weight: 800;
+  transition:
+    border-color var(--motion-fast) var(--ease-flow),
+    transform var(--motion-fast) var(--ease-flow);
 }
 
 .table-reset:hover,
 .table-reset:focus-visible {
   border-color: var(--navy-2);
+  transform: translateY(-1px);
 }
 
 .table-count {
@@ -2530,31 +2636,98 @@ th {
 }
 
 .portfolio-helper-toggle {
-  min-width: 4.8rem;
-  min-height: 3rem;
+  position: relative;
+  min-width: 7.6rem;
+  min-height: 3.75rem;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.45rem;
+  gap: 0.6rem;
+  padding: 0.5rem 0.85rem 0.5rem 0.55rem;
   border: 1px solid #000;
   border-radius: 999px;
   background: #000;
   color: #fff;
-  box-shadow: var(--shadow);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.24);
   font: inherit;
   font-weight: 850;
   cursor: pointer;
+  transform: translateY(0);
+  transition:
+    box-shadow var(--motion-medium) var(--ease-flow),
+    transform var(--motion-medium) var(--ease-flow);
 }
 
-.portfolio-helper-toggle span[aria-hidden] {
-  width: 1.35rem;
-  height: 1.35rem;
+.portfolio-helper-toggle::after {
+  position: absolute;
+  inset: -0.35rem;
+  border: 1px solid rgba(0, 0, 0, 0.22);
+  border-radius: inherit;
+  content: "";
+  opacity: 0;
+  animation: helper-toggle-ring 4.8s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.portfolio-helper-toggle:hover {
+  box-shadow: 0 20px 42px rgba(0, 0, 0, 0.3);
+  transform: translateY(-2px);
+}
+
+.portfolio-helper-toggle-icon {
+  width: 2.1rem;
+  height: 2.1rem;
   display: inline-grid;
   place-items: center;
-  border: 1px solid currentColor;
+  border: 1px solid rgba(255, 255, 255, 0.45);
   border-radius: 50%;
-  font-size: 0.86rem;
+  background: #fff;
+  color: #000;
+  font-size: 1rem;
   line-height: 1;
+}
+
+.portfolio-helper-toggle-copy {
+  display: grid;
+  gap: 0.08rem;
+  line-height: 1;
+  text-align: left;
+}
+
+.portfolio-helper-toggle-copy strong,
+.portfolio-helper-toggle-copy small {
+  display: block;
+}
+
+.portfolio-helper-toggle-copy strong {
+  font-size: 0.98rem;
+}
+
+.portfolio-helper-toggle-copy small {
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.66rem;
+  font-weight: 850;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+@keyframes helper-toggle-ring {
+  0%,
+  74%,
+  100% {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+
+  82% {
+    opacity: 0.52;
+    transform: scale(1);
+  }
+
+  92% {
+    opacity: 0;
+    transform: scale(1.08);
+  }
 }
 
 .portfolio-helper-panel {
@@ -2567,6 +2740,19 @@ th {
   border-radius: var(--radius);
   background: var(--surface);
   box-shadow: var(--shadow);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(0.85rem) scale(0.98);
+  transform-origin: right bottom;
+  transition:
+    opacity var(--motion-medium) var(--ease-flow),
+    transform var(--motion-medium) var(--ease-flow);
+}
+
+.portfolio-helper.is-open .portfolio-helper-panel {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0) scale(1);
 }
 
 .portfolio-helper-panel[hidden] {
@@ -2697,6 +2883,61 @@ th {
   border-left-color: var(--dash-blue);
 }
 
+.portfolio-helper-link-row {
+  margin-top: 0.65rem;
+}
+
+.portfolio-helper-link-list {
+  display: grid;
+  gap: 0.45rem;
+  margin-top: 0.7rem;
+}
+
+.portfolio-helper-link-list strong {
+  color: var(--navy);
+  font-size: 0.78rem;
+}
+
+.portfolio-helper-link-list div {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.portfolio-helper-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.65rem;
+  width: 100%;
+  border: 1px solid #000;
+  border-radius: 4px;
+  padding: 0.58rem 0.7rem;
+  background: #000;
+  color: #fff;
+  font-size: 0.82rem;
+  font-weight: 820;
+  line-height: 1.25;
+  text-decoration: none;
+  transition:
+    background-color var(--motion-fast) var(--ease-flow),
+    transform var(--motion-fast) var(--ease-flow);
+}
+
+.portfolio-helper-link::after {
+  flex: 0 0 auto;
+  color: rgba(255, 255, 255, 0.72);
+  content: "Open";
+  font-size: 0.66rem;
+  font-weight: 850;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.portfolio-helper-link:hover {
+  background: var(--navy);
+  transform: translateY(-1px);
+}
+
 .portfolio-helper-suggestions {
   display: grid;
   gap: 0.45rem;
@@ -2720,10 +2961,15 @@ th {
   font-weight: 760;
   text-align: left;
   cursor: pointer;
+  transition:
+    background-color var(--motion-fast) var(--ease-flow),
+    border-color var(--motion-fast) var(--ease-flow),
+    transform var(--motion-fast) var(--ease-flow);
 }
 
 .portfolio-helper-suggestions button:hover {
   border-color: var(--navy-2);
+  transform: translateY(-1px);
 }
 
 .portfolio-helper-prompts {
@@ -2745,6 +2991,11 @@ th {
   font-size: 0.84rem;
   font-weight: 780;
   cursor: pointer;
+  transition:
+    background-color var(--motion-fast) var(--ease-flow),
+    border-color var(--motion-fast) var(--ease-flow),
+    color var(--motion-fast) var(--ease-flow),
+    transform var(--motion-fast) var(--ease-flow);
 }
 
 .portfolio-helper-prompts button {
@@ -2769,6 +3020,22 @@ th {
   color: var(--ink);
   font: inherit;
   padding: 0 0.7rem;
+  transition:
+    border-color var(--motion-fast) var(--ease-flow),
+    box-shadow var(--motion-fast) var(--ease-flow);
+}
+
+.portfolio-helper-form input:focus {
+  border-color: var(--navy);
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.08);
+  outline: 0;
+}
+
+.portfolio-helper-prompts button:hover,
+.portfolio-helper-prompts button:focus-visible,
+.portfolio-helper-form button:hover,
+.portfolio-helper-form button:focus-visible {
+  transform: translateY(-1px);
 }
 
 .portfolio-helper-form button {
@@ -3056,20 +3323,78 @@ th {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
   .hero-video {
     display: none;
   }
 
+  .brand,
+  .nav-links a,
+  .nav-toggle,
+  .nav-toggle span,
   .button,
   .artifact-link-card,
+  .case-list a,
+  .compare-by-control label,
+  .portfolio-helper-panel,
   .snapshot-card,
   .principle,
+  .portfolio-helper-link,
+  .portfolio-helper-toggle,
+  .portfolio-helper-suggestions button,
+  .portfolio-helper-prompts button,
+  .portfolio-helper-form button,
+  .portfolio-helper-form input,
+  .slice-filter-header button,
+  .slice-filter-actions button,
+  .table-control-row select,
+  .table-reset,
+  .text-link,
   .js-reveal [data-reveal] {
     transition: none;
   }
 
+  .portfolio-helper-toggle,
+  .portfolio-helper-toggle::after {
+    animation: none;
+  }
+
   .js-reveal [data-reveal] {
     opacity: 1;
+    transform: none;
+  }
+
+  .brand:hover,
+  .brand:focus-visible,
+  .nav-links a:hover,
+  .nav-links a:focus-visible,
+  .nav-toggle:hover,
+  .nav-toggle:focus-visible,
+  .button:hover,
+  .button:focus-visible,
+  .artifact-link-card:hover,
+  .artifact-link-card:focus-visible,
+  .case-list a:hover,
+  .case-list a:focus-visible,
+  .compare-by-control label:hover,
+  .compare-by-control label:focus-within,
+  .portfolio-helper-link:hover,
+  .portfolio-helper-prompts button:hover,
+  .portfolio-helper-prompts button:focus-visible,
+  .portfolio-helper-form button:hover,
+  .portfolio-helper-form button:focus-visible,
+  .portfolio-helper-suggestions button:hover,
+  .slice-filter-header button:hover,
+  .slice-filter-header button:focus-visible,
+  .slice-filter-actions button:hover,
+  .slice-filter-actions button:focus-visible,
+  .snapshot-card:hover,
+  .principle:hover,
+  .table-reset:hover,
+  .table-reset:focus-visible {
     transform: none;
   }
 }
@@ -3142,7 +3467,7 @@ th {
   }
 
   .portfolio-helper-toggle {
-    min-width: 4.25rem;
+    min-width: 7rem;
   }
 
   .portfolio-helper-form {

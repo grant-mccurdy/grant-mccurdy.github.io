@@ -182,8 +182,34 @@ async function inspect(page) {
 
 async function inspectHelper(page, label) {
   if (!label.startsWith("home-")) return null;
+  await page.route("https://portfolio-rag-api.grant-mccurdy.workers.dev/query", async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json; charset=utf-8",
+      body: JSON.stringify({
+        answer: "Start with the Analytics Dashboard, then open the Portfolio Data Lab. For methods evidence, visit the Graduate Statistics Portfolio.",
+        blocks: [
+          {
+            type: "text",
+            content:
+              "Start with the **Analytics Dashboard**, then open the Portfolio Data Lab. For methods evidence, visit the Graduate Statistics Portfolio."
+          },
+          {
+            type: "suggestions",
+            title: "Suggested follow-ups",
+            questions: ["Which project shows analytics work?"]
+          }
+        ],
+        links: [{ title: "Analytics Dashboard", url: "/dashboard/assessment.html" }]
+      }),
+    });
+  });
   const toggle = page.locator("[data-helper-toggle]");
   const panel = page.locator("[data-helper-panel]");
+  const toggleRect = await toggle.evaluate((el) => {
+    const rect = el.getBoundingClientRect();
+    return { width: rect.width, height: rect.height };
+  });
   await toggle.click();
   await panel.waitFor({ state: "visible", timeout: 1500 });
   const opened = await panel.isVisible();
@@ -195,6 +221,15 @@ async function inspectHelper(page, label) {
   const handoffHref = await handoffLink.getAttribute("href");
   const handoffUrl = handoffHref ? new URL(handoffHref, page.url()) : null;
   const handoffText = await panel.locator("[data-helper-thread]").innerText();
+  await panel.locator("[data-helper-input]").fill("What should I look at first?");
+  await panel.locator("[data-helper-form] button[type='submit']").click();
+  await panel.locator(".portfolio-helper-link-list a[href*='dashboard/assessment.html']").last().waitFor({ state: "visible", timeout: 1500 });
+  const recommendationLinks = await panel.locator(".portfolio-helper-link-list a").evaluateAll((links) =>
+    links.map((link) => ({
+      href: link.href,
+      text: link.textContent || "",
+    })),
+  );
   const overflow = await page.evaluate(() => {
     const panelEl = document.querySelector("[data-helper-panel]");
     if (!panelEl) return [];
@@ -204,16 +239,22 @@ async function inspectHelper(page, label) {
       : [];
   });
   await page.locator("[data-helper-close]").click();
+  await panel.waitFor({ state: "hidden", timeout: 1500 });
   const closed = await panel.isHidden();
   return {
     opened,
     closed,
+    toggleVisible: toggleRect.width >= 100 && toggleRect.height >= 50,
     initialText: initialText.includes("I can help you find the right project"),
     handoff:
       handoffText.includes("Open Data Lab") &&
       Boolean(handoffUrl?.pathname.endsWith("/data-lab.html")) &&
       handoffUrl?.searchParams.get("question") === "create a trend line" &&
       handoffUrl?.searchParams.get("autorun") === "1",
+    recommendationLinks:
+      recommendationLinks.some((link) => link.href.endsWith("/dashboard/assessment.html") && link.text.includes("Analytics Dashboard")) &&
+      recommendationLinks.some((link) => link.href.endsWith("/data-lab.html") && link.text.includes("Portfolio Data Lab")) &&
+      recommendationLinks.some((link) => link.href.endsWith("/projects/graduate-statistics-portfolio.html")),
     overflow,
   };
 }
@@ -310,8 +351,10 @@ const failures = results.filter(
     result.helper?.overflow.length ||
     result.helper?.opened === false ||
     result.helper?.closed === false ||
+    result.helper?.toggleVisible === false ||
     result.helper?.initialText === false ||
     result.helper?.handoff === false ||
+    result.helper?.recommendationLinks === false ||
     result.dataLab?.prefilled === false ||
     result.capability?.capabilityNote === false,
 );

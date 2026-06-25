@@ -11,9 +11,67 @@ if (helper) {
   const presetButtons = [...helper.querySelectorAll("[data-helper-question]")];
   const submitButton = form.querySelector("button[type='submit']");
   const REQUEST_TIMEOUT_MS = 15000;
+  const PANEL_TRANSITION_MS = 260;
   const ANALYTICS_HANDOFF_PATTERN =
     /\b(sql|warehouse|database|average|avg|median|mean|count|compare|correlation|relationship|trend\s*line|trendline|trend|line\s+chart|time\s+series|visuali[sz]e|chart|graph|plot|figure|growth|readiness|attendance|validation|nonparticipation|non-participation|missingness|course\s+track|expected\s+growth|section\s+performance)\b/i;
   const PROJECT_ROUTING_PATTERN = /\b(which\s+project|what\s+project|where\s+should|project|portfolio|grant|demonstrate|evidence)\b/i;
+  const DESTINATION_LINKS = [
+    {
+      title: "Projects directory",
+      href: "projects/index.html",
+      patterns: [/\bprojects?\s+(directory|index|overview|page|list)\b/i, /\bexplore\s+projects?\b/i]
+    },
+    {
+      title: "Analytics Dashboard",
+      href: "dashboard/assessment.html",
+      patterns: [/\banalytics?\s+dashboard\b/i, /\bdashboard\b/i, /\binteractive\s+demo\b/i]
+    },
+    {
+      title: "Portfolio Data Lab",
+      href: "data-lab.html",
+      patterns: [/\bportfolio\s+data\s+lab\b/i, /\bdata\s+lab\b/i, /\banalytic\s+chat\b/i]
+    },
+    {
+      title: "Assessment Intelligence",
+      href: "projects/assessment-intelligence.html",
+      patterns: [/\bassessment\s+intelligence\b/i, /\bsql-backed\s+extracts?\b/i, /\bassessment\s+system\s+work\b/i]
+    },
+    {
+      title: "Education Data Simulation Engine",
+      href: "projects/education-data-simulation-engine.html",
+      patterns: [/\beducation\s+data\s+simulation\s+engine\b/i, /\bsynthetic\s+education\s+data\b/i, /\bsimulation\s+foundation\b/i]
+    },
+    {
+      title: "Assessment Growth Analytics in R",
+      href: "projects/statistical-risk-modeling-r.html",
+      patterns: [/\bassessment\s+growth\s+analytics\s+in\s+r\b/i, /\bexpected-growth\s+model/i, /\bsection\s+signal\b/i]
+    },
+    {
+      title: "Graduate Statistics Portfolio",
+      href: "projects/graduate-statistics-portfolio.html",
+      patterns: [/\bgraduate\s+statistics\s+portfolio\b/i, /\bgraduate\s+statistics\s+work\b/i, /\bexam\s+1\b/i, /\bfinal\s+project\b/i]
+    },
+    {
+      title: "Content Intelligence",
+      href: "projects/content-intelligence.html",
+      patterns: [/\bcontent\s+intelligence\b/i, /\brag\b/i, /\bsource-grounded\b/i, /\bcorpus\s+construction\b/i]
+    },
+    {
+      title: "Instructional AI Workflows",
+      href: "projects/instructional-ai-workflows.html",
+      patterns: [/\binstructional\s+ai\s+workflows\b/i, /\bhuman-reviewed\s+ai\b/i, /\bfeedback\s+workflows\b/i]
+    },
+    {
+      title: "Assessment-to-Remediation Pipeline",
+      href: "projects/assessment-to-remediation-pipeline.html",
+      patterns: [/\bassessment-to-remediation\s+pipeline\b/i, /\bremediation\s+pipeline\b/i, /\bdiagnostic\s+evidence\b/i]
+    },
+    {
+      title: "Case studies",
+      href: "case-studies/index.html",
+      patterns: [/\bcase\s+studies\b/i, /\bcase\s+study\b/i]
+    }
+  ];
 
   const escapeHtml = (value) =>
     String(value ?? "")
@@ -97,16 +155,126 @@ if (helper) {
     }
   };
 
+  const normalizeLink = (link) => {
+    const label = link?.title || link?.label || link?.text || link?.name;
+    const href = safeHref(link?.href || link?.url || link?.path || "");
+    if (!label || href === "#") return null;
+    return { title: String(label), href };
+  };
+
+  const uniqueLinks = (links) => {
+    const seen = new Set();
+    return links.filter((link) => {
+      if (!link || seen.has(link.href)) return false;
+      seen.add(link.href);
+      return true;
+    });
+  };
+
+  const explicitLinksFromPayload = (payload) => {
+    const links = [];
+    if (Array.isArray(payload.links)) links.push(...payload.links);
+    (payload.blocks || []).forEach((block) => {
+      if (Array.isArray(block.links)) links.push(...block.links);
+      if (block.type === "links" && Array.isArray(block.items)) links.push(...block.items);
+    });
+    return uniqueLinks(links.map(normalizeLink));
+  };
+
+  const destinationSearchText = (payload) =>
+    [
+      payload.answer,
+      ...(payload.blocks || []).flatMap((block) => [
+        block.title,
+        block.content,
+        block.nextBestAction,
+        ...(block.questions || []),
+        ...(block.links || []).map((link) => `${link.title || link.label || ""} ${link.href || link.url || ""}`),
+        ...(block.items || []).map((link) => `${link.title || link.label || ""} ${link.href || link.url || ""}`)
+      ])
+    ]
+      .filter(Boolean)
+      .join(" ");
+
+  const inferredDestinationLinks = (payload) => {
+    const text = destinationSearchText(payload);
+    if (!text) return [];
+    return DESTINATION_LINKS.filter((destination) => destination.patterns.some((pattern) => pattern.test(text)))
+      .slice(0, 4)
+      .map((destination) => normalizeLink(destination))
+      .filter(Boolean);
+  };
+
+  const renderVisitLinks = (links, title = "Recommended pages") => {
+    const usableLinks = uniqueLinks(links).slice(0, 4);
+    if (!usableLinks.length) return "";
+    return `<div class="portfolio-helper-link-list"><strong>${escapeHtml(title)}</strong><div>${usableLinks
+      .map((link) => `<a class="portfolio-helper-link" href="${escapeHtml(link.href)}">${escapeHtml(link.title)}</a>`)
+      .join("")}</div></div>`;
+  };
+
+  let closeTimer = 0;
+  let closeTransitionHandler = null;
+  let openFrame = 0;
+
+  const prefersReducedMotion = () =>
+    window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const clearCloseState = () => {
+    window.clearTimeout(closeTimer);
+    closeTimer = 0;
+    if (openFrame) {
+      window.cancelAnimationFrame(openFrame);
+      openFrame = 0;
+    }
+    if (closeTransitionHandler) {
+      panel.removeEventListener("transitionend", closeTransitionHandler);
+      closeTransitionHandler = null;
+    }
+    helper.classList.remove("is-closing");
+  };
+
   const openPanel = () => {
+    clearCloseState();
     panel.hidden = false;
     toggle.setAttribute("aria-expanded", "true");
-    window.setTimeout(() => input.focus(), 0);
+    toggle.setAttribute("aria-label", "Close portfolio navigator");
+    if (prefersReducedMotion()) {
+      helper.classList.add("is-open");
+      input.focus();
+      return;
+    }
+    openFrame = window.requestAnimationFrame(() => {
+      openFrame = 0;
+      helper.classList.add("is-open");
+    });
+    window.setTimeout(() => input.focus(), 160);
   };
 
   const closePanel = () => {
-    panel.hidden = true;
+    if (panel.hidden) return;
+    clearCloseState();
     toggle.setAttribute("aria-expanded", "false");
-    toggle.focus();
+    toggle.setAttribute("aria-label", "Open portfolio navigator");
+    helper.classList.remove("is-open");
+
+    const finishClose = () => {
+      clearCloseState();
+      panel.hidden = true;
+      toggle.focus();
+    };
+
+    if (prefersReducedMotion()) {
+      finishClose();
+      return;
+    }
+
+    helper.classList.add("is-closing");
+    closeTransitionHandler = (event) => {
+      if (event.target === panel) finishClose();
+    };
+    panel.addEventListener("transitionend", closeTransitionHandler);
+    closeTimer = window.setTimeout(finishClose, PANEL_TRANSITION_MS);
   };
 
   const setBusy = (busy) => {
@@ -162,7 +330,8 @@ if (helper) {
         return `<li><a href="${escapeHtml(href)}">${escapeHtml(title)}</a></li>`;
       })
       .join("");
-    return `${body}${citations ? `<div class="portfolio-helper-sources"><strong>Sources</strong><ul>${citations}</ul></div>` : ""}`;
+    const visitLinks = uniqueLinks([...explicitLinksFromPayload(payload), ...inferredDestinationLinks(payload)]);
+    return `${body}${renderVisitLinks(visitLinks)}${citations ? `<div class="portfolio-helper-sources"><strong>Sources</strong><ul>${citations}</ul></div>` : ""}`;
   };
 
   const statusHtml = (kind, title, content) =>
@@ -178,7 +347,7 @@ if (helper) {
   };
 
   const dataLabHandoffHtml = (href) =>
-    `<div class="portfolio-helper-status info"><strong>Open Data Lab</strong><p>That looks like an analytics or visualization request for the synthetic education warehouse.</p><p><a class="text-link" href="${escapeHtml(href)}">Open Data Lab with this prompt</a></p></div>`;
+    `<div class="portfolio-helper-status info"><strong>Open Data Lab</strong><p>That looks like an analytics or visualization request for the synthetic education warehouse.</p><p class="portfolio-helper-link-row"><a class="portfolio-helper-link" href="${escapeHtml(href)}">Open Data Lab with this prompt</a></p></div>`;
 
   const addMessage = (role, content) => {
     const article = document.createElement("article");
