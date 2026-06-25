@@ -30,12 +30,13 @@ Suggested pinned repository order:
 
 1. `education-data-simulation-engine`
 2. `assessment-intelligence`
-3. `graduate-statistics-portfolio`
-4. `statistical-risk-modeling-r`
-5. `grant-mccurdy.github.io`
-6. `content-intelligence-reporting`
+3. `statistical-risk-modeling-r`
+4. `grant-mccurdy.github.io`
+5. `content-intelligence-reporting`
+6. `instructional-ai-workflows`
 
 Keep `public-workspace` unpinned unless it is intentionally presented as a staging workspace.
+Keep `graduate-statistics-portfolio` linked from the site as methods evidence rather than pinned as a top-level system, unless the profile is being tuned for a statistics-specific audience.
 
 ## Repository Settings
 

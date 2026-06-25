@@ -116,7 +116,14 @@ img {
   place-items: center;
   border: 1px solid currentColor;
   border-radius: 50%;
-  font-size: 0.82rem;
+  overflow: hidden;
+  background: #fff;
+}
+
+.brand-mark img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .brand-text {
@@ -729,6 +736,19 @@ h3 {
 
 .detail-panel {
   padding: 1.35rem;
+}
+
+.artifact-list + .methods-evidence {
+  margin-top: 1rem;
+}
+
+.methods-evidence h2,
+.methods-evidence h3 {
+  font-size: clamp(1.35rem, 2vw, 1.7rem);
+}
+
+.methods-evidence p:not(.section-kicker) {
+  color: var(--muted);
 }
 
 .detail-action {
