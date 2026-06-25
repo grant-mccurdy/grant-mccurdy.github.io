@@ -187,12 +187,12 @@ async function inspectHelper(page, label) {
       status: 200,
       contentType: "application/json; charset=utf-8",
       body: JSON.stringify({
-        answer: "Start with the Analytics Dashboard, then open the Portfolio Data Lab. For methods evidence, visit the Graduate Statistics Portfolio.",
+        answer: "Start with the Analytics Dashboard, then open the Portfolio Data Lab. For methods evidence, visit Statistical Methods Evidence.",
         blocks: [
           {
             type: "text",
             content:
-              "Start with the **Analytics Dashboard**, then open the Portfolio Data Lab. For methods evidence, visit the Graduate Statistics Portfolio."
+              "Start with the **Analytics Dashboard**, then open the Portfolio Data Lab. For methods evidence, visit Statistical Methods Evidence."
           },
           {
             type: "suggestions",

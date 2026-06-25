@@ -58,7 +58,7 @@ gh repo edit grant-mccurdy/statistical-risk-modeling-r \
   --homepage "https://grant-mccurdy.github.io/projects/statistical-risk-modeling-r.html"
 
 gh repo edit grant-mccurdy/graduate-statistics-portfolio \
-  --description "Curated graduate statistics portfolio in R featuring nonlinear model search, GLMs, cross-validation, calibration, and threshold analysis." \
+  --description "Curated statistical methods portfolio in R featuring nonlinear model search, GLMs, cross-validation, calibration, and threshold analysis." \
   --homepage "https://grant-mccurdy.github.io/projects/graduate-statistics-portfolio.html"
 
 gh repo edit grant-mccurdy/content-intelligence-reporting \
