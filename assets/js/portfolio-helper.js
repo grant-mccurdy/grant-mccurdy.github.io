@@ -54,7 +54,7 @@ if (helper) {
     {
       title: "Content Intelligence",
       href: "projects/content-intelligence.html",
-      patterns: [/\bcontent\s+intelligence\b/i, /\brag\b/i, /\bsource-grounded\b/i, /\bcorpus\s+construction\b/i]
+      patterns: [/\bcontent\s+intelligence\b/i, /\brag\b/i, /\bartifact-to-rag\b/i, /\bsource-grounded\b/i, /\bcorpus\s+construction\b/i]
     },
     {
       title: "Instructional AI Workflows",

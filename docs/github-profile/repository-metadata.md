@@ -32,7 +32,7 @@ Suggested pinned repository order:
 2. `assessment-intelligence`
 3. `statistical-risk-modeling-r`
 4. `grant-mccurdy.github.io`
-5. `content-intelligence-reporting`
+5. `content-intelligence`
 6. `instructional-ai-workflows`
 
 Keep `public-workspace` unpinned unless it is intentionally presented as a staging workspace.
@@ -61,8 +61,8 @@ gh repo edit grant-mccurdy/graduate-statistics-portfolio \
   --description "Curated statistical methods portfolio in R featuring nonlinear model search, GLMs, cross-validation, calibration, and threshold analysis." \
   --homepage "https://grant-mccurdy.github.io/projects/graduate-statistics-portfolio.html"
 
-gh repo edit grant-mccurdy/content-intelligence-reporting \
-  --description "Source-grounded content intelligence workflow for evidence-labeled reporting and searchable document analysis." \
+gh repo edit grant-mccurdy/content-intelligence \
+  --description "Artifact-to-RAG content intelligence workflow for source adapters, washed information objects, retrieval-ready chunks, and cited outputs." \
   --homepage "https://grant-mccurdy.github.io/projects/content-intelligence.html"
 
 gh repo edit grant-mccurdy/instructional-ai-workflows \
@@ -118,9 +118,9 @@ gh repo edit grant-mccurdy/graduate-statistics-portfolio \
   --add-topic regression \
   --add-topic portfolio
 
-gh repo edit grant-mccurdy/content-intelligence-reporting \
+gh repo edit grant-mccurdy/content-intelligence \
   --add-topic content-intelligence \
-  --add-topic reporting \
+  --add-topic rag \
   --add-topic python \
   --add-topic retrieval \
   --add-topic ai-assisted-workflows

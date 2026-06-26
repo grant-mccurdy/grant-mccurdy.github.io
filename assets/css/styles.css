@@ -1032,6 +1032,148 @@ h3 {
   color: var(--muted);
 }
 
+.methods-index {
+  padding-top: 0;
+}
+
+.methods-index .section-heading p:not(.section-kicker) {
+  margin: 0;
+  color: var(--muted);
+}
+
+.methods-table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.methods-table {
+  width: 100%;
+  min-width: 760px;
+  border-collapse: collapse;
+}
+
+.methods-table caption {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.methods-table th,
+.methods-table td {
+  padding: 0.72rem 0.85rem;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  vertical-align: top;
+}
+
+.methods-table th {
+  background: var(--surface-soft);
+  color: var(--ink);
+  font-size: 0.72rem;
+  font-weight: 850;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.methods-table td {
+  color: var(--muted);
+  font-size: 0.92rem;
+  line-height: 1.35;
+}
+
+.methods-table tr:last-child td {
+  border-bottom: 0;
+}
+
+.methods-table td:first-child {
+  color: var(--ink);
+  font-weight: 750;
+}
+
+.methods-table a {
+  color: var(--navy-2);
+  font-weight: 750;
+  overflow-wrap: anywhere;
+  text-decoration: none;
+  transition: color var(--motion-fast) var(--ease-flow);
+}
+
+.methods-table a:hover,
+.methods-table a:focus-visible {
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 0.2rem;
+}
+
+@media (max-width: 760px) {
+  .methods-table {
+    display: block;
+    min-width: 0;
+  }
+
+  .methods-table thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  .methods-table tbody {
+    display: grid;
+    gap: 0.65rem;
+    padding: 0.65rem;
+  }
+
+  .methods-table tr {
+    display: grid;
+    gap: 0.42rem;
+    padding: 0.75rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--surface);
+  }
+
+  .methods-table th,
+  .methods-table td,
+  .methods-table tr:last-child td {
+    padding: 0;
+    border-bottom: 0;
+  }
+
+  .methods-table td {
+    display: grid;
+    gap: 0.15rem;
+  }
+
+  .methods-table td::before {
+    color: var(--gold-2);
+    font-size: 0.68rem;
+    font-weight: 850;
+    letter-spacing: 0.05em;
+    line-height: 1.1;
+    text-transform: uppercase;
+  }
+
+  .methods-table td:nth-child(1)::before {
+    content: "Method";
+  }
+
+  .methods-table td:nth-child(2)::before {
+    content: "Source project";
+  }
+
+  .methods-table td:nth-child(3)::before {
+    content: "Proof artifact";
+  }
+}
+
 .report-stack {
   display: grid;
   gap: 1rem;
@@ -2679,6 +2821,55 @@ th {
   font-size: 0.82rem;
 }
 
+.content-rag-demo {
+  display: grid;
+  gap: 1rem;
+}
+
+.content-rag-layout {
+  display: grid;
+  grid-template-columns: minmax(16rem, 0.36fr) minmax(0, 1fr);
+  gap: 1rem;
+  align-items: start;
+}
+
+.content-rag-source-panel {
+  min-width: 0;
+}
+
+.content-rag-source-panel h3 {
+  margin-top: 0;
+}
+
+.content-rag-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.content-rag-presets .button {
+  min-height: 2.35rem;
+  padding: 0.45rem 0.65rem;
+  font-size: 0.84rem;
+}
+
+.content-rag-chat {
+  min-width: 0;
+}
+
+.content-rag-thread {
+  height: min(56vh, 32rem);
+  min-height: 24rem;
+}
+
+.content-rag-form input {
+  border-radius: 4px;
+}
+
+.content-rag-sources {
+  margin-top: 0;
+}
+
 .portfolio-helper {
   position: fixed;
   right: 1.25rem;
@@ -3207,6 +3398,7 @@ th {
   .line-control-grid,
   .dashboard-source-strip,
   .data-lab-shell,
+  .content-rag-layout,
   .source-meta-grid {
     grid-template-columns: 1fr;
   }
@@ -3331,8 +3523,16 @@ th {
     min-height: 30rem;
   }
 
+  .content-rag-thread {
+    min-height: 24rem;
+  }
+
   .data-lab-chat {
     order: -1;
+  }
+
+  .content-rag-chat {
+    order: 0;
   }
 
   .chat-metrics {
@@ -3418,6 +3618,7 @@ th {
   .slice-filter-actions button,
   .table-control-row select,
   .table-reset,
+  .methods-table a,
   .text-link,
   .js-reveal [data-reveal] {
     transition: none;

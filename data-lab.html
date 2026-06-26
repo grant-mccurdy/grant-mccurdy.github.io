@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Portfolio Data Lab | Grant McCurdy</title>
-    <meta name="description" content="Structured analytic chat for a public-safe synthetic warehouse and systems analytics demo.">
+    <meta name="description" content="A reusable analyst chat over connected public-safe SQL datasets.">
     <link rel="stylesheet" href="assets/css/styles.css?v=20260625a">
   </head>
   <body>
@@ -27,19 +27,21 @@
     <main class="detail-main data-lab-main">
       <section class="detail-hero data-lab-hero">
         <p class="section-kicker">Portfolio Data Lab</p>
-        <h1>Explore a public-safe systems data lab</h1>
-        <p>Structured analytic chat over a synthetic warehouse used to test analytics, validation, and reporting workflows.</p>
+        <h1>Ask a connected analytics agent</h1>
+        <p>Structured analyst chat over a public-safe SQL dataset, with inspected schema, guarded queries, and evidence-backed follow-ups.</p>
       </section>
 
       <section
         class="data-lab-shell"
         data-data-lab
         data-api-endpoint="https://portfolio-rag-api.grant-mccurdy.workers.dev/analytics/query"
+        data-datasets-endpoint="https://portfolio-rag-api.grant-mccurdy.workers.dev/analytics/datasets"
         aria-labelledby="data-lab-heading"
       >
         <aside class="data-lab-prompts" aria-labelledby="data-lab-heading">
-          <h2 id="data-lab-heading">Analytic prompts</h2>
+          <h2 id="data-lab-heading">Analyst prompts</h2>
           <div class="preset-row data-lab-preset-row">
+            <button class="preset-button" type="button" data-question="What stands out in the data?">Analyst readout</button>
             <button class="preset-button" type="button" data-question="Which courses show the strongest average observed growth?">Segment growth</button>
             <button class="preset-button" type="button" data-question="How does average observed growth change by school year?">Year trend</button>
             <button class="preset-button" type="button" data-question="What warehouse validation checks passed?">Validation checks</button>
@@ -48,16 +50,16 @@
           </div>
           <dl class="data-lab-status">
             <div>
-              <dt>Warehouse</dt>
-              <dd>15 tables</dd>
+              <dt>Dataset</dt>
+              <dd data-dataset-name>Connecting</dd>
             </div>
             <div>
-              <dt>Rows</dt>
-              <dd>13,643</dd>
+              <dt>Tables</dt>
+              <dd data-dataset-tables>--</dd>
             </div>
             <div>
-              <dt>Validation</dt>
-              <dd>20 / 20</dd>
+              <dt>Mode</dt>
+              <dd data-dataset-mode>Read-only SQL</dd>
             </div>
           </dl>
         </aside>
@@ -66,7 +68,7 @@
           <div class="data-lab-thread" data-chat-thread aria-live="polite"></div>
           <form class="data-lab-form" data-chat-form>
             <label class="sr-only" for="data-lab-question">Question</label>
-            <input id="data-lab-question" name="question" type="text" autocomplete="off" placeholder="Question about the public-safe warehouse" data-chat-input>
+            <input id="data-lab-question" name="question" type="text" autocomplete="off" placeholder="Ask about the connected public-safe dataset" data-chat-input>
             <button class="button primary" type="submit">Run</button>
           </form>
         </section>
@@ -74,6 +76,6 @@
     </main>
 
     <script src="assets/js/site.js"></script>
-    <script src="assets/js/data-lab.js?v=20260624b"></script>
+    <script src="assets/js/data-lab.js?v=20260625a"></script>
   </body>
 </html>

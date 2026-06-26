@@ -10,7 +10,7 @@ My portfolio focuses on systems that make complex education and analytics work i
 - [Education Data Simulation Engine](https://github.com/grant-mccurdy/education-data-simulation-engine) - synthetic education data generator with Canvas-style artifacts, validation reports, warehouse-ready outputs, and public-safe demo data.
 - [Assessment Intelligence](https://github.com/grant-mccurdy/assessment-intelligence) - assessment analytics workflow using synthetic gradebook data, SQL extracts, R reporting, modeling artifacts, and static dashboard outputs.
 - [Assessment Growth Analytics in R](https://github.com/grant-mccurdy/statistical-risk-modeling-r) - public-safe R project for BOY/EOY growth modeling, expected-growth validation, adjusted section signals, and stakeholder reporting.
-- [Content Intelligence Reporting](https://github.com/grant-mccurdy/content-intelligence-reporting) - source-grounded reporting workflow for structured summaries, evidence labels, and auditable content artifacts.
+- [Content Intelligence](https://github.com/grant-mccurdy/content-intelligence) - artifact-to-RAG workflow for source adapters, washed information objects, retrieval-ready chunks, and cited outputs.
 - [Instructional AI Workflows](https://github.com/grant-mccurdy/instructional-ai-workflows) - teacher-controlled AI workflow prototypes with rubric evidence, review gates, feedback drafts, and remediation planning outputs.
 
 ## Evidence To Inspect

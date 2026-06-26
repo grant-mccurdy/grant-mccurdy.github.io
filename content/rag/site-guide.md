@@ -50,8 +50,8 @@ recommend:
 - Assessment-to-Remediation Pipeline;
 - Feedback, Review, and Remediation case study.
 
-If the visitor asks about RAG, source grounding, corpus construction, or content
-pipelines, recommend:
+If the visitor asks about RAG, source grounding, artifact conversion, corpus
+construction, or content pipelines, recommend:
 
 - Content Intelligence;
 - Content Intelligence Pipeline case study;

@@ -69,6 +69,52 @@ function staticServer() {
       );
       return;
     }
+    if (pathname === "/mock-datasets") {
+      response.writeHead(200, { "Content-Type": "application/json; charset=utf-8" });
+      response.end(
+        JSON.stringify({
+          defaultDatasetId: "synthetic_education_warehouse",
+          datasets: [
+            {
+              id: "synthetic_education_warehouse",
+              title: "Synthetic Education Warehouse",
+              dialect: "sqlite",
+              tables: 15,
+              columns: 234,
+              capabilities: ["dataset_overview"],
+              suggestedQuestions: ["What stands out in the data?"]
+            }
+          ]
+        }),
+      );
+      return;
+    }
+    if (pathname === "/mock-content-rag") {
+      response.writeHead(200, { "Content-Type": "application/json; charset=utf-8" });
+      response.end(
+        JSON.stringify({
+          answer: "Source-grounded answer about the artifact-to-RAG workflow with cited evidence [1].",
+          mode: "content_rag_generated",
+          retrievalMode: "hybrid",
+          vectorConfigured: true,
+          vector: {
+            model: "@cf/baai/bge-base-en-v1.5",
+            dimensions: 768,
+            matches: 3,
+          },
+          limits: ["This route uses public-safe generated index records."],
+          suggestedQuestions: ["What is an information object in this project?"],
+          citations: [
+            {
+              number: 1,
+              title: "Assessment Review Cycle Planning Notes",
+              url: "https://github.com/grant-mccurdy/content-intelligence/blob/main/sample_outputs/rag-index.json",
+            },
+          ],
+        }),
+      );
+      return;
+    }
     const relativePath = pathname === "/" ? "index.html" : pathname.replace(/^\/+/, "");
     const target = path.resolve(root, relativePath);
 
@@ -266,6 +312,16 @@ async function inspectDataLabPrefill(page, label) {
   };
 }
 
+async function inspectDataLabCatalog(page, label) {
+  if (label !== "data-lab-catalog") return null;
+  await page.getByText("Synthetic Education Warehouse").waitFor({ state: "visible", timeout: 1500 });
+  return {
+    datasetName: (await page.locator("[data-dataset-name]").innerText()).includes("Synthetic Education Warehouse"),
+    datasetTables: (await page.locator("[data-dataset-tables]").innerText()).includes("15 tables"),
+    datasetMode: (await page.locator("[data-dataset-mode]").innerText()).includes("sqlite analyst"),
+  };
+}
+
 async function inspectDataLabCapability(page, label) {
   if (label !== "data-lab-capability") return null;
   const thread = page.locator("[data-chat-thread]");
@@ -273,6 +329,36 @@ async function inspectDataLabCapability(page, label) {
   const text = await thread.innerText();
   return {
     capabilityNote: text.includes("cannot browse live repos") && text.includes("How does average observed growth change by school year?"),
+  };
+}
+
+async function inspectContentRag(page, label) {
+  if (!label.startsWith("content-rag-")) return null;
+  const thread = page.locator("[data-chat-thread]");
+  await thread.getByText("Content Intelligence RAG").waitFor({ state: "visible", timeout: 1500 });
+  await page.locator("[data-chat-input]").fill("How does the artifact-to-RAG workflow work?");
+  await page.locator("[data-chat-form] button[type='submit']").click();
+  await thread.getByText("Source-grounded answer").waitFor({ state: "visible", timeout: 1500 });
+  const text = await thread.innerText();
+  const sourceHref = await thread.locator(".content-rag-sources a").last().getAttribute("href");
+  const overflow = await page.evaluate(() =>
+    Array.from(document.querySelectorAll("[data-content-rag] *"))
+      .filter((el) => {
+        const rect = el.getBoundingClientRect();
+        return rect.width && rect.height && (rect.right > document.documentElement.clientWidth + 2 || rect.left < -2);
+      })
+      .slice(0, 5)
+      .map((el) => ({
+        className: String(el.className),
+        text: (el.textContent || "").trim().replace(/\s+/g, " ").slice(0, 80),
+      })),
+  );
+  return {
+    rendered: text.includes("Source-grounded answer") && text.includes("Follow-up questions"),
+    citation: Boolean(sourceHref?.includes("content-intelligence/blob/main/sample_outputs/rag-index.json")),
+    retrieval: text.includes("Hybrid vector + lexical retrieval") && text.includes("@cf/baai/bge-base-en-v1.5"),
+    limits: text.includes("public-safe generated index records"),
+    overflow,
   };
 }
 
@@ -285,6 +371,7 @@ const cases = [
   ["synthetic-mobile", path.join("projects", "education-data-simulation-engine.html"), 390, 900],
   ["data-lab-desktop", "data-lab.html", 1440, 1000],
   ["data-lab-mobile", "data-lab.html", 390, 900],
+  ["data-lab-catalog", "data-lab.html?endpoint=/mock-analytics&datasets_endpoint=/mock-datasets", 390, 900],
   ["data-lab-prefill", "data-lab.html?question=create%20a%20trend%20line", 390, 900],
   ["data-lab-capability", "data-lab.html?endpoint=/mock-analytics&question=Can%20you%20query%20the%20GitHub%20repo%20directly%3F&autorun=1", 390, 900],
   ["assessment-desktop", path.join("projects", "assessment-intelligence.html"), 1440, 1000],
@@ -297,6 +384,8 @@ const cases = [
   ["remediation-mobile", path.join("projects", "assessment-to-remediation-pipeline.html"), 390, 900],
   ["content-desktop", path.join("projects", "content-intelligence.html"), 1440, 1000],
   ["content-mobile", path.join("projects", "content-intelligence.html"), 390, 900],
+  ["content-rag-desktop", "projects/content-intelligence.html?content_endpoint=/mock-content-rag", 1440, 1000],
+  ["content-rag-mobile", "projects/content-intelligence.html?content_endpoint=/mock-content-rag", 390, 900],
   ["workflow-desktop", path.join("projects", "instructional-ai-workflows.html"), 1440, 1000],
   ["workflow-mobile", path.join("projects", "instructional-ai-workflows.html"), 390, 900],
   ["dashboard-desktop", path.join("dashboard", "assessment.html"), 1440, 1000],
@@ -318,7 +407,9 @@ try {
       ...(await inspect(page)),
       helper: await inspectHelper(page, label),
       dataLab: await inspectDataLabPrefill(page, label),
+      dataLabCatalog: await inspectDataLabCatalog(page, label),
       capability: await inspectDataLabCapability(page, label),
+      contentRag: await inspectContentRag(page, label),
     });
     await page.close();
   }
@@ -356,7 +447,15 @@ const failures = results.filter(
     result.helper?.handoff === false ||
     result.helper?.recommendationLinks === false ||
     result.dataLab?.prefilled === false ||
-    result.capability?.capabilityNote === false,
+    result.dataLabCatalog?.datasetName === false ||
+    result.dataLabCatalog?.datasetTables === false ||
+    result.dataLabCatalog?.datasetMode === false ||
+    result.capability?.capabilityNote === false ||
+    result.contentRag?.rendered === false ||
+    result.contentRag?.citation === false ||
+    result.contentRag?.retrieval === false ||
+    result.contentRag?.limits === false ||
+    result.contentRag?.overflow.length,
 );
 console.log(JSON.stringify(results, null, 2));
 

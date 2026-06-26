@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Content Intelligence | Grant McCurdy</title>
-    <meta name="description" content="Public-safe content intelligence project brief.">
+    <meta name="description" content="Artifact-to-RAG content intelligence project brief.">
     <link rel="stylesheet" href="../assets/css/styles.css?v=20260625a">
   </head>
   <body>
@@ -28,19 +28,19 @@
       <section class="detail-hero">
         <p class="section-kicker">Project Brief</p>
         <h1>Content Intelligence</h1>
-        <p>A generalized pipeline for converting unstructured content into source-bounded information objects, searchable corpora, transcript enrichment packets, and targeted source-grounded analytical reports.</p>
+        <p>An artifact-to-RAG pipeline for converting source materials into public-safe information objects, retrieval-ready chunks, safety-reviewed index records, and source-grounded answers.</p>
         <div class="hero-actions detail-actions">
           <a class="button primary" href="content-intelligence-demo-report.html">View Demo Report</a>
           <a class="button outline" href="../case-studies/content-intelligence.html">Read Case Study</a>
-          <a class="button outline" href="https://github.com/grant-mccurdy/content-intelligence-reporting">GitHub Repo</a>
+          <a class="button outline" href="https://github.com/grant-mccurdy/content-intelligence">GitHub Repo</a>
         </div>
       </section>
 
       <section class="section-shell detail-grid">
         <div>
           <p class="section-kicker">Implemented Pipeline</p>
-          <h2>From cleaned artifacts to agent-ready context</h2>
-          <p>Ingest synthetic source notes, staged video transcripts, and OCR cleanup examples; build checksum-backed manifests; normalize and segment the corpus; preserve citations; and generate method packs for source-grounded analysis.</p>
+          <h2>From source adapters to RAG-ready evidence</h2>
+          <p>The public demo mirrors a private source-adapter workflow: extract and inventory artifacts, convert and wash the text, create citation-preserving information objects, build retrieval-ready RAG index records, and validate the safety boundary before serving answers.</p>
         </div>
         <div class="detail-panel">
           <h2>Current Artifacts</h2>
@@ -50,9 +50,9 @@
             <li>Transcript enrichment packet examples</li>
             <li>OCR cleanup workflow simulation</li>
             <li>Information-object map across three demo pipelines</li>
-            <li>20 corpus segments and 9 normalized artifacts</li>
+            <li>80 public-safe method and evidence records with Vectorize export metadata</li>
             <li>Manifest and corpus construction scripts</li>
-            <li>Transparent keyword retrieval</li>
+            <li>Public-safety review output</li>
             <li>Cited sample report</li>
             <li>AI-readable analysis method pack</li>
             <li>Privacy and copyright documentation</li>
@@ -60,7 +60,7 @@
           <div class="link-row detail-action">
             <a class="text-link" href="content-intelligence-demo-report.html">Demo report</a>
             <a class="text-link" href="../case-studies/content-intelligence.html">Case study</a>
-            <a class="text-link" href="https://github.com/grant-mccurdy/content-intelligence-reporting">Source repo</a>
+            <a class="text-link" href="https://github.com/grant-mccurdy/content-intelligence">Source repo</a>
           </div>
         </div>
       </section>
@@ -68,43 +68,81 @@
       <section class="section-shell artifact-grid" aria-labelledby="artifact-heading">
         <div class="section-heading">
           <p class="section-kicker">Evidence</p>
-          <h2 id="artifact-heading">What the demo proves</h2>
+          <h2 id="artifact-heading">What the workflow proves</h2>
         </div>
         <article class="artifact">
-          <h3>Source Boundaries</h3>
-          <p>Each source has a manifest record with title, type, license, path, checksum, and processing status.</p>
+          <h3>Source Adapters</h3>
+          <p>The project documents a generic source-adapter contract, with Dropbox API extraction treated as the first private adapter rather than the public boundary.</p>
         </article>
         <article class="artifact">
-          <h3>Citation-Preserving Segments</h3>
-          <p>Twenty corpus segments carry source IDs and citation labels, so report claims can be traced back to supporting passages.</p>
+          <h3>Conversion And Washing</h3>
+          <p>Transcript and OCR-style examples become cleaned, citation-preserving corpus records after public-safety review.</p>
         </article>
         <article class="artifact">
-          <h3>Transcript Enrichment</h3>
-          <p>The staged media demo emits three enrichment packets that simulate an OpenAI-style cleanup pass without making a network request.</p>
+          <h3>RAG-Ready Index</h3>
+          <p>Generated RAG index records add stable chunk IDs, source metadata, method/evidence collections, citation labels, safety levels, embedding metadata, and retrieval fields.</p>
         </article>
         <article class="artifact">
-          <h3>Public-Safe Output</h3>
-          <p>The demo uses synthetic notes only and excludes private transcripts, course identifiers, student records, and credentials.</p>
+          <h3>Evaluated Boundary</h3>
+          <p>The validation step checks generated objects and requires a passing public-safety review before records can be treated as retrieval-ready.</p>
         </article>
+      </section>
+
+      <section
+        class="section-shell content-rag-demo"
+        aria-labelledby="content-rag-heading"
+        data-content-rag
+        data-api-endpoint="https://portfolio-rag-api.grant-mccurdy.workers.dev/content/query"
+      >
+        <div class="section-heading">
+          <p class="section-kicker">Live RAG Surface</p>
+          <h2 id="content-rag-heading">Ask the generated content index</h2>
+        </div>
+        <div class="content-rag-layout">
+          <div class="detail-panel content-rag-source-panel">
+            <h3>Indexed Boundary</h3>
+            <ul class="clean-list">
+              <li>80 public-safe method and evidence records</li>
+              <li>Source adapters, washing, information objects, and citation grounding</li>
+              <li>Cloudflare Vectorize-ready records with lexical fallback</li>
+              <li>Raw private artifacts excluded from the public index</li>
+            </ul>
+            <div class="data-lab-preset-row content-rag-presets" aria-label="Example questions">
+              <button class="button outline" type="button" data-question="How does the artifact-to-RAG workflow work?">Workflow</button>
+              <button class="button outline" type="button" data-question="What is an information object in this project?">Object model</button>
+              <button class="button outline" type="button" data-question="How does the public-safety review protect raw artifacts?">Safety</button>
+            </div>
+          </div>
+          <div class="data-lab-chat content-rag-chat">
+            <div class="data-lab-thread content-rag-thread" data-chat-thread></div>
+            <form class="data-lab-form content-rag-form" data-chat-form>
+              <input data-chat-input type="text" name="question" autocomplete="off" placeholder="Ask about the artifact-to-RAG workflow">
+              <button class="button primary" type="submit">Ask</button>
+            </form>
+          </div>
+        </div>
       </section>
 
       <section class="section-shell detail-grid">
         <div>
-          <p class="section-kicker">Next Build Direction</p>
-          <h2>Artifact conversion before agent packets</h2>
-          <p>The current status report identifies the next strategic tool: a unified converter for cleaned transcripts, OCR outputs, and public-safe documents. That converter should produce stable manifest, normalized artifact, corpus, index, and safety-review objects before a general agent context packet generator is added.</p>
+          <p class="section-kicker">Serving Layer</p>
+          <h2>Hybrid retrieval with a safe fallback</h2>
+          <p>The workflow now produces Vectorize-ready records and the portfolio Worker can use a hybrid vector-plus-lexical route when Cloudflare bindings are configured. If vector retrieval is unavailable, the public demo falls back to lexical retrieval over the same safety-reviewed records.</p>
         </div>
         <div class="detail-panel">
           <h2>Inspect In Source Repo</h2>
           <ul class="clean-list">
+            <li><code>docs/artifact-to-rag-workflow.md</code></li>
+            <li><code>docs/source-adapters.md</code></li>
+            <li><code>docs/rag-architecture.md</code></li>
+            <li><code>sample_outputs/rag-index.json</code></li>
+            <li><code>sample_outputs/vector-records.jsonl</code></li>
+            <li><code>sample_outputs/public-safety-review.json</code></li>
             <li><code>reports/artifact-conversion-and-agent-context-status.md</code></li>
-            <li><code>docs/transcript-enrichment-workflow.md</code></li>
-            <li><code>sample_outputs/information-object-map.json</code></li>
-            <li><code>sample_outputs/cloud_video_transcription/transcript_enrichment_brief.md</code></li>
             <li><code>sample_outputs/analysis-method-pack.json</code></li>
           </ul>
           <div class="link-row detail-action">
-            <a class="text-link" href="https://github.com/grant-mccurdy/content-intelligence-reporting">Source repo</a>
+            <a class="text-link" href="https://github.com/grant-mccurdy/content-intelligence">Source repo</a>
           </div>
         </div>
       </section>
@@ -115,9 +153,10 @@
             <p class="section-kicker">Safety Boundary</p>
             <h2 id="content-safety-heading">Source-grounded, source-limited</h2>
           </div>
-          <p>Public examples must use synthetic, sanitized, public-domain, or clearly licensed source material. Do not publish professor names, university course identifiers, private LMS links, copyrighted transcripts, raw lecture text, private video URLs, private lecture manifests, or coursework-specific prompts.</p>
+          <p>Public examples must use synthetic, sanitized, public-domain, or clearly licensed source material. Raw private artifacts, private source paths, credentials, course identifiers, and copyrighted lecture text stay outside the public repository and public RAG index.</p>
         </div>
       </section>
     </main>
+    <script src="../assets/js/content-rag.js?v=20260626b" defer></script>
   </body>
 </html>

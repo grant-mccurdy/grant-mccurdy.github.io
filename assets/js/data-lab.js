@@ -13,9 +13,18 @@ if (lab) {
     lab.dataset.apiEndpoint ||
     window.PORTFOLIO_ANALYTICS_ENDPOINT ||
     "";
+  const datasetsEndpoint =
+    params.get("datasets_endpoint") ||
+    lab.dataset.datasetsEndpoint ||
+    window.PORTFOLIO_ANALYTICS_DATASETS_ENDPOINT ||
+    (endpoint ? endpoint.replace(/\/analytics\/query\/?$/, "/analytics/datasets") : "");
   const demoToken = params.get("demo_token") || lab.dataset.demoToken || window.PORTFOLIO_ANALYTICS_TOKEN || "";
   const initialQuestion = String(params.get("question") || params.get("prompt") || "").trim();
   const autorunInitialQuestion = params.get("autorun") === "1";
+  const datasetName = lab.querySelector("[data-dataset-name]");
+  const datasetTables = lab.querySelector("[data-dataset-tables]");
+  const datasetMode = lab.querySelector("[data-dataset-mode]");
+  let activeDatasetId = "";
 
   const escapeHtml = (value) =>
     String(value ?? "")
@@ -343,23 +352,49 @@ if (lab) {
     [
       renderStatus(
         "info",
-        "What this lab can answer",
-        "Ask about the public-safe synthetic warehouse, assessment growth patterns, course and cohort comparisons, readiness mix, validation checks, or the source data behind the dashboard."
+        "Connected analyst workspace",
+        "Ask broad inspection questions, compare segments, request trends, check relationships, or ask what the dataset can and cannot support."
       ),
       renderAnalysisNote({
         title: "Good first pass",
         content:
-          "Start with Segment growth or Validation checks to see how the same extract family supports the dashboard, reports, and portfolio evidence."
+          "Start with Analyst readout to let the backend inspect coverage and choose high-signal follow-up analyses before drilling into one metric."
       }),
       renderSuggestions({
         title: "Try one of these",
         questions: [
+          "What stands out in the data?",
           "Which courses show the strongest average observed growth?",
-          "What warehouse validation checks passed?",
-          "How does average observed growth change by school year?"
+          "How does average observed growth change by school year?",
+          "What should I not conclude from this?"
         ]
       })
     ].join("");
+
+  const updateDatasetStatus = (dataset) => {
+    if (!dataset) return;
+    activeDatasetId = dataset.id || activeDatasetId;
+    if (datasetName) datasetName.textContent = dataset.title || dataset.id || "Connected dataset";
+    if (datasetTables) datasetTables.textContent = `${dataset.tables || 0} tables`;
+    if (datasetMode) datasetMode.textContent = `${dataset.dialect || "SQL"} analyst`;
+  };
+
+  const loadDatasetCatalog = async () => {
+    if (!datasetsEndpoint) return;
+    try {
+      const headers = {};
+      if (demoToken) headers["x-demo-token"] = demoToken;
+      const response = await fetch(datasetsEndpoint, { headers });
+      if (!response.ok) return;
+      const payload = await response.json().catch(() => ({}));
+      const dataset =
+        (payload.datasets || []).find((item) => item.id === payload.defaultDatasetId) ||
+        (payload.datasets || [])[0];
+      updateDatasetStatus(dataset);
+    } catch {
+      if (datasetName) datasetName.textContent = "Dataset unavailable";
+    }
+  };
 
   const renderSqlDebug = (block) =>
     `<details class="chat-debug"><summary>${escapeHtml(block.title || "Query")}</summary><pre>${escapeHtml(block.sql || "")}</pre></details>`;
@@ -423,7 +458,7 @@ if (lab) {
         method: "POST",
         headers,
         signal: controller.signal,
-        body: JSON.stringify({ question: trimmed, topK: 4 })
+        body: JSON.stringify({ question: trimmed, topK: 4, datasetId: activeDatasetId || undefined })
       });
       window.clearTimeout(timeoutId);
       const payload = await response.json().catch(() => ({}));
@@ -432,6 +467,7 @@ if (lab) {
         error.status = response.status;
         throw error;
       }
+      updateDatasetStatus(payload.dataset);
       loading.querySelector(".chat-content").innerHTML = renderBlocks(payload);
     } catch (error) {
       window.clearTimeout(timeoutId);
@@ -477,6 +513,7 @@ if (lab) {
     input.value = "";
   });
 
+  loadDatasetCatalog();
   message("assistant", renderInitialLabIntro());
   if (initialQuestion) {
     input.value = initialQuestion;
