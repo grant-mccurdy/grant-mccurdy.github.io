@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="How the prototype turns guest, failure, operating, and cost signals into an explainable recovery recommendation.">
+    <title>Methodology and assumptions | Hotel Comp Policy Model</title>
+    <link rel="stylesheet" href="../../assets/css/styles.css?v=20260710a">
+    <link rel="stylesheet" href="appendix.css?v=20260710a">
+  </head>
+  <body>
+    <header class="site-header compact" data-header>
+      <nav class="nav-shell" aria-label="Primary navigation">
+        <a class="brand" href="../../index.html">
+          <span class="brand-mark" aria-hidden="true"><img src="../../assets/images/grant-mccurdy-profile.jpg" alt=""></span>
+          <span class="brand-text">Grant McCurdy</span>
+        </a>
+        <div class="nav-links static">
+          <a href="index.html">Decision Brief</a>
+          <a href="simulation-audit.html">Simulation Audit</a>
+          <a href="../index.html">Projects</a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="report-main">
+      <section class="report-hero">
+        <p class="section-kicker">Hotel Comp Policy Model · Technical Evidence</p>
+        <h1>Methodology and assumptions</h1>
+        <p>How the prototype turns guest, failure, operating, and cost signals into an explainable recovery recommendation.</p>
+        <div class="report-actions">
+          <a class="button primary" href="index.html">Open decision brief</a>
+          <a class="button outline" href="simulation-audit.html">Open simulation audit</a>
+        </div>
+      </section>
+      <article class="report-body">
+        <div class="evidence-boundary"><strong>Evidence boundary:</strong> Operational records and outcomes are synthetic. Public context establishes property fit and guest-facing value, not internal policy, costs, or performance.</div>
+          <h2 id="decision-frame">Decision Frame</h2>
+          <p>This is an explainable policy simulation. The model asks:</p>
+          <blockquote>Given a service failure, guest relationship, operational constraints, and source-data confidence, what recovery gesture best protects the guest relationship without creating unnecessary cost or room-rate erosion?</blockquote>
+          <p>The target is intelligent generosity, not comp minimization.</p>
+          <h2 id="evidence-classes">Evidence Classes</h2>
+          <div class="report-table-wrap"><table><thead><tr><th scope="col">Evidence</th><th scope="col">Use</th></tr></thead><tbody><tr><td>Observed public booking data</td><td>Shapes synthetic booking and stay context</td></tr><tr><td>Official Santa Monica Proper public facts</td><td>Establishes property-fit and guest-facing value anchors</td></tr><tr><td>Sample-seed public context</td><td>Stress-tests pricing, review-risk, and demand logic</td></tr><tr><td>Synthetic operating systems</td><td>Demonstrates reconciliation, decisioning, and audit workflow</td></tr><tr><td>Policy assumptions</td><td>Defines weights, thresholds, cost ranges, and option scoring</td></tr><tr><td>Internal unavailable data</td><td>Prevents unsupported claims about margins, outcomes, inventory, or policy</td></tr></tbody></table></div>
+          <p>The current policy is <code>smp-public-context-v1.0.0</code> in <code>config/policy.v1.json</code>.</p>
+          <h2 id="input-validation">Input Validation</h2>
+          <p>One scenario contract validates the batch pipeline, CLI, HTML interface, and JSON endpoint. Probabilities must be between zero and one, severity must be a whole number from one through five, monetary values must be nonnegative, and unknown categories are rejected.</p>
+          <p>Derived fields such as guest-value score are calculated consistently. Missing or inferred source values remain visible through data-quality flags.</p>
+          <h2 id="policy-logic">Policy Logic</h2>
+          <ol><li>Calculate recovery need from severity, hotel responsibility, reputation risk, guest value, sentiment, delay, recovery timing, and issue baseline. Losing the in-stay recovery window raises timing risk; it does not reduce the measured need.</li><li>Convert recovery need into a five-tier policy band.</li><li>Score eligible gestures by issue fit, perceived guest value, estimated cost range, property fit, room availability, public-rate pressure, and repeat-comp pattern review. Room upgrades and late checkout are unavailable after checkout.</li><li>Return the top gesture, two alternatives, manager-review decision, and policy version.</li><li>Remove important context signals one at a time. Report a context reason only when the selected gesture changes.</li><li>Rescore under ±20% perturbations to fit, cost, occupancy, external context, the overall recovery-need scale, and each individual recovery-need weight. Report the share preserving the selected gesture as stability.</li></ol>
+          <h2 id="cost-and-value">Cost And Value</h2>
+          <p>Guest-facing values can be anchored to published fees, credits, and wellness values. Internal marginal cost cannot be inferred from public price.</p>
+          <p>Each gesture therefore carries low, midpoint, and high internal-cost assumptions. These ranges support sensitivity analysis; they are not Proper Hotels accounting estimates.</p>
+          <p>The modeled recovery-value field is also policy-simulated. It should not be interpreted as causal revenue protected or projected return on comp spend.</p>
+          <h2 id="explainability">Explainability</h2>
+          <p>Direct reasons identify policy factors such as high severity or clear hotel responsibility. Context reasons require a changed counterfactual. For example:</p>
+          <pre data-language="text"><code>Operational availability changed the recommendation:
+without this signal, the model would prefer a room upgrade.</code></pre>
+          <p>High stability means the decision survives tested parameter changes. It does not mean the decision is empirically optimal.</p>
+          <h2 id="simulated-policy-audit">Simulated Policy Audit</h2>
+          <p>The historical comp ledger is synthetic. Audit classes such as under-recovered, over-comped, aligned, manager review, and data-quality hold demonstrate how a real historical policy could be reviewed. Their counts and dollar values are not observed findings.</p>
+          <h2 id="research-anchors">Research Anchors</h2>
+          <ul><li>Hart, Heskett, and Sasser, <a href="https://hbr.org/1990/07/the-profitable-art-of-service-recovery">The Profitable Art of Service Recovery</a>.</li><li>de Matos, Henrique, and Rossi, <a href="https://doi.org/10.1177/1094670507303012">Service Recovery Paradox: A Meta-Analysis</a>.</li><li>Tax, Brown, and Chandrashekaran, <a href="https://doi.org/10.1177/002224299806200205">Customer Evaluations of Service Complaint Experiences</a>.</li><li>Vargas-Calderon et al., <a href="https://arxiv.org/abs/2107.10328">Review-Based Quality-of-Service Framework</a>.</li></ul>
+          <p>These sources motivate disciplined recovery, fairness, timing, and review signals. They do not provide property-specific policy weights.</p>
+          <h2 id="production-requirements">Production Requirements</h2>
+          <ul><li>Historical actions, approvals, policy versions, and manager overrides.</li><li>Post-recovery satisfaction, review, repeat-stay, and cancellation outcomes.</li><li>Marginal-cost ranges by gesture.</li><li>Live occupancy, inventory, room type, outlet, staffing, and timing constraints.</li><li>Jointly reviewed severity, responsibility, and escalation definitions.</li><li>Prospective monitoring before any automated decisioning.</li></ul>
+      </article>
+    </main>
+    <script src="../../assets/js/site.js"></script>
+  </body>
+</html>

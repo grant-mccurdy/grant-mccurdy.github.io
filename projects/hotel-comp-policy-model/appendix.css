@@ -1,0 +1,35 @@
+:root {
+  --report-ink: #17201d;
+  --report-muted: #5c6662;
+  --report-line: #d7ddda;
+  --report-paper: #f3f5f3;
+  --report-teal: #12685b;
+  --report-coral: #ad4f37;
+}
+.report-main { color: var(--report-ink); }
+.report-hero, .report-body { width: min(980px, calc(100% - 40px)); margin: 0 auto; }
+.report-hero { padding: 64px 0 42px; border-bottom: 1px solid var(--report-line); }
+.report-hero h1 { max-width: 780px; margin: 0 0 14px; font-size: clamp(2.1rem, 6vw, 4.25rem); letter-spacing: 0; }
+.report-hero > p:not(.section-kicker) { max-width: 780px; margin: 0; color: var(--report-muted); font-size: 1.08rem; }
+.report-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 26px; }
+.report-body { padding: 38px 0 72px; }
+.report-body h2 { margin: 46px 0 12px; font-size: 1.65rem; letter-spacing: 0; }
+.report-body h3 { margin: 32px 0 10px; font-size: 1.2rem; letter-spacing: 0; }
+.report-body p, .report-body li { max-width: 820px; color: var(--report-muted); }
+.report-body li + li { margin-top: 7px; }
+.report-body code { padding: 2px 5px; border-radius: 3px; background: #edf2ef; color: #0d4c43; font-size: .9em; }
+.report-body pre { max-width: 100%; overflow-x: auto; padding: 18px; border: 1px solid var(--report-line); background: #202825; color: #e9efec; }
+.report-body pre code { padding: 0; background: transparent; color: inherit; white-space: pre-wrap; overflow-wrap: anywhere; }
+.report-body blockquote { max-width: 820px; margin: 24px 0; padding: 14px 20px; border-left: 4px solid var(--report-teal); background: #edf5f2; font-size: 1.05rem; }
+.report-table-wrap { max-width: 100%; margin: 20px 0 28px; overflow-x: auto; border: 1px solid var(--report-line); }
+.report-table-wrap table { width: 100%; border-collapse: collapse; background: #fff; }
+.report-table-wrap th, .report-table-wrap td { min-width: 120px; padding: 11px 13px; border-bottom: 1px solid var(--report-line); text-align: left; vertical-align: top; font-size: .88rem; }
+.report-table-wrap th { background: var(--report-paper); color: var(--report-ink); }
+.report-table-wrap td { color: var(--report-muted); }
+.evidence-boundary { padding: 15px 18px; border-left: 4px solid var(--report-coral); background: #fff5f0; color: #713521; }
+@media (max-width: 620px) {
+  .report-hero, .report-body { width: min(100% - 30px, 980px); }
+  .report-hero { padding: 42px 0 30px; }
+  .report-body { padding-top: 28px; }
+  .report-actions .button { width: 100%; text-align: center; }
+}

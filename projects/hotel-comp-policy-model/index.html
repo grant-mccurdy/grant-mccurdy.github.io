@@ -1,0 +1,383 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A luxury-hospitality service recovery decision prototype for intelligent, explainable guest recovery.">
+  <title>Service Recovery Decision Prototype</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #17201d;
+      --muted: #5c6662;
+      --line: #d7ddda;
+      --paper: #f3f5f3;
+      --white: #ffffff;
+      --teal: #12685b;
+      --teal-dark: #0d4c43;
+      --teal-soft: #e7f1ee;
+      --coral: #ad4f37;
+      --coral-soft: #f8ece7;
+      --gold: #9a742f;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
+    body {
+      margin: 0;
+      background: var(--white);
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+      font-size: 16px;
+      line-height: 1.55;
+    }
+    a { color: var(--teal-dark); text-underline-offset: 3px; }
+    .shell { width: min(1120px, calc(100% - 40px)); margin: 0 auto; }
+    .eyebrow {
+      margin: 0 0 10px;
+      color: var(--teal);
+      font-size: .76rem;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+    header { border-bottom: 1px solid var(--line); background: var(--white); }
+    .topline {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      min-height: 54px;
+      border-bottom: 1px solid var(--line);
+      color: var(--muted);
+      font-size: .82rem;
+    }
+    .topline strong { color: var(--ink); }
+    .intro { padding: 46px 0 40px; }
+    h1, h2, h3 { margin-top: 0; letter-spacing: 0; line-height: 1.17; }
+    h1 { max-width: 780px; margin-bottom: 14px; font-size: 3.25rem; }
+    h2 { margin-bottom: 12px; font-size: 1.75rem; }
+    h3 { margin-bottom: 8px; font-size: 1rem; }
+    .lead { max-width: 800px; margin: 0; color: var(--muted); font-size: 1.13rem; }
+    .proposal {
+      display: grid;
+      grid-template-columns: 180px minmax(0, 1fr);
+      gap: 22px;
+      margin-top: 32px;
+      padding-top: 25px;
+      border-top: 3px solid var(--teal);
+    }
+    .proposal strong { color: var(--teal-dark); font-size: .84rem; text-transform: uppercase; }
+    .proposal p { max-width: 780px; margin: 0; font-size: 1.14rem; font-weight: 650; }
+    .principle { margin: 18px 0 0 202px; color: var(--muted); font-size: .91rem; }
+    .principle b { color: var(--ink); }
+    section { padding: 54px 0; }
+    .band { background: var(--paper); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    .section-head { max-width: 720px; margin-bottom: 28px; }
+    .section-head p { margin: 0; color: var(--muted); }
+    .scenario-tabs {
+      display: flex;
+      width: fit-content;
+      max-width: 100%;
+      margin-bottom: 18px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      overflow-x: auto;
+      background: var(--white);
+    }
+    .scenario-tab {
+      flex: 0 0 auto;
+      min-height: 40px;
+      border: 0;
+      border-right: 1px solid var(--line);
+      padding: 9px 14px;
+      background: var(--white);
+      color: var(--muted);
+      font: inherit;
+      font-size: .86rem;
+      cursor: pointer;
+    }
+    .scenario-tab:last-child { border-right: 0; }
+    .scenario-tab[aria-pressed="true"] { background: var(--teal); color: var(--white); font-weight: 750; }
+    .scenario-tab:focus-visible { outline: 3px solid #86bcb4; outline-offset: -3px; }
+    .decision {
+      display: grid;
+      grid-template-columns: minmax(0, 1.18fr) minmax(290px, .82fr);
+      min-width: 0;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      overflow: hidden;
+      background: var(--white);
+    }
+    .decision-main, .decision-support { min-width: 0; padding: 28px; }
+    .decision-support { border-left: 1px solid var(--line); background: #fafbfa; }
+    .scenario-context { margin: 0 0 18px; color: var(--muted); font-size: .9rem; }
+    .recommendation { margin: 0; color: var(--teal-dark); font-size: 1.65rem; font-weight: 800; line-height: 1.25; overflow-wrap: anywhere; }
+    .recommendation span:first-child { color: var(--coral); }
+    .decision-metrics {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin: 24px 0;
+      padding: 16px 0;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+    .decision-metrics span { display: block; color: var(--muted); font-size: .76rem; }
+    .decision-metrics strong { display: block; margin-top: 4px; font-size: .94rem; overflow-wrap: anywhere; }
+    .reasons { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px 20px; margin: 12px 0 0; padding: 0; list-style: none; }
+    .reasons li { position: relative; padding-left: 17px; font-size: .9rem; }
+    .reasons li::before { content: ""; position: absolute; left: 0; top: .62em; width: 7px; height: 7px; border-radius: 50%; background: var(--teal); }
+    .decision-support h3:not(:first-child) { margin-top: 24px; }
+    .decision-support p { margin: 0; color: var(--muted); font-size: .91rem; }
+    .alternative { color: var(--ink) !important; font-weight: 700; }
+    .property-menu {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      margin-top: 25px;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+    .property-menu div { min-width: 0; padding: 16px 14px; border-right: 1px solid var(--line); }
+    .property-menu div:first-child { padding-left: 0; }
+    .property-menu div:last-child { border-right: 0; padding-right: 0; }
+    .property-menu strong { display: block; color: var(--teal-dark); font-size: .79rem; text-transform: uppercase; }
+    .property-menu span { display: block; margin-top: 4px; color: var(--muted); font-size: .86rem; }
+    .policy-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 28px; }
+    .policy-step { min-width: 0; padding: 0 28px; border-right: 1px solid var(--line); }
+    .policy-step:first-child { padding-left: 0; }
+    .policy-step:last-child { padding-right: 0; border-right: 0; }
+    .step-number { display: block; margin-bottom: 13px; color: var(--coral); font-size: 1.5rem; font-weight: 800; }
+    .policy-step p { margin: 0; color: var(--muted); font-size: .92rem; }
+    .drivers { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; margin-top: 38px; padding-top: 28px; border-top: 1px solid var(--line); }
+    .drivers p { margin: 0; color: var(--muted); font-size: .88rem; }
+    .pilot { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: 56px; align-items: start; }
+    .pilot-callout { border-left: 4px solid var(--coral); padding-left: 20px; }
+    .pilot-callout p { margin: 0; color: var(--muted); }
+    .pilot-callout strong { display: block; margin-bottom: 7px; color: var(--coral); font-size: .84rem; text-transform: uppercase; }
+    .success-measures { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 26px; }
+    .success-measures p { margin: 0; color: var(--muted); font-size: .9rem; }
+    .data-needed { margin: 28px 0 0; padding-top: 20px; border-top: 1px solid var(--line); color: var(--muted); font-size: .9rem; }
+    .data-needed strong { color: var(--ink); }
+    .evidence { padding: 38px 0; background: #202825; color: #e9efec; }
+    .evidence-grid { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(280px, .75fr); gap: 52px; }
+    .evidence h2 { color: var(--white); font-size: 1.25rem; }
+    .evidence p { margin: 0; color: #bdc8c3; font-size: .9rem; }
+    .evidence-links { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px 20px; align-content: start; }
+    .evidence a { color: #d8eee8; font-size: .88rem; }
+    .portfolio-link { color: var(--teal-dark); font-weight: 800; text-decoration: none; }
+    .portfolio-link:hover { text-decoration: underline; }
+    footer { padding: 18px 0; background: #151a18; color: #9caaa4; font-size: .77rem; }
+    @media (max-width: 820px) {
+      .proposal { grid-template-columns: 1fr; gap: 8px; }
+      .principle { margin-left: 0; }
+      .decision { grid-template-columns: 1fr; }
+      .decision-support { border-top: 1px solid var(--line); border-left: 0; }
+      .property-menu { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .property-menu div, .property-menu div:first-child, .property-menu div:last-child { padding: 14px; border-right: 0; border-bottom: 1px solid var(--line); }
+      .property-menu div:nth-child(odd) { border-right: 1px solid var(--line); }
+      .property-menu div:last-child { border-bottom: 0; }
+      .policy-grid { grid-template-columns: 1fr; gap: 24px; }
+      .policy-step, .policy-step:first-child, .policy-step:last-child { padding: 0 0 24px; border-right: 0; border-bottom: 1px solid var(--line); }
+      .policy-step:last-child { padding-bottom: 0; border-bottom: 0; }
+      .drivers { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .pilot, .evidence-grid { grid-template-columns: 1fr; gap: 32px; }
+    }
+    @media (max-width: 560px) {
+      .shell { width: min(100% - 32px, 1120px); }
+      .topline { align-items: flex-start; flex-direction: column; justify-content: center; gap: 2px; padding: 10px 0; }
+      .intro { padding: 34px 0 30px; }
+      h1 { font-size: 2rem; }
+      h2 { font-size: 1.45rem; }
+      .lead { font-size: 1rem; }
+      section { padding: 42px 0; }
+      .scenario-tabs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); width: 100%; overflow: hidden; }
+      .scenario-tab { width: 100%; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+      .scenario-tab:nth-child(2n) { border-right: 0; }
+      .scenario-tab:nth-last-child(-n+2) { border-bottom: 0; }
+      .decision-main, .decision-support { padding: 20px; }
+      .recommendation { font-size: 1.35rem; }
+      .decision-metrics { grid-template-columns: 1fr; gap: 10px; }
+      .decision-metrics div { padding-bottom: 10px; border-bottom: 1px solid var(--line); }
+      .decision-metrics div:last-child { padding-bottom: 0; border-bottom: 0; }
+      .reasons, .drivers, .success-measures, .evidence-links { grid-template-columns: 1fr; }
+      .property-menu { grid-template-columns: 1fr; }
+      .property-menu div:nth-child(odd) { border-right: 0; }
+      .principle span { display: block; }
+    }
+    @media print {
+      body { font-size: 13px; }
+      .scenario-tabs { display: none; }
+      section { break-inside: avoid; padding: 28px 0; }
+      .evidence, footer { background: var(--white); color: var(--ink); }
+      .evidence p, .evidence a { color: var(--ink); }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="shell topline">
+      <a class="portfolio-link" href="../../index.html">Grant McCurdy portfolio</a>
+      <span>Public Santa Monica Proper context · Synthetic hotel operations</span>
+    </div>
+    <div class="shell intro">
+      <p class="eyebrow">Luxury hospitality service recovery</p>
+      <h1>Service Recovery Decision Prototype</h1>
+      <p class="lead">A proposed operating policy for making comp decisions more consistent, explainable, and financially disciplined without losing the generosity expected in luxury hospitality.</p>
+      <div class="proposal">
+        <strong>Operating recommendation</strong>
+        <p>Standardize how much recovery is justified, which gesture best fits the failure, and when a manager should review the decision.</p>
+      </div>
+      <p class="principle"><b>Intelligent generosity:</b> <span>right guest · right situation · right gesture · right amount · right timing</span></p>
+    </div>
+  </header>
+
+  <main>
+    <section class="band" id="worked-decision">
+      <div class="shell">
+        <div class="section-head">
+          <p class="eyebrow">Worked decision</p>
+          <h2>From service failure to a manager-ready recommendation</h2>
+          <p>Choose a scenario to see how the same operating policy adapts to the guest, failure, timing, and available recovery options.</p>
+        </div>
+        <div class="scenario-tabs" role="group" aria-label="Worked recovery scenarios"><button class="scenario-tab" type="button" data-scenario="arrival_delay" aria-pressed="true">Arrival delay</button><button class="scenario-tab" type="button" data-scenario="dining_lapse" aria-pressed="false">Dining lapse</button><button class="scenario-tab" type="button" data-scenario="suite_recovery" aria-pressed="false">Suite recovery</button><button class="scenario-tab" type="button" data-scenario="parking_friction" aria-pressed="false">Valet delay</button></div>
+        <article class="decision" id="decision-panel" aria-live="polite">
+          <div class="decision-main">
+            <p class="eyebrow">Recommended recovery</p>
+            <h3 id="scenario-title">Room not ready at arrival</h3>
+            <p class="scenario-context" id="scenario-context">Loyalty guest · severity 4 · hotel responsible · recovery possible during the stay</p>
+            <p class="recommendation"><span id="scenario-amount">$220</span> <span id="scenario-gesture">Calabra or Palma dining credit + manager note</span></p>
+            <div class="decision-metrics">
+              <div><span>Working cost range</span><strong id="scenario-cost">$55-$132</strong></div>
+              <div><span>Approval path</span><strong id="scenario-approval">Manager approval</strong></div>
+              <div><span>Decision robustness</span><strong id="scenario-robustness">93% of assumption checks keep this gesture</strong></div>
+            </div>
+            <h3>Why this fits</h3>
+            <ul class="reasons" id="scenario-reasons"><li>Protects an important guest relationship</li><li>Hotel clearly owns the service failure</li><li>Material disruption to the stay</li><li>Elevated reputation risk</li></ul>
+          </div>
+          <aside class="decision-support">
+            <h3>What would change it?</h3>
+            <p id="scenario-counterfactual">If room availability were less constrained, the preferred recovery would shift to room upgrade at $435.</p>
+            <h3>Closest alternative</h3>
+            <p class="alternative" id="scenario-alternative">$435 room upgrade</p>
+            <h3>Why a range, not one cost?</h3>
+            <p>Public prices can anchor guest-facing value. Actual marginal cost requires property accounting, inventory, and outlet-capacity data.</p>
+          </aside>
+        </article>
+        <div class="property-menu" aria-label="Property-aligned recovery menu">
+          <div><strong>Dining</strong><span>Calabra or Palma credit</span></div>
+          <div><strong>Wellness</strong><span>Surya Spa or Recovery Suite</span></div>
+          <div><strong>Stay</strong><span>Room upgrade or late checkout</span></div>
+          <div><strong>Fee relief</strong><span>Valet or destination-fee waiver</span></div>
+          <div><strong>Relationship</strong><span>Future-stay credit</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="operating-policy">
+      <div class="shell">
+        <div class="section-head">
+          <p class="eyebrow">Proposed operating policy</p>
+          <h2>Automation should support judgment, not replace it</h2>
+          <p>The system separates routine recommendations from high-exposure decisions and weak-data cases.</p>
+        </div>
+        <div class="policy-grid">
+          <div class="policy-step"><span class="step-number">01</span><h3>Recommend</h3><p>Offer a consistent gesture when the service failure, guest context, operating capacity, and data quality are clear.</p></div>
+          <div class="policy-step"><span class="step-number">02</span><h3>Review</h3><p>Route severe, costly, uncertain, high-value, or repeat-pattern cases to a manager with reasons and alternatives.</p></div>
+          <div class="policy-step"><span class="step-number">03</span><h3>Hold</h3><p>Stop the recommendation when guest or reservation matching is weak rather than turning bad data into a guest decision.</p></div>
+        </div>
+        <div class="drivers">
+          <div><h3>Guest relationship</h3><p>Current stay value, repeat relationship, and the value at risk.</p></div>
+          <div><h3>Service failure</h3><p>Severity, hotel responsibility, delay, sentiment, and reputation exposure.</p></div>
+          <div><h3>Operating conditions</h3><p>Room availability, timing, demand pressure, and whether recovery is still possible in stay.</p></div>
+          <div><h3>Gesture economics</h3><p>Guest-perceived value, working cost range, property fit, and room-rate erosion.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="band" id="pilot">
+      <div class="shell pilot">
+        <div>
+          <p class="eyebrow">Proposed next step</p>
+          <h2>A bounded pilot, not an immediate production model</h2>
+          <div class="pilot-callout">
+            <strong>Start with a 60-minute policy and data workshop</strong>
+            <p>Map the actual decision path, define approved recovery tiers, identify true cost inputs, and agree on the outcomes that would make a pilot useful.</p>
+          </div>
+        </div>
+        <div>
+          <h3>What the pilot should measure</h3>
+          <div class="success-measures">
+            <div><h3>Guest recovery</h3><p>Post-resolution satisfaction, review sentiment, and unresolved complaints.</p></div>
+            <div><h3>Relationship</h3><p>Repeat stays, cancellations, and retained future revenue.</p></div>
+            <div><h3>Economics</h3><p>Marginal cost, guest-facing value, and avoidable room-rate erosion.</p></div>
+            <div><h3>Operating adoption</h3><p>Manager overrides, approval time, consistency, and reasons for exceptions.</p></div>
+          </div>
+          <p class="data-needed"><strong>Minimum data:</strong> comp actions and approvals, service tickets, guest and stay context, post-recovery outcomes, marginal-cost ranges, and live operating constraints.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="evidence" id="evidence">
+      <div class="shell evidence-grid">
+        <div>
+          <h2>Substantial technical work sits behind a deliberately simple decision product</h2>
+          <p>The prototype reconciles synthetic PMS, CRM, service, comp, POS, survey, and operating extracts; preserves data-quality holds; versions policy assumptions; returns alternatives; and checks whether recommendations remain stable when assumptions change.</p>
+        </div>
+        <nav class="evidence-links" aria-label="Supporting technical evidence">
+          <a href="methodology.html">Methodology and assumptions</a>
+          <a href="policy-sensitivity.html">Policy sensitivity</a>
+          <a href="data-lineage.html">Data lineage</a>
+          <a href="warehouse-validation.html">Warehouse validation</a>
+          <a href="public-context.html">Public property context</a>
+          <a href="simulation-audit.html">Simulation audit dashboard</a>
+        </nav>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="shell">This discussion prototype uses synthetic hotel operations and bounded public Santa Monica Proper context. It does not use or claim access to Proper Hotels internal guest records, comp history, rates, margins, inventory, or policy.</div>
+  </footer>
+
+  <script type="application/json" id="scenario-data">{"arrival_delay": {"key": "arrival_delay", "tab_label": "Arrival delay", "title": "Room not ready at arrival", "context": "Loyalty guest \u00b7 severity 4 \u00b7 hotel responsible \u00b7 recovery possible during the stay", "amount": "$220", "gesture": "Calabra or Palma dining credit + manager note", "cost_range": "$55-$132", "approval": "Manager approval", "robustness": "93% of assumption checks keep this gesture", "reasons": ["Protects an important guest relationship", "Hotel clearly owns the service failure", "Material disruption to the stay", "Elevated reputation risk"], "counterfactual": "If room availability were less constrained, the preferred recovery would shift to room upgrade at $435.", "alternative": "$435 room upgrade"}, "dining_lapse": {"key": "dining_lapse", "tab_label": "Dining lapse", "title": "Dining service failure", "context": "Returning guest \u00b7 severity 4 \u00b7 hotel responsible \u00b7 recovery possible during the stay", "amount": "$180", "gesture": "Calabra or Palma dining credit + manager note", "cost_range": "$45-$108", "approval": "Within policy", "robustness": "100% of assumption checks keep this gesture", "reasons": ["Hotel clearly owns the service failure", "Material disruption to the stay", "There is still time to recover the stay", "High perceived value with less room-rate erosion"], "counterfactual": "No single operating condition tested on its own changed the preferred gesture.", "alternative": "$210 future-stay credit"}, "suite_recovery": {"key": "suite_recovery", "tab_label": "Suite recovery", "title": "Housekeeping failure during a VIP stay", "context": "VIP guest \u00b7 severity 5 \u00b7 hotel responsible \u00b7 high relationship exposure", "amount": "$440", "gesture": "partial room refund + manager note", "cost_range": "$440-$440", "approval": "Manager approval", "robustness": "96% of assumption checks keep this gesture", "reasons": ["Protects an important guest relationship", "Hotel clearly owns the service failure", "Material disruption to the stay", "Elevated reputation risk"], "counterfactual": "No single operating condition tested on its own changed the preferred gesture.", "alternative": "$455 future-stay credit"}, "parking_friction": {"key": "parking_friction", "tab_label": "Valet delay", "title": "Valet or parking delay", "context": "Loyalty guest \u00b7 severity 3 \u00b7 hotel responsible \u00b7 recovery possible during the stay", "amount": "$100", "gesture": "parking or destination-fee waiver + manager note", "cost_range": "$8-$35", "approval": "Within policy", "robustness": "100% of assumption checks keep this gesture", "reasons": ["Protects an important guest relationship", "Hotel clearly owns the service failure", "There is still time to recover the stay", "High perceived value with less room-rate erosion"], "counterfactual": "No single operating condition tested on its own changed the preferred gesture.", "alternative": "$180 Calabra or Palma dining credit"}}</script>
+  <script>
+    (() => {
+      const scenarios = JSON.parse(document.getElementById("scenario-data").textContent);
+      const tabs = [...document.querySelectorAll(".scenario-tab")];
+      const fields = {
+        title: document.getElementById("scenario-title"),
+        context: document.getElementById("scenario-context"),
+        amount: document.getElementById("scenario-amount"),
+        gesture: document.getElementById("scenario-gesture"),
+        cost_range: document.getElementById("scenario-cost"),
+        approval: document.getElementById("scenario-approval"),
+        robustness: document.getElementById("scenario-robustness"),
+        counterfactual: document.getElementById("scenario-counterfactual"),
+        alternative: document.getElementById("scenario-alternative")
+      };
+      const reasonList = document.getElementById("scenario-reasons");
+
+      function selectScenario(key, updateUrl = true) {
+        const scenario = scenarios[key];
+        if (!scenario) return;
+        Object.entries(fields).forEach(([name, node]) => { node.textContent = scenario[name]; });
+        reasonList.replaceChildren(...scenario.reasons.map(reason => {
+          const item = document.createElement("li");
+          item.textContent = reason;
+          return item;
+        }));
+        tabs.forEach(tab => tab.setAttribute("aria-pressed", String(tab.dataset.scenario === key)));
+        if (updateUrl && history.replaceState && window.location.protocol !== "file:") {
+          const url = new URL(window.location.href);
+          url.searchParams.set("scenario", key);
+          history.replaceState(null, "", url);
+        }
+      }
+
+      tabs.forEach(tab => tab.addEventListener("click", () => selectScenario(tab.dataset.scenario)));
+      const requested = new URLSearchParams(window.location.search).get("scenario");
+      if (requested && scenarios[requested]) selectScenario(requested, false);
+    })();
+  </script>
+</body>
+</html>

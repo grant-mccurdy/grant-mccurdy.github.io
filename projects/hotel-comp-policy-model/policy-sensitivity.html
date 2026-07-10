@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Stress tests for recommendation stability, cost uncertainty, and manager-review thresholds.">
+    <title>Policy sensitivity and stability | Hotel Comp Policy Model</title>
+    <link rel="stylesheet" href="../../assets/css/styles.css?v=20260710a">
+    <link rel="stylesheet" href="appendix.css?v=20260710a">
+  </head>
+  <body>
+    <header class="site-header compact" data-header>
+      <nav class="nav-shell" aria-label="Primary navigation">
+        <a class="brand" href="../../index.html">
+          <span class="brand-mark" aria-hidden="true"><img src="../../assets/images/grant-mccurdy-profile.jpg" alt=""></span>
+          <span class="brand-text">Grant McCurdy</span>
+        </a>
+        <div class="nav-links static">
+          <a href="index.html">Decision Brief</a>
+          <a href="simulation-audit.html">Simulation Audit</a>
+          <a href="../index.html">Projects</a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="report-main">
+      <section class="report-hero">
+        <p class="section-kicker">Hotel Comp Policy Model · Technical Evidence</p>
+        <h1>Policy sensitivity and stability</h1>
+        <p>Stress tests for recommendation stability, cost uncertainty, and manager-review thresholds.</p>
+        <div class="report-actions">
+          <a class="button primary" href="index.html">Open decision brief</a>
+          <a class="button outline" href="simulation-audit.html">Open simulation audit</a>
+        </div>
+      </section>
+      <article class="report-body">
+        <div class="evidence-boundary"><strong>Evidence boundary:</strong> Operational records and outcomes are synthetic. Public context establishes property fit and guest-facing value, not internal policy, costs, or performance.</div>
+          <p>This report stress-tests a synthetic policy simulation. It does not validate business outcomes or estimate causal recovery effects.</p>
+          <h2 id="stability-summary">Stability Summary</h2>
+          <ul><li>Cases evaluated: <code>430</code></li><li>Median recommendation stability: <code>100.0%</code></li><li>High-confidence cases: <code>285</code></li><li>Moderate-confidence cases: <code>133</code></li><li>Low-confidence cases: <code>12</code></li><li>Cases where a tested context removal changed the gesture: <code>83</code></li><li>Cases below 60% stability: <code>2</code></li><li>Most common gesture: <code>rooftop_f_and_b_credit</code> (42.6%)</li></ul>
+          <p>Each recommendation is rescored under ±20% perturbations to fit, cost, occupancy, context, the overall recovery-need scale, and every individual recovery-need weight. Stability is the share of perturbations that preserve the selected gesture.</p>
+          <h2 id="cost-uncertainty">Cost Uncertainty</h2>
+          <div class="report-table-wrap"><table><thead><tr><th scope="col">Measure</th><th scope="col">Synthetic run</th></tr></thead><tbody><tr><td>Low estimated internal-cost bound</td><td>$21,864</td></tr><tr><td>Midpoint policy estimate</td><td>$39,807</td></tr><tr><td>High estimated internal-cost bound</td><td>$61,817</td></tr><tr><td>Cases where midpoint cost exceeds modeled recovery value</td><td>35</td></tr></tbody></table></div>
+          <p>The range is intentional. Public prices can anchor guest-facing value, but property contribution margin remains unavailable.</p>
+          <h2 id="stability-by-guest-context">Stability By Guest Context</h2>
+          <div class="report-table-wrap"><table><thead><tr><th scope="col">Guest context</th><th scope="col">Cases</th><th scope="col">Average stability</th><th scope="col">Low-confidence cases</th></tr></thead><tbody><tr><td>event or suite guest</td><td>10</td><td>93.7%</td><td>1</td></tr><tr><td>loyalty guest</td><td>59</td><td>96.4%</td><td>3</td></tr><tr><td>new guest</td><td>229</td><td>97.3%</td><td>6</td></tr><tr><td>returning guest</td><td>100</td><td>97.1%</td><td>1</td></tr><tr><td>vip guest</td><td>32</td><td>98.4%</td><td>1</td></tr></tbody></table></div>
+          <h2 id="lowest-stability-cases">Lowest-Stability Cases</h2>
+          <div class="report-table-wrap"><table><thead><tr><th scope="col">Case</th><th scope="col">Issue</th><th scope="col">Recommendation</th><th scope="col">Stability</th><th scope="col">Alternatives</th></tr></thead><tbody><tr><td><code>case_00209</code></td><td>room readiness delay</td><td>room upgrade</td><td>55.6%</td><td>late checkout, Calabra or Palma dining credit</td></tr><tr><td><code>case_00220</code></td><td>room readiness delay</td><td>future-stay credit</td><td>59.3%</td><td>Calabra or Palma dining credit, late checkout</td></tr><tr><td><code>case_00286</code></td><td>room readiness delay</td><td>late checkout</td><td>63.0%</td><td>room upgrade, Calabra or Palma dining credit</td></tr><tr><td><code>case_00083</code></td><td>noise disruption</td><td>late checkout</td><td>66.7%</td><td>Calabra or Palma dining credit, Palma lounge credit</td></tr><tr><td><code>case_00353</code></td><td>noise disruption</td><td>Surya Spa or Recovery Suite credit</td><td>66.7%</td><td>Calabra or Palma dining credit, Palma lounge credit</td></tr><tr><td><code>case_00377</code></td><td>room readiness delay</td><td>room upgrade</td><td>66.7%</td><td>late checkout, future-stay credit</td></tr><tr><td><code>case_00397</code></td><td>noise disruption</td><td>Calabra or Palma dining credit</td><td>66.7%</td><td>Palma lounge credit, in-room amenity gesture</td></tr><tr><td><code>case_00170</code></td><td>room readiness delay</td><td>room upgrade</td><td>77.8%</td><td>late checkout, Calabra or Palma dining credit</td></tr><tr><td><code>case_00193</code></td><td>housekeeping miss</td><td>future-stay credit</td><td>77.8%</td><td>Calabra or Palma dining credit, Surya Spa or Recovery Suite credit</td></tr><tr><td><code>case_00314</code></td><td>room readiness delay</td><td>room upgrade</td><td>77.8%</td><td>late checkout, Calabra or Palma dining credit</td></tr></tbody></table></div>
+          <h2 id="interpretation">Interpretation</h2>
+          <ul><li>High stability means the selected gesture survives the tested policy perturbations; it does not mean the gesture is empirically optimal.</li><li>Low stability should trigger manager review and parameter discussion rather than a stronger automated claim.</li><li>Real comp decisions, overrides, satisfaction recovery, reviews, and repeat-stay outcomes are required for outcome validation.</li></ul>
+      </article>
+    </main>
+    <script src="../../assets/js/site.js"></script>
+  </body>
+</html>
