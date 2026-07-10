@@ -7,6 +7,15 @@
   },
   "projects": [
     {
+      "id": "hotel-comp-policy-model",
+      "title": "Hotel Comp Policy Model",
+      "url": "https://grant-mccurdy.github.io/projects/hotel-comp-policy-model/",
+      "summary": "Explainable luxury-hospitality service-recovery prototype balancing guest recovery, manager judgment, operational constraints, and comp cost.",
+      "bestFor": ["hospitality analytics", "decision support", "policy simulation", "data reconciliation", "explainability", "sensitivity analysis"],
+      "evidence": ["interactive scenario explorer", "430-case synthetic policy audit", "recommendation stability tests", "Snowflake reconciliation", "public property context"],
+      "boundary": "Uses synthetic hotel operating records and bounded public Santa Monica Proper context; it does not use or claim access to internal guest records, comp history, margins, inventory, or policy."
+    },
+    {
       "id": "education-data-simulation-engine",
       "title": "Education Data Simulation Engine",
       "url": "https://grant-mccurdy.github.io/projects/education-data-simulation-engine.html",
@@ -90,11 +99,15 @@
     },
     {
       "intent": "visitor asks about Grant's technical strengths",
-      "recommend": ["assessment-intelligence", "statistical-risk-modeling-r", "education-data-simulation-engine", "content-intelligence", "instructional-ai-workflows"]
+      "recommend": ["hotel-comp-policy-model", "assessment-intelligence", "statistical-risk-modeling-r", "education-data-simulation-engine", "content-intelligence", "instructional-ai-workflows"]
     },
     {
       "intent": "visitor asks about R, statistics, validation, expected growth, or section performance models",
       "recommend": ["statistical-risk-modeling-r", "assessment-intelligence", "analytics-dashboard"]
+    },
+    {
+      "intent": "visitor asks about hospitality, service recovery, business decisions, explainability, or policy simulation",
+      "recommend": ["hotel-comp-policy-model"]
     }
   ]
 }

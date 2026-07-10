@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://grant-mccurdy.github.io/</loc>
-    <lastmod>2026-06-25</lastmod>
+    <lastmod>2026-07-10</lastmod>
   </url>
   <url>
     <loc>https://grant-mccurdy.github.io/dashboard/assessment.html</loc>
@@ -14,7 +14,35 @@
   </url>
   <url>
     <loc>https://grant-mccurdy.github.io/projects/</loc>
-    <lastmod>2026-06-25</lastmod>
+    <lastmod>2026-07-10</lastmod>
+  </url>
+  <url>
+    <loc>https://grant-mccurdy.github.io/projects/hotel-comp-policy-model/</loc>
+    <lastmod>2026-07-10</lastmod>
+  </url>
+  <url>
+    <loc>https://grant-mccurdy.github.io/projects/hotel-comp-policy-model/simulation-audit.html</loc>
+    <lastmod>2026-07-10</lastmod>
+  </url>
+  <url>
+    <loc>https://grant-mccurdy.github.io/projects/hotel-comp-policy-model/methodology.html</loc>
+    <lastmod>2026-07-10</lastmod>
+  </url>
+  <url>
+    <loc>https://grant-mccurdy.github.io/projects/hotel-comp-policy-model/policy-sensitivity.html</loc>
+    <lastmod>2026-07-10</lastmod>
+  </url>
+  <url>
+    <loc>https://grant-mccurdy.github.io/projects/hotel-comp-policy-model/data-lineage.html</loc>
+    <lastmod>2026-07-10</lastmod>
+  </url>
+  <url>
+    <loc>https://grant-mccurdy.github.io/projects/hotel-comp-policy-model/warehouse-validation.html</loc>
+    <lastmod>2026-07-10</lastmod>
+  </url>
+  <url>
+    <loc>https://grant-mccurdy.github.io/projects/hotel-comp-policy-model/public-context.html</loc>
+    <lastmod>2026-07-10</lastmod>
   </url>
   <url>
     <loc>https://grant-mccurdy.github.io/projects/education-data-simulation-engine.html</loc>

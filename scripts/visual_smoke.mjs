@@ -161,7 +161,7 @@ async function inspect(page) {
     Array.from(document.querySelectorAll("body *"))
       .filter((el) => {
         if (el.closest(".hero-media")) return false;
-        if (el.closest(".chart-frame, .table-wrap")) return false;
+        if (el.closest(".chart-frame, .table-wrap, .report-table-wrap, .table-scroll")) return false;
         const rect = el.getBoundingClientRect();
         return (
           rect.width &&
@@ -362,11 +362,41 @@ async function inspectContentRag(page, label) {
   };
 }
 
+async function inspectHotelComp(page, label) {
+  if (label.startsWith("hotel-comp-decision-")) {
+    const boundary = await page.locator("footer").innerText();
+    const scenarioButton = page.locator('[data-scenario="parking_friction"]');
+    await scenarioButton.click();
+    return {
+      boundary: boundary.includes("synthetic hotel operations") && boundary.includes("does not use or claim access"),
+      scenarioChanged:
+        (await page.locator("#scenario-amount").innerText()) === "$100" &&
+        (await page.locator("#scenario-gesture").innerText()).includes("parking or destination-fee waiver") &&
+        (await scenarioButton.getAttribute("aria-pressed")) === "true",
+    };
+  }
+  if (label.startsWith("hotel-comp-audit-")) {
+    const bodyText = await page.locator("body").innerText();
+    return {
+      auditBoundary:
+        bodyText.includes("Synthetic policy simulation") &&
+        bodyText.includes("not Proper Hotels findings") &&
+        bodyText.includes("Manager Review Queue Preview"),
+    };
+  }
+  return null;
+}
+
 const cases = [
   ["home-desktop", "index.html", 1440, 1000],
   ["home-mobile", "index.html", 390, 900],
   ["projects-directory-desktop", path.join("projects", "index.html"), 1440, 1000],
   ["projects-directory-mobile", path.join("projects", "index.html"), 390, 900],
+  ["hotel-comp-decision-desktop", path.join("projects", "hotel-comp-policy-model", "index.html"), 1440, 1000],
+  ["hotel-comp-decision-mobile", path.join("projects", "hotel-comp-policy-model", "index.html"), 390, 900],
+  ["hotel-comp-audit-desktop", path.join("projects", "hotel-comp-policy-model", "simulation-audit.html"), 1440, 1000],
+  ["hotel-comp-audit-mobile", path.join("projects", "hotel-comp-policy-model", "simulation-audit.html"), 390, 900],
+  ["hotel-comp-methodology-mobile", path.join("projects", "hotel-comp-policy-model", "methodology.html"), 390, 900],
   ["synthetic-desktop", path.join("projects", "education-data-simulation-engine.html"), 1440, 1000],
   ["synthetic-mobile", path.join("projects", "education-data-simulation-engine.html"), 390, 900],
   ["data-lab-desktop", "data-lab.html", 1440, 1000],
@@ -410,6 +440,7 @@ try {
       dataLabCatalog: await inspectDataLabCatalog(page, label),
       capability: await inspectDataLabCapability(page, label),
       contentRag: await inspectContentRag(page, label),
+      hotelComp: await inspectHotelComp(page, label),
     });
     await page.close();
   }
@@ -455,7 +486,10 @@ const failures = results.filter(
     result.contentRag?.citation === false ||
     result.contentRag?.retrieval === false ||
     result.contentRag?.limits === false ||
-    result.contentRag?.overflow.length,
+    result.contentRag?.overflow.length ||
+    result.hotelComp?.boundary === false ||
+    result.hotelComp?.scenarioChanged === false ||
+    result.hotelComp?.auditBoundary === false,
 );
 console.log(JSON.stringify(results, null, 2));
 

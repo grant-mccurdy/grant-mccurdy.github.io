@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="How synthetic operating sources are reconciled into decision-ready recovery cases and audit marts.">
+    <title>Data lineage | Hotel Comp Policy Model</title>
+    <link rel="stylesheet" href="../../assets/css/styles.css?v=20260710a">
+    <link rel="stylesheet" href="appendix.css?v=20260710a">
+  </head>
+  <body>
+    <header class="site-header compact" data-header>
+      <nav class="nav-shell" aria-label="Primary navigation">
+        <a class="brand" href="../../index.html">
+          <span class="brand-mark" aria-hidden="true"><img src="../../assets/images/grant-mccurdy-profile.jpg" alt=""></span>
+          <span class="brand-text">Grant McCurdy</span>
+        </a>
+        <div class="nav-links static">
+          <a href="index.html">Decision Brief</a>
+          <a href="simulation-audit.html">Simulation Audit</a>
+          <a href="../index.html">Projects</a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="report-main">
+      <section class="report-hero">
+        <p class="section-kicker">Hotel Comp Policy Model · Technical Evidence</p>
+        <h1>Data lineage</h1>
+        <p>How synthetic operating sources are reconciled into decision-ready recovery cases and audit marts.</p>
+        <div class="report-actions">
+          <a class="button primary" href="index.html">Open decision brief</a>
+          <a class="button outline" href="simulation-audit.html">Open simulation audit</a>
+        </div>
+      </section>
+      <article class="report-body">
+        <div class="evidence-boundary"><strong>Evidence boundary:</strong> Operational records and outcomes are synthetic. Public context establishes property fit and guest-facing value, not internal policy, costs, or performance.</div>
+          <p>The comp recommendation model consumes a curated recovery-case mart, not clean source rows.</p>
+          <pre data-language="text"><code>raw_pms_reservations
++ raw_guest_profiles_crm
++ raw_service_tickets
++ raw_comp_ledger
++ raw_pos_outlet_charges
++ raw_reviews_surveys
++ raw_ops_daily
++ public_pricing_context
++ public_property_context
++ review_risk_context
++ local_demand_context
+-&gt; identity and reservation matching
+-&gt; dirty issue and comp taxonomy normalization
+-&gt; public quoted-rate, property, review, and local-demand context joins
+-&gt; source-quality flags and match confidence
+-&gt; data/marts/recovery_case_mart.csv
+-&gt; comp recommendation model</code></pre>
+          <h2 id="mart-quality-signals">Mart Quality Signals</h2>
+          <ul><li>Recovery cases: <code>430</code></li><li>Low reservation-match confidence cases: <code>10</code></li><li>Cases with inferred severity: <code>60</code></li><li>Cases with no historical comp record: <code>175</code></li></ul>
+          <p>These issues are intentionally retained because the business problem is partly a data-wrangling problem.</p>
+      </article>
+    </main>
+    <script src="../../assets/js/site.js"></script>
+  </body>
+</html>
