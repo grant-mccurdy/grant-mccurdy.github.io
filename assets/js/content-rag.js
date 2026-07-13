@@ -6,7 +6,7 @@ if (contentRag) {
   const input = contentRag.querySelector("[data-chat-input]");
   const submitButton = form.querySelector("button");
   const presetButtons = [...contentRag.querySelectorAll("[data-question]")];
-  const REQUEST_TIMEOUT_MS = 15000;
+  const REQUEST_TIMEOUT_MS = 30000;
   const params = new URLSearchParams(window.location.search);
   const endpoint =
     params.get("content_endpoint") ||
@@ -26,6 +26,15 @@ if (contentRag) {
     escapeHtml(value)
       .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
       .replace(/`([^`]+)`/g, "<code>$1</code>");
+
+  const safeHttpUrl = (value) => {
+    try {
+      const url = new URL(String(value || ""), window.location.href);
+      return ["http:", "https:"].includes(url.protocol) ? url.href : "";
+    } catch {
+      return "";
+    }
+  };
 
   const renderText = (value) =>
     String(value || "")
@@ -50,10 +59,11 @@ if (contentRag) {
     if (!citations.length) return "";
     const items = citations
       .slice(0, 5)
-      .map(
-        (citation) =>
-          `<li><a href="${escapeHtml(citation.url)}" target="_blank" rel="noopener">[${escapeHtml(citation.number)}] ${escapeHtml(citation.title)}</a></li>`
-      )
+      .map((citation) => {
+        const url = safeHttpUrl(citation.url);
+        const label = `[${escapeHtml(citation.number)}] ${escapeHtml(citation.title)}`;
+        return url ? `<li><a href="${escapeHtml(url)}" target="_blank" rel="noopener">${label}</a></li>` : `<li>${label}</li>`;
+      })
       .join("");
     return `<div class="portfolio-helper-sources content-rag-sources"><strong>Sources</strong><ul>${items}</ul></div>`;
   };
@@ -75,7 +85,9 @@ if (contentRag) {
     const details = [retrievalLabel(mode)];
     const vector = payload.vector || {};
     if (payload.vectorConfigured && vector.model) {
-      details.push(`${vector.model}${vector.dimensions ? `, ${vector.dimensions}d` : ""}`);
+      details.push(
+        `${vector.model}${vector.dimensions ? `, ${vector.dimensions}d` : ""}${vector.pooling ? `, ${vector.pooling} pooling` : ""}`
+      );
     }
     if (payload.vectorConfigured && Number.isFinite(Number(vector.matches))) {
       details.push(`${Number(vector.matches)} vector matches`);
@@ -108,7 +120,12 @@ if (contentRag) {
 
   const apiErrorMessage = (status, payload) => {
     if (status === 401) return "This demo requires a token that is not configured in the static page.";
-    if (status === 429) return "The public demo rate limit was reached. Try again later.";
+    if (status === 429) {
+      const seconds = Number(payload?.resetSeconds || 0);
+      return seconds > 0
+        ? `The public demo rate limit was reached. Try again in about ${seconds} seconds.`
+        : "The public demo rate limit was reached. Try again later.";
+    }
     return payload?.error || payload?.message || "The Content RAG backend could not complete the request.";
   };
 
@@ -147,7 +164,10 @@ if (contentRag) {
       window.clearTimeout(timeoutId);
       const payload = await response.json().catch(() => ({}));
       if (!response.ok) {
-        const error = new Error(apiErrorMessage(response.status, payload));
+        const retryAfterSeconds = Number(response.headers.get("retry-after") || 0);
+        const errorPayload =
+          retryAfterSeconds > 0 && !payload?.resetSeconds ? { ...payload, resetSeconds: retryAfterSeconds } : payload;
+        const error = new Error(apiErrorMessage(response.status, errorPayload));
         error.status = response.status;
         throw error;
       }
