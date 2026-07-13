@@ -369,6 +369,10 @@ async function inspectHotelComp(page, label) {
     await scenarioButton.click();
     return {
       boundary: boundary.includes("synthetic hotel operations") && boundary.includes("does not use or claim access"),
+      policyDecision:
+        (await page.locator("h1").innerText()) === "Comp Policy Shadow-Validation Decision" &&
+        (await page.locator(".policy-comparison-table tbody tr").count()) === 5 &&
+        (await page.locator(".policy-comparison-table tbody tr.selected-policy").count()) === 1,
       scenarioChanged:
         (await page.locator("#scenario-amount").innerText()) === "$100" &&
         (await page.locator("#scenario-gesture").innerText()).includes("parking or destination-fee waiver") &&
@@ -381,7 +385,18 @@ async function inspectHotelComp(page, label) {
       auditBoundary:
         bodyText.includes("Synthetic policy simulation") &&
         bodyText.includes("not Proper Hotels findings") &&
-        bodyText.includes("Manager Review Queue Preview"),
+        bodyText.includes("Selected-Policy Review Queue Preview") &&
+        bodyText.includes("Five-Policy Comparison"),
+    };
+  }
+  if (label.startsWith("hotel-comp-engineering-")) {
+    const bodyText = await page.locator("body").innerText();
+    return {
+      engineeringEvidence:
+        bodyText.includes("Decision Lineage") &&
+        bodyText.includes("Snowflake typed MARTS / AUDIT") &&
+        bodyText.includes("Data Contracts And Quality Gates") &&
+        bodyText.includes("Security And Cost Controls"),
     };
   }
   return null;
@@ -397,6 +412,8 @@ const cases = [
   ["hotel-comp-audit-desktop", path.join("projects", "hotel-comp-policy-model", "simulation-audit.html"), 1440, 1000],
   ["hotel-comp-audit-mobile", path.join("projects", "hotel-comp-policy-model", "simulation-audit.html"), 390, 900],
   ["hotel-comp-methodology-mobile", path.join("projects", "hotel-comp-policy-model", "methodology.html"), 390, 900],
+  ["hotel-comp-policy-analysis-mobile", path.join("projects", "hotel-comp-policy-model", "policy-decision-analysis.html"), 390, 900],
+  ["hotel-comp-engineering-mobile", path.join("projects", "hotel-comp-policy-model", "engineering-evidence.html"), 390, 900],
   ["synthetic-desktop", path.join("projects", "education-data-simulation-engine.html"), 1440, 1000],
   ["synthetic-mobile", path.join("projects", "education-data-simulation-engine.html"), 390, 900],
   ["data-lab-desktop", "data-lab.html", 1440, 1000],
@@ -488,8 +505,10 @@ const failures = results.filter(
     result.contentRag?.limits === false ||
     result.contentRag?.overflow.length ||
     result.hotelComp?.boundary === false ||
+    result.hotelComp?.policyDecision === false ||
     result.hotelComp?.scenarioChanged === false ||
-    result.hotelComp?.auditBoundary === false,
+    result.hotelComp?.auditBoundary === false ||
+    result.hotelComp?.engineeringEvidence === false,
 );
 console.log(JSON.stringify(results, null, 2));
 

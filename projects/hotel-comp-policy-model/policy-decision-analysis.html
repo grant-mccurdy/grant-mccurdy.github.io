@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="The five-policy comparison, declared selection rule, generated shadow-validation candidate, and controlled validation design.">
+    <title>Comp policy decision analysis | Hotel Comp Policy Model</title>
+    <link rel="stylesheet" href="../../assets/css/styles.css?v=20260710a">
+    <link rel="stylesheet" href="appendix.css?v=20260710a">
+  </head>
+  <body>
+    <header class="site-header compact" data-header>
+      <nav class="nav-shell" aria-label="Primary navigation">
+        <a class="brand" href="../../index.html">
+          <span class="brand-mark" aria-hidden="true"><img src="../../assets/images/grant-mccurdy-profile.jpg" alt=""></span>
+          <span class="brand-text">Grant McCurdy</span>
+        </a>
+        <div class="nav-links static">
+          <a href="index.html">Decision Brief</a>
+          <a href="simulation-audit.html">Simulation Audit</a>
+          <a href="../index.html">Projects</a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="report-main">
+      <section class="report-hero">
+        <p class="section-kicker">Hotel Comp Policy Model · Technical Evidence</p>
+        <h1>Comp policy decision analysis</h1>
+        <p>The five-policy comparison, declared selection rule, generated shadow-validation candidate, and controlled validation design.</p>
+        <div class="report-actions">
+          <a class="button primary" href="index.html">Open decision brief</a>
+          <a class="button outline" href="simulation-audit.html">Open simulation audit</a>
+        </div>
+      </section>
+      <article class="report-body">
+        <div class="evidence-boundary"><strong>Evidence boundary:</strong> Operational records and outcomes are synthetic. Public context establishes property fit and guest-facing value, not internal policy, costs, or performance.</div>
+          <h2 id="executive-decision">Executive Decision</h2>
+          <p>Approve a four-week, minimum-50-case shadow validation of Guardrailed recovery as the leading candidate. Under the declared synthetic case mix and policy assumptions, it cleared the guest-protection, data-quality, escalation, and operational guardrails with the lowest modeled cost among eligible policies.</p>
+          <blockquote><strong>Evidence boundary:</strong> this is constrained optimization over synthetic hotel operations and declared policy assumptions. It supports selecting a candidate for shadow validation, not manager-facing use, permanent adoption, actual savings, or claims about Proper Hotels performance.</blockquote>
+          <h2 id="policy-comparison">Policy Comparison</h2>
+          <div class="report-table-wrap"><table><thead><tr><th scope="col">Policy</th><th scope="col">Safe recovery path</th><th scope="col">Gesture fit</th><th scope="col">High-risk under-recovery</th><th scope="col">Midpoint cost</th><th scope="col">Direct refund face value</th><th scope="col">Manager review</th><th scope="col">Assumption-stress pass rate</th><th scope="col">Decision</th></tr></thead><tbody><tr><td>Synthetic discretionary baseline</td><td>44.7%</td><td>44.7%</td><td>67.6%</td><td>$19,109</td><td>$7,345</td><td>unknown</td><td>0.0%</td><td>Comparator</td></tr><tr><td>Tiered standardization</td><td>91.7%</td><td>88.1%</td><td>21.5%</td><td>$24,527</td><td>$7,875</td><td>27.2%</td><td>0.0%</td><td>Comparator</td></tr><tr><td>Guardrailed recovery</td><td>100.0%</td><td>100.0%</td><td>0.0%</td><td>$29,104</td><td>$10,835</td><td>27.4%</td><td>99.6%</td><td>Shadow-validation candidate</td></tr><tr><td>Recovery first</td><td>100.0%</td><td>54.8%</td><td>0.0%</td><td>$49,632</td><td>$1,595</td><td>63.3%</td><td>100.0%</td><td>Comparator</td></tr><tr><td>Intelligent generosity</td><td>100.0%</td><td>64.8%</td><td>0.0%</td><td>$39,010</td><td>$1,300</td><td>57.7%</td><td>100.0%</td><td>Comparator</td></tr></tbody></table></div>
+          <h2 id="decision-rule">Decision Rule</h2>
+          <p>A policy can advance to shadow validation only when at least 80% of assumption-stress draws satisfy all declared guardrails: at least 90% of evaluable cases receive either an adequate gesture or explicit manager review, no more than 5% of high-risk cases are both inadequate and unreviewed, no more than 2% operational infeasibility, complete data-hold compliance, and complete tier-5 manager review.</p>
+          <p>Safe recovery path counts an adequate gesture or an explicit manager-review path. Gesture fit evaluates the proposed gesture alone.</p>
+          <p>Guardrailed recovery is deliberately an adequacy-constrained cost optimizer. Its advantage is therefore a decision-analysis result under the declared fit and cost assumptions, not independent evidence of superior guest outcomes.</p>
+          <p>Among qualifying policies, the decision rule selects the lowest median modeled internal cost. Policies within 1% are resolved by lower direct-refund exposure and then lower manager-review burden.</p>
+          <h2 id="statistical-evidence">Statistical Evidence</h2>
+          <ul><li>Paired case bootstrap draws: <code>10000</code></li><li>Shared-world assumption-stress draws: <code>5000</code></li><li>Bootstrap intervals describe synthetic case-mix variability, not sampling uncertainty for Proper Hotels.</li><li>Each stress draw applies the same recovery-weight, gesture-fit, occupancy-pressure, and comp-cost realization to every policy before comparison.</li><li>Synthetic post-stay scores are excluded because their generator does not include a comp-treatment effect.</li></ul>
+          <h2 id="selected-policy-tradeoff">Selected Policy Tradeoff</h2>
+          <ul><li>Selected policy: <strong>Guardrailed recovery</strong></li><li>Safe recovery-path coverage: <code>100.0%</code></li><li>Strict gesture adequacy before manager review: <code>100.0%</code></li><li>High-risk under-recovery: <code>0.0%</code></li><li>Modeled midpoint internal cost: <code>$29,104</code></li><li>Cost uncertainty range (5th-95th percentile): <code>$27,342-$33,944</code></li><li>Direct room-refund face-value exposure: <code>$10,835</code></li><li>Manager-review rate: <code>27.4%</code></li><li>Assumption-stress guardrail pass rate: <code>99.6%</code></li></ul>
+          <h2 id="proposed-shadow-validation">Proposed Shadow Validation</h2>
+          <ol><li>Run shadow mode for four weeks or 50 eligible cases, whichever is later.</li><li>Validate reservation and CRM matching, property-reviewed marginal-cost ranges, manager override capture, and complete outcome instrumentation.</li><li>Calculate the controlled-phase sample requirement from shadow event volume, outcome variance, baseline recovery, and a pre-specified minimum detectable effect.</li><li>Randomize policy-eligible cases between usual manager judgment and decision support. Tier-5 and low-confidence cases always remain manager-controlled.</li><li>Measure post-recovery satisfaction, resolution time, actual marginal cost, room refunds, overrides, reviews, and repeat stays before any permanent policy decision.</li></ol>
+          <h2 id="model-improvement-after-controlled-test-data">Model Improvement After Controlled-Test Data</h2>
+          <p>Fit a Bayesian hierarchical recovery-outcome model with partial pooling by issue type, manager, guest segment, and operating conditions. Use posterior probabilities to evaluate whether decision support preserves guest recovery while reducing cost or room-rate erosion. Until those outcomes exist, the project remains a robust policy simulation rather than an empirically optimized comp model.</p>
+      </article>
+    </main>
+    <script src="../../assets/js/site.js"></script>
+  </body>
+</html>
