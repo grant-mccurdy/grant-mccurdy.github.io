@@ -28,9 +28,9 @@
       <section class="detail-hero">
         <p class="section-kicker">Project Brief</p>
         <h1>Content Intelligence</h1>
-        <p>An artifact-to-RAG pipeline for converting source materials into public-safe information objects, retrieval-ready chunks, safety-reviewed index records, and source-grounded answers.</p>
+        <p>An artifact-to-RAG pipeline that standardizes text, transcript-derived, and OCR-derived content into provenance-rich records and serves cited answers through hybrid retrieval.</p>
         <div class="hero-actions detail-actions">
-          <a class="button primary" href="content-intelligence-demo-report.html">View Demo Report</a>
+          <a class="button primary" href="#live-rag">Try Live RAG</a>
           <a class="button outline" href="../case-studies/content-intelligence.html">Read Case Study</a>
           <a class="button outline" href="https://github.com/grant-mccurdy/content-intelligence">GitHub Repo</a>
         </div>
@@ -40,7 +40,7 @@
         <div>
           <p class="section-kicker">Implemented Pipeline</p>
           <h2>From source adapters to RAG-ready evidence</h2>
-          <p>The public demo mirrors a private source-adapter workflow: extract and inventory artifacts, convert and wash the text, create citation-preserving information objects, build retrieval-ready RAG index records, and validate the safety boundary before serving answers.</p>
+          <p>The public demo directly processes text and demonstrates the same normalized downstream contract with synthetic transcript and OCR artifacts: inventory, convert, preserve provenance, create citation-aware chunks, review safety, and serve bounded answers.</p>
         </div>
         <div class="detail-panel">
           <h2>Current Artifacts</h2>
@@ -50,7 +50,7 @@
             <li>Transcript enrichment packet examples</li>
             <li>OCR cleanup workflow simulation</li>
             <li>Information-object map across three demo pipelines</li>
-            <li>80 public-safe method and evidence records with Vectorize export metadata</li>
+            <li>Reviewed public-safe method and evidence records with Vectorize export metadata</li>
             <li>Manifest and corpus construction scripts</li>
             <li>Public-safety review output</li>
             <li>Cited sample report</li>
@@ -89,6 +89,7 @@
       </section>
 
       <section
+        id="live-rag"
         class="section-shell content-rag-demo"
         aria-labelledby="content-rag-heading"
         data-content-rag
@@ -102,7 +103,7 @@
           <div class="detail-panel content-rag-source-panel">
             <h3>Indexed Boundary</h3>
             <ul class="clean-list">
-              <li>80 public-safe method and evidence records</li>
+              <li>Reviewed public-safe method and evidence records</li>
               <li>Source adapters, washing, information objects, and citation grounding</li>
               <li>Cloudflare Vectorize-ready records with lexical fallback</li>
               <li>Raw private artifacts excluded from the public index</li>
