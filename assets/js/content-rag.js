@@ -52,6 +52,16 @@ if (contentRag) {
     return article;
   };
 
+  const revealMessage = (article) => {
+    window.requestAnimationFrame(() => {
+      article.scrollIntoView({ behavior: "instant", block: "start", inline: "nearest" });
+      const headerBottom = document.querySelector("[data-header]")?.getBoundingClientRect().bottom || 0;
+      const messageTop = article.getBoundingClientRect().top;
+      const clearance = 12;
+      window.scrollBy({ top: messageTop - headerBottom - clearance, behavior: "instant" });
+    });
+  };
+
   const renderStatus = (kind, title, detail) =>
     `<div class="chat-status ${kind}"><strong>${escapeHtml(title)}</strong><p>${escapeHtml(detail)}</p></div>`;
 
@@ -146,6 +156,7 @@ if (contentRag) {
         "Content RAG endpoint missing",
         "The static page is ready, but this build has not been connected to the Worker route."
       );
+      revealMessage(loading);
       return;
     }
 
@@ -172,6 +183,7 @@ if (contentRag) {
         throw error;
       }
       loading.querySelector(".chat-content").innerHTML = renderPayload(payload);
+      revealMessage(loading);
     } catch (error) {
       window.clearTimeout(timeoutId);
       const title =
@@ -187,6 +199,7 @@ if (contentRag) {
           ? "The Content RAG backend did not respond within 15 seconds."
           : error.message || "The Content RAG request could not be completed.";
       loading.querySelector(".chat-content").innerHTML = renderStatus("error", title, detail);
+      revealMessage(loading);
     } finally {
       setBusy(false);
     }

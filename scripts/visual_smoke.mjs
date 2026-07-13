@@ -93,7 +93,14 @@ function staticServer() {
       response.writeHead(200, { "Content-Type": "application/json; charset=utf-8" });
       response.end(
         JSON.stringify({
-          answer: "Source-grounded answer about the artifact-to-RAG workflow with cited evidence [1].",
+          answer: [
+            "Source-grounded answer about the artifact-to-RAG workflow with cited evidence [1].",
+            "Source adapters normalize supported documents into stable text artifacts before indexing.",
+            "The conversion layer records provenance and public-safety metadata alongside each information object.",
+            "Chunking preserves identifiers that allow retrieval results to map back to the generated public artifact.",
+            "Hybrid retrieval combines semantic matches with lexical evidence for precise source selection.",
+            "The answer layer cites the selected records and reports retrieval details without exposing private source material.",
+          ].join("\n\n"),
           mode: "content_rag_generated",
           retrievalMode: "hybrid",
           vectorConfigured: true,
@@ -339,8 +346,25 @@ async function inspectContentRag(page, label) {
   await page.locator("[data-chat-input]").fill("How does the artifact-to-RAG workflow work?");
   await page.locator("[data-chat-form] button[type='submit']").click();
   await thread.getByText("Source-grounded answer").waitFor({ state: "visible", timeout: 1500 });
+  await page.evaluate(() => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve))));
   const text = await thread.innerText();
   const sourceHref = await thread.locator(".content-rag-sources a").last().getAttribute("href");
+  const answerPosition = await page.evaluate(() => {
+    const header = document.querySelector("[data-header]")?.getBoundingClientRect();
+    const messages = Array.from(document.querySelectorAll("[data-chat-thread] .chat-message.assistant"));
+    const answer = messages.at(-1)?.getBoundingClientRect();
+    const clearance = 8;
+    return {
+      answerTop: answer?.top ?? null,
+      headerBottom: header?.bottom ?? null,
+      visibleBelowHeader: Boolean(
+        answer && header && answer.top >= header.bottom + clearance && answer.top < window.innerHeight
+      ),
+      alignedBelowHeader: Boolean(
+        answer && header && answer.top >= header.bottom + clearance && answer.top <= header.bottom + 20
+      ),
+    };
+  });
   const overflow = await page.evaluate(() =>
     Array.from(document.querySelectorAll("[data-content-rag] *"))
       .filter((el) => {
@@ -358,6 +382,7 @@ async function inspectContentRag(page, label) {
     citation: Boolean(sourceHref?.includes("content-intelligence/blob/main/sample_outputs/rag-index.json")),
     retrieval: text.includes("Hybrid vector + lexical retrieval") && text.includes("@cf/baai/bge-base-en-v1.5"),
     limits: text.includes("public-safe generated index records"),
+    answerPosition,
     overflow,
   };
 }
@@ -503,6 +528,8 @@ const failures = results.filter(
     result.contentRag?.citation === false ||
     result.contentRag?.retrieval === false ||
     result.contentRag?.limits === false ||
+    result.contentRag?.answerPosition?.visibleBelowHeader === false ||
+    result.contentRag?.answerPosition?.alignedBelowHeader === false ||
     result.contentRag?.overflow.length ||
     result.hotelComp?.boundary === false ||
     result.hotelComp?.policyDecision === false ||
