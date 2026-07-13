@@ -28,7 +28,7 @@
       <section class="detail-hero">
         <p class="section-kicker">Project Brief</p>
         <h1>Assessment Intelligence</h1>
-        <p>Public-safe assessment system work: SQL-backed extracts, analytics, reproducible R processing, dashboarding, diagnostics, and decision-support reporting for mathematics programs.</p>
+        <p>An interactive decision layer that turns SQL-backed assessment records into stakeholder-ready views of growth, performance, participation, completion, and data quality.</p>
         <div class="hero-actions detail-actions">
           <a class="button primary" href="../dashboard/assessment.html">Open Dashboard</a>
           <a class="button outline" href="../artifacts/assessment-intelligence/gradebook_synthesis_report.html">Read R Report</a>
@@ -39,8 +39,8 @@
       <section class="section-shell detail-grid">
         <div>
           <p class="section-kicker">Overview</p>
-          <h2>Analytics layer for synthetic assessment records</h2>
-          <p>This project demonstrates how assessment records can become dashboard views, reproducible reports, diagnostics, and decision-support notes without publishing real student data. The current local DuckDB analytics layer uses five SQL-backed synthetic extracts with 3,020 rows, including 2,009 readiness records across 174 course-section groups.</p>
+          <h2>Decision layer for assessment stakeholders</h2>
+          <p>The dashboard helps leaders see whether students are improving, where performance or participation signals are weakest, which groups warrant closer review, and whether the source data is reliable enough to support action. The current DuckDB analytics layer uses five SQL-backed synthetic extracts with 3,020 rows, including 2,009 readiness records across 174 course-section groups.</p>
         </div>
         <div class="detail-panel">
           <h2>Inspect First</h2>
@@ -50,6 +50,7 @@
             <li>Validation summary for the synthetic gradebook reconstruction</li>
             <li>SQL warehouse assessment report in the source repository</li>
             <li>Dashboard data extracts generated from public-safe synthetic marts</li>
+            <li>Minimum-sample safeguards for ranked decision insights</li>
             <li>Assessment reporting case study</li>
           </ul>
           <div class="link-row detail-action">
@@ -69,18 +70,18 @@
           <h2 id="assessment-proof-heading">Three proof lanes</h2>
         </div>
         <article class="artifact">
-          <h3>Interactive dashboard</h3>
-          <p>The dashboard runs on GitHub Pages from SQL-shaped synthetic extracts, with browser-side aggregation, SVG charts, filters, and no external JavaScript dependencies.</p>
+          <h3>Stakeholder dashboard</h3>
+          <p>The dashboard runs on GitHub Pages from SQL-shaped synthetic extracts, with browser-side aggregation, SVG charts, filters, and decision notes tied to visible metrics.</p>
           <a class="text-link" href="../dashboard/assessment.html">Open dashboard</a>
         </article>
         <article class="artifact">
-          <h3>R gradebook synthesis</h3>
-          <p>The R workflow reconstructs a Canvas-style synthetic gradebook from private-reference structure, exports long-form score records, and renders validation-backed reports.</p>
+          <h3>Decision guardrails</h3>
+          <p>Performance and participation remain distinct, ranked insights exclude cohorts below the default minimum sample size, and validation checks the public data boundary before release.</p>
           <a class="text-link" href="../artifacts/assessment-intelligence/gradebook_synthesis_report.html">Read R report</a>
         </article>
         <article class="artifact">
-          <h3>Warehouse reporting</h3>
-          <p>The repo extracts course-section performance, assignment growth, non-participation, LMS reconciliation, and readiness records from the synthetic DuckDB warehouse. DuckDB remains the reproducible local baseline, while hosted extracts are treated as a serving layer.</p>
+          <h3>Reproducible analytics</h3>
+          <p>SQL, Python, and R workflows produce course-section performance, growth, non-participation, roster reconciliation, readiness, modeling, and validation artifacts from the synthetic DuckDB warehouse.</p>
           <a class="text-link" href="education-data-simulation-engine.html">Simulation foundation</a>
         </article>
       </section>

@@ -1,11 +1,11 @@
 <!doctype html>
-<html lang="en" data-asset-version="20260625a">
+<html lang="en" data-asset-version="20260713a">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Analytics Dashboard | Grant McCurdy</title>
     <meta name="description" content="Interactive public-safe analytics dashboard powered by static SQL extract data.">
-    <link rel="stylesheet" href="../assets/css/styles.css?v=20260625a">
+    <link rel="stylesheet" href="../assets/css/styles.css?v=20260713a">
   </head>
   <body>
     <header class="site-header compact" data-header>
@@ -28,7 +28,7 @@
       <section class="detail-hero dashboard-hero">
         <p class="section-kicker">Interactive Dashboard</p>
         <h1>Analytics Dashboard</h1>
-        <p>Static GitHub Pages dashboard over the assessment-intelligence SQL extract, with browser-side aggregation, SVG charts, and filters.</p>
+        <p>Turn public-safe assessment records into stakeholder-ready views of growth, performance, participation, completion, and data quality.</p>
       </section>
 
       <section class="dashboard-shell" aria-labelledby="dashboard-heading">
@@ -60,23 +60,23 @@
 
         <div class="metric-grid metric-grid-wide" aria-live="polite">
           <article class="metric-card">
-            <span>Students</span>
+            <span>Students represented</span>
             <strong id="metric-students">-</strong>
           </article>
           <article class="metric-card">
-            <span>Latest Value</span>
+            <span id="metric-latest-label">Latest mean score</span>
             <strong id="metric-latest">-</strong>
           </article>
           <article class="metric-card">
-            <span>Avg BOY/EOY</span>
+            <span>Avg paired growth</span>
             <strong id="metric-change">-</strong>
           </article>
           <article class="metric-card">
-            <span>Completion</span>
+            <span>Latest completion</span>
             <strong id="metric-completion">-</strong>
           </article>
           <article class="metric-card">
-            <span>Above Target</span>
+            <span>In target-level groups</span>
             <strong id="metric-target">-</strong>
           </article>
         </div>
@@ -131,8 +131,8 @@
               </select>
             </label>
             <label class="range-control line-min-control">
-              <span>Minimum window n <output id="line-min-n-value">5</output></span>
-              <input type="range" id="line-min-n" min="1" max="35" step="1" value="5">
+              <span>Minimum window n <output id="line-min-n-value">10</output></span>
+              <input type="range" id="line-min-n" min="1" max="35" step="1" value="10">
             </label>
           </div>
         </div>
@@ -155,8 +155,8 @@
               Sort / cut
               <select id="line-sort-select">
                 <option value="latest">Latest value</option>
-                <option value="gain">Largest BOY/EOY gain</option>
-                <option value="decline">Lowest BOY/EOY movement</option>
+                <option value="gain">Largest paired-window gain</option>
+                <option value="decline">Lowest paired-window movement</option>
                 <option value="name">Name A-Z</option>
               </select>
             </label>
@@ -218,7 +218,7 @@
         <article class="dashboard-panel time-panel">
           <div class="panel-heading">
             <div>
-              <h3>Historical Analytics Lines</h3>
+              <h3>Assessment Trends</h3>
               <span id="time-caption">Beginning and end reporting windows</span>
             </div>
             <div class="legend" id="time-legend"></div>
@@ -226,7 +226,7 @@
           <div id="time-chart" class="chart-frame time-chart" role="img" aria-label="Analytics time-series chart"></div>
           <div class="mini-chart-block">
             <div class="mini-chart-heading">
-              <h4>Completion Rollout</h4>
+              <h4>Completion By Window</h4>
               <span id="completion-caption">Assigned vs completed records</span>
             </div>
             <div id="completion-chart" class="chart-frame mini-chart" role="img" aria-label="Completion rollout chart"></div>
@@ -254,7 +254,7 @@
 
           <article class="dashboard-panel">
             <div class="panel-heading">
-              <h3>Extract Heatmap</h3>
+              <h3>Latest Status Heatmap</h3>
               <span id="skill-caption"></span>
             </div>
             <div id="skill-chart" class="chart-frame heatmap-frame" role="img" aria-label="Synthetic skill heatmap"></div>
@@ -264,7 +264,7 @@
         <div class="dashboard-grid">
           <article class="dashboard-panel">
             <div class="panel-heading">
-              <h3>BOY/EOY Movement</h3>
+              <h3>Paired-Window Growth</h3>
               <span id="growth-caption"></span>
             </div>
             <div id="growth-chart" class="chart-frame" role="img" aria-label="BOY EOY movement chart"></div>
@@ -326,7 +326,7 @@
                   <th><button type="button" class="table-sort" data-sort="students">Students <span aria-hidden="true"></span></button></th>
                   <th><button type="button" class="table-sort" data-sort="first" id="table-first-period">Assignment 01 <span aria-hidden="true"></span></button></th>
                   <th><button type="button" class="table-sort" data-sort="latest" id="table-latest-period">Assignment 14 <span aria-hidden="true"></span></button></th>
-                  <th><button type="button" class="table-sort" data-sort="change">Avg BOY/EOY <span aria-hidden="true"></span></button></th>
+                  <th><button type="button" class="table-sort" data-sort="change">Avg paired growth <span aria-hidden="true"></span></button></th>
                   <th><button type="button" class="table-sort" data-sort="completion">Completion <span aria-hidden="true"></span></button></th>
                 </tr>
               </thead>
@@ -338,6 +338,6 @@
     </main>
 
     <script src="../assets/js/site.js?v=dashboard-source-v1"></script>
-    <script src="../assets/js/assessment-dashboard.js?v=20260625a"></script>
+    <script src="../assets/js/assessment-dashboard.js?v=20260713a"></script>
   </body>
 </html>

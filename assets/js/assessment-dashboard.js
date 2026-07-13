@@ -19,7 +19,7 @@ const state = {
     smoothCurves: true,
   },
   lines: {
-    minN: 5,
+    minN: 10,
     sortCut: "latest",
     filter: "",
     limit: "10",
@@ -92,6 +92,7 @@ const els = {
   sourceContract: document.querySelector("#source-contract"),
   students: document.querySelector("#metric-students"),
   latest: document.querySelector("#metric-latest"),
+  latestLabel: document.querySelector("#metric-latest-label"),
   change: document.querySelector("#metric-change"),
   completion: document.querySelector("#metric-completion"),
   target: document.querySelector("#metric-target"),
@@ -253,6 +254,7 @@ function averageBoyEoyDeltaFromLineValues(values) {
 }
 
 function boyEoyDeltasByGroup(periodData, metricKey = state.metric) {
+  const minN = Math.max(1, Number(state.lines.minN) || 1);
   const pairs = boyEoyPairs(periodData.map((periodItem) => periodItem.period));
   const groupsByPeriod = new Map(periodData.map((periodItem) => [
     periodItem.period.id,
@@ -262,8 +264,11 @@ function boyEoyDeltasByGroup(periodData, metricKey = state.metric) {
 
   return keys.map((key) => {
     const deltas = pairs.map(({ begin, end }) => {
-      const beginValue = groupsByPeriod.get(begin.id)?.get(key)?.[metricKey];
-      const endValue = groupsByPeriod.get(end.id)?.get(key)?.[metricKey];
+      const beginGroup = groupsByPeriod.get(begin.id)?.get(key);
+      const endGroup = groupsByPeriod.get(end.id)?.get(key);
+      if (groupSampleSize(beginGroup) < minN || groupSampleSize(endGroup) < minN) return NaN;
+      const beginValue = beginGroup?.[metricKey];
+      const endValue = endGroup?.[metricKey];
       return Number.isFinite(beginValue) && Number.isFinite(endValue) ? endValue - beginValue : NaN;
     });
     const numeric = deltas.filter((value) => Number.isFinite(value));
@@ -620,6 +625,10 @@ function aggregate(records, groupBy = state.groupBy) {
   })).sort((a, b) => a.key.localeCompare(b.key, undefined, { numeric: true }));
 }
 
+function groupSampleSize(group) {
+  return group?.totalStudents ?? group?.students ?? group?.rows?.length ?? 0;
+}
+
 function aggregateByPeriod(records, groupBy = state.groupBy) {
   const periods = state.source.periods.filter((period) => state.season === "All" || period.season === state.season);
   return periods.map((period) => {
@@ -652,6 +661,7 @@ function metricAllowsBands() {
 function renderMetrics(records) {
   const latest = latestPeriodData(records);
   const latestRows = latest?.rows ?? [];
+  els.latestLabel.textContent = `Latest ${currentMetricLabel().toLowerCase()}`;
 
   if (!latestRows.length) {
     els.students.textContent = "0";
@@ -727,7 +737,7 @@ function buildLineSeries(periodData) {
     const values = periodData.map((periodItem, periodIndex) => {
       const groupItem = periodItem.groups.find((item) => item.key === group);
       const value = groupItem ? metricValue(groupItem) : NaN;
-      const n = groupItem?.students ?? groupItem?.totalStudents ?? groupItem?.rows?.length ?? 0;
+      const n = groupSampleSize(groupItem);
       if (!groupItem || !Number.isFinite(value) || n < minN) return null;
       return {
         period: periodItem.period,
@@ -1542,7 +1552,8 @@ function renderInsights(records) {
     return;
   }
 
-  const latestGroups = latest.groups;
+  const minN = Math.max(1, Number(state.lines.minN) || 1);
+  const latestGroups = latest.groups.filter((group) => groupSampleSize(group) >= minN);
   const rankedMovement = boyEoyDeltasByGroup(periodDataForTimeSeries(records))
     .sort((a, b) => b.value - a.value);
   const strongest = rankedMovement[0];
@@ -1555,8 +1566,8 @@ function renderInsights(records) {
   const sqlBacked = state.source.source?.contract === "sql-extract-dashboard-json-v1";
 
   const notes = [
-    strongest ? `${strongest.key} has the strongest average BOY/EOY movement at ${fmtPtsAuto(strongest.value)} across ${strongest.count} complete pair${strongest.count === 1 ? "" : "s"}.` : "No complete BOY/EOY movement is available for the current filter.",
-    watch ? `${watch.key} is the lowest latest comparison at ${fmtPct(watch.score)}, making it a candidate for item-level review or targeted supports.` : "No watch segment is available for the current filter.",
+    strongest ? `${strongest.key} has the strongest average paired-window growth at ${fmtPtsAuto(strongest.value)} across ${strongest.count} complete pair${strongest.count === 1 ? "" : "s"}, with at least ${minN} students represented in each included window.` : `No complete paired-window movement meets the minimum n of ${minN}.`,
+    watch ? `${watch.key} is the lowest latest comparison at ${fmtPct(watch.score)} (n=${groupSampleSize(watch).toLocaleString()}), making it a candidate for item-level review or targeted supports.` : `No latest comparison meets the minimum n of ${minN}.`,
     `Latest completion is ${completionLabel}, which is ${completionPosition} the operating target of 95%.`,
     sqlBacked
       ? `The score ribbons are computed from the SQL student readiness extract and use the same public-safe source layer as the assessment report artifacts.`
