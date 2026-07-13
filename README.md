@@ -73,7 +73,7 @@ make external-links
 
 ## Project Areas
 
-- `hotel-comp-policy-model`: luxury-hospitality service-recovery decision support, explainable comp recommendations, policy sensitivity, data lineage, and warehouse validation.
+- `hotel-comp-policy-model`: luxury-hospitality comp-policy comparison, shadow-validation decision support, manager recommendations, assumption stress testing, and warehouse validation.
 - `education-data-simulation-engine`: public-safe education data simulation, validation, and SQL-ready analytics foundations.
 - `assessment-intelligence`: assessment design, analytics, dashboards, diagnostics, and reporting workflows.
 - `statistical-risk-modeling-r`: public-safe R assessment-growth analytics, expected-growth modeling, section signal diagnostics, validation, and model-card reporting.
@@ -87,7 +87,7 @@ Use only public-safe screenshots, synthetic data, generalized case-study languag
 
 ## Current Portal State
 
-- Hotel Comp Policy Model has a hosted stakeholder decision brief, interactive scenario explorer, synthetic policy audit, rendered methodology, sensitivity evidence, data lineage, Snowflake validation, and public property context.
+- Hotel Comp Policy Model has a hosted five-policy decision brief, generated shadow-validation candidate, interactive manager scenarios, synthetic policy audit, coherent assumption stress testing, data lineage, Snowflake validation, and public property context.
 - The homepage presents a systems-portfolio path: capabilities, selected work, demos, case studies, and operating principles.
 - Portfolio Data Lab is present as a static UI shell connected to the private `portfolio-rag-api` Worker endpoint. It must fail gracefully and must not contain API keys, Worker secrets, or demo tokens.
 - Content Intelligence is portfolio-ready and has a hosted sample report, case study, transcript enrichment examples, OCR cleanup workflow, information-object map, and method-pack artifacts.

@@ -15,6 +15,11 @@ DEFAULT_SOURCE = ROOT.parent / "hotel-comp-policy-model"
 OUTPUT_DIR = ROOT / "projects" / "hotel-comp-policy-model"
 
 REPORTS = {
+    "engineering-evidence.md": (
+        "engineering-evidence.html",
+        "Engineering evidence",
+        "Verified S3-to-Snowflake decision lineage, data contracts, semantic quality gates, security controls, and report-source parity.",
+    ),
     "methodology-and-assumptions.md": (
         "methodology.html",
         "Methodology and assumptions",
@@ -22,8 +27,13 @@ REPORTS = {
     ),
     "policy-sensitivity.md": (
         "policy-sensitivity.html",
-        "Policy sensitivity and stability",
-        "Stress tests for recommendation stability, cost uncertainty, and manager-review thresholds.",
+        "Policy comparison uncertainty",
+        "Paired case-bootstrap intervals, probabilistic guardrail checks, cost uncertainty, and policy-selection stability.",
+    ),
+    "policy-decision-analysis.md": (
+        "policy-decision-analysis.html",
+        "Comp policy decision analysis",
+        "The five-policy comparison, declared selection rule, generated shadow-validation candidate, and controlled validation design.",
     ),
     "data-lineage.md": (
         "data-lineage.html",
@@ -43,8 +53,10 @@ REPORTS = {
 }
 
 LINK_REWRITES = {
+    "reports/engineering-evidence.md": "engineering-evidence.html",
     "reports/methodology-and-assumptions.md": "methodology.html",
     "reports/policy-sensitivity.md": "policy-sensitivity.html",
+    "reports/policy-decision-analysis.md": "policy-decision-analysis.html",
     "reports/data-lineage.md": "data-lineage.html",
     "reports/snowflake-validation.md": "warehouse-validation.html",
     "reports/proper-public-context.md": "public-context.html",
@@ -340,12 +352,10 @@ def transform_simulation_audit(source: str) -> str:
         1,
     )
     source = source.replace(
-        "  <header><h1>Service Recovery Policy Review</h1>",
-        '  <header><nav class="audit-nav" aria-label="Artifact navigation"><a href="index.html">Decision brief</a><a href="methodology.html">Methodology</a><a href="../../index.html">Grant McCurdy portfolio</a></nav><h1>Service Recovery Policy Review</h1>',
+        "  <header><h1>Comp Policy Simulation Audit</h1>",
+        '  <header><nav class="audit-nav" aria-label="Artifact navigation"><a href="index.html">Decision brief</a><a href="policy-decision-analysis.html">Decision analysis</a><a href="methodology.html">Methodology</a><a href="../../index.html">Grant McCurdy portfolio</a></nav><h1>Comp Policy Simulation Audit</h1>',
         1,
     )
-    source = source.replace("<table>", '<div class="table-scroll"><table>')
-    source = source.replace("</table>", "</table></div>")
     return source
 
 

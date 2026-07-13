@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Verified S3-to-Snowflake decision lineage, data contracts, semantic quality gates, security controls, and report-source parity.">
+    <title>Engineering evidence | Hotel Comp Policy Model</title>
+    <link rel="stylesheet" href="../../assets/css/styles.css?v=20260710a">
+    <link rel="stylesheet" href="appendix.css?v=20260710a">
+  </head>
+  <body>
+    <header class="site-header compact" data-header>
+      <nav class="nav-shell" aria-label="Primary navigation">
+        <a class="brand" href="../../index.html">
+          <span class="brand-mark" aria-hidden="true"><img src="../../assets/images/grant-mccurdy-profile.jpg" alt=""></span>
+          <span class="brand-text">Grant McCurdy</span>
+        </a>
+        <div class="nav-links static">
+          <a href="index.html">Decision Brief</a>
+          <a href="simulation-audit.html">Simulation Audit</a>
+          <a href="../index.html">Projects</a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="report-main">
+      <section class="report-hero">
+        <p class="section-kicker">Hotel Comp Policy Model · Technical Evidence</p>
+        <h1>Engineering evidence</h1>
+        <p>Verified S3-to-Snowflake decision lineage, data contracts, semantic quality gates, security controls, and report-source parity.</p>
+        <div class="report-actions">
+          <a class="button primary" href="index.html">Open decision brief</a>
+          <a class="button outline" href="simulation-audit.html">Open simulation audit</a>
+        </div>
+      </section>
+      <article class="report-body">
+        <div class="evidence-boundary"><strong>Evidence boundary:</strong> Operational records and outcomes are synthetic. Public context establishes property fit and guest-facing value, not internal policy, costs, or performance.</div>
+          <p>This appendix shows how the static executive decision is produced, validated, and kept traceable. It is supporting evidence for the decision product, not a claim that cloud infrastructure improves the synthetic model&#x27;s statistical validity.</p>
+          <blockquote><strong>Evidence boundary:</strong> operating records and policy outcomes are synthetic. Account, bucket, role, credential, and guest identifiers are intentionally omitted.</blockquote>
+          <h2 id="decision-lineage">Decision Lineage</h2>
+          <pre data-language="text"><code>synthetic PMS / CRM / service / comp / POS / survey / operations
++ bounded public property, pricing, review, and demand context
+        |
+        v
+S3 landing/{run_id}              source-faithful, versioned snapshots
+        |
+        v
+Snowflake RAW                    source-shaped VARCHAR ingestion
+        |
+        v
+Python policy engine             bootstrap, policy comparison, sensitivity
+        |
+        v
+S3 model-output/{run_id}         versioned statistical outputs
+        |
+        v
+Snowflake typed MARTS / AUDIT    decision views and quality controls
+        |
+        v
+parity-checked extract           static executive decision brief</code></pre>
+          <p>Python remains responsible for the paired bootstrap and coherent shared-world assumption stress test. Snowflake is responsible for typed persistence, SQL serving views, reconciliation, and decision-semantic validation.</p>
+          <h2 id="verified-execution">Verified Execution</h2>
+          <ul><li>Cloud status: <strong>PASS - current</strong> - Current policy build is validated in Snowflake.</li><li>Last validated at: <code>2026-07-13T20:41:31+00:00</code></li><li>Load method: <code>s3_external_stage_copy_into</code></li><li>Source/context tables: <code>12</code></li><li>Model and decision tables: <code>10</code></li><li>Analytic and audit views: <code>12</code></li><li>Structural and semantic checks passed: <code>46</code>; failed: <code>0</code></li><li>Decision-semantic checks: <code>12</code></li><li>Case-policy rows: <code>2150</code></li><li>Candidate policies: <code>5</code></li><li>Selected shadow-validation candidate: <code>Guardrailed recovery</code></li><li>Published decision source: <code>Snowflake decision-view extract with exact local-mart parity</code></li></ul>
+          <h2 id="data-contracts-and-quality-gates">Data Contracts And Quality Gates</h2>
+          <p>The curated Snowflake layer uses <code>snowflake_mart_types:v1</code>. <code>253</code> of <code>360</code> MARTS columns are explicitly numeric, Boolean, or date types; identifiers, labels, explanations, and provenance remain text.</p>
+          <p>Validation covers:</p>
+          <ul><li>Local-to-Snowflake row parity for every table.</li><li>Queryability of every MARTS and AUDIT view.</li><li>One selected policy and five complete candidate-policy outputs.</li><li>Complete case-policy grain with no duplicate case-policy keys.</li><li>Simulation-rate bounds and low/mid/high cost ordering.</li><li>Selected-policy and executive-metric parity.</li><li>Data-hold, tier-five review, high-risk recovery, and feasibility guardrails.</li><li>Typed MARTS fields and small-group suppression behavior.</li></ul>
+          <h2 id="security-and-cost-controls">Security And Cost Controls</h2>
+          <div class="report-table-wrap"><table><thead><tr><th scope="col">Control</th><th scope="col">Implementation</th></tr></thead><tbody><tr><td>Public access</td><td>S3 public access is blocked; no cloud resources are exposed by the report.</td></tr><tr><td>Encryption</td><td>S3 objects use server-side encryption and bucket versioning.</td></tr><tr><td>AWS access</td><td>Snowflake assumes a prefix-scoped IAM role with an external ID.</td></tr><tr><td>Snowflake access</td><td>Project-scoped role; credentials and connection files stay outside Git.</td></tr><tr><td>Compute cost</td><td>X-Small warehouse with auto-resume and 60-second auto-suspend.</td></tr><tr><td>Reproducibility</td><td>Run IDs, row counts, hashes, contracts, and sanitized validation evidence.</td></tr><tr><td>Automation</td><td>Local tests run independently; cloud validation is deliberately manually triggered to control credentials and cost.</td></tr></tbody></table></div>
+          <h2 id="reproducible-paths">Reproducible Paths</h2>
+          <pre data-language="bash"><code>make local-all       # credential-free DuckDB path
+make enterprise-all  # S3 -&gt; Snowflake -&gt; validated extracts -&gt; reports</code></pre>
+          <p>The default report remains static so a stakeholder does not need cloud credentials or a running warehouse. A validated extract is materialized before publication.</p>
+          <h2 id="deliberate-limitations">Deliberate Limitations</h2>
+          <ul><li>The dataset is small; S3 and Snowflake support lineage and production-shaped workflow rather than computational scale.</li><li>Loads currently publish complete versioned snapshots instead of incremental change-data capture.</li><li>Statistical policy outputs are produced in Python and then governed in Snowflake; they are not reimplemented in SQL.</li><li>No real hotel operating data, internal cost, policy, or guest outcome enters this workflow.</li></ul>
+          <h2 id="reviewable-implementation">Reviewable Implementation</h2>
+          <ul><li>S3 publisher: <code>scripts/publish_s3_datalake.py</code></li><li>S3-to-Snowflake loader: <code>scripts/load_snowflake_from_s3.py</code></li><li>Snowflake loader and validation: <code>scripts/load_snowflake_warehouse.py</code></li><li>Analytic views: <code>sql/snowflake/02_create_views.sql</code></li><li>Cloud workflow: <code>.github/workflows/snowflake-validation.yml</code></li><li>Warehouse type contract: <code>data/contracts/snowflake_mart_types.json</code></li></ul>
+      </article>
+    </main>
+    <script src="../../assets/js/site.js"></script>
+  </body>
+</html>
