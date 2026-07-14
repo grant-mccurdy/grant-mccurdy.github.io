@@ -396,8 +396,11 @@ async function inspectHotelComp(page, label) {
       boundary: boundary.includes("synthetic hotel operations") && boundary.includes("does not use or claim access"),
       policyDecision:
         (await page.locator("h1").innerText()) === "Comp Policy Shadow-Validation Decision" &&
-        (await page.locator(".policy-comparison-table tbody tr").count()) === 5 &&
-        (await page.locator(".policy-comparison-table tbody tr.selected-policy").count()) === 1,
+        (await page.locator(".policy-plot-row").count()) === 5 &&
+        (await page.locator(".policy-plot-row.selected").count()) === 1 &&
+        (await page.locator(".policy-decision-figure figcaption").innerText()).includes(
+          "lowest median cost among qualifiers",
+        ),
       scenarioChanged:
         (await page.locator("#scenario-amount").innerText()) === "$100" &&
         (await page.locator("#scenario-gesture").innerText()).includes("parking or destination-fee waiver") &&
