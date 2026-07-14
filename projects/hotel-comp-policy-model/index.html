@@ -75,22 +75,37 @@
     .band { background: var(--paper); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
     .section-head { max-width: 720px; margin-bottom: 28px; }
     .section-head p { margin: 0; color: var(--muted); }
-    .policy-table-wrap { width: 100%; overflow-x: auto; border: 1px solid var(--line); background: var(--white); }
-    .policy-comparison-table { width: 100%; min-width: 820px; border-collapse: collapse; }
-    .policy-comparison-table th, .policy-comparison-table td { padding: 12px 13px; border-bottom: 1px solid var(--line); text-align: left; font-size: .82rem; }
-    .policy-comparison-table thead th { color: var(--muted); font-weight: 700; }
-    .policy-comparison-table tbody th { max-width: 210px; color: var(--ink); }
-    .policy-comparison-table .selected-policy { background: var(--teal-soft); }
-    .policy-comparison-table .selected-policy th { color: var(--teal-dark); }
+    .policy-decision-figure { margin: 0; border: 1px solid var(--line); background: var(--white); }
+    .selection-rule { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: 18px; align-items: center; padding: 18px 20px; border-bottom: 1px solid var(--line); background: #edf5f2; }
+    .selection-rule > div { display: grid; grid-template-columns: 30px minmax(0, 1fr); gap: 10px; align-items: start; }
+    .selection-rule p { margin: 0; color: var(--muted); font-size: .86rem; }
+    .selection-rule strong { display: block; color: var(--ink); }
+    .rule-number { display: grid; width: 28px; height: 28px; place-items: center; border-radius: 50%; background: var(--teal); color: var(--white); font-size: .78rem; font-weight: 800; }
+    .rule-arrow { color: var(--teal); font-size: 1.5rem; font-weight: 800; }
+    .figure-axis, .policy-plot-row { display: grid; grid-template-columns: minmax(170px, .75fr) minmax(320px, 1.65fr) 130px; gap: 22px; align-items: center; }
+    .figure-axis { padding: 16px 20px 10px; color: var(--muted); font-size: .7rem; font-weight: 750; text-transform: uppercase; }
+    .axis-track { position: relative; height: 20px; border-bottom: 1px solid var(--line); }
+    .axis-track span { position: absolute; bottom: 2px; transform: translateX(-50%); color: var(--muted); font-size: .68rem; font-weight: 600; text-transform: none; }
+    .axis-track span:first-child { transform: none; }
+    .policy-plot-row { --row-color: #68736e; min-height: 78px; padding: 13px 20px; border-top: 1px solid var(--line); }
+    .policy-plot-row.selected { --row-color: var(--teal); background: var(--teal-soft); }
+    .policy-plot-row.qualified { --row-color: #42665d; }
+    .policy-plot-row.failed { --row-color: var(--coral); }
+    .policy-plot-row.comparator { --row-color: #8a938f; }
+    .policy-plot-label strong, .guardrail-result strong { display: block; color: var(--ink); font-size: .9rem; }
+    .policy-plot-label span, .guardrail-result span { display: block; margin-top: 3px; color: var(--muted); font-size: .74rem; }
+    .policy-plot-row.selected .policy-plot-label span, .policy-plot-row.selected .guardrail-result span { color: var(--teal-dark); font-weight: 750; }
+    .cost-cell { min-width: 0; }
+    .cost-track { position: relative; height: 22px; border-bottom: 1px solid var(--line); }
+    .cost-interval { position: absolute; top: 9px; left: var(--cost-low); width: calc(var(--cost-high) - var(--cost-low)); min-width: 3px; height: 4px; border-radius: 2px; background: var(--row-color); }
+    .cost-median { position: absolute; top: 4px; left: var(--cost-mid); width: 14px; height: 14px; transform: translateX(-50%); border: 3px solid var(--white); border-radius: 50%; background: var(--row-color); box-shadow: 0 0 0 1px var(--row-color); }
+    .cost-readout { display: block; margin-top: 5px; color: var(--muted); font-size: .72rem; }
+    .guardrail-result { text-align: right; }
+    .policy-decision-figure figcaption { padding: 16px 20px; border-top: 1px solid var(--line); background: #fafbfa; color: var(--muted); font-size: .84rem; }
+    .policy-decision-figure figcaption strong { color: var(--ink); }
     .comparison-note { display: grid; grid-template-columns: 180px minmax(0, 1fr); gap: 22px; margin-top: 22px; padding-top: 20px; border-top: 1px solid var(--line); }
     .comparison-note strong { color: var(--coral); font-size: .82rem; text-transform: uppercase; }
     .comparison-note p { margin: 0; color: var(--muted); }
-    .comparison-definition { margin: 14px 0 0; color: var(--muted); font-size: .82rem; }
-    .selection-metrics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); margin-top: 26px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
-    .selection-metrics div { padding: 15px; border-right: 1px solid var(--line); }
-    .selection-metrics div:last-child { border-right: 0; }
-    .selection-metrics span { display: block; color: var(--muted); font-size: .74rem; }
-    .selection-metrics strong { display: block; margin-top: 4px; font-size: 1rem; }
     .scenario-tabs {
       display: flex;
       width: fit-content;
@@ -159,14 +174,6 @@
     .property-menu div:last-child { border-right: 0; padding-right: 0; }
     .property-menu strong { display: block; color: var(--teal-dark); font-size: .79rem; text-transform: uppercase; }
     .property-menu span { display: block; margin-top: 4px; color: var(--muted); font-size: .86rem; }
-    .policy-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 28px; }
-    .policy-step { min-width: 0; padding: 0 28px; border-right: 1px solid var(--line); }
-    .policy-step:first-child { padding-left: 0; }
-    .policy-step:last-child { padding-right: 0; border-right: 0; }
-    .step-number { display: block; margin-bottom: 13px; color: var(--coral); font-size: 1.5rem; font-weight: 800; }
-    .policy-step p { margin: 0; color: var(--muted); font-size: .92rem; }
-    .drivers { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; margin-top: 38px; padding-top: 28px; border-top: 1px solid var(--line); }
-    .drivers p { margin: 0; color: var(--muted); font-size: .88rem; }
     .pilot { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: 56px; align-items: start; }
     .pilot-callout { border-left: 4px solid var(--coral); padding-left: 20px; }
     .pilot-callout p { margin: 0; color: var(--muted); }
@@ -189,19 +196,15 @@
       .proposal { grid-template-columns: 1fr; gap: 8px; }
       .principle, .evidence-boundary { margin-left: 0; }
       .comparison-note { grid-template-columns: 1fr; gap: 6px; }
-      .selection-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .selection-metrics div:nth-child(2) { border-right: 0; }
-      .selection-metrics div:nth-child(-n+2) { border-bottom: 1px solid var(--line); }
+      .selection-rule { grid-template-columns: 1fr; gap: 12px; }
+      .rule-arrow { justify-self: start; margin-left: 6px; transform: rotate(90deg); }
+      .figure-axis, .policy-plot-row { grid-template-columns: minmax(140px, .7fr) minmax(240px, 1.5fr) 115px; gap: 14px; }
       .decision { grid-template-columns: 1fr; }
       .decision-support { border-top: 1px solid var(--line); border-left: 0; }
       .property-menu { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .property-menu div, .property-menu div:first-child, .property-menu div:last-child { padding: 14px; border-right: 0; border-bottom: 1px solid var(--line); }
       .property-menu div:nth-child(odd) { border-right: 1px solid var(--line); }
       .property-menu div:last-child { border-bottom: 0; }
-      .policy-grid { grid-template-columns: 1fr; gap: 24px; }
-      .policy-step, .policy-step:first-child, .policy-step:last-child { padding: 0 0 24px; border-right: 0; border-bottom: 1px solid var(--line); }
-      .policy-step:last-child { padding-bottom: 0; border-bottom: 0; }
-      .drivers { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .pilot, .evidence-grid { grid-template-columns: 1fr; gap: 32px; }
     }
     @media (max-width: 560px) {
@@ -221,21 +224,15 @@
       .decision-metrics { grid-template-columns: 1fr; gap: 10px; }
       .decision-metrics div { padding-bottom: 10px; border-bottom: 1px solid var(--line); }
       .decision-metrics div:last-child { padding-bottom: 0; border-bottom: 0; }
-      .reasons, .drivers, .success-measures, .evidence-links { grid-template-columns: 1fr; }
+      .reasons, .success-measures, .evidence-links { grid-template-columns: 1fr; }
       .property-menu { grid-template-columns: 1fr; }
       .property-menu div:nth-child(odd) { border-right: 0; }
       .principle span { display: block; }
-      .selection-metrics { grid-template-columns: 1fr; }
-      .selection-metrics div, .selection-metrics div:nth-child(2) { border-right: 0; border-bottom: 1px solid var(--line); }
-      .selection-metrics div:last-child { border-bottom: 0; }
-      .policy-comparison-table { min-width: 0; }
-      .policy-comparison-table thead { display: none; }
-      .policy-comparison-table, .policy-comparison-table tbody, .policy-comparison-table tr { display: block; }
-      .policy-comparison-table tr { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); padding: 14px; border-bottom: 1px solid var(--line); }
-      .policy-comparison-table tr:last-child { border-bottom: 0; }
-      .policy-comparison-table tbody th { grid-column: 1 / -1; max-width: none; padding: 0 0 10px; border: 0; font-size: .95rem; }
-      .policy-comparison-table td { padding: 7px 8px 7px 0; border: 0; font-weight: 700; }
-      .policy-comparison-table td::before { content: attr(data-label); display: block; margin-bottom: 2px; color: var(--muted); font-size: .7rem; font-weight: 500; }
+      .figure-axis { display: none; }
+      .policy-plot-row { grid-template-columns: minmax(0, 1fr) auto; gap: 10px 18px; padding: 15px; }
+      .cost-cell { grid-column: 1 / -1; }
+      .guardrail-result { grid-column: 2; grid-row: 1; }
+      .policy-decision-figure figcaption { padding: 15px; }
     }
     @media print {
       body { font-size: 13px; }
@@ -255,13 +252,13 @@
     <div class="shell intro">
       <p class="eyebrow">Luxury hospitality service recovery</p>
       <h1>Comp Policy Shadow-Validation Decision</h1>
-      <p class="lead">A simulation-backed recommendation on which service-recovery policy should enter invisible shadow validation before any manager-facing or permanent operating change.</p>
+      <p class="lead">A simulation-backed decision on which service-recovery policy should enter shadow validation before manager use.</p>
       <div class="proposal">
         <strong>Executive decision</strong>
-        <p>Approve a four-week, minimum-50-case shadow validation of Guardrailed recovery as the leading candidate. Under the declared synthetic case mix and policy assumptions, it cleared the guest-protection, data-quality, escalation, and operational guardrails with the lowest modeled cost among eligible policies.</p>
+        <p>Run Guardrailed recovery in invisible shadow mode for four weeks or at least 50 eligible cases. It was the lowest modeled-cost policy to clear every declared guardrail.</p>
       </div>
       <p class="principle"><b>Selected policy:</b> <span>Guardrailed recovery · guest protection first · cost choice second · manager judgment retained</span></p>
-      <p class="evidence-boundary">Synthetic policy comparison, not observed Proper Hotels performance or projected savings. Public property context informs gesture fit and guest-facing value only.</p>
+      <p class="evidence-boundary">Synthetic comparison, not observed Proper Hotels performance or projected savings. Public context informs gesture fit only.</p>
     </div>
   </header>
 
@@ -270,23 +267,11 @@
       <div class="shell">
         <div class="section-head">
           <p class="eyebrow">Decision evidence</p>
-          <h2>Five policies tested against the same 430 synthetic recovery cases</h2>
-          <p>Given the declared assumptions, the selection rule requires a safe recovery path, reliable escalation, data-quality holds, and operational feasibility before modeled cost can determine the shadow-validation candidate.</p>
+          <h2>Why Guardrailed Recovery advances</h2>
+          <p>Five policies were tested against the same 430 synthetic recovery cases using one guardrail-first selection rule.</p>
         </div>
-        <div class="policy-table-wrap">
-          <table class="policy-comparison-table">
-            <thead><tr><th>Policy</th><th>Safe path</th><th>Gesture fit</th><th>Midpoint cost</th><th>Direct refund face value</th><th>Manager review</th><th>Stress-test pass rate</th></tr></thead>
-            <tbody><tr><th scope="row">Synthetic discretionary baseline</th><td data-label="Safe path">45%</td><td data-label="Gesture fit">45%</td><td data-label="Midpoint cost">$19,109</td><td data-label="Direct refund">$7,345</td><td data-label="Manager review">Unknown</td><td data-label="Stress-test pass rate">0.0%</td></tr><tr><th scope="row">Tiered standardization</th><td data-label="Safe path">92%</td><td data-label="Gesture fit">88%</td><td data-label="Midpoint cost">$24,527</td><td data-label="Direct refund">$7,875</td><td data-label="Manager review">27%</td><td data-label="Stress-test pass rate">0.0%</td></tr><tr class="selected-policy"><th scope="row">Guardrailed recovery</th><td data-label="Safe path">100%</td><td data-label="Gesture fit">100%</td><td data-label="Midpoint cost">$29,104</td><td data-label="Direct refund">$10,835</td><td data-label="Manager review">27%</td><td data-label="Stress-test pass rate">99.6%</td></tr><tr><th scope="row">Recovery first</th><td data-label="Safe path">100%</td><td data-label="Gesture fit">55%</td><td data-label="Midpoint cost">$49,632</td><td data-label="Direct refund">$1,595</td><td data-label="Manager review">63%</td><td data-label="Stress-test pass rate">100.0%</td></tr><tr><th scope="row">Intelligent generosity</th><td data-label="Safe path">100%</td><td data-label="Gesture fit">65%</td><td data-label="Midpoint cost">$39,010</td><td data-label="Direct refund">$1,300</td><td data-label="Manager review">58%</td><td data-label="Stress-test pass rate">100.0%</td></tr></tbody>
-          </table>
-        </div>
-        <div class="selection-metrics" aria-label="Selected policy evidence">
-          <div><span>Safe recovery path</span><strong>100%</strong></div>
-          <div><span>Strict gesture fit</span><strong>100%</strong></div>
-          <div><span>Modeled midpoint cost</span><strong>$29,104</strong></div>
-          <div><span>Assumption-stress pass rate</span><strong>99.6%</strong></div>
-        </div>
+        <figure class="policy-decision-figure" aria-labelledby="policy-figure-title"><div class="selection-rule" id="policy-figure-title"><div><span class="rule-number">1</span><p><strong>Qualify</strong> Clear every guest-protection and operating guardrail in at least 80% of draws.</p></div><span class="rule-arrow" aria-hidden="true">→</span><div><span class="rule-number">2</span><p><strong>Select</strong> Choose the lowest median modeled cost among qualifiers.</p></div></div><div class="figure-axis" aria-hidden="true"><span>Policy</span><div class="axis-track"><span style="left:0.00%">$0.0K</span><span style="left:30.77%">$20.0K</span><span style="left:61.54%">$40.0K</span><span style="left:92.31%">$60.0K</span></div><span>Guardrail result</span></div><div class="policy-plot"><div class="policy-plot-row comparator"><div class="policy-plot-label"><strong>Synthetic discretionary baseline</strong></div><div class="cost-cell"><div class="cost-track" style="--cost-low:29.40%;--cost-mid:29.40%;--cost-high:29.40%" aria-label="Synthetic discretionary baseline: Median $19.1K"><span class="cost-interval"></span><span class="cost-median"></span></div><span class="cost-readout">Median $19.1K</span></div><div class="guardrail-result"><strong>Not eligible</strong><span>Comparator only</span></div></div><div class="policy-plot-row failed"><div class="policy-plot-label"><strong>Tiered standardization</strong></div><div class="cost-cell"><div class="cost-track" style="--cost-low:35.21%;--cost-mid:39.87%;--cost-high:45.20%" aria-label="Tiered standardization: Median $25.9K · range $22.9K–$29.4K"><span class="cost-interval"></span><span class="cost-median"></span></div><span class="cost-readout">Median $25.9K · range $22.9K–$29.4K</span></div><div class="guardrail-result"><strong>0.0% pass</strong><span>Does not qualify</span></div></div><div class="policy-plot-row selected"><div class="policy-plot-label"><strong>Guardrailed recovery</strong></div><div class="cost-cell"><div class="cost-track" style="--cost-low:42.06%;--cost-mid:46.87%;--cost-high:52.22%" aria-label="Guardrailed recovery: Median $30.5K · range $27.3K–$33.9K"><span class="cost-interval"></span><span class="cost-median"></span></div><span class="cost-readout">Median $30.5K · range $27.3K–$33.9K</span></div><div class="guardrail-result"><strong>99.6% pass</strong><span>Selected</span></div></div><div class="policy-plot-row qualified"><div class="policy-plot-label"><strong>Intelligent generosity</strong></div><div class="cost-cell"><div class="cost-track" style="--cost-low:51.99%;--cost-mid:61.71%;--cost-high:71.56%" aria-label="Intelligent generosity: Median $40.1K · range $33.8K–$46.5K"><span class="cost-interval"></span><span class="cost-median"></span></div><span class="cost-readout">Median $40.1K · range $33.8K–$46.5K</span></div><div class="guardrail-result"><strong>100.0% pass</strong><span>Qualifies</span></div></div><div class="policy-plot-row qualified"><div class="policy-plot-label"><strong>Recovery first</strong></div><div class="cost-cell"><div class="cost-track" style="--cost-low:64.34%;--cost-mid:78.64%;--cost-high:93.05%" aria-label="Recovery first: Median $51.1K · range $41.8K–$60.5K"><span class="cost-interval"></span><span class="cost-median"></span></div><span class="cost-readout">Median $51.1K · range $41.8K–$60.5K</span></div><div class="guardrail-result"><strong>100.0% pass</strong><span>Qualifies</span></div></div></div><figcaption><strong>How to read:</strong> Lines show each policy’s 5th–95th percentile modeled-cost range across 5,000 shared assumption-stress draws; dots mark medians. Only policies clearing every guardrail in at least 80% of draws qualify. Guardrailed Recovery advances because it has the lowest median cost among qualifiers. Synthetic outputs support shadow validation; they are not projected savings.</figcaption></figure>
         <div class="comparison-note"><strong>Material tradeoff</strong><p>Compared with Intelligent Generosity, the selected policy reduces modeled midpoint cost by $9,906, increases direct-refund face-value exposure by $9,535, and reduces manager-review volume by 30.2%. These are simulated tradeoffs to validate in shadow mode, not projected business results.</p></div>
-        <p class="comparison-definition">Safe path means an adequate gesture or an explicit manager-review path; gesture fit reports adequacy of the proposed gesture alone. This is constrained optimization under declared assumptions, not independent evidence of guest or profit outcomes.</p>
       </div>
     </section>
 
@@ -295,7 +280,7 @@
         <div class="section-head">
           <p class="eyebrow">Worked decision</p>
           <h2>From service failure to a manager-ready recommendation</h2>
-          <p>Choose a scenario to see how the same operating policy adapts to the guest, failure, timing, and available recovery options.</p>
+          <p>Select a scenario to see the policy adapt to the failure and operating context.</p>
         </div>
         <div class="scenario-tabs" role="group" aria-label="Worked recovery scenarios"><button class="scenario-tab" type="button" data-scenario="arrival_delay" aria-pressed="true">Arrival delay</button><button class="scenario-tab" type="button" data-scenario="dining_lapse" aria-pressed="false">Dining lapse</button><button class="scenario-tab" type="button" data-scenario="suite_recovery" aria-pressed="false">Suite recovery</button><button class="scenario-tab" type="button" data-scenario="parking_friction" aria-pressed="false">Valet delay</button></div>
         <article class="decision" id="decision-panel" aria-live="polite">
@@ -314,7 +299,7 @@
           </div>
           <aside class="decision-support">
             <h3>What would change it?</h3>
-            <p id="scenario-counterfactual">Shadow mode must confirm actual availability and marginal cost; changed property inputs could shift the recommendation. If room availability were less constrained, the preferred recovery would shift to room upgrade at $435.</p>
+            <p id="scenario-counterfactual">Shadow mode must confirm availability and marginal cost. If room availability were less constrained, the preferred recovery would shift to room upgrade at $435.</p>
             <h3>Closest alternative</h3>
             <p class="alternative" id="scenario-alternative">$125 late checkout</p>
             <h3>Why a range, not one cost?</h3>
@@ -331,27 +316,6 @@
       </div>
     </section>
 
-    <section id="operating-policy">
-      <div class="shell">
-        <div class="section-head">
-          <p class="eyebrow">Proposed shadow-validation policy</p>
-          <h2>Guardrails determine safety before cost determines the gesture</h2>
-          <p>Guardrailed recovery is an adequacy-constrained, manager-assisted policy. It is not a mandate to minimize comps.</p>
-        </div>
-        <div class="policy-grid">
-          <div class="policy-step"><span class="step-number">01</span><h3>Protect</h3><p>Require a tier-appropriate gesture with a recovery-fit margin that survives the tested assumption range.</p></div>
-          <div class="policy-step"><span class="step-number">02</span><h3>Review</h3><p>Escalate weak-fit, severe, high-value, capacity-constrained, or repeat-pattern cases rather than forcing an automated answer.</p></div>
-          <div class="policy-step"><span class="step-number">03</span><h3>Choose</h3><p>Only after protection and review rules pass, select the lowest modeled-cost adequate gesture and preserve alternatives.</p></div>
-        </div>
-        <div class="drivers">
-          <div><h3>Guest relationship</h3><p>Current stay value, repeat relationship, and the value at risk.</p></div>
-          <div><h3>Service failure</h3><p>Severity, hotel responsibility, delay, sentiment, and reputation exposure.</p></div>
-          <div><h3>Operating conditions</h3><p>Room availability, timing, demand pressure, and whether recovery is still possible in stay.</p></div>
-          <div><h3>Gesture economics</h3><p>Guest-perceived value, working cost range, property fit, and room-rate erosion.</p></div>
-        </div>
-      </div>
-    </section>
-
     <section class="band" id="pilot">
       <div class="shell pilot">
         <div>
@@ -359,18 +323,18 @@
           <h2>Shadow first, manager-assisted test second</h2>
           <div class="pilot-callout">
             <strong>Four weeks or 50 eligible cases, whichever is later</strong>
-            <p>Run recommendations invisibly, reconcile them with manager decisions, replace assumed costs, and calculate the controlled-phase sample requirement before exposing guidance.</p>
+            <p>Compare invisible recommendations with manager decisions, replace assumed costs, and size the controlled test before exposing guidance.</p>
           </div>
         </div>
         <div>
-          <h3>What the controlled test should measure</h3>
+          <h3>Measure before adoption</h3>
           <div class="success-measures">
-            <div><h3>Guest recovery</h3><p>Post-resolution satisfaction, review sentiment, and unresolved complaints.</p></div>
-            <div><h3>Relationship</h3><p>Repeat stays, cancellations, and retained future revenue.</p></div>
-            <div><h3>Economics</h3><p>Marginal cost, guest-facing value, and avoidable room-rate erosion.</p></div>
-            <div><h3>Operating adoption</h3><p>Manager overrides, approval time, consistency, and reasons for exceptions.</p></div>
+            <div><h3>Guest recovery</h3><p>Satisfaction, reviews, and unresolved complaints.</p></div>
+            <div><h3>Relationship</h3><p>Repeat stays, cancellations, and retained revenue.</p></div>
+            <div><h3>Economics</h3><p>Marginal cost and room-rate erosion.</p></div>
+            <div><h3>Adoption</h3><p>Overrides, approval time, and exceptions.</p></div>
           </div>
-          <p class="data-needed"><strong>Minimum data:</strong> comp actions and approvals, service tickets, guest and stay context, post-recovery outcomes, marginal-cost ranges, and live operating constraints.</p>
+          <p class="data-needed"><strong>Minimum data:</strong> comp decisions, service tickets, outcomes, costs, and live operating constraints.</p>
         </div>
       </div>
     </section>
@@ -378,8 +342,8 @@
     <section class="evidence" id="evidence">
       <div class="shell evidence-grid">
         <div>
-          <h2>Substantial technical work sits behind a deliberately simple decision product</h2>
-          <p>The prototype reconciles synthetic PMS, CRM, service, comp, POS, survey, and operating extracts; preserves data-quality holds; versions policy assumptions; returns alternatives; and checks whether recommendations remain stable when assumptions change.</p>
+          <h2>Technical evidence</h2>
+          <p>Supporting reports document source reconciliation, decision contracts, assumption stress tests, and S3-to-Snowflake lineage.</p>
           <p class="pipeline-proof">Decision metrics were extracted from Snowflake and parity-checked against the versioned policy mart.</p>
         </div>
         <nav class="evidence-links" aria-label="Supporting technical evidence">
@@ -400,7 +364,7 @@
     <div class="shell">This discussion prototype uses synthetic hotel operations and bounded public Santa Monica Proper context. It does not use or claim access to Proper Hotels internal guest records, comp history, rates, margins, inventory, or policy.</div>
   </footer>
 
-  <script type="application/json" id="scenario-data">{"arrival_delay": {"key": "arrival_delay", "tab_label": "Arrival delay", "title": "Room not ready at arrival", "context": "Loyalty guest \u00b7 severity 4 \u00b7 hotel responsible \u00b7 recovery possible during the stay", "amount": "$240", "gesture": "partial room refund + manager note", "cost_range": "$240-$240", "approval": "Manager approval", "robustness": "Clears guardrails in 99.6% of shared assumption-stress draws", "reasons": ["Meets the reference recovery tier and issue-fit guardrail", "Uses the lowest modeled cost among robust-fit gestures", "Retains manager approval for exposure or uncertainty", "Hotel clearly owns the service failure"], "counterfactual": "Shadow mode must confirm actual availability and marginal cost; changed property inputs could shift the recommendation. If room availability were less constrained, the preferred recovery would shift to room upgrade at $435.", "alternative": "$125 late checkout"}, "dining_lapse": {"key": "dining_lapse", "tab_label": "Dining lapse", "title": "Dining service failure", "context": "Returning guest \u00b7 severity 4 \u00b7 hotel responsible \u00b7 recovery possible during the stay", "amount": "$180", "gesture": "Calabra or Palma dining credit + manager note", "cost_range": "$45-$108", "approval": "Within policy", "robustness": "Clears guardrails in 99.6% of shared assumption-stress draws", "reasons": ["Meets the reference recovery tier and issue-fit guardrail", "Uses the lowest modeled cost among robust-fit gestures", "Hotel clearly owns the service failure"], "counterfactual": "Shadow mode must confirm actual availability and marginal cost; changed property inputs could shift the recommendation. No single operating condition tested on its own changed the preferred gesture.", "alternative": "$0 manager note and personal follow-up"}, "suite_recovery": {"key": "suite_recovery", "tab_label": "Suite recovery", "title": "Housekeeping failure during a VIP stay", "context": "VIP guest \u00b7 severity 5 \u00b7 hotel responsible \u00b7 high relationship exposure", "amount": "$455", "gesture": "future-stay credit + manager note", "cost_range": "$136-$387", "approval": "Manager approval", "robustness": "Clears guardrails in 99.6% of shared assumption-stress draws", "reasons": ["Meets the reference recovery tier and issue-fit guardrail", "Uses the lowest modeled cost among robust-fit gestures", "Retains manager approval for exposure or uncertainty", "Hotel clearly owns the service failure"], "counterfactual": "Shadow mode must confirm actual availability and marginal cost; changed property inputs could shift the recommendation. No single operating condition tested on its own changed the preferred gesture.", "alternative": "$80 in-room amenity gesture"}, "parking_friction": {"key": "parking_friction", "tab_label": "Valet delay", "title": "Valet or parking delay", "context": "Loyalty guest \u00b7 severity 3 \u00b7 hotel responsible \u00b7 recovery possible during the stay", "amount": "$100", "gesture": "parking or destination-fee waiver + manager note", "cost_range": "$8-$35", "approval": "Within policy", "robustness": "Clears guardrails in 99.6% of shared assumption-stress draws", "reasons": ["Meets the reference recovery tier and issue-fit guardrail", "Uses the lowest modeled cost among robust-fit gestures", "Hotel clearly owns the service failure"], "counterfactual": "Shadow mode must confirm actual availability and marginal cost; changed property inputs could shift the recommendation. No single operating condition tested on its own changed the preferred gesture.", "alternative": "$0 manager note and personal follow-up"}}</script>
+  <script type="application/json" id="scenario-data">{"arrival_delay": {"key": "arrival_delay", "tab_label": "Arrival delay", "title": "Room not ready at arrival", "context": "Loyalty guest \u00b7 severity 4 \u00b7 hotel responsible \u00b7 recovery possible during the stay", "amount": "$240", "gesture": "partial room refund + manager note", "cost_range": "$240-$240", "approval": "Manager approval", "robustness": "Clears guardrails in 99.6% of shared assumption-stress draws", "reasons": ["Meets the reference recovery tier and issue-fit guardrail", "Uses the lowest modeled cost among robust-fit gestures", "Retains manager approval for exposure or uncertainty", "Hotel clearly owns the service failure"], "counterfactual": "Shadow mode must confirm availability and marginal cost. If room availability were less constrained, the preferred recovery would shift to room upgrade at $435.", "alternative": "$125 late checkout"}, "dining_lapse": {"key": "dining_lapse", "tab_label": "Dining lapse", "title": "Dining service failure", "context": "Returning guest \u00b7 severity 4 \u00b7 hotel responsible \u00b7 recovery possible during the stay", "amount": "$180", "gesture": "Calabra or Palma dining credit + manager note", "cost_range": "$45-$108", "approval": "Within policy", "robustness": "Clears guardrails in 99.6% of shared assumption-stress draws", "reasons": ["Meets the reference recovery tier and issue-fit guardrail", "Uses the lowest modeled cost among robust-fit gestures", "Hotel clearly owns the service failure"], "counterfactual": "Shadow mode must confirm availability and marginal cost. No single operating condition tested on its own changed the preferred gesture.", "alternative": "$0 manager note and personal follow-up"}, "suite_recovery": {"key": "suite_recovery", "tab_label": "Suite recovery", "title": "Housekeeping failure during a VIP stay", "context": "VIP guest \u00b7 severity 5 \u00b7 hotel responsible \u00b7 high relationship exposure", "amount": "$455", "gesture": "future-stay credit + manager note", "cost_range": "$136-$387", "approval": "Manager approval", "robustness": "Clears guardrails in 99.6% of shared assumption-stress draws", "reasons": ["Meets the reference recovery tier and issue-fit guardrail", "Uses the lowest modeled cost among robust-fit gestures", "Retains manager approval for exposure or uncertainty", "Hotel clearly owns the service failure"], "counterfactual": "Shadow mode must confirm availability and marginal cost. No single operating condition tested on its own changed the preferred gesture.", "alternative": "$80 in-room amenity gesture"}, "parking_friction": {"key": "parking_friction", "tab_label": "Valet delay", "title": "Valet or parking delay", "context": "Loyalty guest \u00b7 severity 3 \u00b7 hotel responsible \u00b7 recovery possible during the stay", "amount": "$100", "gesture": "parking or destination-fee waiver + manager note", "cost_range": "$8-$35", "approval": "Within policy", "robustness": "Clears guardrails in 99.6% of shared assumption-stress draws", "reasons": ["Meets the reference recovery tier and issue-fit guardrail", "Uses the lowest modeled cost among robust-fit gestures", "Hotel clearly owns the service failure"], "counterfactual": "Shadow mode must confirm availability and marginal cost. No single operating condition tested on its own changed the preferred gesture.", "alternative": "$0 manager note and personal follow-up"}}</script>
   <script>
     (() => {
       const scenarios = JSON.parse(document.getElementById("scenario-data").textContent);
