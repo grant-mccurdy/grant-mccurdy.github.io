@@ -13,6 +13,7 @@ const mimeTypes = {
   ".js": "text/javascript; charset=utf-8",
   ".json": "application/json; charset=utf-8",
   ".mp4": "video/mp4",
+  ".pdf": "application/pdf",
   ".png": "image/png",
   ".txt": "text/plain; charset=utf-8",
   ".xml": "application/xml; charset=utf-8",
@@ -389,12 +390,40 @@ async function inspectContentRag(page, label) {
 
 async function inspectHotelComp(page, label) {
   if (label.startsWith("hotel-comp-decision-")) {
+    const bodyText = await page.locator("body").innerText();
+    const pdfHref = await page.getByRole("link", { name: "Download the PDF" }).getAttribute("href");
+    return {
+      boundary:
+        bodyText.includes("synthetic hotel operating records") &&
+        bodyText.includes("does not use or claim access"),
+      decisionFramework:
+        (await page.locator("h1").innerText()) === "A Practical Framework for Better Hotel Comp Decisions" &&
+        bodyText.includes("do not change comp policy from synthetic results") &&
+        bodyText.includes("Guest recovery first") &&
+        bodyText.includes("Cost second") &&
+        bodyText.includes("Real outcomes decide") &&
+        bodyText.includes("four weeks or 50 eligible recovery cases") &&
+        bodyText.includes("operational discovery target") &&
+        bodyText.includes("One case, end to end") &&
+        bodyText.includes("90-minute working session"),
+      evidenceFigure:
+        (await page.locator("#fig-policy-cost img").count()) === 1 &&
+        (await page.locator("#fig-policy-cost figcaption").innerText()).includes(
+          "not observed Proper Hotels costs",
+        ),
+      reportFormat:
+        pdfHref === "hotel-comp-decision-framework.pdf" &&
+        (await page.locator("table tbody tr").count()) === 3 &&
+        (await page.locator("button, [role='tab']").count()) === 0,
+    };
+  }
+  if (label.startsWith("hotel-comp-technical-")) {
     const boundary = await page.locator("footer").innerText();
     const scenarioButton = page.locator('[data-scenario="parking_friction"]');
     await scenarioButton.click();
     return {
       boundary: boundary.includes("synthetic hotel operations") && boundary.includes("does not use or claim access"),
-      policyDecision:
+      technicalPolicyDecision:
         (await page.locator("h1").innerText()) === "Which Comp Policy Should Enter Shadow Validation?" &&
         (await page.locator(".policy-plot-row").count()) === 5 &&
         (await page.locator(".protection-cell").count()) === 5 &&
@@ -402,7 +431,7 @@ async function inspectHotelComp(page, label) {
         (await page.locator(".policy-decision-figure figcaption").innerText()).includes(
           "Policies must clear every guardrail",
         ),
-      scenarioChanged:
+      technicalScenarioChanged:
         (await page.locator("#scenario-amount").innerText()) === "$100" &&
         (await page.locator("#scenario-gesture").innerText()).includes("parking or destination-fee waiver") &&
         (await scenarioButton.getAttribute("aria-pressed")) === "true",
@@ -438,6 +467,7 @@ const cases = [
   ["projects-directory-mobile", path.join("projects", "index.html"), 390, 900],
   ["hotel-comp-decision-desktop", path.join("projects", "hotel-comp-policy-model", "index.html"), 1440, 1000],
   ["hotel-comp-decision-mobile", path.join("projects", "hotel-comp-policy-model", "index.html"), 390, 900],
+  ["hotel-comp-technical-desktop", path.join("projects", "hotel-comp-policy-model", "technical-prototype.html"), 1440, 1000],
   ["hotel-comp-audit-desktop", path.join("projects", "hotel-comp-policy-model", "simulation-audit.html"), 1440, 1000],
   ["hotel-comp-audit-mobile", path.join("projects", "hotel-comp-policy-model", "simulation-audit.html"), 390, 900],
   ["hotel-comp-methodology-mobile", path.join("projects", "hotel-comp-policy-model", "methodology.html"), 390, 900],
@@ -536,8 +566,11 @@ const failures = results.filter(
     result.contentRag?.answerPosition?.alignedBelowHeader === false ||
     result.contentRag?.overflow.length ||
     result.hotelComp?.boundary === false ||
-    result.hotelComp?.policyDecision === false ||
-    result.hotelComp?.scenarioChanged === false ||
+    result.hotelComp?.decisionFramework === false ||
+    result.hotelComp?.evidenceFigure === false ||
+    result.hotelComp?.reportFormat === false ||
+    result.hotelComp?.technicalPolicyDecision === false ||
+    result.hotelComp?.technicalScenarioChanged === false ||
     result.hotelComp?.auditBoundary === false ||
     result.hotelComp?.engineeringEvidence === false,
 );

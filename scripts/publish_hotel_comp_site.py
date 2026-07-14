@@ -53,6 +53,8 @@ REPORTS = {
 }
 
 LINK_REWRITES = {
+    "reports/hotel-comp-decision-framework.pdf": "hotel-comp-decision-framework.pdf",
+    "reports/interactive-policy-prototype.html": "technical-prototype.html",
     "reports/engineering-evidence.md": "engineering-evidence.html",
     "reports/methodology-and-assumptions.md": "methodology.html",
     "reports/policy-sensitivity.md": "policy-sensitivity.html",
@@ -318,9 +320,14 @@ APPENDIX_CSS = """:root {
 """
 
 
-def transform_decision_brief(source: str) -> str:
+def rewrite_report_links(source: str) -> str:
     for old, new in LINK_REWRITES.items():
         source = source.replace(old, new)
+    return source
+
+
+def transform_technical_prototype(source: str) -> str:
+    source = rewrite_report_links(source)
     source = source.replace(
         "    footer { padding: 18px 0;",
         "    .portfolio-link { color: var(--teal-dark); font-weight: 800; text-decoration: none; }\n"
@@ -374,14 +381,22 @@ def validate_publication(files: dict[str, str]) -> None:
 def main() -> int:
     args = parse_args()
     source_dir = args.source.resolve()
-    required = [source_dir / "index.html", source_dir / "reports" / "comp-optimization-dashboard.html"]
+    required = [
+        source_dir / "index.html",
+        source_dir / "reports" / "hotel-comp-decision-framework.pdf",
+        source_dir / "reports" / "interactive-policy-prototype.html",
+        source_dir / "reports" / "comp-optimization-dashboard.html",
+    ]
     required.extend(source_dir / "reports" / name for name in REPORTS)
     missing = [str(path) for path in required if not path.is_file()]
     if missing:
         raise FileNotFoundError("Missing approved source artifacts:\n" + "\n".join(missing))
 
     files: dict[str, str] = {
-        "index.html": transform_decision_brief((source_dir / "index.html").read_text(encoding="utf-8")),
+        "index.html": rewrite_report_links((source_dir / "index.html").read_text(encoding="utf-8")),
+        "technical-prototype.html": transform_technical_prototype(
+            (source_dir / "reports" / "interactive-policy-prototype.html").read_text(encoding="utf-8")
+        ),
         "simulation-audit.html": transform_simulation_audit(
             (source_dir / "reports" / "comp-optimization-dashboard.html").read_text(encoding="utf-8")
         ),
@@ -397,7 +412,10 @@ def main() -> int:
     for name, content in files.items():
         (OUTPUT_DIR / name).write_text(content.rstrip() + "\n", encoding="utf-8")
 
-    print(f"Published {len(files)} static files to {OUTPUT_DIR.relative_to(ROOT)}")
+    pdf_source = source_dir / "reports" / "hotel-comp-decision-framework.pdf"
+    (OUTPUT_DIR / "hotel-comp-decision-framework.pdf").write_bytes(pdf_source.read_bytes())
+
+    print(f"Published {len(files) + 1} static files to {OUTPUT_DIR.relative_to(ROOT)}")
     return 0
 
 
