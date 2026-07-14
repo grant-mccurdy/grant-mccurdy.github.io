@@ -394,26 +394,31 @@ async function inspectHotelComp(page, label) {
     const pdfHref = await page.getByRole("link", { name: "Download the PDF" }).getAttribute("href");
     return {
       boundary:
-        bodyText.includes("synthetic hotel operating records") &&
-        bodyText.includes("does not use or claim access"),
+        bodyText.includes("historical comp actions, costs, and outcomes in this prototype are synthetic") &&
+        bodyText.includes("No Proper Hotels guest records"),
       decisionFramework:
-        (await page.locator("h1").innerText()) === "A Practical Framework for Better Hotel Comp Decisions" &&
-        bodyText.includes("do not change comp policy from synthetic results") &&
-        bodyText.includes("Guest recovery first") &&
-        bodyText.includes("Cost second") &&
-        bodyText.includes("Real outcomes decide") &&
-        bodyText.includes("four weeks or 50 eligible recovery cases") &&
-        bodyText.includes("operational discovery target") &&
-        bodyText.includes("One case, end to end") &&
-        bodyText.includes("90-minute working session"),
-      evidenceFigure:
-        (await page.locator("#fig-policy-cost img").count()) === 1 &&
-        (await page.locator("#fig-policy-cost figcaption").innerText()).includes(
-          "not observed Proper Hotels costs",
+        (await page.locator("h1").innerText()) === "A Comp Decision Engine for Luxury Hotel Service Recovery" &&
+        bodyText.includes("The business task") &&
+        bodyText.includes("The proposed decision product") &&
+        bodyText.includes("An illustrative recommendation") &&
+        bodyText.includes("How the real model would be chosen") &&
+        bodyText.includes("A focused first step") &&
+        bodyText.includes("four weeks or 50 eligible cases") &&
+        bodyText.includes("workflow discovery, not proof of impact") &&
+        bodyText.includes("90-minute data and policy workshop"),
+      workedRecommendation:
+        bodyText.includes("late checkout + personal manager note") &&
+        bodyText.includes("Modeled guest-facing value: $100") &&
+        bodyText.includes("Assumed internal-cost range: $8-$45") &&
+        bodyText.includes("not estimates of property economics"),
+      focusBoundary:
+        !["Guardrailed recovery", "5,000", "Snowflake", "Cloudflare", "RAG"].some((text) =>
+          bodyText.includes(text),
         ),
       reportFormat:
         pdfHref === "hotel-comp-decision-framework.pdf" &&
-        (await page.locator("table tbody tr").count()) === 3 &&
+        (await page.locator("table").count()) === 0 &&
+        (await page.locator("figure").count()) === 0 &&
         (await page.locator("button, [role='tab']").count()) === 0,
     };
   }
@@ -567,7 +572,8 @@ const failures = results.filter(
     result.contentRag?.overflow.length ||
     result.hotelComp?.boundary === false ||
     result.hotelComp?.decisionFramework === false ||
-    result.hotelComp?.evidenceFigure === false ||
+    result.hotelComp?.workedRecommendation === false ||
+    result.hotelComp?.focusBoundary === false ||
     result.hotelComp?.reportFormat === false ||
     result.hotelComp?.technicalPolicyDecision === false ||
     result.hotelComp?.technicalScenarioChanged === false ||
