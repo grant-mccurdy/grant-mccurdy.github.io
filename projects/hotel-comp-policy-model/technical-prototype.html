@@ -1,0 +1,449 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A luxury-hospitality service recovery decision prototype for intelligent, explainable guest recovery.">
+  <title>Which Comp Policy Should Enter Shadow Validation?</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #17201d;
+      --muted: #5c6662;
+      --line: #d7ddda;
+      --paper: #f3f5f3;
+      --white: #ffffff;
+      --teal: #12685b;
+      --teal-dark: #0d4c43;
+      --teal-soft: #e7f1ee;
+      --coral: #ad4f37;
+      --coral-soft: #f8ece7;
+      --gold: #9a742f;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
+    body {
+      margin: 0;
+      background: var(--white);
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+      font-size: 16px;
+      line-height: 1.55;
+    }
+    a { color: var(--teal-dark); text-underline-offset: 3px; }
+    .shell { width: min(1120px, calc(100% - 40px)); margin: 0 auto; }
+    .eyebrow {
+      margin: 0 0 10px;
+      color: var(--teal);
+      font-size: .76rem;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+    header { border-bottom: 1px solid var(--line); background: var(--white); }
+    .topline {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      min-height: 54px;
+      border-bottom: 1px solid var(--line);
+      color: var(--muted);
+      font-size: .82rem;
+    }
+    .topline strong { color: var(--ink); }
+    .intro { padding: 46px 0 40px; }
+    h1, h2, h3 { margin-top: 0; letter-spacing: 0; line-height: 1.17; }
+    h1 { max-width: 780px; margin-bottom: 14px; font-size: 3.25rem; }
+    h2 { margin-bottom: 12px; font-size: 1.75rem; }
+    h3 { margin-bottom: 8px; font-size: 1rem; }
+    .lead { max-width: 800px; margin: 0; color: var(--muted); font-size: 1.13rem; }
+    .proposal {
+      display: grid;
+      grid-template-columns: 180px minmax(0, 1fr);
+      gap: 22px;
+      margin-top: 32px;
+      padding-top: 25px;
+      border-top: 3px solid var(--teal);
+    }
+    .proposal strong { color: var(--teal-dark); font-size: .84rem; text-transform: uppercase; }
+    .proposal p { max-width: 780px; margin: 0; font-size: 1.14rem; font-weight: 650; }
+    .evidence-boundary { max-width: 850px; margin: 18px 0 0 202px; color: var(--muted); font-size: .84rem; }
+    section { padding: 54px 0; }
+    .band { background: var(--paper); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    .section-head { max-width: 720px; margin-bottom: 28px; }
+    .section-head p { margin: 0; color: var(--muted); }
+    .story-layout { display: grid; grid-template-columns: minmax(0, 1.08fr) minmax(330px, .92fr); gap: 58px; align-items: start; }
+    .story-copy .section-head { margin-bottom: 18px; }
+    .story-copy > p { margin: 0; color: var(--muted); }
+    .story-copy > p + p { margin-top: 14px; }
+    .story-turn { padding-left: 18px; border-left: 3px solid var(--teal); color: var(--ink) !important; font-size: 1.03rem; font-weight: 650; }
+    .baseline-signal { padding: 24px 0; border-top: 3px solid var(--coral); border-bottom: 1px solid var(--line); }
+    .baseline-signal h3 { margin-bottom: 16px; font-size: 1.08rem; }
+    .baseline-metrics { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+    .baseline-metrics span { display: block; color: var(--muted); font-size: .72rem; }
+    .baseline-metrics strong { display: block; margin-top: 3px; color: var(--ink); font-size: 1.35rem; }
+    .baseline-boundary { margin: 18px 0 0; color: var(--muted); font-size: .82rem; }
+    .policy-decision-figure { margin: 0; border: 1px solid var(--line); background: var(--white); }
+    .selection-rule { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: 18px; align-items: center; padding: 18px 20px; border-bottom: 1px solid var(--line); background: #edf5f2; }
+    .selection-rule > div { display: grid; grid-template-columns: 30px minmax(0, 1fr); gap: 10px; align-items: start; }
+    .selection-rule p { margin: 0; color: var(--muted); font-size: .86rem; }
+    .selection-rule strong { display: block; color: var(--ink); }
+    .rule-number { display: grid; width: 28px; height: 28px; place-items: center; border-radius: 50%; background: var(--teal); color: var(--white); font-size: .78rem; font-weight: 800; }
+    .rule-arrow { color: var(--teal); font-size: 1.5rem; font-weight: 800; }
+    .figure-axis, .policy-plot-row { display: grid; grid-template-columns: minmax(150px, .65fr) minmax(210px, .9fr) minmax(270px, 1.25fr) 110px; gap: 18px; align-items: center; }
+    .figure-axis { padding: 16px 20px 10px; color: var(--muted); font-size: .7rem; font-weight: 750; text-transform: uppercase; }
+    .axis-track { position: relative; height: 20px; border-bottom: 1px solid var(--line); }
+    .axis-track span { position: absolute; bottom: 2px; transform: translateX(-50%); color: var(--muted); font-size: .68rem; font-weight: 600; text-transform: none; }
+    .axis-track span:first-child { transform: none; }
+    .policy-plot-row { --row-color: #68736e; min-height: 78px; padding: 13px 20px; border-top: 1px solid var(--line); }
+    .policy-plot-row.selected { --row-color: var(--teal); background: var(--teal-soft); }
+    .policy-plot-row.qualified { --row-color: #42665d; }
+    .policy-plot-row.failed { --row-color: var(--coral); }
+    .policy-plot-row.comparator { --row-color: #8a938f; }
+    .policy-plot-label strong, .guardrail-result strong { display: block; color: var(--ink); font-size: .9rem; }
+    .policy-plot-label span, .guardrail-result span { display: block; margin-top: 3px; color: var(--muted); font-size: .74rem; }
+    .policy-plot-row.selected .policy-plot-label span, .policy-plot-row.selected .guardrail-result span { color: var(--teal-dark); font-weight: 750; }
+    .protection-cell { display: grid; gap: 8px; min-width: 0; }
+    .protection-metric > span:first-child { display: flex; justify-content: space-between; gap: 10px; color: var(--muted); font-size: .7rem; }
+    .protection-metric b { font-weight: 600; }
+    .protection-metric strong { color: var(--ink); font-size: .76rem; }
+    .metric-track { display: block; height: 5px; margin-top: 3px; overflow: hidden; background: #e2e7e4; }
+    .metric-track i { display: block; height: 100%; background: var(--teal); }
+    .under-recovery .metric-track i { background: var(--coral); }
+    .cost-cell { min-width: 0; }
+    .cost-track { position: relative; height: 22px; border-bottom: 1px solid var(--line); }
+    .cost-interval { position: absolute; top: 9px; left: var(--cost-low); width: calc(var(--cost-high) - var(--cost-low)); min-width: 3px; height: 4px; border-radius: 2px; background: var(--row-color); }
+    .cost-median { position: absolute; top: 4px; left: var(--cost-mid); width: 14px; height: 14px; transform: translateX(-50%); border: 3px solid var(--white); border-radius: 50%; background: var(--row-color); box-shadow: 0 0 0 1px var(--row-color); }
+    .cost-readout { display: block; margin-top: 5px; color: var(--muted); font-size: .72rem; }
+    .guardrail-result { text-align: right; }
+    .policy-decision-figure figcaption { padding: 16px 20px; border-top: 1px solid var(--line); background: #fafbfa; color: var(--muted); font-size: .84rem; }
+    .policy-decision-figure figcaption strong { color: var(--ink); }
+    .figure-source { display: block; margin-top: 7px; }
+    .comparison-note { display: grid; grid-template-columns: 180px minmax(0, 1fr); gap: 22px; margin-top: 22px; padding-top: 20px; border-top: 1px solid var(--line); }
+    .comparison-note strong { color: var(--coral); font-size: .82rem; text-transform: uppercase; }
+    .comparison-note p { margin: 0; color: var(--muted); }
+    .scenario-tabs {
+      display: flex;
+      width: fit-content;
+      max-width: 100%;
+      margin-bottom: 18px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      overflow-x: auto;
+      background: var(--white);
+    }
+    .scenario-tab {
+      flex: 0 0 auto;
+      min-height: 40px;
+      border: 0;
+      border-right: 1px solid var(--line);
+      padding: 9px 14px;
+      background: var(--white);
+      color: var(--muted);
+      font: inherit;
+      font-size: .86rem;
+      cursor: pointer;
+    }
+    .scenario-tab:last-child { border-right: 0; }
+    .scenario-tab[aria-pressed="true"] { background: var(--teal); color: var(--white); font-weight: 750; }
+    .scenario-tab:focus-visible { outline: 3px solid #86bcb4; outline-offset: -3px; }
+    .decision {
+      display: grid;
+      grid-template-columns: minmax(0, 1.18fr) minmax(290px, .82fr);
+      min-width: 0;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      overflow: hidden;
+      background: var(--white);
+    }
+    .decision-main, .decision-support { min-width: 0; padding: 28px; }
+    .decision-support { border-left: 1px solid var(--line); background: #fafbfa; }
+    .scenario-context { margin: 0 0 18px; color: var(--muted); font-size: .9rem; }
+    .recommendation { margin: 0; color: var(--teal-dark); font-size: 1.65rem; font-weight: 800; line-height: 1.25; overflow-wrap: anywhere; }
+    .recommendation span:first-child { color: var(--coral); }
+    .decision-metrics {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin: 24px 0;
+      padding: 16px 0;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+    .decision-metrics span { display: block; color: var(--muted); font-size: .76rem; }
+    .decision-metrics strong { display: block; margin-top: 4px; font-size: .94rem; overflow-wrap: anywhere; }
+    .reasons { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px 20px; margin: 12px 0 0; padding: 0; list-style: none; }
+    .reasons li { position: relative; padding-left: 17px; font-size: .9rem; }
+    .reasons li::before { content: ""; position: absolute; left: 0; top: .62em; width: 7px; height: 7px; border-radius: 50%; background: var(--teal); }
+    .decision-support h3:not(:first-child) { margin-top: 24px; }
+    .decision-support p { margin: 0; color: var(--muted); font-size: .91rem; }
+    .alternative { color: var(--ink) !important; font-weight: 700; }
+    .property-menu {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      margin-top: 25px;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+    .property-menu div { min-width: 0; padding: 16px 14px; border-right: 1px solid var(--line); }
+    .property-menu div:first-child { padding-left: 0; }
+    .property-menu div:last-child { border-right: 0; padding-right: 0; }
+    .property-menu strong { display: block; color: var(--teal-dark); font-size: .79rem; text-transform: uppercase; }
+    .property-menu span { display: block; margin-top: 4px; color: var(--muted); font-size: .86rem; }
+    .pilot { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: 56px; align-items: start; }
+    .pilot-callout { border-left: 4px solid var(--coral); padding-left: 20px; }
+    .pilot-callout p { margin: 0; color: var(--muted); }
+    .pilot-callout strong { display: block; margin-bottom: 7px; color: var(--coral); font-size: .84rem; text-transform: uppercase; }
+    .success-measures { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 26px; }
+    .success-measures p { margin: 0; color: var(--muted); font-size: .9rem; }
+    .data-needed { margin: 28px 0 0; padding-top: 20px; border-top: 1px solid var(--line); color: var(--muted); font-size: .9rem; }
+    .data-needed strong { color: var(--ink); }
+    .evidence { padding: 38px 0; background: #202825; color: #e9efec; }
+    .evidence-grid { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(280px, .75fr); gap: 52px; }
+    .evidence h2 { color: var(--white); font-size: 1.25rem; }
+    .evidence p { margin: 0; color: #bdc8c3; font-size: .9rem; }
+    .pipeline-proof { margin-top: 14px !important; color: #d8e3de !important; }
+    .evidence-links { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px 20px; align-content: start; }
+    .evidence a { color: #d8eee8; font-size: .88rem; }
+    .portfolio-link { color: var(--teal-dark); font-weight: 800; text-decoration: none; }
+    .portfolio-link:hover { text-decoration: underline; }
+    footer { padding: 18px 0; background: #151a18; color: #9caaa4; font-size: .77rem; }
+    @media (max-width: 820px) {
+      .proposal { grid-template-columns: 1fr; gap: 8px; }
+      .evidence-boundary { margin-left: 0; }
+      .comparison-note { grid-template-columns: 1fr; gap: 6px; }
+      .story-layout { grid-template-columns: 1fr; gap: 32px; }
+      .selection-rule { grid-template-columns: 1fr; gap: 12px; }
+      .rule-arrow { justify-self: start; margin-left: 6px; transform: rotate(90deg); }
+      .figure-axis { display: none; }
+      .policy-plot-row { grid-template-columns: minmax(0, 1fr) auto; gap: 10px 18px; }
+      .policy-plot-label { grid-column: 1; grid-row: 1; }
+      .guardrail-result { grid-column: 2; grid-row: 1; }
+      .protection-cell { grid-column: 1 / -1; grid-row: 2; }
+      .cost-cell { grid-column: 1 / -1; grid-row: 3; }
+      .decision { grid-template-columns: 1fr; }
+      .decision-support { border-top: 1px solid var(--line); border-left: 0; }
+      .property-menu { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .property-menu div, .property-menu div:first-child, .property-menu div:last-child { padding: 14px; border-right: 0; border-bottom: 1px solid var(--line); }
+      .property-menu div:nth-child(odd) { border-right: 1px solid var(--line); }
+      .property-menu div:last-child { border-bottom: 0; }
+      .pilot, .evidence-grid { grid-template-columns: 1fr; gap: 32px; }
+    }
+    @media (max-width: 560px) {
+      .shell { width: min(100% - 32px, 1120px); }
+      .topline { align-items: flex-start; flex-direction: column; justify-content: center; gap: 2px; padding: 10px 0; }
+      .intro { padding: 34px 0 30px; }
+      h1 { font-size: 2rem; }
+      h2 { font-size: 1.45rem; }
+      .lead { font-size: 1rem; }
+      section { padding: 42px 0; }
+      .scenario-tabs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); width: 100%; overflow: hidden; }
+      .scenario-tab { width: 100%; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+      .scenario-tab:nth-child(2n) { border-right: 0; }
+      .scenario-tab:nth-last-child(-n+2) { border-bottom: 0; }
+      .decision-main, .decision-support { padding: 20px; }
+      .recommendation { font-size: 1.35rem; }
+      .decision-metrics { grid-template-columns: 1fr; gap: 10px; }
+      .decision-metrics div { padding-bottom: 10px; border-bottom: 1px solid var(--line); }
+      .decision-metrics div:last-child { padding-bottom: 0; border-bottom: 0; }
+      .reasons, .success-measures, .evidence-links { grid-template-columns: 1fr; }
+      .property-menu { grid-template-columns: 1fr; }
+      .property-menu div:nth-child(odd) { border-right: 0; }
+      .policy-plot-row { padding: 15px; }
+      .policy-decision-figure figcaption { padding: 15px; }
+    }
+    @media print {
+      body { font-size: 13px; }
+      .scenario-tabs { display: none; }
+      section { break-inside: avoid; padding: 28px 0; }
+      .evidence, footer { background: var(--white); color: var(--ink); }
+      .evidence p, .evidence a { color: var(--ink); }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="shell topline">
+      <a class="portfolio-link" href="../../index.html">Grant McCurdy portfolio</a>
+      <span>Public Santa Monica Proper context · Synthetic hotel operations</span>
+    </div>
+    <div class="shell intro">
+      <p class="eyebrow">Luxury hospitality service recovery</p>
+      <h1>Which Comp Policy Should Enter Shadow Validation?</h1>
+      <p class="lead">A synthetic guest incident frames the decision: how should a luxury hotel balance recovery, consistency, and comp cost?</p>
+      <div class="proposal">
+        <strong>Executive answer</strong>
+        <p>Shadow-test Guardrailed recovery for four weeks or 50 eligible cases. It had the lowest modeled cost among policies clearing every guardrail.</p>
+      </div>
+      <p class="evidence-boundary"><strong>Decision scope:</strong> candidate selection for shadow validation, not policy adoption. Synthetic results do not estimate Proper Hotels performance or savings; public context informs gesture fit only.</p>
+    </div>
+  </header>
+
+  <main>
+    <section id="context-and-conflict">
+      <div class="shell story-layout">
+        <div class="story-copy">
+          <div class="section-head">
+            <p class="eyebrow">Operating context</p>
+            <h2>A room delay forces a choice before the full cost is known</h2>
+          </div>
+          <p><strong>Room not ready at arrival.</strong> Loyalty guest · severity 4 · hotel responsible · recovery possible during the stay. The manager must choose cash-like relief, an experience gesture, or escalation before availability and marginal cost are known.</p>
+          <p class="story-turn">One incident becomes a policy problem: how can managers recover this guest consistently without replacing judgment?</p>
+        </div>
+        <aside class="baseline-signal" aria-label="Synthetic discretionary comparator signal">
+          <p class="eyebrow">Synthetic stress-test signal</p>
+          <h3>The cheapest synthetic comparator fails the modeled adequacy test</h3>
+          <div class="baseline-metrics">
+            <div><span>Adequate or reviewed</span><strong>44.7%</strong></div>
+            <div><span>Inadequate and unreviewed</span><strong>67.6%</strong></div>
+            <div><span>Unknown or held cases</span><strong>175</strong></div>
+          </div>
+          <p class="baseline-boundary">These are synthetic failure conditions, not Proper Hotels observations or measured guest outcomes.</p>
+        </aside>
+      </div>
+    </section>
+
+    <section class="band" id="policy-comparison">
+      <div class="shell">
+        <div class="section-head">
+          <p class="eyebrow">Policy comparison</p>
+          <h2 id="policy-figure-heading">Three policies clear the modeled guardrails; Guardrailed Recovery has the lowest modeled cost</h2>
+          <p>Five policies faced the same 430 synthetic cases. Cost was compared only after adequacy, escalation, data-quality, and feasibility guardrails.</p>
+        </div>
+        <figure class="policy-decision-figure" aria-labelledby="policy-figure-heading" aria-describedby="policy-figure-caption"><div class="selection-rule"><div><span class="rule-number">1</span><p><strong>Qualify</strong> Clear every modeled guardrail in at least 80% of draws.</p></div><span class="rule-arrow" aria-hidden="true">→</span><div><span class="rule-number">2</span><p><strong>Choose</strong> Compare modeled cost only among qualifiers.</p></div></div><div class="figure-axis" aria-hidden="true"><span>Policy</span><span>Modeled adequacy</span><div class="axis-track"><span style="left:0.00%">$0.0K</span><span style="left:30.77%">$20.0K</span><span style="left:61.54%">$40.0K</span><span style="left:92.31%">$60.0K</span></div><span>Decision</span></div><div class="policy-plot"><div class="policy-plot-row comparator" role="group" aria-label="Synthetic discretionary baseline: adequate or reviewed 44.7%; inadequate and unreviewed 67.6%; Median $19.1K; Not eligible, Comparator only"><div class="policy-plot-label"><strong>Synthetic discretionary baseline</strong></div><div class="protection-cell"><div class="protection-metric safe-path"><span><b>Adequate or reviewed</b><strong>44.7%</strong></span><span class="metric-track" aria-hidden="true"><i style="width:44.71%"></i></span></div><div class="protection-metric under-recovery"><span><b>Inadequate and unreviewed</b><strong>67.6%</strong></span><span class="metric-track" aria-hidden="true"><i style="width:67.57%"></i></span></div></div><div class="cost-cell"><div class="cost-track" style="--cost-low:29.40%;--cost-mid:29.40%;--cost-high:29.40%" aria-label="Synthetic discretionary baseline: Median $19.1K"><span class="cost-interval"></span><span class="cost-median"></span></div><span class="cost-readout">Median $19.1K</span></div><div class="guardrail-result"><strong>Not eligible</strong><span>Comparator only</span></div></div><div class="policy-plot-row failed" role="group" aria-label="Tiered standardization: adequate or reviewed 91.7%; inadequate and unreviewed 21.5%; Median $25.9K · range $22.9K–$29.4K; 0.0% pass, Does not qualify"><div class="policy-plot-label"><strong>Tiered standardization</strong></div><div class="protection-cell"><div class="protection-metric safe-path"><span><b>Adequate or reviewed</b><strong>91.7%</strong></span><span class="metric-track" aria-hidden="true"><i style="width:91.67%"></i></span></div><div class="protection-metric under-recovery"><span><b>Inadequate and unreviewed</b><strong>21.5%</strong></span><span class="metric-track" aria-hidden="true"><i style="width:21.47%"></i></span></div></div><div class="cost-cell"><div class="cost-track" style="--cost-low:35.21%;--cost-mid:39.87%;--cost-high:45.20%" aria-label="Tiered standardization: Median $25.9K · range $22.9K–$29.4K"><span class="cost-interval"></span><span class="cost-median"></span></div><span class="cost-readout">Median $25.9K · range $22.9K–$29.4K</span></div><div class="guardrail-result"><strong>0.0% pass</strong><span>Does not qualify</span></div></div><div class="policy-plot-row selected" role="group" aria-label="Guardrailed recovery: adequate or reviewed 100.0%; inadequate and unreviewed 0.0%; Median $30.5K · range $27.3K–$33.9K; 99.6% pass, Selected"><div class="policy-plot-label"><strong>Guardrailed recovery</strong></div><div class="protection-cell"><div class="protection-metric safe-path"><span><b>Adequate or reviewed</b><strong>100.0%</strong></span><span class="metric-track" aria-hidden="true"><i style="width:100.00%"></i></span></div><div class="protection-metric under-recovery"><span><b>Inadequate and unreviewed</b><strong>0.0%</strong></span><span class="metric-track" aria-hidden="true"><i style="width:0.00%"></i></span></div></div><div class="cost-cell"><div class="cost-track" style="--cost-low:42.06%;--cost-mid:46.87%;--cost-high:52.22%" aria-label="Guardrailed recovery: Median $30.5K · range $27.3K–$33.9K"><span class="cost-interval"></span><span class="cost-median"></span></div><span class="cost-readout">Median $30.5K · range $27.3K–$33.9K</span></div><div class="guardrail-result"><strong>99.6% pass</strong><span>Selected</span></div></div><div class="policy-plot-row qualified" role="group" aria-label="Intelligent generosity: adequate or reviewed 100.0%; inadequate and unreviewed 0.0%; Median $40.1K · range $33.8K–$46.5K; 100.0% pass, Qualifies"><div class="policy-plot-label"><strong>Intelligent generosity</strong></div><div class="protection-cell"><div class="protection-metric safe-path"><span><b>Adequate or reviewed</b><strong>100.0%</strong></span><span class="metric-track" aria-hidden="true"><i style="width:100.00%"></i></span></div><div class="protection-metric under-recovery"><span><b>Inadequate and unreviewed</b><strong>0.0%</strong></span><span class="metric-track" aria-hidden="true"><i style="width:0.00%"></i></span></div></div><div class="cost-cell"><div class="cost-track" style="--cost-low:51.99%;--cost-mid:61.71%;--cost-high:71.56%" aria-label="Intelligent generosity: Median $40.1K · range $33.8K–$46.5K"><span class="cost-interval"></span><span class="cost-median"></span></div><span class="cost-readout">Median $40.1K · range $33.8K–$46.5K</span></div><div class="guardrail-result"><strong>100.0% pass</strong><span>Qualifies</span></div></div><div class="policy-plot-row qualified" role="group" aria-label="Recovery first: adequate or reviewed 100.0%; inadequate and unreviewed 0.0%; Median $51.1K · range $41.8K–$60.5K; 100.0% pass, Qualifies"><div class="policy-plot-label"><strong>Recovery first</strong></div><div class="protection-cell"><div class="protection-metric safe-path"><span><b>Adequate or reviewed</b><strong>100.0%</strong></span><span class="metric-track" aria-hidden="true"><i style="width:100.00%"></i></span></div><div class="protection-metric under-recovery"><span><b>Inadequate and unreviewed</b><strong>0.0%</strong></span><span class="metric-track" aria-hidden="true"><i style="width:0.00%"></i></span></div></div><div class="cost-cell"><div class="cost-track" style="--cost-low:64.34%;--cost-mid:78.64%;--cost-high:93.05%" aria-label="Recovery first: Median $51.1K · range $41.8K–$60.5K"><span class="cost-interval"></span><span class="cost-median"></span></div><span class="cost-readout">Median $51.1K · range $41.8K–$60.5K</span></div><div class="guardrail-result"><strong>100.0% pass</strong><span>Qualifies</span></div></div></div><figcaption id="policy-figure-caption"><strong>How to read:</strong> Adequate or reviewed cases pass the modeled test; inadequate, unreviewed cases do not. Lines show cost P05–P95 across 5,000 shared stress draws; dots show medians. Policies must clear every guardrail in 80% of draws before cost comparison. <span class="figure-source"><strong>Source:</strong> synthetic policy mart, 430 cases; <a href="methodology.html">methods</a> and <a href="policy-sensitivity.html">sensitivity analysis</a>. Not projected savings.</span></figcaption></figure>
+        <div class="comparison-note"><strong>Material tradeoff</strong><p>Compared with Intelligent Generosity, the selected policy reduces modeled midpoint cost by $9,906, increases direct-refund face-value exposure by $9,535, and reduces manager-review volume by 30.2%. These are simulated tradeoffs for shadow validation, not projected results.</p></div>
+      </div>
+    </section>
+
+    <section id="worked-decision">
+      <div class="shell">
+        <div class="section-head">
+          <p class="eyebrow">Manager application</p>
+          <h2>The selected policy turns the opening case into a manager-ready choice</h2>
+          <p>The arrival-delay case returns first; the tabs show how the rule adapts elsewhere.</p>
+        </div>
+        <div class="scenario-tabs" role="group" aria-label="Worked recovery scenarios"><button class="scenario-tab" type="button" data-scenario="arrival_delay" aria-pressed="true">Arrival delay</button><button class="scenario-tab" type="button" data-scenario="dining_lapse" aria-pressed="false">Dining lapse</button><button class="scenario-tab" type="button" data-scenario="suite_recovery" aria-pressed="false">Suite recovery</button><button class="scenario-tab" type="button" data-scenario="parking_friction" aria-pressed="false">Valet delay</button></div>
+        <article class="decision" id="decision-panel" aria-live="polite">
+          <div class="decision-main">
+            <p class="eyebrow">Recommended recovery</p>
+            <h3 id="scenario-title">Room not ready at arrival</h3>
+            <p class="scenario-context" id="scenario-context">Loyalty guest · severity 4 · hotel responsible · recovery possible during the stay</p>
+            <p class="recommendation"><span id="scenario-amount">$240</span> <span id="scenario-gesture">partial room refund + manager note</span></p>
+            <div class="decision-metrics">
+              <div><span>Working cost range</span><strong id="scenario-cost">$240-$240</strong></div>
+              <div><span>Approval path</span><strong id="scenario-approval">Manager approval</strong></div>
+              <div><span>Policy stress test</span><strong id="scenario-robustness">Policy clears all modeled guardrails in 99.6% of shared stress draws</strong></div>
+            </div>
+            <h3>Why this fits</h3>
+            <ul class="reasons" id="scenario-reasons"><li>Meets recovery-tier and issue-fit guardrails</li><li>Lowest modeled cost among robust-fit gestures</li><li>Manager approval retained for exposure or uncertainty</li><li>Hotel owns the service failure</li></ul>
+          </div>
+          <aside class="decision-support">
+            <h3>What would change it?</h3>
+            <p id="scenario-counterfactual">Shadow mode must confirm availability and marginal cost. If room availability were less constrained, the preferred recovery would shift to room upgrade at $435.</p>
+            <h3>Closest alternative</h3>
+            <p class="alternative" id="scenario-alternative">$125 late checkout</p>
+            <h3>Why a range, not one cost?</h3>
+            <p>Public prices anchor value; property data must replace assumed marginal cost.</p>
+          </aside>
+        </article>
+        <div class="property-menu" aria-label="Property-aligned recovery menu">
+          <div><strong>Dining</strong><span>Calabra or Palma credit</span></div>
+          <div><strong>Wellness</strong><span>Surya Spa or Recovery Suite</span></div>
+          <div><strong>Stay</strong><span>Room upgrade or late checkout</span></div>
+          <div><strong>Fee relief</strong><span>Valet or destination-fee waiver</span></div>
+          <div><strong>Relationship</strong><span>Future-stay credit</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="band" id="pilot">
+      <div class="shell pilot">
+        <div>
+          <p class="eyebrow">Controlled validation</p>
+          <h2>The next decision is whether the rule survives real operations</h2>
+          <div class="pilot-callout">
+            <strong>Four weeks or 50 eligible cases, whichever is later</strong>
+            <p>Compare invisible recommendations with manager decisions and replace assumed costs before exposing guidance.</p>
+          </div>
+        </div>
+        <div>
+          <h3>Measure before adoption</h3>
+          <div class="success-measures">
+            <div><h3>Guest recovery</h3><p>Satisfaction, reviews, and unresolved complaints.</p></div>
+            <div><h3>Relationship</h3><p>Repeat stays, cancellations, and retained revenue.</p></div>
+            <div><h3>Economics</h3><p>Marginal cost and room-rate erosion.</p></div>
+            <div><h3>Adoption</h3><p>Overrides, approval time, and exceptions.</p></div>
+          </div>
+          <p class="data-needed"><strong>Decision gate:</strong> advance only if protections hold with actual costs and outcomes; otherwise revise or stop. Minimum data: comps, service tickets, outcomes, costs, and operating constraints.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="evidence" id="evidence">
+      <div class="shell evidence-grid">
+        <div>
+          <h2>Methods and engineering evidence</h2>
+          <p>Supporting reports document reconciliation, decision contracts, stress tests, and S3-to-Snowflake lineage.</p>
+          <p class="pipeline-proof">Decision metrics were extracted from Snowflake and parity-checked against the versioned policy mart.</p>
+        </div>
+        <nav class="evidence-links" aria-label="Supporting technical evidence">
+          <a href="engineering-evidence.html">Engineering evidence</a>
+          <a href="methodology.html">Methodology and assumptions</a>
+          <a href="policy-decision-analysis.html">Policy decision analysis</a>
+          <a href="policy-sensitivity.html">Policy sensitivity</a>
+          <a href="data-lineage.html">Data lineage</a>
+          <a href="warehouse-validation.html">Warehouse validation</a>
+          <a href="public-context.html">Public property context</a>
+          <a href="simulation-audit.html">Simulation audit dashboard</a>
+        </nav>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="shell">This prototype uses synthetic hotel operations and bounded public Santa Monica Proper context. It does not use or claim access to internal guest, comp, rate, margin, inventory, or policy data.</div>
+  </footer>
+
+  <script type="application/json" id="scenario-data">{"arrival_delay": {"key": "arrival_delay", "tab_label": "Arrival delay", "title": "Room not ready at arrival", "context": "Loyalty guest \u00b7 severity 4 \u00b7 hotel responsible \u00b7 recovery possible during the stay", "amount": "$240", "gesture": "partial room refund + manager note", "cost_range": "$240-$240", "approval": "Manager approval", "robustness": "Policy clears all modeled guardrails in 99.6% of shared stress draws", "reasons": ["Meets recovery-tier and issue-fit guardrails", "Lowest modeled cost among robust-fit gestures", "Manager approval retained for exposure or uncertainty", "Hotel owns the service failure"], "counterfactual": "Shadow mode must confirm availability and marginal cost. If room availability were less constrained, the preferred recovery would shift to room upgrade at $435.", "alternative": "$125 late checkout"}, "dining_lapse": {"key": "dining_lapse", "tab_label": "Dining lapse", "title": "Dining service failure", "context": "Returning guest \u00b7 severity 4 \u00b7 hotel responsible \u00b7 recovery possible during the stay", "amount": "$180", "gesture": "Calabra or Palma dining credit + manager note", "cost_range": "$45-$108", "approval": "Within policy", "robustness": "Policy clears all modeled guardrails in 99.6% of shared stress draws", "reasons": ["Meets recovery-tier and issue-fit guardrails", "Lowest modeled cost among robust-fit gestures", "Hotel owns the service failure"], "counterfactual": "Shadow mode must confirm availability and marginal cost. No single operating condition tested on its own changed the preferred gesture.", "alternative": "$0 manager note and personal follow-up"}, "suite_recovery": {"key": "suite_recovery", "tab_label": "Suite recovery", "title": "Housekeeping failure during a VIP stay", "context": "VIP guest \u00b7 severity 5 \u00b7 hotel responsible \u00b7 high relationship exposure", "amount": "$455", "gesture": "future-stay credit + manager note", "cost_range": "$136-$387", "approval": "Manager approval", "robustness": "Policy clears all modeled guardrails in 99.6% of shared stress draws", "reasons": ["Meets recovery-tier and issue-fit guardrails", "Lowest modeled cost among robust-fit gestures", "Manager approval retained for exposure or uncertainty", "Hotel owns the service failure"], "counterfactual": "Shadow mode must confirm availability and marginal cost. No single operating condition tested on its own changed the preferred gesture.", "alternative": "$80 in-room amenity gesture"}, "parking_friction": {"key": "parking_friction", "tab_label": "Valet delay", "title": "Valet or parking delay", "context": "Loyalty guest \u00b7 severity 3 \u00b7 hotel responsible \u00b7 recovery possible during the stay", "amount": "$100", "gesture": "parking or destination-fee waiver + manager note", "cost_range": "$8-$35", "approval": "Within policy", "robustness": "Policy clears all modeled guardrails in 99.6% of shared stress draws", "reasons": ["Meets recovery-tier and issue-fit guardrails", "Lowest modeled cost among robust-fit gestures", "Hotel owns the service failure"], "counterfactual": "Shadow mode must confirm availability and marginal cost. No single operating condition tested on its own changed the preferred gesture.", "alternative": "$0 manager note and personal follow-up"}}</script>
+  <script>
+    (() => {
+      const scenarios = JSON.parse(document.getElementById("scenario-data").textContent);
+      const tabs = [...document.querySelectorAll(".scenario-tab")];
+      const fields = {
+        title: document.getElementById("scenario-title"),
+        context: document.getElementById("scenario-context"),
+        amount: document.getElementById("scenario-amount"),
+        gesture: document.getElementById("scenario-gesture"),
+        cost_range: document.getElementById("scenario-cost"),
+        approval: document.getElementById("scenario-approval"),
+        robustness: document.getElementById("scenario-robustness"),
+        counterfactual: document.getElementById("scenario-counterfactual"),
+        alternative: document.getElementById("scenario-alternative")
+      };
+      const reasonList = document.getElementById("scenario-reasons");
+
+      function selectScenario(key, updateUrl = true) {
+        const scenario = scenarios[key];
+        if (!scenario) return;
+        Object.entries(fields).forEach(([name, node]) => { node.textContent = scenario[name]; });
+        reasonList.replaceChildren(...scenario.reasons.map(reason => {
+          const item = document.createElement("li");
+          item.textContent = reason;
+          return item;
+        }));
+        tabs.forEach(tab => tab.setAttribute("aria-pressed", String(tab.dataset.scenario === key)));
+        if (updateUrl && history.replaceState && window.location.protocol !== "file:") {
+          const url = new URL(window.location.href);
+          url.searchParams.set("scenario", key);
+          history.replaceState(null, "", url);
+        }
+      }
+
+      tabs.forEach(tab => tab.addEventListener("click", () => selectScenario(tab.dataset.scenario)));
+      const requested = new URLSearchParams(window.location.search).get("scenario");
+      if (requested && scenarios[requested]) selectScenario(requested, false);
+    })();
+  </script>
+</body>
+</html>
