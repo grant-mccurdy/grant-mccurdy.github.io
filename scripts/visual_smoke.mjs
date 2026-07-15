@@ -392,6 +392,9 @@ async function inspectHotelComp(page, label) {
   if (label.startsWith("hotel-comp-decision-")) {
     const bodyText = await page.locator("body").innerText();
     const pdfHref = await page.getByRole("link", { name: "Download the PDF" }).getAttribute("href");
+    const decisionDeskHref = await page
+      .getByRole("link", { name: "Open the synthetic Decision Desk" })
+      .getAttribute("href");
     return {
       boundary:
         bodyText.includes("historical comp actions, costs, and outcomes in this prototype are synthetic") &&
@@ -411,6 +414,11 @@ async function inspectHotelComp(page, label) {
         bodyText.includes("Modeled guest-facing value: $100") &&
         bodyText.includes("Assumed internal-cost range: $8-$45") &&
         bodyText.includes("not estimates of property economics"),
+      interactivePrototype:
+        bodyText.includes("Test the prototype") &&
+        bodyText.includes("Synthetic scenarios only") &&
+        bodyText.includes("Do not enter actual guest or reservation information") &&
+        decisionDeskHref === "https://hotel-comp-decision-desk.grant-mccurdy.workers.dev/",
       focusBoundary:
         !["Guardrailed recovery", "5,000", "Snowflake", "Cloudflare", "RAG"].some((text) =>
           bodyText.includes(text),
