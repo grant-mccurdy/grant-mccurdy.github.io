@@ -54,6 +54,7 @@ REPORTS = {
 
 LINK_REWRITES = {
     "reports/hotel-comp-decision-framework.pdf": "hotel-comp-decision-framework.pdf",
+    "reports/policy-selection-technical-appendix.html": "technical-appendix.html",
     "reports/interactive-policy-prototype.html": "technical-prototype.html",
     "reports/engineering-evidence.md": "engineering-evidence.html",
     "reports/methodology-and-assumptions.md": "methodology.html",
@@ -343,6 +344,11 @@ def transform_technical_prototype(source: str) -> str:
     return source
 
 
+def transform_policy_appendix(source: str) -> str:
+    source = rewrite_report_links(source)
+    return source.replace('href="../index.html"', 'href="index.html"')
+
+
 def transform_simulation_audit(source: str) -> str:
     source = source.replace(
         '<meta name="viewport" content="width=device-width, initial-scale=1">',
@@ -384,6 +390,7 @@ def main() -> int:
     required = [
         source_dir / "index.html",
         source_dir / "reports" / "hotel-comp-decision-framework.pdf",
+        source_dir / "reports" / "policy-selection-technical-appendix.html",
         source_dir / "reports" / "interactive-policy-prototype.html",
         source_dir / "reports" / "comp-optimization-dashboard.html",
     ]
@@ -394,6 +401,9 @@ def main() -> int:
 
     files: dict[str, str] = {
         "index.html": rewrite_report_links((source_dir / "index.html").read_text(encoding="utf-8")),
+        "technical-appendix.html": transform_policy_appendix(
+            (source_dir / "reports" / "policy-selection-technical-appendix.html").read_text(encoding="utf-8")
+        ),
         "technical-prototype.html": transform_technical_prototype(
             (source_dir / "reports" / "interactive-policy-prototype.html").read_text(encoding="utf-8")
         ),

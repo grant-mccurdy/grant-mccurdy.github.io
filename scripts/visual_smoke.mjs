@@ -169,7 +169,7 @@ async function inspect(page) {
     Array.from(document.querySelectorAll("body *"))
       .filter((el) => {
         if (el.closest(".hero-media")) return false;
-        if (el.closest(".chart-frame, .table-wrap, .report-table-wrap, .table-scroll")) return false;
+        if (el.closest(".chart-frame, .table-wrap, .report-table-wrap, .table-scroll, .cell-output-display")) return false;
         const rect = el.getBoundingClientRect();
         return (
           rect.width &&
@@ -391,9 +391,14 @@ async function inspectContentRag(page, label) {
 async function inspectHotelComp(page, label) {
   if (label.startsWith("hotel-comp-decision-")) {
     const bodyText = await page.locator("body").innerText();
-    const pdfHref = await page.getByRole("link", { name: "Download the PDF" }).getAttribute("href");
+    const pdfHref = await page
+      .getByRole("link", { name: "Executive brief PDF", exact: true })
+      .getAttribute("href");
+    const appendixHref = await page
+      .getByRole("link", { name: "Policy selection appendix", exact: true })
+      .getAttribute("href");
     const decisionDeskHref = await page
-      .getByRole("link", { name: "Open the synthetic Decision Desk" })
+      .getByRole("link", { name: "Open the Decision Desk", exact: true })
       .getAttribute("href");
     return {
       boundary:
@@ -419,6 +424,10 @@ async function inspectHotelComp(page, label) {
         bodyText.includes("Synthetic scenarios only") &&
         bodyText.includes("Do not enter actual guest or reservation information") &&
         decisionDeskHref === "https://hotel-comp-decision-desk.grant-mccurdy.workers.dev/",
+      artifactHierarchy:
+        pdfHref === "hotel-comp-decision-framework.pdf" &&
+        appendixHref === "technical-appendix.html" &&
+        decisionDeskHref === "https://hotel-comp-decision-desk.grant-mccurdy.workers.dev/",
       focusBoundary:
         !["Guardrailed recovery", "5,000", "Snowflake", "Cloudflare", "RAG"].some((text) =>
           bodyText.includes(text),
@@ -428,6 +437,56 @@ async function inspectHotelComp(page, label) {
         (await page.locator("table").count()) === 0 &&
         (await page.locator("figure").count()) === 0 &&
         (await page.locator("button, [role='tab']").count()) === 0,
+    };
+  }
+  if (label.startsWith("hotel-comp-appendix-")) {
+    const bodyText = await page.locator("body").innerText();
+    const briefHref = await page
+      .getByRole("link", { name: "Return to the executive brief", exact: true })
+      .getAttribute("href");
+    const pdfHref = await page
+      .getByRole("link", { name: "Download the executive PDF", exact: true })
+      .getAttribute("href");
+    const deskHref = await page
+      .getByRole("link", { name: "Open the synthetic Decision Desk", exact: true })
+      .getAttribute("href");
+    const tableScroll = await page.locator(".cell-output-display:has(table)").evaluateAll((containers) =>
+      containers.every((container) => {
+        const rect = container.getBoundingClientRect();
+        const style = window.getComputedStyle(container);
+        return (
+          style.overflowX === "auto" &&
+          rect.left >= -2 &&
+          rect.right <= document.documentElement.clientWidth + 2
+        );
+      }),
+    );
+    return {
+      appendixBoundary:
+        bodyText.includes("evaluates policy rules on synthetic hotel operations") &&
+        bodyText.includes("does not establish actual policy effectiveness, savings, margins, or guest outcomes"),
+      appendixMethod:
+        (await page.locator("h1").innerText()) === "Policy Selection Methodology" &&
+        bodyText.includes("policy selection, not final predictive-model selection") &&
+        bodyText.includes("2,150 matched case-policy evaluations") &&
+        bodyText.includes("10,000-draw paired case bootstrap") &&
+        bodyText.includes("5,000-draw shared-world assumption stress") &&
+        bodyText.includes("stress-median cost") &&
+        bodyText.includes("What real data must establish"),
+      appendixEvidence:
+        (await page.locator("table").count()) === 4 &&
+        (await page.locator("img[role='img']").count()) === 1 &&
+        (await page.locator(".selection-flow-list li").count()) === 6 &&
+        (await page.locator("figcaption").count()) >= 6 &&
+        bodyText.includes("$29,104") &&
+        bodyText.includes("$30,467") &&
+        bodyText.includes("$27,342-$33,944"),
+      appendixNavigation:
+        briefHref === "index.html" &&
+        pdfHref === "hotel-comp-decision-framework.pdf" &&
+        deskHref === "https://hotel-comp-decision-desk.grant-mccurdy.workers.dev/",
+      appendixFormat:
+        (await page.locator("button, [role='tab'], .site-header, .report-hero").count()) === 0 && tableScroll,
     };
   }
   if (label.startsWith("hotel-comp-technical-")) {
@@ -480,6 +539,8 @@ const cases = [
   ["projects-directory-mobile", path.join("projects", "index.html"), 390, 900],
   ["hotel-comp-decision-desktop", path.join("projects", "hotel-comp-policy-model", "index.html"), 1440, 1000],
   ["hotel-comp-decision-mobile", path.join("projects", "hotel-comp-policy-model", "index.html"), 390, 900],
+  ["hotel-comp-appendix-desktop", path.join("projects", "hotel-comp-policy-model", "technical-appendix.html"), 1440, 1000],
+  ["hotel-comp-appendix-mobile", path.join("projects", "hotel-comp-policy-model", "technical-appendix.html"), 390, 900],
   ["hotel-comp-technical-desktop", path.join("projects", "hotel-comp-policy-model", "technical-prototype.html"), 1440, 1000],
   ["hotel-comp-audit-desktop", path.join("projects", "hotel-comp-policy-model", "simulation-audit.html"), 1440, 1000],
   ["hotel-comp-audit-mobile", path.join("projects", "hotel-comp-policy-model", "simulation-audit.html"), 390, 900],
@@ -583,6 +644,12 @@ const failures = results.filter(
     result.hotelComp?.workedRecommendation === false ||
     result.hotelComp?.focusBoundary === false ||
     result.hotelComp?.reportFormat === false ||
+    result.hotelComp?.artifactHierarchy === false ||
+    result.hotelComp?.appendixBoundary === false ||
+    result.hotelComp?.appendixMethod === false ||
+    result.hotelComp?.appendixEvidence === false ||
+    result.hotelComp?.appendixNavigation === false ||
+    result.hotelComp?.appendixFormat === false ||
     result.hotelComp?.technicalPolicyDecision === false ||
     result.hotelComp?.technicalScenarioChanged === false ||
     result.hotelComp?.auditBoundary === false ||
