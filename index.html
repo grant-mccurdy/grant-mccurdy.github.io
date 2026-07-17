@@ -8,8 +8,11 @@
     <meta property="og:title" content="Grant McCurdy | Systems Portfolio">
     <meta property="og:description" content="Public-safe demos, project briefs, repositories, and case studies for data systems, analytics products, workflow automation, AI-assisted systems, and content intelligence.">
     <meta property="og:type" content="website">
-    <meta property="og:image" content="assets/images/workflow-hero-poster.jpg?v=20260623h">
-    <link rel="stylesheet" href="assets/css/styles.css?v=20260625a">
+    <meta property="og:url" content="https://grant-mccurdy.github.io/">
+    <meta property="og:image" content="https://grant-mccurdy.github.io/assets/images/workflow-hero-poster.jpg">
+    <link rel="canonical" href="https://grant-mccurdy.github.io/">
+    <link rel="icon" href="assets/images/grant-mccurdy-profile.jpg" type="image/jpeg">
+    <link rel="stylesheet" href="assets/css/styles.css?v=20260717a">
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
@@ -51,8 +54,12 @@
             <a class="button primary" href="projects/index.html">Explore Projects</a>
             <a class="button secondary" href="#demos">Open Demos</a>
           </div>
-          <p class="hero-proof">Start with the dashboard, then inspect the source-backed project briefs and public-safe evidence packets.</p>
-          <div class="hero-snapshot" aria-label="Portfolio capabilities">
+          <p class="hero-proof">Start with the hotel decision brief, assessment dashboard, or live RAG demo. Each route includes inspectable source and validation evidence.</p>
+        </div>
+      </section>
+
+      <section class="capability-band" aria-label="Portfolio capabilities">
+        <div class="section-shell hero-snapshot">
             <div class="hero-snapshot-item">
               <strong>Data Systems</strong>
               <span>Structured data, validation, reporting marts</span>
@@ -69,7 +76,6 @@
               <strong>Content Intelligence</strong>
               <span>Artifact-to-RAG, OCR, transcripts, source grounding</span>
             </div>
-          </div>
         </div>
       </section>
 
@@ -86,44 +92,29 @@
       <section class="section-shell" id="projects" aria-labelledby="projects-heading">
         <div class="section-heading" data-reveal>
           <p class="section-kicker">Project Portfolio</p>
-          <h2 id="projects-heading">Seven public systems to inspect</h2>
+          <h2 id="projects-heading">Flagship systems to inspect</h2>
         </div>
 
         <div class="artifact-list work-list">
-          <a class="artifact-link-card" href="projects/hotel-comp-policy-model/" data-reveal>
-            <span class="artifact-kind">Hospitality decision support</span>
+          <a class="artifact-link-card" href="projects/hotel-comp-policy-model/" data-home-project-id="hotel-comp-policy-model" data-reveal>
+            <span class="artifact-kind">Flagship | decision support</span>
             <strong>Hotel Comp Policy Model</strong>
             <p>A five-policy comparison and shadow-validation recommendation balancing guest protection, manager judgment, operating constraints, and comp cost.</p>
           </a>
-          <a class="artifact-link-card" href="projects/education-data-simulation-engine.html" data-reveal>
-            <span class="artifact-kind">Systems data foundation</span>
-            <strong>Education Data Simulation Engine</strong>
-            <p>Public-safe simulation, validation, SQL-ready data, and reporting marts for analytics prototypes.</p>
-          </a>
-          <a class="artifact-link-card" href="projects/assessment-intelligence.html" data-reveal>
-            <span class="artifact-kind">Analytics and decision support</span>
+          <a class="artifact-link-card" href="projects/assessment-intelligence.html" data-home-project-id="assessment-intelligence" data-reveal>
+            <span class="artifact-kind">Flagship | analytics product</span>
             <strong>Assessment Intelligence</strong>
             <p>SQL/R/Python extracts, dashboards, diagnostics, and reporting patterns that translate records into reviewable decisions.</p>
           </a>
-          <a class="artifact-link-card" href="projects/statistical-risk-modeling-r.html" data-reveal>
-            <span class="artifact-kind">Statistical modeling</span>
-            <strong>Growth Analytics in R</strong>
-            <p>Adjusted BOY/EOY growth modeling, section signal diagnostics, validation, and stakeholder-facing decision support.</p>
-          </a>
-          <a class="artifact-link-card" href="projects/assessment-to-remediation-pipeline.html" data-reveal>
-            <span class="artifact-kind">Workflow automation</span>
-            <strong>Assessment-to-Remediation Pipeline</strong>
-            <p>Diagnostic design, review gates, dry-run payloads, feedback, follow-up actions, and evidence tracking.</p>
-          </a>
-          <a class="artifact-link-card" href="projects/content-intelligence.html" data-reveal>
-            <span class="artifact-kind">Content systems</span>
+          <a class="artifact-link-card" href="projects/content-intelligence.html" data-home-project-id="content-intelligence" data-reveal>
+            <span class="artifact-kind">Flagship | content systems</span>
             <strong>Content Intelligence</strong>
             <p>Artifact-to-RAG workflow with source adapters, transcript/OCR cleanup, safety-reviewed chunks, and cited outputs.</p>
           </a>
-          <a class="artifact-link-card" href="projects/instructional-ai-workflows.html" data-reveal>
-            <span class="artifact-kind">Human-reviewed AI workflows</span>
-            <strong>Instructional AI Workflows</strong>
-            <p>Rubric evidence, review packets, feedback drafts, and action artifacts with human judgment kept in the loop.</p>
+          <a class="artifact-link-card" href="projects/education-data-simulation-engine.html" data-home-project-id="education-data-simulation-engine" data-reveal>
+            <span class="artifact-kind">Flagship | data foundation</span>
+            <strong>Education Data Simulation Engine</strong>
+            <p>Public-safe simulation, validation, SQL-ready data, and reporting marts for analytics prototypes.</p>
           </a>
         </div>
         <div class="section-actions" data-reveal>
@@ -174,7 +165,12 @@
           <h2 id="demos-heading">Open these first</h2>
         </div>
 
-        <div class="artifact-list">
+        <div class="artifact-list demo-list">
+          <a class="artifact-link-card" href="https://hotel-comp-decision-desk.grant-mccurdy.workers.dev/" data-reveal>
+            <span class="artifact-kind">Interactive decision support</span>
+            <strong>Hotel Decision Desk</strong>
+            <p>Explore policy scenarios, operating constraints, recommendation stability, and the evidence behind the executive brief.</p>
+          </a>
           <a class="artifact-link-card" href="dashboard/assessment.html" data-reveal>
             <span class="artifact-kind">Interactive dashboard</span>
             <strong>Assessment Analytics Dashboard</strong>
@@ -185,10 +181,10 @@
             <strong>Portfolio Data Lab</strong>
             <p>Structured chat surface for tables, summaries, charts, and cited analysis over a public-safe warehouse.</p>
           </a>
-          <a class="artifact-link-card" href="projects/content-intelligence-demo-report.html" data-reveal>
-            <span class="artifact-kind">Demo report</span>
-            <strong>Content Intelligence Demo Report</strong>
-            <p>A source-grounded reporting pattern built from synthetic notes and visible evidence labels.</p>
+          <a class="artifact-link-card" href="projects/content-intelligence.html#live-rag" data-reveal>
+            <span class="artifact-kind">Live retrieval surface</span>
+            <strong>Content Intelligence RAG</strong>
+            <p>Ask a reviewed public index about source adapters, information objects, citation grounding, and the safety boundary.</p>
           </a>
         </div>
       </section>
@@ -245,7 +241,6 @@
           <a href="projects/index.html">Projects</a>
           <a href="dashboard/assessment.html">Dashboard</a>
           <a href="data-lab.html">Data Lab</a>
-          <a href="projects/statistical-risk-modeling-r.html">R Analytics</a>
           <a href="case-studies/index.html">Case Studies</a>
           <a href="https://github.com/grant-mccurdy">GitHub</a>
         </div>
@@ -288,7 +283,7 @@
       </div>
     </section>
 
-    <script src="assets/js/site.js"></script>
-    <script src="assets/js/portfolio-helper.js?v=20260625a"></script>
+    <script src="assets/js/site.js?v=20260717a"></script>
+    <script src="assets/js/portfolio-helper.js?v=20260717a"></script>
   </body>
 </html>

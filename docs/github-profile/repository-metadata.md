@@ -1,12 +1,12 @@
 # GitHub Repository Metadata
 
-Use these descriptions, homepage URLs, and topics to make the public GitHub profile readable from the repository list without requiring visitors to open every repo first.
+This file records the intended public profile configuration. Applying these settings is a separate live GitHub action and should happen only after the site changes have been reviewed and merged.
 
 ## Profile
 
 Suggested public bio:
 
-> Mathematics/statistics professional building synthetic-data systems, assessment analytics, and AI-assisted reporting workflows.
+> Analytics and systems builder creating decision tools, validated data products, statistical models, and source-grounded AI workflows.
 
 Suggested website:
 
@@ -14,138 +14,100 @@ Suggested website:
 https://grant-mccurdy.github.io/
 ```
 
-The GitHub profile bio and website can be changed from the GitHub profile UI. From `gh`, they require the `user` OAuth scope:
-
-```bash
-gh auth refresh -h github.com -s user
-
-gh api --method PATCH /user \
-  -f bio="Mathematics/statistics professional building synthetic-data systems, assessment analytics, and AI-assisted reporting workflows." \
-  -f blog="https://grant-mccurdy.github.io/"
-```
-
-Review the company/employer field manually before changing it; leaving it visible is a personal profile decision.
-
 Suggested pinned repository order:
 
-1. `education-data-simulation-engine`
+1. `hotel-comp-policy-model`
 2. `assessment-intelligence`
-3. `statistical-risk-modeling-r`
-4. `grant-mccurdy.github.io`
-5. `content-intelligence`
-6. `instructional-ai-workflows`
+3. `content-intelligence`
+4. `education-data-simulation-engine`
+5. `statistical-risk-modeling-r`
+6. `grant-mccurdy.github.io`
 
-Keep `public-workspace` unpinned unless it is intentionally presented as a staging workspace.
-Keep `graduate-statistics-portfolio` linked from the site as methods evidence rather than pinned as a top-level system, unless the profile is being tuned for a statistics-specific audience.
+The Graduate Statistics Portfolio remains linked as supporting methods evidence. The active workflow prototypes remain discoverable through the portal without displacing the four flagships. Repositories pending human QA are not included.
 
 ## Repository Settings
 
 ```bash
-gh repo edit grant-mccurdy/grant-mccurdy.github.io \
-  --description "Public portfolio for analytics systems, synthetic education data, dashboards, and AI-assisted reporting." \
-  --homepage "https://grant-mccurdy.github.io/"
+gh repo edit grant-mccurdy/hotel-comp-policy-model \
+  --description "Explainable hotel service-recovery decision support with policy comparison, sensitivity analysis, and controlled shadow validation." \
+  --homepage "https://grant-mccurdy.github.io/projects/hotel-comp-policy-model/"
 
 gh repo edit grant-mccurdy/assessment-intelligence \
-  --description "Assessment analytics project using synthetic gradebook data, R reporting, SQL extracts, and static dashboards." \
+  --description "SQL, R, and Python assessment analytics with reproducible extracts, reporting artifacts, and an interactive dashboard." \
   --homepage "https://grant-mccurdy.github.io/projects/assessment-intelligence.html"
 
+gh repo edit grant-mccurdy/content-intelligence \
+  --description "Artifact-to-RAG workflow for provenance-rich information objects, reviewed retrieval records, and cited answers." \
+  --homepage "https://grant-mccurdy.github.io/projects/content-intelligence.html"
+
 gh repo edit grant-mccurdy/education-data-simulation-engine \
-  --description "Synthetic education data generator for public-safe Canvas-style analytics, validation, and warehouse demos." \
+  --description "Validated synthetic education data and warehouse models for public-safe analytics products and workflow prototypes." \
   --homepage "https://grant-mccurdy.github.io/projects/education-data-simulation-engine.html"
 
 gh repo edit grant-mccurdy/statistical-risk-modeling-r \
-  --description "Public-safe R assessment growth analytics with expected-growth validation and adjusted section signals." \
+  --description "Public-safe R assessment growth analytics with expected-growth validation, adjusted section signals, and stakeholder reporting." \
   --homepage "https://grant-mccurdy.github.io/projects/statistical-risk-modeling-r.html"
 
 gh repo edit grant-mccurdy/graduate-statistics-portfolio \
-  --description "Curated statistical methods portfolio in R featuring nonlinear model search, GLMs, cross-validation, calibration, and threshold analysis." \
+  --description "Curated R methods portfolio featuring nonlinear models, GLMs, cross-validation, calibration, thresholds, and diagnostics." \
   --homepage "https://grant-mccurdy.github.io/projects/graduate-statistics-portfolio.html"
 
-gh repo edit grant-mccurdy/content-intelligence \
-  --description "Artifact-to-RAG content intelligence workflow for source adapters, washed information objects, retrieval-ready chunks, and cited outputs." \
-  --homepage "https://grant-mccurdy.github.io/projects/content-intelligence.html"
-
 gh repo edit grant-mccurdy/instructional-ai-workflows \
-  --description "Teacher-controlled AI workflow prototypes for rubric review, feedback drafting, and instructional support." \
+  --description "Human-reviewed workflow prototypes for rubric evidence, feedback drafting, reviewer packets, and remediation actions." \
   --homepage "https://grant-mccurdy.github.io/projects/instructional-ai-workflows.html"
 
-gh repo edit grant-mccurdy/public-workspace \
-  --description "Public staging workspace for portfolio project packets, docs, and early public-safe prototypes." \
+gh repo edit grant-mccurdy/grant-mccurdy.github.io \
+  --description "Curated portfolio portal for decision support, analytics systems, statistical modeling, and source-grounded AI workflows." \
   --homepage "https://grant-mccurdy.github.io/"
 ```
 
 ## Topics
 
 ```bash
-gh repo edit grant-mccurdy/grant-mccurdy.github.io \
-  --add-topic portfolio \
-  --add-topic github-pages \
-  --add-topic data-visualization \
-  --add-topic education-analytics \
-  --add-topic synthetic-data
+gh repo edit grant-mccurdy/hotel-comp-policy-model \
+  --add-topic decision-support \
+  --add-topic hospitality-analytics \
+  --add-topic simulation \
+  --add-topic sensitivity-analysis \
+  --add-topic data-validation
 
 gh repo edit grant-mccurdy/assessment-intelligence \
   --add-topic assessment \
-  --add-topic education-analytics \
-  --add-topic synthetic-data \
+  --add-topic analytics \
+  --add-topic sql \
   --add-topic r \
   --add-topic dashboard \
-  --add-topic github-pages
-
-gh repo edit grant-mccurdy/education-data-simulation-engine \
-  --add-topic synthetic-data \
-  --add-topic education-data \
-  --add-topic python \
-  --add-topic duckdb \
-  --add-topic data-generation \
-  --add-topic privacy-safe
-
-gh repo edit grant-mccurdy/statistical-risk-modeling-r \
-  --add-topic r \
-  --add-topic statistical-modeling \
-  --add-topic risk-modeling \
-  --add-topic glm \
-  --add-topic calibration \
-  --add-topic decision-support
-
-gh repo edit grant-mccurdy/graduate-statistics-portfolio \
-  --add-topic r \
-  --add-topic statistics \
-  --add-topic statistical-modeling \
-  --add-topic glm \
-  --add-topic cross-validation \
-  --add-topic calibration \
-  --add-topic regression \
-  --add-topic portfolio
+  --add-topic synthetic-data
 
 gh repo edit grant-mccurdy/content-intelligence \
   --add-topic content-intelligence \
   --add-topic rag \
-  --add-topic python \
+  --add-topic provenance \
   --add-topic retrieval \
   --add-topic ai-assisted-workflows
 
-gh repo edit grant-mccurdy/instructional-ai-workflows \
-  --add-topic instructional-ai \
-  --add-topic education \
-  --add-topic rubrics \
-  --add-topic feedback \
-  --add-topic ai-assisted-workflows
+gh repo edit grant-mccurdy/education-data-simulation-engine \
+  --add-topic synthetic-data \
+  --add-topic data-engineering \
+  --add-topic python \
+  --add-topic duckdb \
+  --add-topic data-validation
 
-gh repo edit grant-mccurdy/public-workspace \
-  --add-topic portfolio-workspace \
-  --add-topic public-safe \
-  --add-topic documentation
+gh repo edit grant-mccurdy/statistical-risk-modeling-r \
+  --add-topic r \
+  --add-topic assessment-analytics \
+  --add-topic growth-modeling \
+  --add-topic validation \
+  --add-topic decision-support
+
+gh repo edit grant-mccurdy/grant-mccurdy.github.io \
+  --add-topic portfolio \
+  --add-topic github-pages \
+  --add-topic analytics \
+  --add-topic data-visualization \
+  --add-topic decision-support
 ```
 
-## Profile README Deployment
+## Live Update Boundary
 
-The file at `docs/github-profile/README.md` is ready to become the root `README.md` in a public profile repository named `grant-mccurdy/grant-mccurdy`.
-
-Recommended setup:
-
-```bash
-gh repo create grant-mccurdy/grant-mccurdy --public --description "GitHub profile README for Grant McCurdy"
-```
-
-Then copy the profile README into that repository, commit it, and push through the normal public branch-and-PR workflow.
+The commands above are reviewed guidance, not an automated sync. Profile bio, repository metadata, topics, and pin order should be changed only after explicit authorization for those live GitHub writes.

@@ -24,6 +24,7 @@ if (lab) {
   const datasetName = lab.querySelector("[data-dataset-name]");
   const datasetTables = lab.querySelector("[data-dataset-tables]");
   const datasetMode = lab.querySelector("[data-dataset-mode]");
+  const datasetUpdated = lab.querySelector("[data-dataset-updated]");
   let activeDatasetId = "";
 
   const escapeHtml = (value) =>
@@ -371,12 +372,19 @@ if (lab) {
       })
     ].join("");
 
-  const updateDatasetStatus = (dataset) => {
+  const updateDatasetStatus = (dataset, generatedAt = "") => {
     if (!dataset) return;
     activeDatasetId = dataset.id || activeDatasetId;
     if (datasetName) datasetName.textContent = dataset.title || dataset.id || "Connected dataset";
     if (datasetTables) datasetTables.textContent = `${dataset.tables || 0} tables`;
     if (datasetMode) datasetMode.textContent = `${dataset.dialect || "SQL"} analyst`;
+    if (datasetUpdated) {
+      const timestamp = generatedAt || dataset.generatedAt;
+      const parsed = timestamp ? new Date(timestamp) : null;
+      datasetUpdated.textContent = parsed && !Number.isNaN(parsed.valueOf())
+        ? parsed.toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" })
+        : "Not reported";
+    }
   };
 
   const loadDatasetCatalog = async () => {
@@ -390,7 +398,7 @@ if (lab) {
       const dataset =
         (payload.datasets || []).find((item) => item.id === payload.defaultDatasetId) ||
         (payload.datasets || [])[0];
-      updateDatasetStatus(dataset);
+      updateDatasetStatus(dataset, payload.generatedAt);
     } catch {
       if (datasetName) datasetName.textContent = "Dataset unavailable";
     }
