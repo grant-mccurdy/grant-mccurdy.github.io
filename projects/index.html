@@ -4,13 +4,20 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Projects | Grant McCurdy</title>
-    <meta name="description" content="Project directory for Grant McCurdy's public portfolio: hospitality decision support, data systems, analytics, R modeling, workflow automation, content intelligence, and AI workflows.">
-    <link rel="stylesheet" href="../assets/css/styles.css?v=20260625a">
+    <meta name="description" content="A curated directory of Grant McCurdy's flagship analytics systems, technical evidence, and active public prototypes.">
+    <meta property="og:title" content="Projects | Grant McCurdy">
+    <meta property="og:description" content="Curated analytics, decision-support, data-system, and source-grounded AI projects with inspectable evidence.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://grant-mccurdy.github.io/projects/">
+    <meta property="og:image" content="https://grant-mccurdy.github.io/assets/images/workflow-hero-poster.jpg">
+    <link rel="canonical" href="https://grant-mccurdy.github.io/projects/">
+    <link rel="icon" href="../assets/images/grant-mccurdy-profile.jpg" type="image/jpeg">
+    <link rel="stylesheet" href="../assets/css/styles.css?v=20260717a">
   </head>
   <body>
     <header class="site-header compact" data-header>
       <nav class="nav-shell" aria-label="Primary navigation">
-        <a class="brand" href="../index.html">
+        <a class="brand" href="../index.html" aria-label="Grant McCurdy home">
           <span class="brand-mark" aria-hidden="true"><img src="../assets/images/grant-mccurdy-profile.jpg" alt=""></span>
           <span class="brand-text">Grant McCurdy</span>
         </a>
@@ -25,215 +32,111 @@
     </header>
 
     <main class="detail-main">
-      <section class="detail-hero">
+      <section class="detail-hero directory-hero">
         <p class="section-kicker">Project Directory</p>
-        <h1>Public project portfolio</h1>
-        <p>A compact index of the public systems behind this GitHub Pages portal, with project briefs, demos, case studies, and source links grouped in one place.</p>
+        <h1>Public systems, ordered for review</h1>
+        <p>Start with four completed, inspectable systems. Continue into statistical depth or active prototypes when those capabilities match the question you are evaluating.</p>
         <div class="hero-actions detail-actions">
-          <a class="button primary" href="../dashboard/assessment.html">Open Dashboard</a>
+          <a class="button primary" href="hotel-comp-policy-model/">Start With Hotel Comp</a>
+          <a class="button outline" href="../dashboard/assessment.html">Open Dashboard</a>
           <a class="button outline" href="../data-lab.html">Open Data Lab</a>
-          <a class="button outline" href="https://github.com/grant-mccurdy">GitHub Profile</a>
         </div>
       </section>
 
-      <section class="review-path-band" aria-labelledby="review-path-heading">
-        <div>
-          <p class="section-kicker">Recommended Review Path</p>
-          <h2 id="review-path-heading">Four stops for a fast portfolio read</h2>
+      <nav class="directory-jump" aria-label="Project groups">
+        <a href="#flagship">Flagship</a>
+        <a href="#technical-depth">Technical depth</a>
+        <a href="#active-prototypes">Active prototypes</a>
+      </nav>
+
+      <section class="section-shell portfolio-group" id="flagship" aria-labelledby="flagship-heading">
+        <div class="portfolio-group-heading">
+          <div>
+            <p class="section-kicker">Flagship</p>
+            <h2 id="flagship-heading">Best first review</h2>
+          </div>
+          <p>Working products with a clear decision surface, public-safe evidence, and a direct path into source.</p>
         </div>
-        <ol class="review-path-list">
-          <li>
-            <span>01</span>
-            <a href="hotel-comp-policy-model/">Open the hotel comp decision framework</a>
-          </li>
-          <li>
-            <span>02</span>
-            <a href="../dashboard/assessment.html">Open the assessment dashboard</a>
-          </li>
-          <li>
-            <span>03</span>
-            <a href="education-data-simulation-engine.html">Inspect the data foundation</a>
-          </li>
-          <li>
-            <span>04</span>
-            <a href="#graduate-statistics-portfolio">Check the statistics methods evidence</a>
-          </li>
-        </ol>
+        <div class="directory-grid">
+          <article class="directory-project" id="hotel-comp-policy-model" data-project-id="hotel-comp-policy-model">
+            <div class="directory-project-top"><span>Decision support</span><strong>Published brief + live desk</strong></div>
+            <h3>Hotel Comp Policy Model</h3>
+            <p>Five-policy comparison and shadow-validation recommendation balancing guest protection, manager judgment, operating constraints, and comp cost.</p>
+            <div class="link-row"><a class="text-link" href="hotel-comp-policy-model/">Decision brief</a><a class="text-link" href="https://hotel-comp-decision-desk.grant-mccurdy.workers.dev/">Live desk</a><a class="text-link" href="hotel-comp-policy-model/engineering-evidence.html">Engineering evidence</a></div>
+          </article>
+          <article class="directory-project" id="assessment-intelligence" data-project-id="assessment-intelligence">
+            <div class="directory-project-top"><span>Analytics product</span><strong>SQL extracts + dashboard</strong></div>
+            <h3>Assessment Intelligence</h3>
+            <p>SQL, R, and Python reporting path that turns synthetic assessment warehouse extracts into diagnostics and browser-ready decisions.</p>
+            <div class="link-row"><a class="text-link" href="assessment-intelligence.html">Project brief</a><a class="text-link" href="../dashboard/assessment.html">Dashboard</a><a class="text-link" href="https://github.com/grant-mccurdy/assessment-intelligence">Source</a></div>
+          </article>
+          <article class="directory-project" id="content-intelligence" data-project-id="content-intelligence">
+            <div class="directory-project-top"><span>Content systems</span><strong>Live cited retrieval</strong></div>
+            <h3>Content Intelligence</h3>
+            <p>Artifact-to-RAG pipeline with source adapters, transcript/OCR cleanup, reviewed information objects, retrieval records, and cited outputs.</p>
+            <div class="link-row"><a class="text-link" href="content-intelligence.html">Project brief</a><a class="text-link" href="content-intelligence.html#live-rag">Live RAG</a><a class="text-link" href="https://github.com/grant-mccurdy/content-intelligence">Source</a></div>
+          </article>
+          <article class="directory-project" id="education-data-simulation-engine" data-project-id="education-data-simulation-engine">
+            <div class="directory-project-top"><span>Data foundation</span><strong>Validated synthetic warehouse</strong></div>
+            <h3>Education Data Simulation Engine</h3>
+            <p>Public-safe simulation, validation, SQL-ready records, and reporting marts that support analytics prototypes without exposing private data.</p>
+            <div class="link-row"><a class="text-link" href="education-data-simulation-engine.html">Project brief</a><a class="text-link" href="../data-lab.html">Data Lab</a><a class="text-link" href="https://github.com/grant-mccurdy/education-data-simulation-engine">Source</a></div>
+          </article>
+        </div>
       </section>
 
-      <section class="section-shell study-stack" aria-label="Project directory">
-        <article class="study" id="hotel-comp-policy-model">
-          <span>01</span>
-          <div class="project-badge-row" aria-label="Project highlights">
-            <strong>Business decision</strong>
-            <strong>Hospitality analytics</strong>
+      <section class="portfolio-group-band" id="technical-depth" aria-labelledby="technical-depth-heading">
+        <div class="section-shell portfolio-group">
+          <div class="portfolio-group-heading">
+            <div><p class="section-kicker">Technical Depth</p><h2 id="technical-depth-heading">Methods and modeling evidence</h2></div>
+            <p>Focused artifacts for reviewers who want to inspect statistical reasoning, validation, and implementation details.</p>
           </div>
-          <h2>Hotel Comp Policy Model</h2>
-          <p>A practical decision framework for testing whether a luxury-hotel comp system can improve consistency while preserving guest recovery and manager judgment.</p>
-          <div class="study-meta" aria-label="Hotel comp policy model summary">
-            <div><span>Role</span><strong>Decision support</strong></div>
-            <div><span>Evidence</span><strong>Policy comparison and uncertainty</strong></div>
-            <div><span>Primary Deliverable</span><strong>Stakeholder decision framework</strong></div>
-            <div><span>Context</span><strong>Luxury hospitality</strong></div>
+          <div class="directory-grid directory-grid-two">
+            <article class="directory-project" id="statistical-risk-modeling-r" data-project-id="statistical-risk-modeling-r">
+              <div class="directory-project-top"><span>R analytics</span><strong>Model card + PDF report</strong></div>
+              <h3>Assessment Growth Analytics in R</h3>
+              <p>BOY/EOY growth modeling, expected-growth validation, adjusted section signals, diagnostics, and stakeholder reporting.</p>
+              <div class="link-row"><a class="text-link" href="statistical-risk-modeling-r.html">Evidence brief</a><a class="text-link" href="https://github.com/grant-mccurdy/statistical-risk-modeling-r">Source</a></div>
+            </article>
+            <article class="directory-project" id="graduate-statistics-portfolio" data-project-id="graduate-statistics-portfolio">
+              <div class="directory-project-top"><span>Statistical methods</span><strong>Curated methods index</strong></div>
+              <h3>Graduate Statistics Portfolio</h3>
+              <p>Public-safe methods evidence covering nonlinear search, Fourier terms, GLMs, repeated cross-validation, calibration, thresholds, and diagnostics.</p>
+              <div class="link-row"><a class="text-link" href="graduate-statistics-portfolio.html">Methods evidence</a><a class="text-link" href="https://github.com/grant-mccurdy/graduate-statistics-portfolio">Source</a></div>
+            </article>
           </div>
-          <div class="link-row">
-            <a class="text-link" href="hotel-comp-policy-model/">Open executive brief</a>
-            <a class="text-link" href="hotel-comp-policy-model/technical-appendix.html">Read technical appendix</a>
-            <a class="text-link" href="https://hotel-comp-decision-desk.grant-mccurdy.workers.dev/">Open Decision Desk</a>
-          </div>
-        </article>
+        </div>
+      </section>
 
-        <article class="study" id="education-data-simulation-engine">
-          <span>02</span>
-          <div class="project-badge-row" aria-label="Project highlights">
-            <strong>Best source</strong>
-            <strong>Data foundation</strong>
-          </div>
-          <h2>Education Data Simulation Engine</h2>
-          <p>Public-safe simulation, validation, SQL-ready data, and reporting marts for education analytics prototypes.</p>
-          <div class="study-meta" aria-label="Education data simulation summary">
-            <div><span>Role</span><strong>Data foundation</strong></div>
-            <div><span>Evidence</span><strong>Synthetic warehouse</strong></div>
-            <div><span>Primary Demo</span><strong>Data Lab</strong></div>
-            <div><span>Source</span><strong>Dedicated repo</strong></div>
-          </div>
-          <div class="link-row">
-            <a class="text-link" href="education-data-simulation-engine.html">Open brief</a>
-            <a class="text-link" href="../data-lab.html">Open Data Lab</a>
-            <a class="text-link" href="https://github.com/grant-mccurdy/education-data-simulation-engine">Source repo</a>
-          </div>
-        </article>
-
-        <article class="study" id="assessment-intelligence">
-          <span>03</span>
-          <div class="project-badge-row" aria-label="Project highlights">
-            <strong>Best demo</strong>
-            <strong>Analytics product</strong>
-          </div>
-          <h2>Assessment Intelligence</h2>
-          <p>SQL/R/Python extracts, diagnostics, dashboards, and reporting patterns that turn synthetic assessment records into reviewable decisions.</p>
-          <div class="study-meta" aria-label="Assessment intelligence summary">
-            <div><span>Role</span><strong>Analytics product</strong></div>
-            <div><span>Evidence</span><strong>SQL extracts and R reports</strong></div>
-            <div><span>Primary Demo</span><strong>Assessment dashboard</strong></div>
-            <div><span>Source</span><strong>Dedicated repo</strong></div>
-          </div>
-          <div class="link-row">
-            <a class="text-link" href="assessment-intelligence.html">Open brief</a>
-            <a class="text-link" href="../dashboard/assessment.html">Open dashboard</a>
-            <a class="text-link" href="../case-studies/assessment-reporting.html">Case study</a>
-            <a class="text-link" href="https://github.com/grant-mccurdy/assessment-intelligence">Source repo</a>
-          </div>
-        </article>
-
-        <article class="study" id="statistical-risk-modeling-r">
-          <span>04</span>
-          <div class="project-badge-row" aria-label="Project highlights">
-            <strong>Best report</strong>
-            <strong>R evidence</strong>
-          </div>
-          <h2>Assessment Growth Analytics in R</h2>
-          <p>BOY/EOY growth modeling, adjusted section performance signals, validation diagnostics, and stakeholder-facing R reporting.</p>
-          <div class="study-meta" aria-label="Assessment growth analytics summary">
-            <div><span>Role</span><strong>Statistical analytics</strong></div>
-            <div><span>Evidence</span><strong>PDF report and model card</strong></div>
-            <div><span>Primary Demo</span><strong>Source artifacts</strong></div>
-            <div><span>Source</span><strong>Dedicated repo</strong></div>
-          </div>
-          <div class="link-row">
-            <a class="text-link" href="statistical-risk-modeling-r.html">Open brief</a>
-            <a class="text-link" href="https://github.com/grant-mccurdy/statistical-risk-modeling-r/blob/main/reports/assessment_growth_section_performance_report.pdf">PDF report</a>
-            <a class="text-link" href="https://github.com/grant-mccurdy/statistical-risk-modeling-r/blob/main/reports/executive_brief.md">Executive brief</a>
-            <a class="text-link" href="https://github.com/grant-mccurdy/statistical-risk-modeling-r">Source repo</a>
-          </div>
-        </article>
-
-        <aside class="detail-panel methods-evidence" id="graduate-statistics-portfolio" aria-labelledby="graduate-statistics-methods-heading">
-          <p class="section-kicker">Supporting Methods Evidence</p>
-          <h2 id="graduate-statistics-methods-heading">Statistical methods behind the R work</h2>
-          <p>This public-safe coursework derivative is an aside for reviewers who want to inspect the statistical methods I apply in analysis: nonlinear model search, Fourier terms, staged GLMs, repeated cross-validation, calibration, thresholds, and diagnostics.</p>
-          <div class="link-row">
-            <a class="text-link" href="graduate-statistics-portfolio.html">Open methods evidence</a>
-            <a class="text-link" href="https://github.com/grant-mccurdy/graduate-statistics-portfolio/blob/main/docs/skills-index.md">Skills index</a>
-            <a class="text-link" href="https://github.com/grant-mccurdy/graduate-statistics-portfolio">Source repo</a>
-          </div>
-        </aside>
-
-        <article class="study" id="assessment-to-remediation-pipeline">
-          <span>05</span>
-          <div class="project-badge-row" aria-label="Project highlights">
-            <strong>Workflow system</strong>
-          </div>
-          <h2>Assessment-to-Remediation Pipeline</h2>
-          <p>Diagnostic design, review gates, dry-run Canvas payloads, feedback, follow-up actions, and remediation evidence tracking.</p>
-          <div class="study-meta" aria-label="Assessment remediation summary">
-            <div><span>Role</span><strong>Workflow automation</strong></div>
-            <div><span>Evidence</span><strong>Review-gated packets</strong></div>
-            <div><span>Primary Demo</span><strong>Project brief</strong></div>
-            <div><span>Source</span><strong>Public workspace folder</strong></div>
-          </div>
-          <div class="link-row">
-            <a class="text-link" href="assessment-to-remediation-pipeline.html">Open brief</a>
-            <a class="text-link" href="https://github.com/grant-mccurdy/public-workspace/tree/main/assessment-to-remediation-pipeline">Source folder</a>
-          </div>
-        </article>
-
-        <article class="study" id="content-intelligence">
-          <span>06</span>
-          <div class="project-badge-row" aria-label="Project highlights">
-            <strong>Best case study</strong>
-            <strong>Source-grounded</strong>
-          </div>
-          <h2>Content Intelligence</h2>
-          <p>Artifact-to-RAG pipeline with source adapters, transcript/OCR cleanup, safety-reviewed information objects, retrieval records, and cited outputs.</p>
-          <div class="study-meta" aria-label="Content intelligence summary">
-            <div><span>Role</span><strong>Content systems</strong></div>
-            <div><span>Evidence</span><strong>RAG-ready index</strong></div>
-            <div><span>Primary Demo</span><strong>Workflow brief</strong></div>
-            <div><span>Source</span><strong>Dedicated repo</strong></div>
-          </div>
-          <div class="link-row">
-            <a class="text-link" href="content-intelligence.html">Open brief</a>
-            <a class="text-link" href="content-intelligence-demo-report.html">View demo report</a>
-            <a class="text-link" href="../case-studies/content-intelligence.html">Case study</a>
-            <a class="text-link" href="https://github.com/grant-mccurdy/content-intelligence">Source repo</a>
-          </div>
-        </article>
-
-        <article class="study" id="instructional-ai-workflows">
-          <span>07</span>
-          <div class="project-badge-row" aria-label="Project highlights">
-            <strong>AI workflow</strong>
-            <strong>Human review</strong>
-          </div>
-          <h2>Instructional AI Workflows</h2>
-          <p>Human-reviewed rubric evidence, feedback drafts, review packets, and remediation action artifacts for instructional workflows.</p>
-          <div class="study-meta" aria-label="Instructional AI workflow summary">
-            <div><span>Role</span><strong>AI workflow controls</strong></div>
-            <div><span>Evidence</span><strong>Reviewed output packets</strong></div>
-            <div><span>Primary Demo</span><strong>Sample outputs</strong></div>
-            <div><span>Source</span><strong>Dedicated repo</strong></div>
-          </div>
-          <div class="link-row">
-            <a class="text-link" href="instructional-ai-workflows.html">Open brief</a>
-            <a class="text-link" href="../case-studies/instructional-ai-workflows.html">Case study</a>
-            <a class="text-link" href="https://github.com/grant-mccurdy/instructional-ai-workflows/tree/main/sample_outputs/precalculus_frq">Demo outputs</a>
-            <a class="text-link" href="https://github.com/grant-mccurdy/instructional-ai-workflows">Source repo</a>
-          </div>
-        </article>
+      <section class="section-shell portfolio-group" id="active-prototypes" aria-labelledby="active-prototypes-heading">
+        <div class="portfolio-group-heading">
+          <div><p class="section-kicker">Active Prototypes</p><h2 id="active-prototypes-heading">Review-gated workflow builds</h2></div>
+          <p>Presentable work in progress with explicit boundaries. These pages demonstrate architecture and controls, not production deployment claims.</p>
+        </div>
+        <div class="directory-grid directory-grid-two">
+          <article class="directory-project" id="assessment-to-remediation-pipeline" data-project-id="assessment-to-remediation-pipeline">
+            <div class="directory-project-top"><span>Workflow automation</span><strong>Prototype | review gated</strong></div>
+            <h3>Assessment-to-Remediation Pipeline</h3>
+            <p>Diagnostic design, dry-run LMS payloads, review gates, feedback, follow-up actions, and remediation evidence tracking.</p>
+            <div class="link-row"><a class="text-link" href="assessment-to-remediation-pipeline.html">Prototype brief</a><a class="text-link" href="https://github.com/grant-mccurdy/public-workspace/tree/main/assessment-to-remediation-pipeline">Source folder</a></div>
+          </article>
+          <article class="directory-project" id="instructional-ai-workflows" data-project-id="instructional-ai-workflows">
+            <div class="directory-project-top"><span>Human-reviewed AI</span><strong>Prototype | sample packets</strong></div>
+            <h3>Instructional AI Workflows</h3>
+            <p>Rubric evidence, feedback drafts, reviewer packets, and remediation actions that keep educator judgment explicit.</p>
+            <div class="link-row"><a class="text-link" href="instructional-ai-workflows.html">Prototype brief</a><a class="text-link" href="../case-studies/instructional-ai-workflows.html">Case study</a><a class="text-link" href="https://github.com/grant-mccurdy/instructional-ai-workflows">Source</a></div>
+          </article>
+        </div>
       </section>
 
       <section class="intro-band" aria-labelledby="supporting-artifacts-heading">
         <div class="section-shell intro-grid">
-          <div>
-            <p class="section-kicker">Supporting Artifacts</p>
-            <h2 id="supporting-artifacts-heading">Reports that support the project briefs</h2>
-          </div>
-          <p>Use the <a class="text-link" href="assessment-gradebook-synthesis.html">Assessment Gradebook Synthesis</a> and <a class="text-link" href="content-intelligence-demo-report.html">Content Intelligence Demo Report</a> pages as rendered evidence for the larger project systems rather than as separate top-level projects.</p>
+          <div><p class="section-kicker">Supporting Artifacts</p><h2 id="supporting-artifacts-heading">Reports belong with their systems</h2></div>
+          <p>The <a class="text-link" href="assessment-gradebook-synthesis.html">gradebook synthesis</a> and <a class="text-link" href="content-intelligence-demo-report.html">content demo report</a> are evidence for larger projects, so they remain discoverable without competing as separate portfolio entries.</p>
         </div>
       </section>
     </main>
 
-    <script src="../assets/js/site.js"></script>
+    <script src="../assets/js/site.js?v=20260717a"></script>
   </body>
 </html>

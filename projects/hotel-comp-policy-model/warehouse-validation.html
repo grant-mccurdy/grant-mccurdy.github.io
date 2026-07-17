@@ -5,8 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Reconciliation checks between the local analytical build and its Snowflake implementation.">
     <title>Warehouse validation | Hotel Comp Policy Model</title>
-    <link rel="stylesheet" href="../../assets/css/styles.css?v=20260710a">
-    <link rel="stylesheet" href="appendix.css?v=20260710a">
+    <meta property="og:title" content="Warehouse validation | Hotel Comp Policy Model">
+    <meta property="og:description" content="Reconciliation checks between the local analytical build and its Snowflake implementation.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://grant-mccurdy.github.io/projects/hotel-comp-policy-model/warehouse-validation.html">
+    <meta property="og:image" content="https://grant-mccurdy.github.io/assets/images/workflow-hero-poster.jpg">
+    <link rel="canonical" href="https://grant-mccurdy.github.io/projects/hotel-comp-policy-model/warehouse-validation.html">
+    <link rel="icon" href="../../assets/images/grant-mccurdy-profile.jpg" type="image/jpeg">
+    <link rel="stylesheet" href="../../assets/css/styles.css?v=20260717a">
+    <link rel="stylesheet" href="appendix.css?v=20260717a">
   </head>
   <body>
     <header class="site-header compact" data-header>
@@ -19,13 +26,14 @@
           <a href="index.html">Decision Brief</a>
           <a href="simulation-audit.html">Simulation Audit</a>
           <a href="../index.html">Projects</a>
+          <a href="https://github.com/grant-mccurdy/hotel-comp-policy-model">Source</a>
         </div>
       </nav>
     </header>
 
     <main class="report-main">
       <section class="report-hero">
-        <p class="section-kicker">Hotel Comp Policy Model · Technical Evidence</p>
+        <p class="section-kicker">Hotel Comp Policy Model | Technical Evidence</p>
         <h1>Warehouse validation</h1>
         <p>Reconciliation checks between the local analytical build and its Snowflake implementation.</p>
         <div class="report-actions">
@@ -45,6 +53,6 @@
           <p>Table checks reconcile Snowflake row counts to the generated public-safe artifacts. View checks confirm the analytic layer is queryable. Semantic checks verify policy grain, selection uniqueness, simulation-rate and cost bounds, selected-policy parity, safety guardrails, typed MARTS columns, and suppression behavior.</p>
       </article>
     </main>
-    <script src="../../assets/js/site.js"></script>
+    <script src="../../assets/js/site.js?v=20260717a"></script>
   </body>
 </html>

@@ -6,8 +6,8 @@ positioning of the project work.
 
 ## Core Positioning
 
-Grant McCurdy presents a systems portfolio focused on data systems, analytics
-products, AI-assisted workflows, workflow automation, and content intelligence.
+Grant McCurdy presents an analytics and systems portfolio focused on decision
+support, data products, statistical modeling, and source-grounded AI workflows.
 The common pattern across the portfolio is turning messy information into
 usable decisions, reviewable artifacts, and inspectable operations.
 
@@ -21,6 +21,8 @@ The short public positioning statement is:
 
 Grant's public portfolio emphasizes:
 
+- hospitality decision support with policy comparison, uncertainty, and
+  controlled shadow-validation design;
 - public-safe synthetic data foundations for education analytics prototypes;
 - SQL-ready warehouse and reporting marts;
 - assessment-growth analytics in R with expected-growth modeling,
@@ -52,7 +54,8 @@ publicly supported themes:
 ## How To Answer About Grant
 
 Use restrained public wording. The helper may say that Grant's portfolio shows
-work in data systems, analytics products, education-data simulation,
+work in business decision support, data systems, analytics products,
+education-data simulation,
 assessment-growth analytics, assessment/reporting workflows, instructional AI
 workflows, and source-grounded content intelligence.
 
@@ -64,6 +67,7 @@ that the public helper can only answer from the portfolio sources.
 ## Best Evidence Pages
 
 - Homepage: https://grant-mccurdy.github.io/
+- Hotel Comp Policy Model: https://grant-mccurdy.github.io/projects/hotel-comp-policy-model/
 - Portfolio Data Lab: https://grant-mccurdy.github.io/data-lab.html
 - Analytics dashboard: https://grant-mccurdy.github.io/dashboard/assessment.html
 - Education Data Simulation Engine: https://grant-mccurdy.github.io/projects/education-data-simulation-engine.html

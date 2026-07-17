@@ -1,0 +1,52 @@
+{
+  "schemaVersion": "assessment-dashboard-manifest-v1",
+  "contract": "sql-extract-dashboard-json-v1",
+  "generatedAt": "2026-07-17T19:04:12Z",
+  "dashboard": {
+    "path": "data/synthetic/assessment-dashboard.json",
+    "bytes": 2707933,
+    "sha256": "a686fc8f1b8497d60b985de918fd5ff1674a294a111e625eb7e4288c5f34bfe0",
+    "recordCounts": {
+      "periods": 14,
+      "sections": 174,
+      "aggregateRecords": 348,
+      "syntheticStudentRecords": 4018,
+      "courseSectionPerformanceRows": 348,
+      "courseGrowthRows": 27,
+      "nonparticipationRows": 462,
+      "rosterReconciliationRows": 174,
+      "studentReadinessRows": 2009
+    }
+  },
+  "builder": {
+    "path": "scripts/build_sql_dashboard_json.py",
+    "sha256": "bbeca4b91fdb8a88a54fb6b447d577c0b7ba968ee1c7b13172cceac8a10a5f3b"
+  },
+  "extracts": [
+    {
+      "name": "course_section_performance.csv",
+      "rows": 348,
+      "sha256": "ede72402892054e00dc407e8407dd3e7204feddda54f6bc14965a00300f372ea"
+    },
+    {
+      "name": "assignment_growth_by_course.csv",
+      "rows": 27,
+      "sha256": "6efddd00a725466cda9ad3b269fa8298194e11bfc53e3b017502f85884700975"
+    },
+    {
+      "name": "nonparticipation_by_group.csv",
+      "rows": 462,
+      "sha256": "ce56966e3350c0163ed1e0b95682f806a71f2213d6b84b828f151df965ef6bf8"
+    },
+    {
+      "name": "lms_enrollment_reconciliation.csv",
+      "rows": 174,
+      "sha256": "594133a98214356c18183fd1350ec0c1aa71078c194005b4c2509ab36acbd74f"
+    },
+    {
+      "name": "student_readiness_extract.csv",
+      "rows": 2009,
+      "sha256": "a7a4b7e8fccb7046da3c23e54cd9330a4a6264343ead5d0f4acdd79730d4ca46"
+    }
+  ]
+}

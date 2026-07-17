@@ -3,7 +3,7 @@
   "site": {
     "title": "Grant McCurdy Systems Portfolio",
     "url": "https://grant-mccurdy.github.io/",
-    "summary": "A public portfolio for data systems, analytics products, AI-assisted workflows, workflow automation, and content intelligence."
+    "summary": "A curated public portfolio for decision support, analytics products, validated data systems, statistical modeling, and source-grounded AI workflows."
   },
   "projects": [
     {
@@ -91,7 +91,7 @@
   "routingRules": [
     {
       "intent": "visitor wants a quick overview",
-      "recommend": ["homepage", "analytics-dashboard", "portfolio-data-lab"]
+      "recommend": ["hotel-comp-policy-model", "analytics-dashboard", "portfolio-data-lab", "content-intelligence"]
     },
     {
       "intent": "visitor asks about statistics or computation over education data",

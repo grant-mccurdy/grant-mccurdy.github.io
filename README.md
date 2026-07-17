@@ -14,7 +14,7 @@ This repo is the presentation layer. It links to the project repositories and pr
 
 It should not contain all project source code, raw data, private Canvas extracts, student records, transcripts, or private workflow artifacts.
 
-## Planned Structure
+## Repository Structure
 
 ```text
 grant-mccurdy.github.io/
@@ -36,6 +36,10 @@ grant-mccurdy.github.io/
 - `docs/github-profile/repository-metadata.md` records the recommended public repo descriptions, topics, homepages, and profile setup commands.
 - `assets/css/styles.css` controls the visual system.
 - `assets/js/site.js` controls the mobile navigation and header state.
+- `data/portfolio-projects.json` is the curated project registry; repositories
+  are never added to the public directory automatically.
+- `data/synthetic/assessment-dashboard.manifest.json` binds the hosted
+  assessment dashboard to its source extracts and builder.
 - `scripts/publish_hotel_comp_site.py` converts the approved stakeholder report, simulation audit, and Markdown evidence from the separately maintained hotel-comp project into a public-safe static Pages bundle.
 - `assets/js/data-lab.js` renders analytic response blocks from the private backend. Configure the endpoint through the `data-api-endpoint` attribute after Worker deployment, or use an `endpoint` query parameter for local testing.
 - `assets/video/workflow-hero.mp4` is the muted, grayscale homepage hero loop generated from the latest local workflow recording.
@@ -64,6 +68,12 @@ Run local checks:
 ```bash
 make check
 ```
+
+The check suite validates local links and fragments, curated project inventory,
+assessment publication integrity, dashboard logic, and responsive browser
+rendering. GitHub Actions runs the same suite for pull requests and main-branch
+updates; external links run on a separate schedule because third-party hosts can
+be transient.
 
 External GitHub links require network access and are checked separately:
 

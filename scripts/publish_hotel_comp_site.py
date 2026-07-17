@@ -13,6 +13,8 @@ from urllib.parse import urlparse
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_SOURCE = ROOT.parent / "hotel-comp-policy-model"
 OUTPUT_DIR = ROOT / "projects" / "hotel-comp-policy-model"
+PUBLIC_BASE = "https://grant-mccurdy.github.io/projects/hotel-comp-policy-model"
+SOURCE_URL = "https://github.com/grant-mccurdy/hotel-comp-policy-model"
 
 REPORTS = {
     "engineering-evidence.md": (
@@ -236,7 +238,8 @@ def render_markdown(markdown: str) -> str:
     return "\n          ".join(output)
 
 
-def report_page(title: str, description: str, content: str) -> str:
+def report_page(output_name: str, title: str, description: str, content: str) -> str:
+    canonical_url = f"{PUBLIC_BASE}/{output_name}"
     return f"""<!doctype html>
 <html lang="en">
   <head>
@@ -244,8 +247,15 @@ def report_page(title: str, description: str, content: str) -> str:
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="{html.escape(description, quote=True)}">
     <title>{html.escape(title)} | Hotel Comp Policy Model</title>
-    <link rel="stylesheet" href="../../assets/css/styles.css?v=20260710a">
-    <link rel="stylesheet" href="appendix.css?v=20260710a">
+    <meta property="og:title" content="{html.escape(title, quote=True)} | Hotel Comp Policy Model">
+    <meta property="og:description" content="{html.escape(description, quote=True)}">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="{canonical_url}">
+    <meta property="og:image" content="https://grant-mccurdy.github.io/assets/images/workflow-hero-poster.jpg">
+    <link rel="canonical" href="{canonical_url}">
+    <link rel="icon" href="../../assets/images/grant-mccurdy-profile.jpg" type="image/jpeg">
+    <link rel="stylesheet" href="../../assets/css/styles.css?v=20260717a">
+    <link rel="stylesheet" href="appendix.css?v=20260717a">
   </head>
   <body>
     <header class="site-header compact" data-header>
@@ -258,13 +268,14 @@ def report_page(title: str, description: str, content: str) -> str:
           <a href="index.html">Decision Brief</a>
           <a href="simulation-audit.html">Simulation Audit</a>
           <a href="../index.html">Projects</a>
+          <a href="{SOURCE_URL}">Source</a>
         </div>
       </nav>
     </header>
 
     <main class="report-main">
       <section class="report-hero">
-        <p class="section-kicker">Hotel Comp Policy Model · Technical Evidence</p>
+        <p class="section-kicker">Hotel Comp Policy Model | Technical Evidence</p>
         <h1>{html.escape(title)}</h1>
         <p>{html.escape(description)}</p>
         <div class="report-actions">
@@ -277,7 +288,7 @@ def report_page(title: str, description: str, content: str) -> str:
           {content}
       </article>
     </main>
-    <script src="../../assets/js/site.js"></script>
+    <script src="../../assets/js/site.js?v=20260717a"></script>
   </body>
 </html>
 """
@@ -325,6 +336,50 @@ def rewrite_report_links(source: str) -> str:
     for old, new in LINK_REWRITES.items():
         source = source.replace(old, new)
     return source
+
+
+def add_standalone_wayfinding(
+    source: str, output_name: str, title: str, description: str
+) -> str:
+    canonical_url = f"{PUBLIC_BASE}/" if output_name == "index.html" else f"{PUBLIC_BASE}/{output_name}"
+    if '<meta name="description"' not in source:
+        source = source.replace(
+            '<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">',
+            '<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">\n'
+            f'<meta name="description" content="{html.escape(description, quote=True)}">',
+            1,
+        )
+        source = source.replace(
+            '<meta name="viewport" content="width=device-width, initial-scale=1">',
+            '<meta name="viewport" content="width=device-width, initial-scale=1">\n'
+            f'  <meta name="description" content="{html.escape(description, quote=True)}">',
+            1,
+        )
+
+    metadata = f"""
+<meta property="og:title" content="{html.escape(title, quote=True)} | Hotel Comp Policy Model">
+<meta property="og:description" content="{html.escape(description, quote=True)}">
+<meta property="og:type" content="article">
+<meta property="og:url" content="{canonical_url}">
+<meta property="og:image" content="https://grant-mccurdy.github.io/assets/images/workflow-hero-poster.jpg">
+<link rel="canonical" href="{canonical_url}">
+<link rel="icon" href="../../assets/images/grant-mccurdy-profile.jpg" type="image/jpeg">
+<style id="portfolio-context-styles">
+.portfolio-context {{ position:relative;z-index:20;display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;padding:10px max(20px,calc((100% - 1120px)/2));border-bottom:1px solid #d7ddda;background:#fff;color:#17201d;font:700 13px/1.4 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif; }}
+.portfolio-context a {{ color:inherit;text-decoration:underline;text-underline-offset:3px; }}
+.portfolio-context strong {{ margin-right:auto; }}
+@media(max-width:620px) {{ .portfolio-context {{ padding:10px 15px; }} .portfolio-context strong {{ width:100%; }} }}
+</style>"""
+    source = source.replace("</head>", metadata + "\n</head>", 1)
+    wayfinding = f"""<nav class="portfolio-context" aria-label="Hotel project navigation">
+  <strong>Hotel Comp Policy Model</strong>
+  <a href="index.html">Decision brief</a>
+  <a href="https://hotel-comp-decision-desk.grant-mccurdy.workers.dev/">Live desk</a>
+  <a href="../index.html">Project directory</a>
+  <a href="../../index.html">Portfolio home</a>
+  <a href="{SOURCE_URL}">Source</a>
+</nav>"""
+    return re.sub(r"(<body(?:\s[^>]*)?>)", r"\1\n" + wayfinding, source, count=1)
 
 
 def transform_technical_prototype(source: str) -> str:
@@ -400,22 +455,42 @@ def main() -> int:
         raise FileNotFoundError("Missing approved source artifacts:\n" + "\n".join(missing))
 
     files: dict[str, str] = {
-        "index.html": rewrite_report_links((source_dir / "index.html").read_text(encoding="utf-8")),
-        "technical-appendix.html": transform_policy_appendix(
-            (source_dir / "reports" / "policy-selection-technical-appendix.html").read_text(encoding="utf-8")
+        "index.html": add_standalone_wayfinding(
+            rewrite_report_links((source_dir / "index.html").read_text(encoding="utf-8")),
+            "index.html",
+            "A Comp Decision Engine for Luxury Hotel Service Recovery",
+            "Executive decision brief comparing five explainable hotel comp policies and a controlled shadow-validation recommendation.",
         ),
-        "technical-prototype.html": transform_technical_prototype(
-            (source_dir / "reports" / "interactive-policy-prototype.html").read_text(encoding="utf-8")
+        "technical-appendix.html": add_standalone_wayfinding(
+            transform_policy_appendix(
+                (source_dir / "reports" / "policy-selection-technical-appendix.html").read_text(encoding="utf-8")
+            ),
+            "technical-appendix.html",
+            "Policy Selection Methodology",
+            "Technical appendix for the hotel comp policy comparison, selection logic, uncertainty, and validation design.",
         ),
-        "simulation-audit.html": transform_simulation_audit(
-            (source_dir / "reports" / "comp-optimization-dashboard.html").read_text(encoding="utf-8")
+        "technical-prototype.html": add_standalone_wayfinding(
+            transform_technical_prototype(
+                (source_dir / "reports" / "interactive-policy-prototype.html").read_text(encoding="utf-8")
+            ),
+            "technical-prototype.html",
+            "Which Comp Policy Should Enter Shadow Validation?",
+            "Interactive technical prototype for an explainable luxury-hospitality service recovery decision.",
+        ),
+        "simulation-audit.html": add_standalone_wayfinding(
+            transform_simulation_audit(
+                (source_dir / "reports" / "comp-optimization-dashboard.html").read_text(encoding="utf-8")
+            ),
+            "simulation-audit.html",
+            "Comp Policy Simulation Audit",
+            "Synthetic service-recovery policy audit supporting a controlled hotel comp shadow-validation decision.",
         ),
         "appendix.css": APPENDIX_CSS,
     }
 
     for source_name, (output_name, title, description) in REPORTS.items():
         markdown = (source_dir / "reports" / source_name).read_text(encoding="utf-8")
-        files[output_name] = report_page(title, description, render_markdown(markdown))
+        files[output_name] = report_page(output_name, title, description, render_markdown(markdown))
 
     validate_publication(files)
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
