@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "policy": "Curated public portfolio entries only. Public repositories are never added automatically.",
+  "projects": [
+    {
+      "id": "hotel-comp-policy-model",
+      "title": "Hotel Comp Policy Model",
+      "tier": "flagship",
+      "statusLabel": "Published brief + live desk",
+      "homeFeatured": true,
+      "portalPath": "projects/hotel-comp-policy-model/",
+      "sourceUrl": "https://github.com/grant-mccurdy/hotel-comp-policy-model",
+      "primaryEvidenceUrl": "https://hotel-comp-decision-desk.grant-mccurdy.workers.dev/"
+    },
+    {
+      "id": "assessment-intelligence",
+      "title": "Assessment Intelligence",
+      "tier": "flagship",
+      "statusLabel": "SQL extracts + dashboard",
+      "homeFeatured": true,
+      "portalPath": "projects/assessment-intelligence.html",
+      "sourceUrl": "https://github.com/grant-mccurdy/assessment-intelligence",
+      "primaryEvidenceUrl": "dashboard/assessment.html"
+    },
+    {
+      "id": "content-intelligence",
+      "title": "Content Intelligence",
+      "tier": "flagship",
+      "statusLabel": "Live cited retrieval",
+      "homeFeatured": true,
+      "portalPath": "projects/content-intelligence.html",
+      "sourceUrl": "https://github.com/grant-mccurdy/content-intelligence",
+      "primaryEvidenceUrl": "projects/content-intelligence.html#live-rag"
+    },
+    {
+      "id": "education-data-simulation-engine",
+      "title": "Education Data Simulation Engine",
+      "tier": "flagship",
+      "statusLabel": "Validated synthetic warehouse",
+      "homeFeatured": true,
+      "portalPath": "projects/education-data-simulation-engine.html",
+      "sourceUrl": "https://github.com/grant-mccurdy/education-data-simulation-engine",
+      "primaryEvidenceUrl": "data-lab.html"
+    },
+    {
+      "id": "statistical-risk-modeling-r",
+      "title": "Assessment Growth Analytics in R",
+      "tier": "technical-depth",
+      "statusLabel": "Model card + PDF report",
+      "homeFeatured": false,
+      "portalPath": "projects/statistical-risk-modeling-r.html",
+      "sourceUrl": "https://github.com/grant-mccurdy/statistical-risk-modeling-r",
+      "primaryEvidenceUrl": "projects/statistical-risk-modeling-r.html"
+    },
+    {
+      "id": "graduate-statistics-portfolio",
+      "title": "Graduate Statistics Portfolio",
+      "tier": "technical-depth",
+      "statusLabel": "Curated methods index",
+      "homeFeatured": false,
+      "portalPath": "projects/graduate-statistics-portfolio.html",
+      "sourceUrl": "https://github.com/grant-mccurdy/graduate-statistics-portfolio",
+      "primaryEvidenceUrl": "projects/graduate-statistics-portfolio.html"
+    },
+    {
+      "id": "assessment-to-remediation-pipeline",
+      "title": "Assessment-to-Remediation Pipeline",
+      "tier": "active-prototype",
+      "statusLabel": "Prototype | review gated",
+      "homeFeatured": false,
+      "portalPath": "projects/assessment-to-remediation-pipeline.html",
+      "sourceUrl": "https://github.com/grant-mccurdy/public-workspace/tree/main/assessment-to-remediation-pipeline",
+      "primaryEvidenceUrl": "projects/assessment-to-remediation-pipeline.html"
+    },
+    {
+      "id": "instructional-ai-workflows",
+      "title": "Instructional AI Workflows",
+      "tier": "active-prototype",
+      "statusLabel": "Prototype | sample packets",
+      "homeFeatured": false,
+      "portalPath": "projects/instructional-ai-workflows.html",
+      "sourceUrl": "https://github.com/grant-mccurdy/instructional-ai-workflows",
+      "primaryEvidenceUrl": "projects/instructional-ai-workflows.html"
+    }
+  ]
+}

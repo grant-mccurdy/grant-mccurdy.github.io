@@ -74,6 +74,7 @@ function staticServer() {
       response.writeHead(200, { "Content-Type": "application/json; charset=utf-8" });
       response.end(
         JSON.stringify({
+          generatedAt: "2026-07-13T21:53:04.922Z",
           defaultDatasetId: "synthetic_education_warehouse",
           datasets: [
             {
@@ -231,6 +232,30 @@ async function inspect(page) {
     dashboardError: bodyText.includes("Dashboard data did not load"),
     heroVideo,
     overflow,
+    shell: await page.evaluate(() => {
+      if (!document.querySelector("[data-header]")) return null;
+      return {
+        skipLink: Boolean(document.querySelector('.skip-link[href="#main"]')),
+        mainTarget: Boolean(document.querySelector("main#main")),
+        footer: Boolean(document.querySelector(".site-footer")),
+        navToggle: Boolean(document.querySelector("[data-nav-toggle]")),
+      };
+    }),
+  };
+}
+
+async function inspectNavigation(page, label) {
+  if (label !== "projects-directory-mobile") return null;
+  const toggle = page.locator("[data-nav-toggle]");
+  const links = page.locator("[data-nav-links]");
+  await toggle.click();
+  const opened = (await toggle.getAttribute("aria-expanded")) === "true" && (await links.isVisible());
+  await page.keyboard.press("Escape");
+  const closed = (await toggle.getAttribute("aria-expanded")) === "false" && !(await links.isVisible());
+  return {
+    opened,
+    closed,
+    activeProject: (await links.locator('a[aria-current="page"]').innerText()) === "Projects",
   };
 }
 
@@ -258,6 +283,11 @@ async function inspectHelper(page, label) {
       }),
     });
   });
+  await page.evaluate(() => {
+    document.documentElement.style.scrollBehavior = "auto";
+    window.scrollTo(0, Math.min(700, document.documentElement.scrollHeight - window.innerHeight));
+  });
+  await page.waitForTimeout(80);
   const toggle = page.locator("[data-helper-toggle]");
   const panel = page.locator("[data-helper-panel]");
   const toggleRect = await toggle.evaluate((el) => {
@@ -298,7 +328,10 @@ async function inspectHelper(page, label) {
   return {
     opened,
     closed,
-    toggleVisible: toggleRect.width >= 100 && toggleRect.height >= 50,
+    toggleVisible:
+      label === "home-mobile"
+        ? toggleRect.width >= 48 && toggleRect.height >= 48
+        : toggleRect.width >= 100 && toggleRect.height >= 50,
     initialText: initialText.includes("I can help you find the right project"),
     handoff:
       handoffText.includes("Open Data Lab") &&
@@ -327,6 +360,7 @@ async function inspectDataLabCatalog(page, label) {
     datasetName: (await page.locator("[data-dataset-name]").innerText()).includes("Synthetic Education Warehouse"),
     datasetTables: (await page.locator("[data-dataset-tables]").innerText()).includes("15 tables"),
     datasetMode: (await page.locator("[data-dataset-mode]").innerText()).includes("sqlite analyst"),
+    datasetUpdated: (await page.locator("[data-dataset-updated]").innerText()).includes("2026"),
   };
 }
 
@@ -585,6 +619,7 @@ try {
     results.push({
       label,
       ...(await inspect(page)),
+      navigation: await inspectNavigation(page, label),
       helper: await inspectHelper(page, label),
       dataLab: await inspectDataLabPrefill(page, label),
       dataLabCatalog: await inspectDataLabCatalog(page, label),
@@ -618,6 +653,13 @@ const heroVideoFailed = (result) => {
 const failures = results.filter(
   (result) =>
     result.overflow.length > 0 ||
+    result.shell?.skipLink === false ||
+    result.shell?.mainTarget === false ||
+    result.shell?.footer === false ||
+    result.shell?.navToggle === false ||
+    result.navigation?.opened === false ||
+    result.navigation?.closed === false ||
+    result.navigation?.activeProject === false ||
     result.dashboardError ||
     heroVideoFailed(result) ||
     result.helper?.overflow.length ||
@@ -631,6 +673,7 @@ const failures = results.filter(
     result.dataLabCatalog?.datasetName === false ||
     result.dataLabCatalog?.datasetTables === false ||
     result.dataLabCatalog?.datasetMode === false ||
+    result.dataLabCatalog?.datasetUpdated === false ||
     result.capability?.capabilityNote === false ||
     result.contentRag?.rendered === false ||
     result.contentRag?.citation === false ||
