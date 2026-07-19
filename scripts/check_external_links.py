@@ -16,6 +16,9 @@ TIMEOUT_SECONDS = 20
 MAX_ATTEMPTS = 3
 SKIP_DIRS = {".git", "node_modules"}
 DOI_HOSTS = {"doi.org", "dx.doi.org"}
+AUTOMATION_BLOCKED_STATUSES = {
+    "https://www.linkedin.com/in/grant-mccurdy/": {999},
+}
 
 
 class LinkParser(HTMLParser):
@@ -65,6 +68,8 @@ def check_url(url: str) -> tuple[bool, str]:
             except HTTPError as error:
                 if is_doi and 300 <= error.code < 400:
                     return True, f"HTTP {error.code} DOI redirect"
+                if error.code in AUTOMATION_BLOCKED_STATUSES.get(url, set()):
+                    return True, f"HTTP {error.code} automation blocked"
                 transient_worker_404 = error.code == 404 and parsed.hostname and parsed.hostname.endswith(".workers.dev")
                 if method == "HEAD" and (error.code in {403, 405, 429} or transient_worker_404):
                     last_detail = f"HTTP {error.code}"
