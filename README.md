@@ -44,6 +44,7 @@ grant-mccurdy.github.io/
 - `assets/js/data-lab.js` renders analytic response blocks from the private backend. Configure the endpoint through the `data-api-endpoint` attribute after Worker deployment, or use an `endpoint` query parameter for local testing.
 - `assets/video/workflow-hero.mp4` is the muted, grayscale homepage hero loop generated from the latest local workflow recording.
 - `assets/images/workflow-hero-poster.jpg` is the static poster and reduced-motion fallback for the homepage hero.
+- `assets/images/social/` contains current 1280x640 review and social-preview captures for the curated portfolio surfaces.
 - `.nojekyll` keeps GitHub Pages from applying Jekyll processing.
 - `sitemap.xml` and `robots.txt` expose the public portal pages to crawlers.
 
@@ -107,3 +108,11 @@ Use only public-safe screenshots, synthetic data, generalized case-study languag
 - Assessment-to-Remediation Pipeline has an original 36-item math-readiness diagnostic, student and instructor previews, automated review artifacts, and offline Canvas New Quizzes payloads.
 - Instructional AI Workflows has an active synthetic Precalculus FRQ workflow demo with three evaluated examples, teacher review packets, student-facing feedback, and remediation planning output.
 - Internal link checks validate both local file paths and same-site HTML fragments.
+
+## Licensing
+
+- Site code is available under the [MIT License](LICENSE).
+- Original copy, documentation, and generated visual content are available under [CC BY 4.0](LICENSE-CONTENT.md).
+- Original synthetic data published with the dashboard are available under [CC BY 4.0](LICENSE-DATA.md).
+
+Third-party materials, trademarks, personal likenesses, and acquired source material are excluded unless explicitly stated otherwise.

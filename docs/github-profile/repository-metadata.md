@@ -14,6 +14,12 @@ Suggested website:
 https://grant-mccurdy.github.io/
 ```
 
+Public social account:
+
+```text
+https://www.linkedin.com/in/grant-mccurdy/
+```
+
 Suggested pinned repository order:
 
 1. `hotel-comp-policy-model`
@@ -54,7 +60,11 @@ gh repo edit grant-mccurdy/graduate-statistics-portfolio \
 
 gh repo edit grant-mccurdy/instructional-ai-workflows \
   --description "Human-reviewed workflow prototypes for rubric evidence, feedback drafting, reviewer packets, and remediation actions." \
-  --homepage "https://grant-mccurdy.github.io/projects/instructional-ai-workflows.html"
+  --homepage "https://grant-mccurdy.github.io/instructional-ai-workflows/"
+
+gh repo edit grant-mccurdy/assessment-to-remediation-pipeline \
+  --description "Review-gated math diagnostic authoring, static previews, public-safe LMS payloads, and remediation workflow design." \
+  --homepage "https://grant-mccurdy.github.io/assessment-to-remediation-pipeline/"
 
 gh repo edit grant-mccurdy/grant-mccurdy.github.io \
   --description "Curated portfolio portal for decision support, analytics systems, statistical modeling, and source-grounded AI workflows." \
@@ -99,6 +109,19 @@ gh repo edit grant-mccurdy/statistical-risk-modeling-r \
   --add-topic growth-modeling \
   --add-topic validation \
   --add-topic decision-support
+
+gh repo edit grant-mccurdy/assessment-to-remediation-pipeline \
+  --add-topic assessment \
+  --add-topic workflow-automation \
+  --add-topic synthetic-data \
+  --add-topic canvas-lms \
+  --add-topic human-in-the-loop
+
+gh repo edit grant-mccurdy/instructional-ai-workflows \
+  --add-topic instructional-design \
+  --add-topic human-in-the-loop \
+  --add-topic workflow-automation \
+  --add-topic synthetic-data
 
 gh repo edit grant-mccurdy/grant-mccurdy.github.io \
   --add-topic portfolio \
