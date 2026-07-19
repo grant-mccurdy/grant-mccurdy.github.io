@@ -69,8 +69,8 @@
       "statusLabel": "Prototype | review gated",
       "homeFeatured": false,
       "portalPath": "projects/assessment-to-remediation-pipeline.html",
-      "sourceUrl": "https://github.com/grant-mccurdy/public-workspace/tree/main/assessment-to-remediation-pipeline",
-      "primaryEvidenceUrl": "projects/assessment-to-remediation-pipeline.html"
+      "sourceUrl": "https://github.com/grant-mccurdy/assessment-to-remediation-pipeline",
+      "primaryEvidenceUrl": "https://grant-mccurdy.github.io/assessment-to-remediation-pipeline/"
     },
     {
       "id": "instructional-ai-workflows",
@@ -80,7 +80,7 @@
       "homeFeatured": false,
       "portalPath": "projects/instructional-ai-workflows.html",
       "sourceUrl": "https://github.com/grant-mccurdy/instructional-ai-workflows",
-      "primaryEvidenceUrl": "projects/instructional-ai-workflows.html"
+      "primaryEvidenceUrl": "https://grant-mccurdy.github.io/instructional-ai-workflows/"
     }
   ]
 }

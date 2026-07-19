@@ -10,6 +10,7 @@ const navLinks = document.querySelector(".nav-links");
 const revealItems = Array.from(document.querySelectorAll("[data-reveal]"));
 const playbackVideos = Array.from(document.querySelectorAll("video[data-playback-rate]"));
 const portfolioHelper = document.querySelector("[data-portfolio-helper]");
+const portfolioEventsEndpoint = "https://portfolio-rag-api.grant-mccurdy.workers.dev/events";
 
 if (main && !main.id) {
   main.id = "main";
@@ -102,7 +103,8 @@ if (!document.querySelector(".site-footer")) {
         <a href="${siteUrl("dashboard/assessment.html")}">Dashboard</a>
         <a href="${siteUrl("data-lab.html")}">Data Lab</a>
         <a href="${siteUrl("case-studies/index.html")}">Case Studies</a>
-        <a href="https://github.com/grant-mccurdy">GitHub</a>
+        <a href="https://github.com/grant-mccurdy" data-track-project="portfolio" data-track-destination="source">GitHub</a>
+        <a href="https://www.linkedin.com/in/grant-mccurdy/" data-track-project="linkedin" data-track-destination="linkedin">LinkedIn</a>
       </div>
     </div>`;
   document.body.append(footer);
@@ -110,6 +112,28 @@ if (!document.querySelector(".site-footer")) {
 
 document.querySelectorAll("[data-year]").forEach((year) => {
   year.textContent = new Date().getFullYear();
+});
+
+document.addEventListener("click", (event) => {
+  if (!(event.target instanceof Element)) return;
+  const link = event.target.closest("a[data-track-project][data-track-destination]");
+  if (!link) return;
+  const payload = JSON.stringify({
+    schemaVersion: "portfolio-event-v1",
+    event: "portfolio_click",
+    pagePath: window.location.pathname,
+    projectId: link.dataset.trackProject,
+    destinationType: link.dataset.trackDestination,
+  });
+  if (navigator.sendBeacon) {
+    navigator.sendBeacon(portfolioEventsEndpoint, payload);
+    return;
+  }
+  fetch(portfolioEventsEndpoint, {
+    method: "POST",
+    body: payload,
+    keepalive: true,
+  }).catch(() => {});
 });
 
 if (header) {

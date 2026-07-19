@@ -7,11 +7,16 @@
     "check:links": "python3 scripts/check_links.py",
     "check:external": "python3 scripts/check_external_links.py",
     "check:visual": "node scripts/visual_smoke.mjs",
+    "check:accessibility": "node scripts/accessibility_smoke.mjs",
     "check:dashboard": "node scripts/dashboard_logic_smoke.mjs",
+    "check:tracking": "node scripts/check_tracking_contract.mjs",
+    "check:live": "node scripts/live_service_smoke.mjs",
+    "capture:review": "node scripts/capture_review_images.mjs",
     "audit:dashboard": "node scripts/dashboard_toggle_audit.mjs",
     "check": "make check"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.10.2",
     "playwright": "^1.60.0"
   }
 }

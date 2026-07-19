@@ -4,6 +4,8 @@ Analytics and systems builder creating decision tools, validated data products, 
 
 My public work focuses on a practical question: how can messy operational or analytical inputs become decisions that another person can inspect, challenge, and use? The projects below pair working interfaces with source, validation, and explicit data boundaries.
 
+**[Portfolio](https://grant-mccurdy.github.io/)** | **[LinkedIn](https://www.linkedin.com/in/grant-mccurdy/)**
+
 ## Start Here
 
 - [Systems Portfolio](https://grant-mccurdy.github.io/) - the curated portal for project briefs, live demos, case studies, and evidence.
@@ -25,8 +27,8 @@ My public work focuses on a practical question: how can messy operational or ana
 
 ## Active Prototypes
 
-- [Assessment-to-Remediation Pipeline](https://grant-mccurdy.github.io/projects/assessment-to-remediation-pipeline.html) - review-gated diagnostic, dry-run LMS payload, feedback, and remediation workflow.
-- [Instructional AI Workflows](https://github.com/grant-mccurdy/instructional-ai-workflows) - human-reviewed rubric evidence, feedback drafts, reviewer packets, and remediation actions.
+- [Assessment-to-Remediation Pipeline](https://grant-mccurdy.github.io/assessment-to-remediation-pipeline/) - review-gated diagnostic, dry-run LMS payload, feedback, and remediation workflow with a published review packet.
+- [Instructional AI Workflows](https://grant-mccurdy.github.io/instructional-ai-workflows/) - human-reviewed rubric evidence, feedback drafts, reviewer packets, and remediation actions in a live synthetic demo.
 
 ## Working Patterns
 
