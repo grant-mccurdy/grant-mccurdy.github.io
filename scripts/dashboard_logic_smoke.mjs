@@ -211,6 +211,16 @@ function sourceExpectations(source) {
     tableRows,
     subjectViolinCount,
     academicYearCount: new Set(periods.map((period) => period.academicYear)).size,
+    periodCount: periods.length,
+    firstPeriodId: periods[0]?.id ?? "",
+    latestPeriodId: periods.at(-1)?.id ?? "",
+    defaultTrendStartId: periods.at(-10)?.id ?? periods[0]?.id ?? "",
+    defaultTrendEndOptionIds: periods.slice(-10).map((period) => period.id),
+    arbitraryTrendStartId: periods[3]?.id ?? periods[0]?.id ?? "",
+    arbitraryTrendEndId: periods[8]?.id ?? periods.at(-1)?.id ?? "",
+    arbitraryTrendEndOptionIds: periods.slice(3).map((period) => period.id),
+    arbitraryTrendWindowCount: periods.slice(3, 9).length,
+    arbitraryTrendYearCount: new Set(periods.slice(3, 9).map((period) => period.academicYear)).size,
     benchmarkCourseCount: benchmarkEntries.length,
     benchmarkTestCourse: benchmarkTest[0],
     benchmarkTestValue: benchmarkTest[1],
@@ -299,7 +309,15 @@ async function resetDashboard(page) {
   await setInput(page, "#line-filter", "");
   await setSelect(page, "#metric-select", "score");
   await setSelect(page, "#season-select", "All");
-  await setSelect(page, "#trend-history-select", "all");
+  const trendBounds = await page.evaluate(() => {
+    const options = [...document.querySelectorAll("#trend-start-select option")];
+    return {
+      first: options[0]?.value ?? "",
+      latest: options.at(-1)?.value ?? "",
+    };
+  });
+  await setSelect(page, "#trend-start-select", trendBounds.first);
+  await setSelect(page, "#trend-end-select", trendBounds.latest);
   await setSelect(page, "#line-sort-select", "latest");
   await setSelect(page, "#line-limit-select", "10");
   await setRange(page, "#line-min-n", "5");
@@ -360,7 +378,11 @@ async function snapshot(page) {
       },
       timeCaption: document.querySelector("#time-caption")?.textContent ?? "",
       timeChartText: document.querySelector("#time-chart")?.textContent ?? "",
-      trendHistory: document.querySelector("#trend-history-select")?.value ?? "",
+      trendStart: document.querySelector("#trend-start-select")?.value ?? "",
+      trendEnd: document.querySelector("#trend-end-select")?.value ?? "",
+      trendStartOptions: document.querySelectorAll("#trend-start-select option").length,
+      trendEndOptions: document.querySelectorAll("#trend-end-select option").length,
+      trendEndOptionIds: [...document.querySelectorAll("#trend-end-select option")].map((option) => option.value),
       trendWindowCount: document.querySelectorAll("#time-chart .x-label").length,
       trendYearLabelCount: document.querySelectorAll("#time-chart .trend-year-label").length,
       benchmarkChecked: document.querySelector("#toggle-mastery-line")?.checked ?? false,
@@ -385,6 +407,10 @@ async function snapshot(page) {
       performanceGrowthPoints: document.querySelectorAll(".performance-growth-point").length,
       performanceGrowthLabels: document.querySelectorAll(".performance-growth-label").length,
       performanceGrowthCaption: document.querySelector("#performance-growth-caption")?.textContent ?? "",
+      performanceGrowthGuide: document.querySelector("#performance-growth-guide")?.textContent.replace(/\s+/g, " ").trim() ?? "",
+      performanceGrowthReviewReasons: [...document.querySelectorAll(".performance-growth-item[data-review-reasons]")]
+        .flatMap((node) => node.dataset.reviewReasons.split(",").filter(Boolean)),
+      performanceGrowthBenchmarkLines: document.querySelectorAll("#performance-growth-chart .performance-benchmark-line").length,
       decisionSignalCount: document.querySelectorAll("#insight-list li").length,
       mobileOverflow: [...document.querySelectorAll("body *")]
         .filter((element) => {
@@ -421,12 +447,18 @@ async function runDesktopChecks(page, expected, emptyCombo) {
   assertCondition(failures, overview.taskTabCount === 3, "three semantic task tabs render", overview.taskTabCount);
   assertCondition(failures, overview.lineCount === Math.min(5, expected.subjectLineCount), "overview limits the default trend to five lines", overview.lineCount);
   assertCondition(failures, overview.violinCount === 0, "overview omits distribution overlays by default", overview.violinCount);
-  assertCondition(failures, overview.performanceGrowthPoints > 0 && overview.performanceGrowthCaption.includes("Descriptive, not causal"), "overview renders a bounded performance-growth synthesis", overview);
-  assertCondition(failures, overview.performanceGrowthLabels >= 2 && overview.performanceGrowthLabels <= 4, "synthesis labels only decision-relevant extremes", overview.performanceGrowthLabels);
+  assertCondition(failures, overview.performanceGrowthPoints > 0 && overview.performanceGrowthGuide.includes("Descriptive, not causal"), "overview renders a bounded performance-growth synthesis", overview);
+  assertCondition(failures, overview.performanceGrowthLabels >= 2 && overview.performanceGrowthLabels <= 4, "synthesis renders only the disclosed boundary labels", overview.performanceGrowthLabels);
+  assertCondition(failures, ["lowest-latest-mean", "highest-latest-mean", "weakest-observed-growth", "strongest-observed-growth"].every((reason) => overview.performanceGrowthReviewReasons.includes(reason)), "synthesis labels cover the four disclosed boundary rules", overview.performanceGrowthReviewReasons);
+  assertCondition(failures, overview.performanceGrowthCaption.includes("meet n >= 10 in the latest window and at least one complete BOY/EOY pair") && overview.performanceGrowthCaption.includes("every eligible subject is shown"), "synthesis caption explains eligibility and complete inclusion", overview.performanceGrowthCaption);
+  assertCondition(failures, overview.performanceGrowthGuide.includes("Right is a higher latest mean") && overview.performanceGrowthGuide.includes("Lowest and highest latest mean") && overview.performanceGrowthGuide.includes("weakest and strongest observed growth"), "synthesis guide explains position, size, and label selection", overview.performanceGrowthGuide);
+  assertCondition(failures, overview.performanceGrowthBenchmarkLines === 0, "cross-course synthesis omits the inapplicable single program benchmark", overview.performanceGrowthBenchmarkLines);
   assertCondition(failures, overview.decisionSignalCount === 3, "overview contains three decision signals", overview.decisionSignalCount);
   assertCondition(failures, cardsMatch(overview.cards, expected.cards), "overview metrics match source JSON", { actual: overview.cards, expected: expected.cards });
-  assertCondition(failures, overview.trendHistory === "5" && overview.trendWindowCount === 10 && overview.trendYearLabelCount === 5, "trend defaults to five paired academic years", overview);
+  assertCondition(failures, overview.trendStart === expected.defaultTrendStartId && overview.trendEnd === expected.latestPeriodId && overview.trendWindowCount === 10 && overview.trendYearLabelCount === 5, "trend defaults to the latest five paired academic years", overview);
   assertCondition(failures, overview.timeCaption.includes("5 academic years (10 assessment windows)"), "trend caption names the academic-year interval", overview.timeCaption);
+  assertCondition(failures, overview.trendStartOptions === expected.periodCount, "trend start exposes every assessment window", overview.trendStartOptions);
+  assertCondition(failures, JSON.stringify(overview.trendEndOptionIds) === JSON.stringify(expected.defaultTrendEndOptionIds), "trend end exposes only windows at or after the selected start", overview.trendEndOptionIds);
   assertCondition(failures, !/\b(?:assignment|task)\b/i.test(overview.timeChartText), "trend does not expose generic task labels", overview.timeChartText);
   assertCondition(failures, overview.benchmarkCourseOptions === expected.benchmarkCourseCount, "course benchmark selector covers every course", overview.benchmarkCourseOptions);
   assertCondition(failures, overview.benchmarkChecked && !overview.benchmarkCourseDisabled && overview.benchmarkLineCount === 1, "course benchmark is visible by default", overview);
@@ -441,12 +473,19 @@ async function runDesktopChecks(page, expected, emptyCombo) {
   const benchmarkCourse = await snapshot(page);
   assertCondition(failures, benchmarkCourse.benchmarkLineCount === 1 && benchmarkCourse.benchmarkLegend.includes(expected.benchmarkTestCourse) && benchmarkCourse.benchmarkLegend.includes(`${expected.benchmarkTestValue}%`), "benchmark selector renders the chosen course threshold", benchmarkCourse);
 
-  await setSelect(page, "#trend-history-select", "3");
-  const threeYears = await snapshot(page);
-  assertCondition(failures, threeYears.trendWindowCount === 6 && threeYears.trendYearLabelCount === 3 && threeYears.timeCaption.includes("3 academic years (6 assessment windows)"), "trend can shorten to three academic years", threeYears);
-  await setSelect(page, "#trend-history-select", "all");
+  await setSelect(page, "#trend-start-select", expected.arbitraryTrendStartId);
+  await setSelect(page, "#trend-end-select", expected.arbitraryTrendEndId);
+  const arbitraryRange = await snapshot(page);
+  assertCondition(failures, arbitraryRange.trendWindowCount === expected.arbitraryTrendWindowCount && arbitraryRange.trendYearLabelCount === expected.arbitraryTrendYearCount, "trend accepts an arbitrary partial-year interval", arbitraryRange);
+  assertCondition(failures, JSON.stringify(arbitraryRange.trendEndOptionIds) === JSON.stringify(expected.arbitraryTrendEndOptionIds), "changing the trend start rebuilds the valid end-window subset", arbitraryRange.trendEndOptionIds);
+  await setSelect(page, "#trend-start-select", expected.firstPeriodId);
+  await setSelect(page, "#trend-end-select", expected.latestPeriodId);
   const allYears = await snapshot(page);
   assertCondition(failures, allYears.trendWindowCount === expected.academicYearCount * 2 && allYears.trendYearLabelCount === expected.academicYearCount && allYears.timeCaption.includes(`${expected.academicYearCount} academic years`), "trend can expand to the full academic-year history", allYears);
+  await setSelect(page, "#trend-end-select", expected.firstPeriodId);
+  await setSelect(page, "#trend-start-select", expected.latestPeriodId);
+  const crossedRange = await snapshot(page);
+  assertCondition(failures, crossedRange.trendStart === expected.latestPeriodId && crossedRange.trendEnd === expected.latestPeriodId && crossedRange.trendWindowCount === 1 && crossedRange.trendEndOptions === 1, "crossed boundaries collapse to the newly selected assessment window and its one valid end option", crossedRange);
 
   await selectDashboardView(page, "compare");
   const compareView = await snapshot(page);

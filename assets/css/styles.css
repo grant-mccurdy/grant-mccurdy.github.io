@@ -2218,7 +2218,7 @@ h3 {
 
 .trend-controls {
   display: grid;
-  grid-template-columns: minmax(10rem, 0.8fr) auto minmax(13rem, 1fr);
+  grid-template-columns: repeat(2, minmax(8.75rem, 0.8fr)) auto minmax(13rem, 1fr);
   align-items: end;
   gap: 0.75rem;
   margin: -0.25rem 0 0.8rem;
@@ -2773,6 +2773,31 @@ h3 {
 
 .performance-growth-panel {
   padding-bottom: 0.75rem;
+}
+
+.synthesis-guide {
+  display: grid;
+  grid-template-columns: 2fr 1fr 2fr 1fr;
+  gap: 0.8rem;
+  margin-top: 0.5rem;
+  padding-top: 0.7rem;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 0.76rem;
+  line-height: 1.45;
+}
+
+.synthesis-guide span,
+.synthesis-guide strong {
+  display: block;
+}
+
+.synthesis-guide strong {
+  margin-bottom: 0.15rem;
+  color: var(--ink);
+  font-size: 0.7rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
 .performance-growth-point {
@@ -3915,6 +3940,10 @@ th {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .synthesis-guide {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .trend-controls .trend-benchmark-toggle {
     grid-column: 1 / -1;
     grid-row: 2;
@@ -4233,6 +4262,11 @@ th {
 
   .trend-controls {
     grid-template-columns: 1fr;
+  }
+
+  .synthesis-guide {
+    grid-template-columns: 1fr;
+    gap: 0.55rem;
   }
 
   .trend-controls .trend-benchmark-toggle {

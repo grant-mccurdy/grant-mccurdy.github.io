@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" data-asset-version="20260720d">
+<html lang="en" data-asset-version="20260720g">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -13,7 +13,7 @@
     <meta name="twitter:card" content="summary_large_image">
     <link rel="canonical" href="https://grant-mccurdy.github.io/dashboard/assessment.html">
     <link rel="icon" href="../assets/images/grant-mccurdy-profile.jpg" type="image/jpeg">
-    <link rel="stylesheet" href="../assets/css/styles.css?v=20260720d">
+    <link rel="stylesheet" href="../assets/css/styles.css?v=20260720g">
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
@@ -75,19 +75,19 @@
                 <div>
                   <p class="panel-kicker">Performance over time</p>
                   <h2>Assessment trends</h2>
-                  <span id="time-caption">Five academic years of BOY and EOY assessment windows</span>
+                  <span id="time-caption">Select any interval across the available BOY and EOY assessment windows</span>
                 </div>
                 <div class="legend" id="time-legend"></div>
               </div>
-              <div class="trend-controls" aria-label="Assessment trend controls">
-                <label>
-                  Academic-year history
-                  <select id="trend-history-select">
-                    <option value="3">Latest 3 years</option>
-                    <option value="5" selected>Latest 5 years</option>
-                    <option value="all">All 7 years</option>
-                  </select>
-                </label>
+                <div class="trend-controls" aria-label="Assessment trend controls">
+                  <label>
+                    From
+                    <select id="trend-start-select" aria-label="Trend start assessment window"></select>
+                  </label>
+                  <label>
+                    Through
+                    <select id="trend-end-select" aria-label="Trend end assessment window"></select>
+                  </label>
                 <label class="trend-benchmark-toggle">
                   <input type="checkbox" id="toggle-mastery-line" checked>
                   <span>Show benchmark</span>
@@ -115,12 +115,18 @@
           <article class="dashboard-panel performance-growth-panel">
             <div class="panel-heading">
               <div>
-                <p class="panel-kicker">Synthesis view</p>
-                <h2>Current performance and growth</h2>
-                <span id="performance-growth-caption">Latest score plotted against average paired-window growth</span>
+                <p class="panel-kicker">Comparative review</p>
+                <h2>Latest performance and observed growth</h2>
+                <span id="performance-growth-caption">Each eligible group is plotted; review labels identify neutral boundary cases</span>
               </div>
             </div>
-            <div id="performance-growth-chart" class="chart-frame performance-growth-chart" role="img" aria-label="Current performance versus paired growth chart"></div>
+            <div id="performance-growth-chart" class="chart-frame performance-growth-chart" role="img" aria-label="Latest mean score versus observed BOY-to-EOY growth scatterplot"></div>
+            <div class="synthesis-guide" id="performance-growth-guide" aria-label="Figure interpretation">
+              <span><strong>Position</strong> Right is a higher latest mean; up is a larger average EOY-minus-BOY change across complete academic-year pairs.</span>
+              <span><strong>Size</strong> Circle size reflects the latest sample.</span>
+              <span><strong>Review labels</strong> Lowest and highest latest mean, plus weakest and strongest observed growth; duplicate selections appear once.</span>
+              <span><strong>Scope</strong> Descriptive, not causal.</span>
+            </div>
           </article>
         </section>
 
@@ -364,8 +370,8 @@
       <div class="footer-shell"><p>&copy; <span data-year></span> Grant McCurdy</p><div class="footer-links"><a href="../projects/index.html">Projects</a><a href="../demos/index.html">Demos</a><a href="https://github.com/grant-mccurdy">GitHub</a><a href="https://www.linkedin.com/in/grant-mccurdy/">LinkedIn</a></div></div>
     </footer>
     <script src="../assets/js/site.js?v=20260720b"></script>
-    <script src="../assets/js/assessment-core.js?v=20260720d"></script>
-    <script src="../assets/js/assessment-charts.js?v=20260720d"></script>
-    <script src="../assets/js/assessment-dashboard.js?v=20260720d"></script>
+    <script src="../assets/js/assessment-core.js?v=20260720g"></script>
+    <script src="../assets/js/assessment-charts.js?v=20260720g"></script>
+    <script src="../assets/js/assessment-dashboard.js?v=20260720g"></script>
   </body>
 </html>
