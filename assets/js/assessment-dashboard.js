@@ -25,14 +25,12 @@ const state = {
   metric: "score",
   season: "All",
   toggles: {
-    department: true,
-    network: false,
     mastery: true,
-    violins: false,
     sections: false,
   },
   visual: {
     center: "mean",
+    distributionDisplay: "none",
     ribbonOpacity: 0.16,
     ribbonRange: "50",
     ribbonPopulation: "completed",
@@ -95,10 +93,8 @@ const els = {
   trendStart: document.querySelector("#trend-start-select"),
   trendEnd: document.querySelector("#trend-end-select"),
   trendBenchmarkCourse: document.querySelector("#trend-benchmark-course"),
-  departmentBand: document.querySelector("#toggle-department-band"),
-  networkBand: document.querySelector("#toggle-network-band"),
+  distributionDisplay: document.querySelector("#distribution-display-select"),
   masteryLine: document.querySelector("#toggle-mastery-line"),
-  violinPlots: document.querySelector("#toggle-violin-plots"),
   sectionLines: document.querySelector("#toggle-section-lines"),
   ribbonRange: document.querySelector("#ribbon-range-select"),
   center: document.querySelector("#center-select"),
@@ -772,30 +768,57 @@ function lineLimitValue() {
   return state.lines.limit === "all" ? Number.POSITIVE_INFINITY : Number(state.lines.limit);
 }
 
-function lineChartDomain(series, periods) {
+function distributionQuantileBounds() {
+  const coverage = clamp(Number(state.visual.ribbonRange) / 100, 0.01, 0.99);
+  const tail = (1 - coverage) / 2;
+  return [tail, 1 - tail];
+}
+
+function buildDistributionSeries(periods, selectedSeries) {
+  const [lowerQuantile, upperQuantile] = distributionQuantileBounds();
+  const minimumN = Math.max(4, Math.max(1, Number(state.lines.minN) || 1));
+  const rowsByPeriod = new Map(periods.map((period) => [period.id, scoreRowsForPeriod(period.id)]));
+
+  return selectedSeries.map((line) => {
+    const visiblePeriodIds = new Set(line.values.map((value) => value.period.id));
+    const distributions = periods.map((period, periodIndex) => {
+      if (!visiblePeriodIds.has(period.id)) return null;
+      const scores = (rowsByPeriod.get(period.id) ?? [])
+        .filter((record) => groupKeyFromStudentRecord(record, state.groupBy) === line.key)
+        .map((record) => record.score)
+        .filter((score) => Number.isFinite(score));
+      if (scores.length < minimumN) return null;
+      return {
+        period,
+        periodIndex,
+        scores,
+        n: scores.length,
+        lower: quantile(scores, lowerQuantile),
+        upper: quantile(scores, upperQuantile),
+        p10: quantile(scores, 0.1),
+        median: quantile(scores, 0.5),
+        p90: quantile(scores, 0.9),
+      };
+    }).filter(Boolean);
+    return { key: line.key, color: line.color, distributions };
+  });
+}
+
+function buildDistributionLayout(periods, seriesCount, x) {
+  const periodSpacing = periods.length > 1 ? Math.abs(x(1) - x(0)) : 48;
+  const clusterWidth = seriesCount > 1 ? clamp(periodSpacing * 0.64, 34, 132) : 0;
+  const offsetStep = seriesCount > 1 ? clusterWidth / (seriesCount - 1) : 0;
+  return {
+    offset: (seriesIndex) => seriesCount > 1 ? (seriesIndex - (seriesCount - 1) / 2) * offsetStep : 0,
+    maxHalfWidth: seriesCount > 1 ? clamp(offsetStep * 0.28, 2.2, 7) : clamp(periodSpacing * 0.13, 8, 16),
+  };
+}
+
+function lineChartDomain(series, periods, distributionSeries) {
   const values = series.flatMap((line) => line.values.map((value) => value.value));
 
-  if (metricAllowsBands()) {
-    periods.forEach((period) => {
-      const scores = scoreRowsForPeriod(period.id).map((record) => record.score);
-      values.push(quantile(scores, 0.1), quantile(scores, 0.9));
-    });
-  }
-
-  if (state.toggles.department && metricAllowsBands()) {
-    const band = bandFromStudentRecords("department", periods) ?? state.source.bands.department;
-    values.push(...periods.flatMap((period, index) => [
-      band.lower[period.order - 1] ?? band.lower[index],
-      band.upper[period.order - 1] ?? band.upper[index],
-    ]));
-  }
-
-  if (state.toggles.network && metricAllowsBands()) {
-    const band = bandFromStudentRecords("network", periods) ?? state.source.bands.network;
-    values.push(...periods.flatMap((period, index) => [
-      band.lower[period.order - 1] ?? band.lower[index],
-      band.upper[period.order - 1] ?? band.upper[index],
-    ]));
+  if (state.visual.distributionDisplay !== "none" && metricAllowsBands()) {
+    values.push(...distributionSeries.flatMap((line) => line.distributions.flatMap((item) => [item.p10, item.p90])));
   }
 
   if (state.toggles.mastery && metricAllowsBands()) {
@@ -827,12 +850,15 @@ function renderTimeSeries(records) {
   const explicitComparison = hasExplicitComparisonSelection();
   const maxLines = explicitComparison ? Number.POSITIVE_INFINITY : lineLimitValue();
   const selectedSeries = lineSeries.slice(0, compact && !explicitComparison ? Math.min(maxLines, 5) : maxLines);
-  const domain = lineChartDomain(selectedSeries, periods);
+  const distributionSeries = metricAllowsBands() ? buildDistributionSeries(periods, selectedSeries) : [];
+  const domain = lineChartDomain(selectedSeries, periods, distributionSeries);
   const yMax = domain.max;
   const yMin = domain.min;
   const x = (index) => margin.left + (periods.length <= 1 ? innerWidth / 2 : (index / (periods.length - 1)) * innerWidth);
   const y = (value) => margin.top + innerHeight - ((value - yMin) / (yMax - yMin)) * innerHeight;
-  const bandScale = (value) => y(value);
+  const showDistributions = state.visual.distributionDisplay !== "none" && metricAllowsBands();
+  const distributionLayout = buildDistributionLayout(periods, selectedSeries.length, x);
+  const seriesX = (periodIndex, seriesIndex) => x(periodIndex) + (showDistributions ? distributionLayout.offset(seriesIndex) : 0);
 
   const grid = domain.ticks.filter((tick) => tick >= yMin && tick <= yMax).map((tick) => `
     <g>
@@ -841,18 +867,19 @@ function renderTimeSeries(records) {
     </g>
   `).join("");
 
-  const departmentBand = !compact && state.toggles.department && metricAllowsBands() ? renderBand("department", periods, x, bandScale) : "";
-  const networkBand = !compact && state.toggles.network && metricAllowsBands() ? renderBand("network", periods, x, bandScale) : "";
+  const distributionRibbons = showDistributions ? renderDistributionRibbons(distributionSeries, seriesX, y) : "";
   const masteryLine = state.toggles.mastery && metricAllowsBands() ? renderBenchmark(periods, x, y) : "";
-  const violinPlots = !compact && state.toggles.violins && metricAllowsBands() ? renderViolinPlots(periods, selectedSeries, x, y, yMin, yMax) : "";
+  const violinPlots = state.visual.distributionDisplay === "ribbons-violins" && metricAllowsBands()
+    ? renderViolinPlots(distributionSeries, seriesX, y, yMin, yMax, distributionLayout.maxHalfWidth)
+    : "";
 
   const labelY = layoutRightLabels(selectedSeries, y, margin.top + 12, margin.top + innerHeight - 10);
   const labelX = width - margin.right + 44;
   const labelDotX = width - margin.right + 20;
-  const groupLines = selectedSeries.map((line) => {
+  const groupLines = selectedSeries.map((line, lineIndex) => {
     const points = line.values.map((value) => ({
       ...value,
-      x: x(value.periodIndex),
+      x: seriesX(value.periodIndex, lineIndex),
       y: y(value.value),
     }));
     const labelPosition = labelY.get(line.key) ?? y(line.latest.value);
@@ -893,8 +920,7 @@ function renderTimeSeries(records) {
     <svg viewBox="0 0 ${width} ${height}" aria-hidden="true" focusable="false">
       <rect x="0" y="0" width="${width}" height="${height}" class="chart-bg"></rect>
       ${grid}
-      ${networkBand}
-      ${departmentBand}
+      ${distributionRibbons}
       ${masteryLine}
       ${violinPlots}
       ${sectionLines}
@@ -918,40 +944,39 @@ function renderTimeSeries(records) {
   renderLegend(selectedSeries, periods);
 }
 
-function renderBand(key, periods, x, y) {
-  const computed = bandFromStudentRecords(key, periods);
-  const band = computed ?? state.source.bands[key];
-  const lower = periods.map((period, index) => ({ x: x(index), y: y(band.lower[period.order - 1] ?? band.lower[index]) }));
-  const upper = periods.map((period, index) => ({ x: x(index), y: y(band.upper[period.order - 1] ?? band.upper[index]) }));
-  const lowerReverse = [...lower].reverse();
-  const opacity = key === "department" ? state.visual.ribbonOpacity : state.visual.ribbonOpacity * 0.48;
-  const path = `${pointsToCurvePath(upper)} ${pointsToCurvePath(lowerReverse, "L")} Z`;
-  return `<path d="${path}" class="ribbon ribbon-${key}" style="opacity: ${opacity.toFixed(2)}"></path>`;
+function contiguousDistributionSegments(distributions) {
+  const segments = [];
+  distributions.forEach((item) => {
+    const current = segments.at(-1);
+    if (!current || item.periodIndex !== current.at(-1).periodIndex + 1) {
+      segments.push([item]);
+    } else {
+      current.push(item);
+    }
+  });
+  return segments.filter((segment) => segment.length > 1);
 }
 
-function bandFromStudentRecords(key, periods) {
-  const studentRecords = filterStudentRecords();
-  if (!studentRecords.length) return null;
-
-  const lower = [];
-  const upper = [];
-  const ranges = {
-    "50": { department: [0.25, 0.75], network: [0.1, 0.9] },
-    "60": { department: [0.2, 0.8], network: [0.1, 0.9] },
-    "80": { department: [0.1, 0.9], network: [0.05, 0.95] },
-  };
-  const [lowerQuantile, upperQuantile] = ranges[state.visual.ribbonRange]?.[key] ?? ranges["50"][key];
-
-  periods.forEach((period) => {
-    const rows = studentRecords.filter((record) => record.periodId === period.id);
-    const scores = state.visual.ribbonPopulation === "completed"
-      ? rows.filter((record) => record.completed).map((record) => record.score)
-      : rows.map((record) => record.score);
-    lower.push(quantile(scores, lowerQuantile));
-    upper.push(quantile(scores, upperQuantile));
-  });
-
-  return { lower, upper };
+function renderDistributionRibbons(distributionSeries, seriesX, y) {
+  const population = state.visual.ribbonPopulation === "completed" ? "completed scores" : "assigned records";
+  return distributionSeries.map((line, lineIndex) => (
+    contiguousDistributionSegments(line.distributions).map((segment) => {
+      const upper = segment.map((item) => ({ x: seriesX(item.periodIndex, lineIndex), y: y(item.upper) }));
+      const lower = [...segment].reverse().map((item) => ({ x: seriesX(item.periodIndex, lineIndex), y: y(item.lower) }));
+      const path = `${pointsToCurvePath(upper)} ${pointsToCurvePath(lower, "L")} Z`;
+      const startX = seriesX(segment[0].periodIndex, lineIndex);
+      return `
+        <path
+          d="${path}"
+          class="distribution-ribbon"
+          data-series-key="${escapeHtml(line.key)}"
+          data-start-period-id="${escapeHtml(segment[0].period.id)}"
+          data-start-x="${startX.toFixed(1)}"
+          style="--distribution-color: ${line.color}; opacity: ${state.visual.ribbonOpacity.toFixed(2)}"
+        ><title>${escapeSvgText(line.key)}: middle ${state.visual.ribbonRange}% of ${population}</title></path>
+      `;
+    }).join("")
+  )).join("");
 }
 
 function renderBenchmark(periods, x, y) {
@@ -960,38 +985,20 @@ function renderBenchmark(periods, x, y) {
   return `<path d="${pointsToCurvePath(points)}" class="benchmark-line"><title>${escapeSvgText(benchmark.label)}. Synthetic demonstration threshold.</title></path>`;
 }
 
-function renderViolinPlots(periods, selectedSeries, x, y, yMin, yMax) {
-  if (!selectedSeries.length) return "";
-  const periodSpacing = periods.length > 1 ? Math.abs(x(1) - x(0)) : 48;
-  const visibleCount = selectedSeries.length;
-  const clusterWidth = visibleCount > 1 ? clamp(periodSpacing * 0.64, 34, 132) : 0;
-  const offsetStep = visibleCount > 1 ? clusterWidth / (visibleCount - 1) : 0;
-  const maxHalfWidth = visibleCount > 1 ? clamp(offsetStep * 0.28, 2.2, 7) : clamp(periodSpacing * 0.13, 8, 16);
-  const minScoresForViolin = Math.max(4, Math.max(1, Number(state.lines.minN) || 1));
+function renderViolinPlots(distributionSeries, seriesX, y, yMin, yMax, maxHalfWidth) {
+  if (!distributionSeries.length) return "";
   const comparisonLabel = currentSliceLabel();
 
-  return periods.map((period, index) => {
-    const periodRows = scoreRowsForPeriod(period.id);
-    return selectedSeries.map((line, lineIndex) => {
-      if (!line.values.some((value) => value.period.id === period.id)) return "";
-      const scores = periodRows
-        .filter((record) => groupKeyFromStudentRecord(record, state.groupBy) === line.key)
-        .map((record) => record.score)
-        .filter((score) => Number.isFinite(score));
-      if (scores.length < minScoresForViolin) return "";
-      const p10 = quantile(scores, 0.1);
-      const p25 = quantile(scores, 0.25);
-      const median = quantile(scores, 0.5);
-      const p75 = quantile(scores, 0.75);
-      const p90 = quantile(scores, 0.9);
-      const minScore = Math.max(yMin, p10 - 4);
-      const maxScore = Math.min(yMax, p90 + 4);
+  return distributionSeries.map((line, lineIndex) => (
+    line.distributions.map((item) => {
+      const minScore = Math.max(yMin, item.p10 - 4);
+      const maxScore = Math.min(yMax, item.p90 + 4);
       const span = Math.max(1, maxScore - minScore);
       const bandwidth = Math.max(2.5, span / 7);
       const steps = 18;
       const density = Array.from({ length: steps }, (_, step) => {
         const value = minScore + (span * step) / (steps - 1);
-        const scoreDensity = scores.reduce((sum, score) => {
+        const scoreDensity = item.scores.reduce((sum, score) => {
           const z = (score - value) / bandwidth;
           return sum + Math.exp(-0.5 * z * z);
         }, 0);
@@ -999,8 +1006,7 @@ function renderViolinPlots(periods, selectedSeries, x, y, yMin, yMax) {
       });
       const maxDensity = Math.max(...density.map((point) => point.density));
       if (!maxDensity) return "";
-      const offset = visibleCount > 1 ? (lineIndex - (visibleCount - 1) / 2) * offsetStep : 0;
-      const px = x(index) + offset;
+      const px = seriesX(item.periodIndex, lineIndex);
       const leftPoints = density.map((point) => {
         const halfWidth = 1.2 + (point.density / maxDensity) * maxHalfWidth;
         return `${px - halfWidth},${y(point.value)}`;
@@ -1009,19 +1015,25 @@ function renderViolinPlots(periods, selectedSeries, x, y, yMin, yMax) {
         const halfWidth = 1.2 + (point.density / maxDensity) * maxHalfWidth;
         return `${px + halfWidth},${y(point.value)}`;
       });
-      const iqrWidth = maxHalfWidth * 0.72;
+      const rangeWidth = maxHalfWidth * 0.72;
       return `
-        <g class="violin-plot" style="--violin-color: ${line.color}">
-          <title>${escapeSvgText(period.label)} / ${escapeSvgText(line.key)}: ${comparisonLabel} score distribution p25 ${Math.round(p25)}%, median ${Math.round(median)}%, p75 ${Math.round(p75)}%, n=${scores.length}</title>
+        <g
+          class="violin-plot"
+          data-series-key="${escapeHtml(line.key)}"
+          data-period-id="${escapeHtml(item.period.id)}"
+          data-center-x="${px.toFixed(1)}"
+          style="--distribution-color: ${line.color}"
+        >
+          <title>${escapeSvgText(item.period.label)} / ${escapeSvgText(line.key)}: ${comparisonLabel} score distribution, middle ${state.visual.ribbonRange}% ${Math.round(item.lower)}-${Math.round(item.upper)}%, median ${Math.round(item.median)}%, p10-p90 ${Math.round(item.p10)}-${Math.round(item.p90)}%, n=${item.n}</title>
           <polygon points="${leftPoints.concat(rightPoints).join(" ")}" class="violin-shape"></polygon>
-          <line x1="${px}" x2="${px}" y1="${y(p10)}" y2="${y(p90)}" class="violin-whisker"></line>
-          <line x1="${px - iqrWidth}" x2="${px + iqrWidth}" y1="${y(p25)}" y2="${y(p25)}" class="violin-iqr"></line>
-          <line x1="${px - iqrWidth}" x2="${px + iqrWidth}" y1="${y(p75)}" y2="${y(p75)}" class="violin-iqr"></line>
-          <circle cx="${px}" cy="${y(median)}" r="3.1" class="violin-median"></circle>
+          <line x1="${px}" x2="${px}" y1="${y(item.p10)}" y2="${y(item.p90)}" class="violin-whisker"></line>
+          <line x1="${px - rangeWidth}" x2="${px + rangeWidth}" y1="${y(item.lower)}" y2="${y(item.lower)}" class="violin-range"></line>
+          <line x1="${px - rangeWidth}" x2="${px + rangeWidth}" y1="${y(item.upper)}" y2="${y(item.upper)}" class="violin-range"></line>
+          <circle cx="${px}" cy="${y(item.median)}" r="3.1" class="violin-median"></circle>
         </g>
       `;
-    }).join("");
-  }).join("");
+    }).join("")
+  )).join("");
 }
 
 function periodScoreStats(period) {
@@ -1202,17 +1214,14 @@ function renderSectionLines(records, periods, x, y) {
 
 function renderLegend(series, periods) {
   const populationLabel = state.visual.ribbonPopulation === "completed" ? "completed" : "assigned";
-  const rangeLabel = `middle ${state.visual.ribbonRange}%`;
-  const departmentLabel = `Main ${rangeLabel} ${populationLabel}`;
-  const networkLabel = `Wider context ${populationLabel}`;
+  const distributionLabel = `Middle ${state.visual.ribbonRange}% ${populationLabel} distributions by ${currentSliceLabel()}`;
+  const violinLabel = state.visual.distributionDisplay === "ribbons-violins" ? " with violin profiles" : "";
   const masteryLabel = activeBenchmarkDescriptor(periods).label;
   const lineSummary = `<span>${series.length} ${currentSliceLabel(true)} from ${periods.length} windows</span>`;
   const ribbonItems = [
     lineSummary,
-    state.toggles.department && metricAllowsBands() ? `<span><i class="legend-swatch ribbon-key department-key"></i>${departmentLabel}</span>` : "",
-    state.toggles.network && metricAllowsBands() ? `<span><i class="legend-swatch ribbon-key network-key"></i>${networkLabel}</span>` : "",
+    state.visual.distributionDisplay !== "none" && metricAllowsBands() ? `<span><i class="legend-swatch distribution-ribbon-key"></i>${distributionLabel}${violinLabel}</span>` : "",
     state.toggles.mastery && metricAllowsBands() ? `<span><i class="legend-line benchmark-key"></i>${masteryLabel}</span>` : "",
-    state.toggles.violins && metricAllowsBands() ? `<span><i class="legend-swatch violin-key"></i>Group score distributions</span>` : "",
     state.toggles.sections ? `<span><i class="legend-line section-key"></i>Section lines</span>` : "",
   ].filter(Boolean).join("");
 
@@ -1820,18 +1829,20 @@ function syncControls() {
   els.season.value = state.season;
   els.trendStart.value = state.trend.startPeriodId;
   els.trendEnd.value = state.trend.endPeriodId;
-  els.departmentBand.checked = state.toggles.department;
-  els.networkBand.checked = state.toggles.network;
+  els.distributionDisplay.value = state.visual.distributionDisplay;
+  els.distributionDisplay.disabled = !metricAllowsBands();
   els.masteryLine.checked = state.toggles.mastery;
   els.trendBenchmarkCourse.value = activeBenchmarkCourse();
   els.trendBenchmarkCourse.disabled = !state.toggles.mastery;
-  els.violinPlots.checked = state.toggles.violins;
   els.sectionLines.checked = state.toggles.sections;
   els.ribbonRange.value = state.visual.ribbonRange;
   els.center.value = state.visual.center;
   els.ribbonPopulation.value = state.visual.ribbonPopulation;
   els.ribbonOpacity.value = state.visual.ribbonOpacity;
   els.ribbonOpacityValue.textContent = `${Math.round(state.visual.ribbonOpacity * 100)}%`;
+  const distributionsDisabled = state.visual.distributionDisplay === "none" || !metricAllowsBands();
+  els.ribbonRange.disabled = distributionsDisabled;
+  els.ribbonOpacity.disabled = distributionsDisabled;
   els.smoothCurves.checked = state.visual.smoothCurves;
   els.lineMinN.value = state.lines.minN;
   els.lineMinNValue.textContent = state.lines.minN;
@@ -1939,6 +1950,7 @@ function initControls() {
 
   els.metric.addEventListener("change", (event) => {
     state.metric = event.target.value;
+    syncControls();
     render();
   });
 
@@ -2035,24 +2047,15 @@ function initControls() {
     });
   });
 
-  els.departmentBand.addEventListener("change", (event) => {
-    state.toggles.department = event.target.checked;
-    render();
-  });
-
-  els.networkBand.addEventListener("change", (event) => {
-    state.toggles.network = event.target.checked;
+  els.distributionDisplay.addEventListener("change", (event) => {
+    state.visual.distributionDisplay = event.target.value;
+    syncControls();
     render();
   });
 
   els.masteryLine.addEventListener("change", (event) => {
     state.toggles.mastery = event.target.checked;
     els.trendBenchmarkCourse.disabled = !state.toggles.mastery;
-    render();
-  });
-
-  els.violinPlots.addEventListener("change", (event) => {
-    state.toggles.violins = event.target.checked;
     render();
   });
 

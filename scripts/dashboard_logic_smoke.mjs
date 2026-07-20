@@ -324,12 +324,8 @@ async function resetDashboard(page) {
   await setSelect(page, "#line-sort-select", "latest");
   await setSelect(page, "#line-limit-select", "10");
   await setRange(page, "#line-min-n", "5");
+  await setSelect(page, "#distribution-display-select", "ribbons-violins");
   await page.evaluate(() => {
-    const violin = document.querySelector("#toggle-violin-plots");
-    if (violin && !violin.checked) {
-      violin.checked = true;
-      violin.dispatchEvent(new Event("change", { bubbles: true }));
-    }
     const benchmark = document.querySelector("#toggle-mastery-line");
     if (benchmark && !benchmark.checked) {
       benchmark.checked = true;
@@ -387,15 +383,22 @@ async function snapshot(page) {
       trendEndOptions: document.querySelectorAll("#trend-end-select option").length,
       trendEndOptionIds: [...document.querySelectorAll("#trend-end-select option")].map((option) => option.value),
       trendOverlayControlsInOverview: [
-        "#toggle-department-band",
-        "#toggle-network-band",
-        "#toggle-violin-plots",
+        "#distribution-display-select",
         "#toggle-section-lines",
         "#ribbon-range-select",
         "#ribbon-population-select",
       ].every((selector) => document.querySelector(`#assessment-overview ${selector}`)),
-      mainRibbonCount: document.querySelectorAll("#time-chart .ribbon-department").length,
-      contextRibbonCount: document.querySelectorAll("#time-chart .ribbon-network").length,
+      distributionDisplay: document.querySelector("#distribution-display-select")?.value ?? "",
+      distributionDisplayDisabled: document.querySelector("#distribution-display-select")?.disabled ?? false,
+      distributionRangeDisabled: document.querySelector("#ribbon-range-select")?.disabled ?? false,
+      distributionRibbonCount: document.querySelectorAll("#time-chart .distribution-ribbon").length,
+      legacyPooledRibbonCount: document.querySelectorAll("#time-chart .ribbon-department, #time-chart .ribbon-network").length,
+      distributionRibbonSeries: [...document.querySelectorAll("#time-chart .distribution-ribbon")].map((node) => ({
+        key: node.dataset.seriesKey ?? "",
+        color: node.style.getPropertyValue("--distribution-color").trim(),
+        periodId: node.dataset.startPeriodId ?? "",
+        x: Number(node.dataset.startX),
+      })),
       trendWindowCount: document.querySelectorAll("#time-chart .x-label").length,
       trendYearLabelCount: document.querySelectorAll("#time-chart .trend-year-label").length,
       benchmarkChecked: document.querySelector("#toggle-mastery-line")?.checked ?? false,
@@ -409,6 +412,12 @@ async function snapshot(page) {
       lineLabels: [...document.querySelectorAll(".right-label-text")].map((node) => node.textContent.trim()).slice(0, 8),
       violinCount: document.querySelectorAll(".violin-plot").length,
       violinTitles: [...document.querySelectorAll(".violin-plot title")].map((node) => node.textContent.trim()).slice(0, 8),
+      violinSeries: [...document.querySelectorAll(".violin-plot")].map((node) => ({
+        key: node.dataset.seriesKey ?? "",
+        color: node.style.getPropertyValue("--distribution-color").trim(),
+        periodId: node.dataset.periodId ?? "",
+        x: Number(node.dataset.centerX),
+      })),
       emptyChartText: [...document.querySelectorAll(".empty-chart-text")].map((node) => node.textContent.trim()),
       tableRows: document.querySelectorAll("#course-table tr").length,
       tableCount: document.querySelector("#table-count")?.textContent ?? "",
@@ -453,6 +462,17 @@ function cardsMatch(actual, expected) {
   return Object.entries(expected).every(([key, value]) => actual[key] === value);
 }
 
+function seriesSignatures(rows) {
+  return [...new Set(rows.map((row) => `${row.key}|${row.color}`))].sort();
+}
+
+function ribbonsAlignWithViolins(ribbons, violins) {
+  return ribbons.every((ribbon) => {
+    const violin = violins.find((item) => item.key === ribbon.key && item.color === ribbon.color && item.periodId === ribbon.periodId);
+    return violin && Number.isFinite(ribbon.x) && Number.isFinite(violin.x) && Math.abs(ribbon.x - violin.x) < 0.11;
+  });
+}
+
 async function runDesktopChecks(page, expected, emptyCombo) {
   const failures = [];
   const overview = await snapshot(page);
@@ -475,20 +495,38 @@ async function runDesktopChecks(page, expected, emptyCombo) {
   assertCondition(failures, !/\b(?:assignment|task)\b/i.test(overview.timeChartText), "trend does not expose generic task labels", overview.timeChartText);
   assertCondition(failures, overview.benchmarkCourseOptions === expected.benchmarkCourseCount, "course benchmark selector covers every course", overview.benchmarkCourseOptions);
   assertCondition(failures, expected.benchmarkTestCourse === "Beyond Core Math Sequence" && expected.benchmarkTestValue === 75, "Beyond Core Math Sequence retains the highest benchmark", { course: expected.benchmarkTestCourse, value: expected.benchmarkTestValue });
-  assertCondition(failures, overview.trendOverlayControlsInOverview && overview.mainRibbonCount === 1 && overview.contextRibbonCount === 0 && overview.violinCount === 0, "trend overlay controls live with the overview chart and preserve restrained defaults", overview);
+  assertCondition(
+    failures,
+    overview.trendOverlayControlsInOverview && overview.distributionDisplay === "none" && overview.distributionRangeDisabled && overview.distributionRibbonCount === 0 && overview.violinCount === 0,
+    "trend distribution controls live with the overview chart and preserve a lines-only default",
+    overview,
+  );
+  assertCondition(failures, overview.legacyPooledRibbonCount === 0, "legacy pooled ribbons are absent", overview.legacyPooledRibbonCount);
   assertCondition(failures, overview.benchmarkChecked && !overview.benchmarkCourseDisabled && overview.benchmarkLineCount === 1, "course benchmark is visible by default", overview);
   assertCondition(failures, overview.benchmarkLegend.includes(overview.benchmarkCourse) && overview.benchmarkLegend.includes("%"), "benchmark legend names the selected course and cut score", overview.benchmarkLegend);
 
   await page.locator("#trend-overlay-settings").evaluate((details) => { details.open = true; });
-  await page.locator("#toggle-violin-plots").check();
-  await page.locator("#toggle-department-band").uncheck();
-  await page.locator("#toggle-network-band").check();
+  await setSelect(page, "#distribution-display-select", "ribbons");
   await page.waitForTimeout(100);
-  const overlays = await snapshot(page);
-  assertCondition(failures, overlays.violinCount > 0 && overlays.mainRibbonCount === 0 && overlays.contextRibbonCount === 1, "overview overlay controls toggle violin distributions and ribbon context", overlays);
-  await page.locator("#toggle-network-band").uncheck();
-  await page.locator("#toggle-department-band").check();
-  await page.locator("#toggle-violin-plots").uncheck();
+  const ribbons = await snapshot(page);
+  assertCondition(failures, ribbons.distributionRibbonCount > 0 && ribbons.violinCount === 0 && !ribbons.distributionRangeDisabled, "ribbon mode renders one distribution layer without violins", ribbons);
+  await setSelect(page, "#distribution-display-select", "ribbons-violins");
+  const fullDistributions = await snapshot(page);
+  assertCondition(failures, fullDistributions.distributionRibbonCount > 0 && fullDistributions.violinCount > 0, "ribbons and violins render together", fullDistributions);
+  assertCondition(
+    failures,
+    JSON.stringify(seriesSignatures(fullDistributions.distributionRibbonSeries)) === JSON.stringify(seriesSignatures(fullDistributions.violinSeries)),
+    "each distribution ribbon matches its violin series and color",
+    { ribbons: seriesSignatures(fullDistributions.distributionRibbonSeries), violins: seriesSignatures(fullDistributions.violinSeries) },
+  );
+  assertCondition(
+    failures,
+    ribbonsAlignWithViolins(fullDistributions.distributionRibbonSeries, fullDistributions.violinSeries),
+    "each ribbon begins at the center of its matching assessment-window violin",
+    { ribbons: fullDistributions.distributionRibbonSeries, violins: fullDistributions.violinSeries },
+  );
+  assertCondition(failures, fullDistributions.violinTitles.every((title) => title.includes("middle 50%")), "violin summaries use the selected ribbon interval", fullDistributions.violinTitles);
+  await setSelect(page, "#distribution-display-select", "none");
   await page.locator("#trend-overlay-settings").evaluate((details) => { details.open = false; });
 
   await page.locator("#toggle-mastery-line").uncheck();
@@ -541,6 +579,7 @@ async function runDesktopChecks(page, expected, emptyCombo) {
   assertCondition(failures, base.tableRows === expected.tableRows, "default table rows match source JSON", base);
   assertCondition(failures, base.violinCount === expected.subjectViolinCount, "default violin count matches source JSON", base);
   assertCondition(failures, base.violinTitles.every((title) => title.includes("subject score distribution")), "default violins are subject distributions", base.violinTitles);
+  assertCondition(failures, base.distributionRibbonCount > 0 && JSON.stringify(seriesSignatures(base.distributionRibbonSeries)) === JSON.stringify(seriesSignatures(base.violinSeries)), "default distribution ribbons and violins remain paired by subject and color", base);
 
   const selectedTeachers = await checkFirstN(page, "#teacher-filter-options input[type='checkbox']", 2);
   const teacher = await snapshot(page);
@@ -580,8 +619,8 @@ async function runDesktopChecks(page, expected, emptyCombo) {
       await setSelect(page, "#metric-select", metric);
       const state = await snapshot(page);
       assertCondition(failures, !state.dashboardError && !state.badTextValue && !state.badSvgValue, `${compareBy}/${metric} renders cleanly`, state);
-      if (metric === "completion") {
-        assertCondition(failures, state.violinCount === 0, `${compareBy}/completion has no violins`, state);
+      if (metric !== "score") {
+        assertCondition(failures, state.distributionDisplayDisabled && state.distributionRibbonCount === 0 && state.violinCount === 0, `${compareBy}/${metric} disables score distributions`, state);
       }
     }
   }
@@ -616,7 +655,7 @@ async function runDesktopChecks(page, expected, emptyCombo) {
     await checkValue(page, "#course-filter-options", emptyCombo.course);
     await checkValue(page, "#teacher-filter-options", emptyCombo.teacher);
     const empty = await snapshot(page);
-    assertCondition(failures, empty.lineCount === 0 && empty.violinCount === 0, "empty subject/teacher intersection renders no lines or violins", empty);
+    assertCondition(failures, empty.lineCount === 0 && empty.distributionRibbonCount === 0 && empty.violinCount === 0, "empty subject/teacher intersection renders no trend distributions", empty);
     assertCondition(failures, empty.emptyChartText.length > 0, "empty subject/teacher intersection shows empty states", empty.emptyChartText);
   }
 
