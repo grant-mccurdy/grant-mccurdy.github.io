@@ -389,27 +389,43 @@ async function inspectContentRag(page, label) {
   const thread = page.locator("[data-chat-thread]");
   await thread.getByText("Content Intelligence RAG").waitFor({ state: "visible", timeout: 1500 });
   await page.locator("[data-chat-input]").fill("How does the artifact-to-RAG workflow work?");
-  await page.locator("[data-chat-form] button[type='submit']").click();
+  const submitButton = page.locator("[data-chat-form] button[type='submit']");
+  await submitButton.scrollIntoViewIfNeeded();
+  const pageScrollBeforeResponse = await page.evaluate(() => window.scrollY);
+  await submitButton.click();
   await thread.getByText("Source-grounded answer").waitFor({ state: "visible", timeout: 1500 });
-  await page.evaluate(() => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+  await page.waitForFunction(
+    () => {
+      const chatThread = document.querySelector("[data-chat-thread]");
+      const messages = Array.from(document.querySelectorAll("[data-chat-thread] .chat-message.assistant"));
+      const answer = messages.at(-1)?.getBoundingClientRect();
+      const bounds = chatThread?.getBoundingClientRect();
+      return Boolean(answer && bounds && answer.top >= bounds.top + 8 && answer.top < bounds.bottom);
+    },
+    undefined,
+    { timeout: 3000 },
+  );
   const text = await thread.innerText();
   const sourceHref = await thread.locator(".content-rag-sources a").last().getAttribute("href");
-  const answerPosition = await page.evaluate(() => {
-    const header = document.querySelector("[data-header]")?.getBoundingClientRect();
+  const diagnosticsHidden =
+    (await thread.locator(".content-rag-retrieval").count()) === 0 &&
+    (await thread.getByText("Limits", { exact: true }).count()) === 0;
+  const threadScroll = await page.evaluate((pageScrollBefore) => {
+    const chatThread = document.querySelector("[data-chat-thread]");
     const messages = Array.from(document.querySelectorAll("[data-chat-thread] .chat-message.assistant"));
     const answer = messages.at(-1)?.getBoundingClientRect();
+    const bounds = chatThread?.getBoundingClientRect();
     const clearance = 8;
     return {
-      answerTop: answer?.top ?? null,
-      headerBottom: header?.bottom ?? null,
-      visibleBelowHeader: Boolean(
-        answer && header && answer.top >= header.bottom + clearance && answer.top < window.innerHeight
+      scrollTop: chatThread?.scrollTop ?? null,
+      maxScrollTop: chatThread ? chatThread.scrollHeight - chatThread.clientHeight : null,
+      hasOverflow: Boolean(chatThread && chatThread.scrollHeight > chatThread.clientHeight),
+      latestAnswerVisible: Boolean(
+        answer && bounds && answer.top >= bounds.top + clearance && answer.top < bounds.bottom
       ),
-      alignedBelowHeader: Boolean(
-        answer && header && answer.top >= header.bottom + clearance && answer.top <= header.bottom + 20
-      ),
+      pageStayedPut: Math.abs(window.scrollY - pageScrollBefore) <= 1,
     };
-  });
+  }, pageScrollBeforeResponse);
   const overflow = await page.evaluate(() =>
     Array.from(document.querySelectorAll("[data-content-rag] *"))
       .filter((el) => {
@@ -425,9 +441,8 @@ async function inspectContentRag(page, label) {
   return {
     rendered: text.includes("Source-grounded answer") && text.includes("Follow-up questions"),
     citation: Boolean(sourceHref?.includes("content-intelligence/blob/main/sample_outputs/rag-index.json")),
-    retrieval: text.includes("Hybrid vector + lexical retrieval") && text.includes("@cf/baai/bge-base-en-v1.5"),
-    limits: text.includes("public-safe generated index records"),
-    answerPosition,
+    diagnosticsHidden,
+    threadScroll,
     overflow,
   };
 }
@@ -688,10 +703,10 @@ const failures = results.filter(
     result.capability?.capabilityNote === false ||
     result.contentRag?.rendered === false ||
     result.contentRag?.citation === false ||
-    result.contentRag?.retrieval === false ||
-    result.contentRag?.limits === false ||
-    result.contentRag?.answerPosition?.visibleBelowHeader === false ||
-    result.contentRag?.answerPosition?.alignedBelowHeader === false ||
+    result.contentRag?.diagnosticsHidden === false ||
+    result.contentRag?.threadScroll?.hasOverflow === false ||
+    result.contentRag?.threadScroll?.latestAnswerVisible === false ||
+    result.contentRag?.threadScroll?.pageStayedPut === false ||
     result.contentRag?.overflow.length ||
     result.hotelComp?.boundary === false ||
     result.hotelComp?.decisionFramework === false ||

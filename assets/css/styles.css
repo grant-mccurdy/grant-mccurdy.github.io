@@ -2972,8 +2972,8 @@ th {
 }
 
 .content-rag-thread {
-  height: min(56vh, 32rem);
-  min-height: 24rem;
+  height: clamp(24rem, 56vh, 32rem);
+  min-height: 0;
 }
 
 .content-rag-form input {
@@ -3653,7 +3653,8 @@ th {
   }
 
   .content-rag-thread {
-    min-height: 24rem;
+    height: clamp(22rem, 56vh, 28rem);
+    min-height: 0;
   }
 
   .data-lab-chat {

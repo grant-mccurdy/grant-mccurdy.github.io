@@ -52,13 +52,19 @@ if (contentRag) {
     return article;
   };
 
+  let revealFrame = 0;
   const revealMessage = (article) => {
-    window.requestAnimationFrame(() => {
-      article.scrollIntoView({ behavior: "instant", block: "start", inline: "nearest" });
-      const headerBottom = document.querySelector("[data-header]")?.getBoundingClientRect().bottom || 0;
+    if (revealFrame) window.cancelAnimationFrame(revealFrame);
+    revealFrame = window.requestAnimationFrame(() => {
+      revealFrame = 0;
+      const threadTop = thread.getBoundingClientRect().top;
       const messageTop = article.getBoundingClientRect().top;
       const clearance = 12;
-      window.scrollBy({ top: messageTop - headerBottom - clearance, behavior: "instant" });
+      const reduceMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+      thread.scrollTo({
+        top: Math.max(0, thread.scrollTop + messageTop - threadTop - clearance),
+        behavior: reduceMotion ? "auto" : "smooth"
+      });
     });
   };
 
@@ -78,36 +84,6 @@ if (contentRag) {
     return `<div class="portfolio-helper-sources content-rag-sources"><strong>Sources</strong><ul>${items}</ul></div>`;
   };
 
-  const renderLimits = (limits = []) => {
-    if (!limits.length) return "";
-    return `<div class="chat-note"><strong>Limits</strong><p>${escapeHtml(limits.join(" "))}</p></div>`;
-  };
-
-  const retrievalLabel = (mode) => {
-    if (mode === "hybrid") return "Hybrid vector + lexical retrieval";
-    if (mode === "lexical_fallback") return "Lexical fallback";
-    return "Lexical retrieval";
-  };
-
-  const renderRetrievalMeta = (payload) => {
-    const mode = payload?.retrievalMode || payload?.corpus?.retrievalMode;
-    if (!mode) return "";
-    const details = [retrievalLabel(mode)];
-    const vector = payload.vector || {};
-    if (payload.vectorConfigured && vector.model) {
-      details.push(
-        `${vector.model}${vector.dimensions ? `, ${vector.dimensions}d` : ""}${vector.pooling ? `, ${vector.pooling} pooling` : ""}`
-      );
-    }
-    if (payload.vectorConfigured && Number.isFinite(Number(vector.matches))) {
-      details.push(`${Number(vector.matches)} vector matches`);
-    }
-    if (payload.vectorConfigured && payload.fallbackReason && mode === "lexical_fallback") {
-      details.push(`fallback: ${String(payload.fallbackReason).replaceAll("_", " ")}`);
-    }
-    return `<div class="chat-note content-rag-retrieval"><strong>Retrieval</strong><p>${escapeHtml(details.join(" | "))}</p></div>`;
-  };
-
   const renderSuggestions = (questions = []) => {
     const unique = [...new Set(questions.filter(Boolean))].slice(0, 4);
     if (!unique.length) return "";
@@ -123,8 +99,6 @@ if (contentRag) {
     [
       renderText(payload.answer || "No answer was returned."),
       renderCitations(payload.citations),
-      renderRetrievalMeta(payload),
-      renderLimits(payload.limits),
       renderSuggestions(payload.suggestedQuestions)
     ].join("");
 
@@ -148,7 +122,8 @@ if (contentRag) {
     const trimmed = String(question || "").trim();
     if (!trimmed) return;
     message("user", renderText(trimmed));
-    const loading = message("assistant", renderStatus("info", "Thinking", "Retrieving public-safe content records."));
+    const loading = message("assistant", renderStatus("info", "Thinking", "Finding the most useful response."));
+    revealMessage(loading);
 
     if (!endpoint) {
       loading.querySelector(".chat-content").innerHTML = renderStatus(
@@ -196,7 +171,7 @@ if (contentRag) {
               : "Content RAG backend unavailable";
       const detail =
         error.name === "AbortError"
-          ? "The Content RAG backend did not respond within 15 seconds."
+          ? "The Content RAG backend did not respond within 30 seconds."
           : error.message || "The Content RAG request could not be completed.";
       loading.querySelector(".chat-content").innerHTML = renderStatus("error", title, detail);
       revealMessage(loading);
