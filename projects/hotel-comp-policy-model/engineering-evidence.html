@@ -12,26 +12,30 @@
     <meta property="og:image" content="https://grant-mccurdy.github.io/assets/images/workflow-hero-poster.jpg">
     <link rel="canonical" href="https://grant-mccurdy.github.io/projects/hotel-comp-policy-model/engineering-evidence.html">
     <link rel="icon" href="../../assets/images/grant-mccurdy-profile.jpg" type="image/jpeg">
-    <link rel="stylesheet" href="../../assets/css/styles.css?v=20260717a">
-    <link rel="stylesheet" href="appendix.css?v=20260717a">
+    <link rel="stylesheet" href="../../assets/css/styles.css?v=20260720b">
+    <link rel="stylesheet" href="appendix.css?v=20260720b">
   </head>
   <body>
+    <a class="skip-link" href="#main">Skip to content</a>
     <header class="site-header compact" data-header>
       <nav class="nav-shell" aria-label="Primary navigation">
-        <a class="brand" href="../../index.html">
+        <a class="brand" href="../../index.html" aria-label="Grant McCurdy home">
           <span class="brand-mark" aria-hidden="true"><img src="../../assets/images/grant-mccurdy-profile.jpg" alt=""></span>
           <span class="brand-text">Grant McCurdy</span>
         </a>
-        <div class="nav-links static">
-          <a href="index.html">Decision Brief</a>
-          <a href="simulation-audit.html">Simulation Audit</a>
+        <button class="nav-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false" data-nav-toggle>
+          <span></span><span></span><span></span>
+        </button>
+        <div class="nav-links" data-nav-links>
           <a href="../index.html">Projects</a>
-          <a href="https://github.com/grant-mccurdy/hotel-comp-policy-model">Source</a>
+          <a href="../../demos/index.html">Demos</a>
+          <a href="https://github.com/grant-mccurdy">GitHub</a>
+          <a href="https://www.linkedin.com/in/grant-mccurdy/">LinkedIn</a>
         </div>
       </nav>
     </header>
 
-    <main class="report-main">
+    <main id="main" class="report-main">
       <section class="report-hero">
         <p class="section-kicker">Hotel Comp Policy Model | Technical Evidence</p>
         <h1>Engineering evidence</h1>
@@ -83,11 +87,22 @@ parity-checked extract           static executive decision brief</code></pre>
 make enterprise-all  # S3 -&gt; Snowflake -&gt; validated extracts -&gt; reports</code></pre>
           <p>The default report remains static so a stakeholder does not need cloud credentials or a running warehouse. A validated extract is materialized before publication.</p>
           <h2 id="deliberate-limitations">Deliberate Limitations</h2>
-          <ul><li>The dataset is small; S3 and Snowflake support lineage and production-shaped workflow rather than computational scale.</li><li>Loads currently publish complete versioned snapshots instead of incremental change-data capture.</li><li>Statistical policy outputs are produced in Python and then governed in Snowflake; they are not reimplemented in SQL.</li><li>No real hotel operating data, internal cost, policy, or guest outcome enters this workflow.</li></ul>
+          <ul><li>The dataset is small; S3 and Snowflake support lineage and production-shaped workflow rather than computational scale.</li><li>Loads publish complete versioned snapshots instead of incremental change-data capture.</li><li>Statistical policy outputs are produced in Python and then governed in Snowflake; they are not reimplemented in SQL.</li><li>No real hotel operating data, internal cost, policy, or guest outcome enters this workflow.</li></ul>
           <h2 id="reviewable-implementation">Reviewable Implementation</h2>
           <ul><li>S3 publisher: <code>scripts/publish_s3_datalake.py</code></li><li>S3-to-Snowflake loader: <code>scripts/load_snowflake_from_s3.py</code></li><li>Snowflake loader and validation: <code>scripts/load_snowflake_warehouse.py</code></li><li>Analytic views: <code>sql/snowflake/02_create_views.sql</code></li><li>Cloud workflow: <code>.github/workflows/snowflake-validation.yml</code></li><li>Warehouse type contract: <code>data/contracts/snowflake_mart_types.json</code></li><li>Runtime bundle builder: <code>scripts/build_runtime_policy_bundle.py</code></li><li>Canonical recommendation service: <code>scripts/decision_service.py</code></li><li>Worker entry point: <code>cloudflare/src/entry.py</code></li><li>Runtime/API contract tests: <code>tests/test_decision_service.py</code>, <code>tests/test_intake_contract.py</code>, and <code>tests/test_worker_assets.py</code></li></ul>
       </article>
     </main>
-    <script src="../../assets/js/site.js?v=20260717a"></script>
+    <footer class="site-footer">
+      <div class="footer-shell">
+        <p>&copy; <span data-year></span> Grant McCurdy</p>
+        <div class="footer-links">
+          <a href="../index.html">Projects</a>
+          <a href="../../demos/index.html">Demos</a>
+          <a href="https://github.com/grant-mccurdy">GitHub</a>
+          <a href="https://www.linkedin.com/in/grant-mccurdy/">LinkedIn</a>
+        </div>
+      </div>
+    </footer>
+    <script src="../../assets/js/site.js?v=20260720b"></script>
   </body>
 </html>
