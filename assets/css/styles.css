@@ -2218,7 +2218,7 @@ h3 {
 
 .trend-controls {
   display: grid;
-  grid-template-columns: minmax(10rem, 0.8fr) auto minmax(13rem, 1fr);
+  grid-template-columns: repeat(2, minmax(8.75rem, 0.8fr)) auto minmax(13rem, 1fr);
   align-items: end;
   gap: 0.75rem;
   margin: -0.25rem 0 0.8rem;

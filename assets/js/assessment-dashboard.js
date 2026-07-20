@@ -45,7 +45,8 @@ const state = {
     limit: "5",
   },
   trend: {
-    historyYears: "5",
+    startPeriodId: "",
+    endPeriodId: "",
     benchmarkCourse: "",
   },
   filters: {
@@ -91,7 +92,8 @@ const els = {
   compareBy: [...document.querySelectorAll("input[name='compare-by']")],
   metric: document.querySelector("#metric-select"),
   season: document.querySelector("#season-select"),
-  trendHistory: document.querySelector("#trend-history-select"),
+  trendStart: document.querySelector("#trend-start-select"),
+  trendEnd: document.querySelector("#trend-end-select"),
   trendBenchmarkCourse: document.querySelector("#trend-benchmark-course"),
   departmentBand: document.querySelector("#toggle-department-band"),
   networkBand: document.querySelector("#toggle-network-band"),
@@ -680,16 +682,38 @@ function pointsToCurvePath(points, firstCommand = "M") {
   return buildCurvePath(points, { firstCommand, smooth: state.visual.smoothCurves });
 }
 
+function orderedTrendPeriods() {
+  return [...state.source.periods].sort((left, right) => left.order - right.order);
+}
+
+function trendPeriodOption(period) {
+  const label = period.shortLabel ?? `${inferredAcademicYear(period)} ${periodWindowCode(period)}`.trim();
+  return `<option value="${escapeHtml(period.id)}">${escapeHtml(label)}</option>`;
+}
+
+function renderTrendRangeOptions() {
+  const periods = orderedTrendPeriods();
+  const defaultStart = periods[Math.max(0, periods.length - 10)];
+  const start = periods.find((period) => period.id === state.trend.startPeriodId) ?? defaultStart ?? periods[0];
+  let end = periods.find((period) => period.id === state.trend.endPeriodId) ?? periods.at(-1);
+  if (start && end && end.order < start.order) end = start;
+  state.trend.startPeriodId = start?.id ?? "";
+  state.trend.endPeriodId = end?.id ?? "";
+  els.trendStart.innerHTML = periods.map(trendPeriodOption).join("");
+  els.trendEnd.innerHTML = periods
+    .filter((period) => !start || period.order >= start.order)
+    .map(trendPeriodOption)
+    .join("");
+  els.trendStart.value = state.trend.startPeriodId;
+  els.trendEnd.value = state.trend.endPeriodId;
+}
+
 function visiblePeriodWindow(periodData) {
-  if (state.trend.historyYears === "all") return periodData;
-  const requestedYears = Math.max(1, Number(state.trend.historyYears) || 1);
-  const orderedYears = [];
-  periodData.forEach(({ period }) => {
-    const academicYear = inferredAcademicYear(period);
-    if (academicYear && !orderedYears.includes(academicYear)) orderedYears.push(academicYear);
-  });
-  const visibleYears = new Set(orderedYears.slice(-requestedYears));
-  return periodData.filter(({ period }) => visibleYears.has(inferredAcademicYear(period)));
+  if (!periodData.length) return periodData;
+  const periods = orderedTrendPeriods();
+  const start = periods.find((period) => period.id === state.trend.startPeriodId) ?? periods[0];
+  const end = periods.find((period) => period.id === state.trend.endPeriodId) ?? periods.at(-1);
+  return periodData.filter(({ period }) => period.order >= start.order && period.order <= end.order);
 }
 
 function buildLineSeries(periodData) {
@@ -713,7 +737,7 @@ function buildLineSeries(periodData) {
       };
     }).filter(Boolean);
 
-    if (values.length < 2) return null;
+    if (!values.length) return null;
     const first = values[0];
     const latest = values[values.length - 1];
     const averageDelta = averageBoyEoyDeltaFromLineValues(values);
@@ -1311,12 +1335,11 @@ function renderPerformanceGrowthMap(records) {
     return;
   }
 
-  const benchmark = state.source.bands?.mastery?.line?.[(latest.period?.order ?? 1) - 1] ?? 70;
   const scores = items.map((item) => item.score);
   const growthValues = items.map((item) => item.growth);
   const xDomain = niceTicks(
-    clamp(Math.min(benchmark, ...scores) - 4, 0, 100),
-    clamp(Math.max(benchmark, ...scores) + 4, 0, 100),
+    clamp(Math.min(...scores) - 4, 0, 100),
+    clamp(Math.max(...scores) + 4, 0, 100),
     5,
   );
   const yDomain = niceTicks(Math.min(0, ...growthValues), Math.max(0, ...growthValues) + 1, 5);
@@ -1336,13 +1359,18 @@ function renderPerformanceGrowthMap(records) {
     </g>
   `).join("");
   const zeroY = y(clamp(0, yDomain.min, yDomain.max));
-  const benchmarkX = x(clamp(benchmark, xDomain.min, xDomain.max));
-  const highlightedItems = [...new Map([
-    items.reduce((lowest, item) => item.score < lowest.score ? item : lowest),
-    items.reduce((highest, item) => item.score > highest.score ? item : highest),
-    items.reduce((strongest, item) => item.growth > strongest.growth ? item : strongest),
-    items.reduce((largest, item) => item.n > largest.n ? item : largest),
-  ].map((item) => [item.key, item])).values()];
+  const reviewSelections = [
+    { item: items.reduce((lowest, item) => item.score < lowest.score ? item : lowest), reason: "lowest-latest-mean" },
+    { item: items.reduce((highest, item) => item.score > highest.score ? item : highest), reason: "highest-latest-mean" },
+    { item: items.reduce((weakest, item) => item.growth < weakest.growth ? item : weakest), reason: "weakest-observed-growth" },
+    { item: items.reduce((strongest, item) => item.growth > strongest.growth ? item : strongest), reason: "strongest-observed-growth" },
+  ];
+  const reviewReasonsByKey = new Map();
+  reviewSelections.forEach(({ item, reason }) => {
+    if (!reviewReasonsByKey.has(item.key)) reviewReasonsByKey.set(item.key, []);
+    reviewReasonsByKey.get(item.key).push(reason);
+  });
+  const highlightedItems = items.filter((item) => reviewReasonsByKey.has(item.key));
   const highlightIndexByKey = new Map(highlightedItems.map((item, index) => [item.key, index]));
   const points = items.map((item, index) => {
     const px = x(item.score);
@@ -1350,6 +1378,7 @@ function renderPerformanceGrowthMap(records) {
     const radius = clamp(5 + Math.sqrt(item.n) * 0.22, 6, 11);
     const highlightIndex = highlightIndexByKey.get(item.key);
     const isHighlighted = Number.isInteger(highlightIndex);
+    const reviewReasons = reviewReasonsByKey.get(item.key) ?? [];
     const labelOnLeft = px > margin.left + innerWidth * 0.62;
     const labelX = labelOnLeft ? px - radius - 9 : px + radius + 9;
     const labelY = py + (highlightIndex % 2 === 0 ? -12 : 18);
@@ -1358,8 +1387,8 @@ function renderPerformanceGrowthMap(records) {
         <line x1="${px}" y1="${py}" x2="${labelX}" y2="${labelY - 4}" class="performance-growth-leader"></line>
         <text x="${labelX}" y="${labelY}" class="performance-growth-label" text-anchor="${labelOnLeft ? "end" : "start"}">${escapeSvgText(label)}</text>` : "";
     return `
-      <g class="performance-growth-item${isHighlighted ? " is-highlighted" : ""}">
-        <title>${escapeSvgText(item.key)}: latest mean ${Math.round(item.score)}%, average paired growth ${escapeSvgText(fmtPtsAuto(item.growth))}, n=${item.n}, ${item.pairCount} complete pairs</title>
+      <g class="performance-growth-item${isHighlighted ? " is-highlighted" : ""}"${isHighlighted ? ` data-review-reasons="${escapeHtml(reviewReasons.join(","))}"` : ""}>
+        <title>${escapeSvgText(item.key)}: latest mean ${Math.round(item.score)}%, average observed EOY-minus-BOY change ${escapeSvgText(fmtPtsAuto(item.growth))}, n=${item.n}, ${item.pairCount} complete pairs${isHighlighted ? `. Review label: ${escapeSvgText(reviewReasons.join(", "))}` : ""}</title>
         <circle cx="${px}" cy="${py}" r="${radius}" fill="${palette[index % palette.length]}" class="performance-growth-point"></circle>
         ${directLabel}
       </g>
@@ -1371,17 +1400,15 @@ function renderPerformanceGrowthMap(records) {
       <rect x="0" y="0" width="${width}" height="${height}" class="chart-bg"></rect>
       ${verticalGrid}
       ${horizontalGrid}
-      <line x1="${benchmarkX}" x2="${benchmarkX}" y1="${margin.top}" y2="${margin.top + innerHeight}" class="performance-benchmark-line"></line>
       <line x1="${margin.left}" x2="${margin.left + innerWidth}" y1="${zeroY}" y2="${zeroY}" class="performance-zero-line"></line>
-      <text x="${benchmarkX + 7}" y="${margin.top + 14}" class="performance-guide-label">Program reference ${Math.round(benchmark)}%</text>
       ${points}
       <line x1="${margin.left}" x2="${margin.left + innerWidth}" y1="${margin.top + innerHeight}" y2="${margin.top + innerHeight}" class="axis-line"></line>
       <line x1="${margin.left}" x2="${margin.left}" y1="${margin.top}" y2="${margin.top + innerHeight}" class="axis-line"></line>
       <text x="${margin.left + innerWidth / 2}" y="${height - 8}" class="axis-title" text-anchor="middle">Latest mean score</text>
-      <text x="18" y="${margin.top + innerHeight / 2}" class="axis-title" text-anchor="middle" transform="rotate(-90 18 ${margin.top + innerHeight / 2})">Average paired growth</text>
+      <text x="18" y="${margin.top + innerHeight / 2}" class="axis-title" text-anchor="middle" transform="rotate(-90 18 ${margin.top + innerHeight / 2})">Average observed EOY-minus-BOY change</text>
     </svg>
   `;
-  els.performanceGrowthCaption.textContent = `${latest.period?.label ?? "Latest window"}: score versus average paired growth for ${items.length} ${currentSliceLabel(true)}; circle size reflects n. Labels mark decision-relevant extremes. Descriptive, not causal.`;
+  els.performanceGrowthCaption.textContent = `${latest.period?.label ?? "Latest window"}: each circle is one ${currentSliceLabel()}; right means a higher latest mean, up means a larger average EOY-minus-BOY change, and size reflects latest n. Every eligible ${currentSliceLabel()} is plotted. Labels identify one group at each boundary: lowest and highest latest mean, plus weakest and strongest observed growth; duplicates appear once. Descriptive, not causal.`;
 }
 
 function renderSkillHeatmap(records) {
@@ -1790,7 +1817,8 @@ function syncControls() {
   syncCompareControls();
   els.metric.value = state.metric;
   els.season.value = state.season;
-  els.trendHistory.value = state.trend.historyYears;
+  els.trendStart.value = state.trend.startPeriodId;
+  els.trendEnd.value = state.trend.endPeriodId;
   els.departmentBand.checked = state.toggles.department;
   els.networkBand.checked = state.toggles.network;
   els.masteryLine.checked = state.toggles.mastery;
@@ -1828,6 +1856,8 @@ function render() {
 
 function initControls() {
   const courses = unique(state.source.sections.map((section) => section.course));
+  const periods = orderedTrendPeriods();
+  renderTrendRangeOptions();
   const configuredBenchmarkCourses = benchmarkCourses();
   state.trend.benchmarkCourse = configuredBenchmarkCourses.includes(state.trend.benchmarkCourse)
     ? state.trend.benchmarkCourse
@@ -1916,8 +1946,18 @@ function initControls() {
     render();
   });
 
-  els.trendHistory.addEventListener("change", (event) => {
-    state.trend.historyYears = event.target.value;
+  els.trendStart.addEventListener("change", (event) => {
+    state.trend.startPeriodId = event.target.value;
+    renderTrendRangeOptions();
+    render();
+  });
+
+  els.trendEnd.addEventListener("change", (event) => {
+    state.trend.endPeriodId = event.target.value;
+    const start = periods.find((period) => period.id === state.trend.startPeriodId);
+    const end = periods.find((period) => period.id === state.trend.endPeriodId);
+    if (start && end && end.order < start.order) state.trend.startPeriodId = end.id;
+    syncControls();
     render();
   });
 
