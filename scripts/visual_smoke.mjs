@@ -274,6 +274,12 @@ async function inspectHelper(page, label) {
               "Start with the **Analytics Dashboard**, then open the Portfolio Data Lab. For methods evidence, visit Statistical Methods Evidence."
           },
           {
+            type: "capability_note",
+            title: "Supported scope",
+            status: "warning",
+            content: "This generic scope note should not appear in the portfolio helper."
+          },
+          {
             type: "suggestions",
             title: "Suggested follow-ups",
             questions: ["Which project shows analytics work?"]
@@ -308,6 +314,7 @@ async function inspectHelper(page, label) {
   await panel.locator("[data-helper-input]").fill("What should I look at first?");
   await panel.locator("[data-helper-form] button[type='submit']").click();
   await panel.locator(".portfolio-helper-link-list a[href*='dashboard/assessment.html']").last().waitFor({ state: "visible", timeout: 1500 });
+  const recommendationText = await panel.locator("[data-helper-thread]").innerText();
   const recommendationLinks = await panel.locator(".portfolio-helper-link-list a").evaluateAll((links) =>
     links.map((link) => ({
       href: link.href,
@@ -342,6 +349,9 @@ async function inspectHelper(page, label) {
       recommendationLinks.some((link) => link.href.endsWith("/dashboard/assessment.html") && link.text.includes("Analytics Dashboard")) &&
       recommendationLinks.some((link) => link.href.endsWith("/data-lab.html") && link.text.includes("Portfolio Data Lab")) &&
       recommendationLinks.some((link) => link.href.endsWith("/projects/graduate-statistics-portfolio.html")),
+    supportedScopeHidden:
+      !recommendationText.includes("Supported scope") &&
+      !recommendationText.includes("This generic scope note should not appear in the portfolio helper."),
     overflow,
   };
 }
@@ -669,6 +679,7 @@ const failures = results.filter(
     result.helper?.initialText === false ||
     result.helper?.handoff === false ||
     result.helper?.recommendationLinks === false ||
+    result.helper?.supportedScopeHidden === false ||
     result.dataLab?.prefilled === false ||
     result.dataLabCatalog?.datasetName === false ||
     result.dataLabCatalog?.datasetTables === false ||

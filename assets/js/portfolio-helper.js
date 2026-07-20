@@ -288,8 +288,10 @@ if (helper) {
   const renderTextBlock = (block) => renderMarkdownText(block.content || "");
 
   const renderCapabilityNote = (block) => {
+    const title = String(block.title || "Supported scope").trim();
+    if (title.toLowerCase() === "supported scope") return "";
     const nextBestAction = block.nextBestAction ? `<p>Next best action: ${escapeHtml(block.nextBestAction)}</p>` : "";
-    return `<div class="portfolio-helper-status ${escapeHtml(block.status || "info")}"><strong>${escapeHtml(block.title || "Supported scope")}</strong><p>${escapeHtml(block.content || "")}</p>${nextBestAction}</div>`;
+    return `<div class="portfolio-helper-status ${escapeHtml(block.status || "info")}"><strong>${escapeHtml(title)}</strong><p>${escapeHtml(block.content || "")}</p>${nextBestAction}</div>`;
   };
 
   const renderSuggestions = (block) => {
