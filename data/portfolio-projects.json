@@ -1,5 +1,6 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
+  "siteLastReviewed": "2026-07-20",
   "policy": "Curated public portfolio entries only. Public repositories are never added automatically.",
   "projects": [
     {
@@ -8,9 +9,18 @@
       "tier": "flagship",
       "statusLabel": "Published brief + live desk",
       "homeFeatured": true,
-      "portalPath": "projects/hotel-comp-policy-model/",
+      "lastReviewed": "2026-07-20",
+      "portalPath": "projects/hotel-comp-policy-model.html",
       "sourceUrl": "https://github.com/grant-mccurdy/hotel-comp-policy-model",
-      "primaryEvidenceUrl": "https://hotel-comp-decision-desk.grant-mccurdy.workers.dev/"
+      "primaryEvidenceUrl": "https://hotel-comp-decision-desk.grant-mccurdy.workers.dev/",
+      "summary": "Explainable service-recovery decision support that compares feasible guest gestures while keeping cost, constraints, and manager judgment visible.",
+      "capabilities": ["decision support", "policy evaluation", "data engineering"],
+      "demo": {
+        "title": "Hotel Decision Desk",
+        "url": "https://hotel-comp-decision-desk.grant-mccurdy.workers.dev/",
+        "task": "Run a synthetic service-recovery scenario and inspect the recommendation, alternatives, and assumptions.",
+        "dataBoundary": "Built-in or user-entered synthetic scenarios only; no guest records or internal hotel policy."
+      }
     },
     {
       "id": "assessment-intelligence",
@@ -18,9 +28,18 @@
       "tier": "flagship",
       "statusLabel": "SQL extracts + dashboard",
       "homeFeatured": true,
+      "lastReviewed": "2026-07-20",
       "portalPath": "projects/assessment-intelligence.html",
       "sourceUrl": "https://github.com/grant-mccurdy/assessment-intelligence",
-      "primaryEvidenceUrl": "dashboard/assessment.html"
+      "primaryEvidenceUrl": "dashboard/assessment.html",
+      "summary": "SQL-backed assessment reporting that turns shared synthetic extracts into growth, participation, completion, and data-quality decisions.",
+      "capabilities": ["SQL analytics", "dashboard design", "reporting"],
+      "demo": {
+        "title": "Assessment Analytics",
+        "url": "dashboard/assessment.html",
+        "task": "Inspect trends, compare groups, and review readiness signals from the published assessment extracts.",
+        "dataBoundary": "Synthetic records generated from the same public SQL extracts used by the reporting workflow."
+      }
     },
     {
       "id": "content-intelligence",
@@ -28,9 +47,18 @@
       "tier": "flagship",
       "statusLabel": "Live cited retrieval",
       "homeFeatured": true,
+      "lastReviewed": "2026-07-20",
       "portalPath": "projects/content-intelligence.html",
       "sourceUrl": "https://github.com/grant-mccurdy/content-intelligence",
-      "primaryEvidenceUrl": "projects/content-intelligence.html#live-rag"
+      "primaryEvidenceUrl": "demos/content-rag.html",
+      "summary": "A source-preserving content pipeline that produces reviewed retrieval records and cited answers from public-safe inputs.",
+      "capabilities": ["RAG", "content processing", "retrieval evaluation"],
+      "demo": {
+        "title": "Content Intelligence RAG",
+        "url": "demos/content-rag.html",
+        "task": "Ask how the conversion, information-object, retrieval, citation, and safety workflows operate.",
+        "dataBoundary": "Reviewed public-safe method and evidence records; raw private source material is excluded."
+      }
     },
     {
       "id": "education-data-simulation-engine",
@@ -38,9 +66,18 @@
       "tier": "flagship",
       "statusLabel": "Validated synthetic warehouse",
       "homeFeatured": true,
+      "lastReviewed": "2026-07-20",
       "portalPath": "projects/education-data-simulation-engine.html",
       "sourceUrl": "https://github.com/grant-mccurdy/education-data-simulation-engine",
-      "primaryEvidenceUrl": "data-lab.html"
+      "primaryEvidenceUrl": "data-lab.html",
+      "summary": "A validated synthetic education warehouse that supports reproducible analytics prototypes without exposing private records.",
+      "capabilities": ["data simulation", "warehouse design", "validation"],
+      "demo": {
+        "title": "Education Data Lab",
+        "url": "data-lab.html",
+        "task": "Ask statistical and operational questions and receive structured tables, charts, and analysis notes.",
+        "dataBoundary": "Read-only analysis over a validated synthetic education warehouse."
+      }
     },
     {
       "id": "statistical-risk-modeling-r",
@@ -48,9 +85,12 @@
       "tier": "technical-depth",
       "statusLabel": "Model card + PDF report",
       "homeFeatured": false,
+      "lastReviewed": "2026-07-20",
       "portalPath": "projects/statistical-risk-modeling-r.html",
       "sourceUrl": "https://github.com/grant-mccurdy/statistical-risk-modeling-r",
-      "primaryEvidenceUrl": "projects/statistical-risk-modeling-r.html"
+      "primaryEvidenceUrl": "projects/statistical-risk-modeling-r.html",
+      "summary": "R-based growth analytics with model diagnostics, expected-growth validation, and stakeholder reporting.",
+      "capabilities": ["R", "statistical modeling", "model validation"]
     },
     {
       "id": "graduate-statistics-portfolio",
@@ -58,9 +98,12 @@
       "tier": "technical-depth",
       "statusLabel": "Curated methods index",
       "homeFeatured": false,
+      "lastReviewed": "2026-07-20",
       "portalPath": "projects/graduate-statistics-portfolio.html",
       "sourceUrl": "https://github.com/grant-mccurdy/graduate-statistics-portfolio",
-      "primaryEvidenceUrl": "projects/graduate-statistics-portfolio.html"
+      "primaryEvidenceUrl": "projects/graduate-statistics-portfolio.html",
+      "summary": "Curated graduate statistics evidence covering model search, validation, calibration, thresholds, and diagnostics.",
+      "capabilities": ["statistical methods", "model selection", "diagnostics"]
     },
     {
       "id": "assessment-to-remediation-pipeline",
@@ -68,9 +111,12 @@
       "tier": "active-prototype",
       "statusLabel": "Prototype | review gated",
       "homeFeatured": false,
+      "lastReviewed": "2026-07-20",
       "portalPath": "projects/assessment-to-remediation-pipeline.html",
       "sourceUrl": "https://github.com/grant-mccurdy/assessment-to-remediation-pipeline",
-      "primaryEvidenceUrl": "https://grant-mccurdy.github.io/assessment-to-remediation-pipeline/"
+      "primaryEvidenceUrl": "https://grant-mccurdy.github.io/assessment-to-remediation-pipeline/",
+      "summary": "A review-gated prototype connecting assessment diagnostics to feedback, dry-run LMS actions, and remediation evidence.",
+      "capabilities": ["workflow automation", "assessment design", "human review"]
     },
     {
       "id": "instructional-ai-workflows",
@@ -78,9 +124,12 @@
       "tier": "active-prototype",
       "statusLabel": "Prototype | sample packets",
       "homeFeatured": false,
+      "lastReviewed": "2026-07-20",
       "portalPath": "projects/instructional-ai-workflows.html",
       "sourceUrl": "https://github.com/grant-mccurdy/instructional-ai-workflows",
-      "primaryEvidenceUrl": "https://grant-mccurdy.github.io/instructional-ai-workflows/"
+      "primaryEvidenceUrl": "https://grant-mccurdy.github.io/instructional-ai-workflows/",
+      "summary": "Human-reviewed instructional AI workflows for rubric evidence, feedback drafts, remediation plans, and reviewer packets.",
+      "capabilities": ["AI-assisted workflows", "instructional design", "review controls"]
     }
   ]
 }

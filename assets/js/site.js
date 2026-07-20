@@ -1,9 +1,5 @@
-const siteScript = document.currentScript;
-const siteRoot = siteScript?.src ? new URL("../../", siteScript.src) : new URL("./", window.location.href);
-
 document.documentElement.classList.add("js", "js-reveal");
 
-const siteUrl = (path) => new URL(path, siteRoot).href;
 const main = document.querySelector("main");
 const header = document.querySelector("[data-header]");
 const navLinks = document.querySelector(".nav-links");
@@ -83,31 +79,17 @@ if (navLinks) {
     const target = new URL(link.href, window.location.href);
     const targetPath = target.pathname.replace(/\/$/, "/index.html");
     const isProjectPage = targetPath.endsWith("/projects/index.html") && currentPath.includes("/projects/");
-    const isCaseStudyPage = targetPath.endsWith("/case-studies/index.html") && currentPath.includes("/case-studies/");
+    const isDemoPage =
+      targetPath.endsWith("/demos/index.html") &&
+      (currentPath.includes("/demos/") ||
+        currentPath.endsWith("/dashboard/assessment.html") ||
+        currentPath.endsWith("/data-lab.html"));
     const isCurrentPage =
       target.origin === window.location.origin &&
       targetPath === currentPath &&
       (!target.hash || target.hash === window.location.hash);
-    if (isProjectPage || isCaseStudyPage || isCurrentPage) link.setAttribute("aria-current", "page");
+    if (isProjectPage || isDemoPage || isCurrentPage) link.setAttribute("aria-current", "page");
   });
-}
-
-if (!document.querySelector(".site-footer")) {
-  const footer = document.createElement("footer");
-  footer.className = "site-footer";
-  footer.innerHTML = `
-    <div class="footer-shell">
-      <p>&copy; <span data-year></span> Grant McCurdy</p>
-      <div class="footer-links">
-        <a href="${siteUrl("projects/index.html")}">Projects</a>
-        <a href="${siteUrl("dashboard/assessment.html")}">Dashboard</a>
-        <a href="${siteUrl("data-lab.html")}">Data Lab</a>
-        <a href="${siteUrl("case-studies/index.html")}">Case Studies</a>
-        <a href="https://github.com/grant-mccurdy" data-track-project="portfolio" data-track-destination="source">GitHub</a>
-        <a href="https://www.linkedin.com/in/grant-mccurdy/" data-track-project="linkedin" data-track-destination="linkedin">LinkedIn</a>
-      </div>
-    </div>`;
-  document.body.append(footer);
 }
 
 document.querySelectorAll("[data-year]").forEach((year) => {

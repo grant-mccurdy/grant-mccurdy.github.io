@@ -17,16 +17,18 @@
   <body>
     <header class="site-header compact" data-header>
       <nav class="nav-shell" aria-label="Primary navigation">
-        <a class="brand" href="../index.html">
+        <a class="brand" href="../index.html" aria-label="Grant McCurdy home">
           <span class="brand-mark" aria-hidden="true"><img src="../assets/images/grant-mccurdy-profile.jpg" alt=""></span>
           <span class="brand-text">Grant McCurdy</span>
         </a>
-        <div class="nav-links static">
+        <button class="nav-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false" data-nav-toggle>
+          <span></span><span></span><span></span>
+        </button>
+        <div class="nav-links" data-nav-links>
           <a href="../projects/index.html">Projects</a>
-          <a href="../index.html#demos">Demos</a>
-          <a href="../case-studies/index.html">Case Studies</a>
-          <a href="../data-lab.html">Data Lab</a>
+          <a href="../demos/index.html">Demos</a>
           <a href="https://github.com/grant-mccurdy">GitHub</a>
+          <a href="https://www.linkedin.com/in/grant-mccurdy/">LinkedIn</a>
         </div>
       </nav>
     </header>
@@ -39,7 +41,6 @@
         <div class="hero-actions detail-actions">
           <a class="button primary" href="https://grant-mccurdy.github.io/instructional-ai-workflows/" data-track-project="instructional-ai-workflows" data-track-destination="live-demo">Open Reviewer Demo</a>
           <a class="button outline" href="https://github.com/grant-mccurdy/instructional-ai-workflows" data-track-project="instructional-ai-workflows" data-track-destination="source">GitHub Repo</a>
-          <a class="button outline" href="../case-studies/instructional-ai-workflows.html" data-track-project="instructional-ai-workflows" data-track-destination="case-study">Read Case Study</a>
         </div>
       </section>
 
@@ -63,21 +64,47 @@
           </ul>
           <div class="link-row detail-action">
             <a class="text-link" href="https://github.com/grant-mccurdy/instructional-ai-workflows" data-track-project="instructional-ai-workflows" data-track-destination="source">Source repo</a>
-            <a class="text-link" href="../case-studies/instructional-ai-workflows.html" data-track-project="instructional-ai-workflows" data-track-destination="case-study">Case study</a>
             <a class="text-link" href="https://github.com/grant-mccurdy/instructional-ai-workflows/tree/main/demos/precalculus_frq">Demo inputs</a>
             <a class="text-link" href="https://github.com/grant-mccurdy/instructional-ai-workflows/tree/main/sample_outputs/precalculus_frq">Demo outputs</a>
           </div>
         </div>
       </section>
 
+      <section class="section-shell case-study-grid" aria-labelledby="workflow-story-heading">
+        <div class="section-heading case-study-heading">
+          <p class="section-kicker">System Story</p>
+          <h2 id="workflow-story-heading">From rubric evidence to reviewed language</h2>
+        </div>
+        <article class="case-step">
+          <span>01</span>
+          <h3>Problem</h3>
+          <p>Feedback workflows need consistency and speed, but the system cannot substitute model output for teacher judgment or expose private instructional records.</p>
+        </article>
+        <article class="case-step">
+          <span>02</span>
+          <h3>Approach</h3>
+          <p>JSON rubrics and synthetic responses feed deterministic workflow logic that separates evidence capture, draft generation, teacher review, release language, and remediation planning.</p>
+        </article>
+        <article class="case-step">
+          <span>03</span>
+          <h3>Result</h3>
+          <p>The Precalculus demo produces three synthetic evaluations, two review-required cases, a reviewer packet, approved feedback, and a rubric-organized remediation plan.</p>
+        </article>
+        <article class="case-step">
+          <span>04</span>
+          <h3>Lesson</h3>
+          <p>The strongest use of AI here is a controlled review pipeline, not automatic scoring. Evidence and teacher approval remain explicit at every release boundary.</p>
+        </article>
+      </section>
+
       <section class="section-shell artifact-grid" aria-labelledby="workflow-build-heading">
         <div class="section-heading">
           <p class="section-kicker">Demo Evidence</p>
-          <h2 id="workflow-build-heading">What the current demo shows</h2>
+          <h2 id="workflow-build-heading">What the demo shows</h2>
         </div>
         <article class="artifact">
           <h3>Synthetic FRQ input</h3>
-          <p>The source repo now includes fake learner responses and a teacher-defined rubric for a Precalculus linear model task.</p>
+          <p>The source repository includes fake learner responses and a teacher-defined rubric for a Precalculus linear model task.</p>
         </article>
         <article class="artifact">
           <h3>Structured evaluation</h3>
@@ -103,6 +130,9 @@
         </div>
       </section>
     </main>
-    <script src="../assets/js/site.js?v=20260717a"></script>
+    <footer class="site-footer">
+      <div class="footer-shell"><p>&copy; <span data-year></span> Grant McCurdy</p><div class="footer-links"><a href="index.html">Projects</a><a href="../demos/index.html">Demos</a><a href="https://github.com/grant-mccurdy">GitHub</a><a href="https://www.linkedin.com/in/grant-mccurdy/">LinkedIn</a></div></div>
+    </footer>
+    <script src="../assets/js/site.js?v=20260720b"></script>
   </body>
 </html>

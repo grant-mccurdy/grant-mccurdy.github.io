@@ -270,7 +270,25 @@ async function checkValue(page, containerSelector, value) {
   await page.waitForTimeout(120);
 }
 
+async function selectDashboardView(page, view) {
+  await page.locator(`[data-dashboard-view="${view}"]`).click();
+  await page.waitForFunction((activeView) => {
+    const activeButton = document.querySelector(`[data-dashboard-view="${activeView}"]`);
+    const activePanel = document.querySelector(`[data-dashboard-panel="${activeView}"]`);
+    return activeButton?.getAttribute("aria-selected") === "true" && activePanel && !activePanel.hidden;
+  }, view);
+}
+
 async function resetDashboard(page) {
+  await selectDashboardView(page, "compare");
+  await page.evaluate(() => {
+    const comparisonTools = document.querySelector("#dashboard-comparison-tools");
+    if (comparisonTools && !comparisonTools.open) {
+      comparisonTools.open = true;
+      comparisonTools.dispatchEvent(new Event("toggle"));
+    }
+  });
+  await page.waitForTimeout(40);
   await page.locator("#slice-filter-clear").click();
   await setInput(page, "#line-filter", "");
   await setSelect(page, "#metric-select", "score");
@@ -337,6 +355,15 @@ async function snapshot(page) {
       emptyChartText: [...document.querySelectorAll(".empty-chart-text")].map((node) => node.textContent.trim()),
       tableRows: document.querySelectorAll("#course-table tr").length,
       tableCount: document.querySelector("#table-count")?.textContent ?? "",
+      activeView: document.querySelector("[data-dashboard-view][aria-selected='true']")?.dataset.dashboardView ?? "",
+      visiblePanels: [...document.querySelectorAll("[data-dashboard-panel]")]
+        .filter((panel) => !panel.hidden)
+        .map((panel) => panel.dataset.dashboardPanel),
+      taskTabCount: document.querySelectorAll("[role='tab'][data-dashboard-view]").length,
+      performanceGrowthPoints: document.querySelectorAll(".performance-growth-point").length,
+      performanceGrowthLabels: document.querySelectorAll(".performance-growth-label").length,
+      performanceGrowthCaption: document.querySelector("#performance-growth-caption")?.textContent ?? "",
+      decisionSignalCount: document.querySelectorAll("#insight-list li").length,
       mobileOverflow: [...document.querySelectorAll("body *")]
         .filter((element) => {
           if (element.closest(".chart-frame, .table-wrap")) return false;
@@ -367,6 +394,23 @@ function cardsMatch(actual, expected) {
 
 async function runDesktopChecks(page, expected, emptyCombo) {
   const failures = [];
+  const overview = await snapshot(page);
+  assertCondition(failures, overview.activeView === "overview" && overview.visiblePanels.join(",") === "overview", "overview is the only default task view", overview);
+  assertCondition(failures, overview.taskTabCount === 3, "three semantic task tabs render", overview.taskTabCount);
+  assertCondition(failures, overview.lineCount === Math.min(5, expected.subjectLineCount), "overview limits the default trend to five lines", overview.lineCount);
+  assertCondition(failures, overview.violinCount === 0, "overview omits distribution overlays by default", overview.violinCount);
+  assertCondition(failures, overview.performanceGrowthPoints > 0 && overview.performanceGrowthCaption.includes("Descriptive, not causal"), "overview renders a bounded performance-growth synthesis", overview);
+  assertCondition(failures, overview.performanceGrowthLabels >= 2 && overview.performanceGrowthLabels <= 4, "synthesis labels only decision-relevant extremes", overview.performanceGrowthLabels);
+  assertCondition(failures, overview.decisionSignalCount === 3, "overview contains three decision signals", overview.decisionSignalCount);
+  assertCondition(failures, cardsMatch(overview.cards, expected.cards), "overview metrics match source JSON", { actual: overview.cards, expected: expected.cards });
+
+  await selectDashboardView(page, "compare");
+  const compareView = await snapshot(page);
+  assertCondition(failures, compareView.activeView === "compare" && compareView.visiblePanels.join(",") === "compare", "compare tab reveals only comparison workspace", compareView);
+  await selectDashboardView(page, "quality");
+  const qualityView = await snapshot(page);
+  assertCondition(failures, qualityView.activeView === "quality" && qualityView.visiblePanels.join(",") === "quality", "quality tab reveals only quality workspace", qualityView);
+
   await resetDashboard(page);
 
   const base = await snapshot(page);
@@ -380,7 +424,7 @@ async function runDesktopChecks(page, expected, emptyCombo) {
   assertCondition(failures, !base.metricOptions.includes("growth"), "growth baseline metric option removed", base.metricOptions);
   assertCondition(failures, base.summary.includes("Comparing all subjects") && base.summary.includes("filters: all teachers, all sections"), "default comparison summary is simplified", base.summary);
   assertCondition(failures, !base.legacyGrowthCopy, "old growth copy absent", base);
-  assertCondition(failures, cardsMatch(base.cards, expected.cards), "metric cards match source JSON", { actual: base.cards, expected: expected.cards });
+  assertCondition(failures, cardsMatch(base.cards, expected.cards), "metrics remain stable in compare view", { actual: base.cards, expected: expected.cards });
   assertCondition(failures, base.movementCaption.includes("average End-minus-Beginning delta"), "movement caption uses BOY/EOY language", base.movementCaption);
   assertCondition(failures, base.lineCount === expected.subjectLineCount, "default subject line count matches source JSON", base);
   assertCondition(failures, base.lineLabels.length > 0 && base.lineLabels.every((label) => label.includes("x\u0304\u03b4")), "line labels show visible average delta notation", base.lineLabels);
@@ -447,6 +491,7 @@ async function runDesktopChecks(page, expected, emptyCombo) {
   const sectionSearchCount = await page.locator("#section-filter-options input[type='checkbox']").count();
   assertCondition(failures, sectionSearchCount > 0 && sectionSearchCount < 174, "section search filters checkbox list", sectionSearchCount);
 
+  await selectDashboardView(page, "quality");
   await setSelect(page, "#table-completion-filter", "95");
   const tableFiltered = await snapshot(page);
   assertCondition(failures, tableFiltered.tableRows >= 0, "table completion filter renders", tableFiltered.tableCount);
@@ -480,11 +525,17 @@ async function runDesktopChecks(page, expected, emptyCombo) {
 
 async function runMobileChecks(page) {
   const failures = [];
-  const mobile = await snapshot(page);
-  assertCondition(failures, !mobile.dashboardError, "mobile dashboard loads", mobile);
-  assertCondition(failures, mobile.compareRadios.length === 3, "mobile compare radios present", mobile.compareRadios);
-  assertCondition(failures, mobile.mobileOverflow.length === 0, "mobile has no non-chart horizontal overflow", mobile.mobileOverflow);
-  return { failures, summary: { overflowCount: mobile.mobileOverflow.length } };
+  const views = {};
+  for (const view of ["overview", "compare", "quality"]) {
+    await selectDashboardView(page, view);
+    views[view] = await snapshot(page);
+    assertCondition(failures, views[view].activeView === view && views[view].visiblePanels.join(",") === view, `mobile ${view} view is isolated`, views[view]);
+    assertCondition(failures, views[view].mobileOverflow.length === 0, `mobile ${view} has no non-chart horizontal overflow`, views[view].mobileOverflow);
+  }
+  assertCondition(failures, !views.overview.dashboardError, "mobile dashboard loads", views.overview);
+  assertCondition(failures, views.compare.compareRadios.length === 3, "mobile compare radios present", views.compare.compareRadios);
+  assertCondition(failures, views.overview.performanceGrowthPoints > 0, "mobile synthesis chart renders", views.overview.performanceGrowthPoints);
+  return { failures, summary: { overflowCount: Math.max(...Object.values(views).map((view) => view.mobileOverflow.length)) } };
 }
 
 const source = JSON.parse(fs.readFileSync(sourcePath, "utf8"));

@@ -11,8 +11,8 @@ For a first-time visitor, recommend this path:
 1. Start on the homepage to understand the overall systems-portfolio framing.
 2. Open the Hotel Comp decision brief or live Decision Desk for the clearest
    business decision-support example.
-3. Open the Analytics Dashboard for a fast interactive data-product demo.
-4. Open the Portfolio Data Lab for structured analytic chat over the synthetic
+3. Open Assessment Analytics for a fast interactive data-product demo.
+4. Open the Education Data Lab for structured analytic chat over the synthetic
    education warehouse.
 5. Read the Assessment Intelligence or Education Data Simulation Engine project
    page for the strongest data and SQL evidence.
@@ -28,17 +28,17 @@ data, recommend:
 
 - Education Data Simulation Engine;
 - Assessment Intelligence;
-- Portfolio Data Lab;
-- Analytics Dashboard.
+- Education Data Lab;
+- Assessment Analytics.
 
 If the visitor asks about dashboards, reporting, or analytics products,
 recommend:
 
 - Hotel Comp Policy Model for operational decision support;
-- Analytics Dashboard;
+- Assessment Analytics;
 - Assessment Intelligence;
 - Assessment Growth Analytics in R;
-- Assessment Reporting Architecture case study.
+- the Assessment Intelligence project brief for the consolidated delivery story.
 
 If the visitor asks about statistical modeling, R, expected growth, BOY/EOY
 improvement, section performance, validation, or model cards, recommend:
@@ -51,13 +51,13 @@ recommend:
 
 - Instructional AI Workflows;
 - Assessment-to-Remediation Pipeline;
-- Feedback, Review, and Remediation case study.
+- their project briefs for the problem, approach, result, and limits.
 
 If the visitor asks about RAG, source grounding, artifact conversion, corpus
 construction, or content pipelines, recommend:
 
 - Content Intelligence;
-- Content Intelligence Pipeline case study;
+- the Content Intelligence RAG demo;
 - the public RAG/backend project context when cited by the helper sources.
 
 If the visitor asks about hospitality, service recovery, policy comparison,
@@ -73,7 +73,7 @@ The homepage helper answers questions about Grant, the site, projects, demos,
 and where to navigate. It should not perform statistical analysis itself.
 
 For computational questions over the synthetic education data, send the visitor
-to the Portfolio Data Lab at:
+to the Education Data Lab at:
 
 https://grant-mccurdy.github.io/data-lab.html
 

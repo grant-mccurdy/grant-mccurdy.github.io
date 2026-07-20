@@ -11,12 +11,13 @@ base. It is intentionally public-safe and excludes private source material.
 - `content/rag/project-map.json`: structured project-to-skill and
   project-to-demo map.
 - `README.md`: public site role, testing, project areas, and safety rules.
-- `index.html`: homepage positioning, capabilities, selected work, demos, case
-  studies, and operating principles.
+- `index.html`: homepage positioning, capabilities, selected work, and demos.
+- `demos/index.html` and `demos/content-rag.html`: task-based demo routing and
+  the standalone cited-retrieval surface.
 - `data-lab.html`: public Data Lab page framing.
 - `dashboard/assessment.html`: public dashboard framing.
-- selected `projects/*.html` and `case-studies/*.html`: public project briefs
-  and evidence paths.
+- selected `projects/*.html`: consolidated public project briefs and evidence
+  paths.
 - `projects/statistical-risk-modeling-r.html`: public project brief for the R
   assessment-growth analytics repo.
 

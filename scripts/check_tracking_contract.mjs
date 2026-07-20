@@ -14,7 +14,7 @@ const allowedProjects = new Set([
   "instructional-ai-workflows",
   "linkedin",
 ]);
-const allowedDestinations = new Set(["live-demo", "source", "project-brief", "case-study", "linkedin"]);
+const allowedDestinations = new Set(["live-demo", "source", "project-brief", "report", "linkedin"]);
 const files = [
   "index.html",
   "projects/index.html",
@@ -45,8 +45,8 @@ const siteScript = fs.readFileSync(path.join(root, "assets", "js", "site.js"), "
 if (!siteScript.includes("portfolio-event-v1") || !siteScript.includes("/events")) {
   errors.push("Site event sender is missing the versioned Worker contract.");
 }
-if (!siteScript.includes("https://www.linkedin.com/in/grant-mccurdy/")) {
-  errors.push("Generated footer is missing the approved LinkedIn URL.");
+if (!files.every((relative) => fs.readFileSync(path.join(root, relative), "utf8").includes("https://www.linkedin.com/in/grant-mccurdy/"))) {
+  errors.push("A curated static shell is missing the approved LinkedIn URL.");
 }
 if (trackedLinks < 20) errors.push(`Expected at least 20 curated tracked links; found ${trackedLinks}.`);
 

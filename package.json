@@ -4,7 +4,13 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "check:prose": "python3 scripts/check_prose_conventions.py",
     "check:links": "python3 scripts/check_links.py",
+    "build:sitemap": "node scripts/build_sitemap.mjs",
+    "check:sitemap": "node scripts/build_sitemap.mjs --check",
+    "check:shell": "node scripts/check_site_shell.mjs",
+    "check:chat-ui": "node scripts/chat_ui_smoke.mjs",
+    "check:assessment-core": "node scripts/assessment_core_smoke.mjs",
     "check:external": "python3 scripts/check_external_links.py",
     "check:visual": "node scripts/visual_smoke.mjs",
     "check:accessibility": "node scripts/accessibility_smoke.mjs",

@@ -6,7 +6,7 @@
     <title>Grant McCurdy | Systems Portfolio</title>
     <meta name="description" content="Systems portfolio for Grant McCurdy: data systems, analytics products, AI-assisted workflows, content intelligence, and public-safe demos.">
     <meta property="og:title" content="Grant McCurdy | Systems Portfolio">
-    <meta property="og:description" content="Public-safe demos, project briefs, repositories, and case studies for data systems, analytics products, workflow automation, AI-assisted systems, and content intelligence.">
+    <meta property="og:description" content="Public demos, concise project briefs, and inspectable source for data systems, analytics products, workflow automation, and content intelligence.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://grant-mccurdy.github.io/">
     <meta property="og:image" content="https://grant-mccurdy.github.io/assets/images/social/portfolio.png">
@@ -31,10 +31,9 @@
         </button>
         <div class="nav-links" data-nav-links>
           <a href="projects/index.html">Projects</a>
-          <a href="#demos">Demos</a>
-          <a href="case-studies/index.html">Case Studies</a>
-          <a href="data-lab.html">Data Lab</a>
+          <a href="demos/index.html">Demos</a>
           <a href="https://github.com/grant-mccurdy" data-track-project="portfolio" data-track-destination="source">GitHub</a>
+          <a href="https://www.linkedin.com/in/grant-mccurdy/" data-track-project="linkedin" data-track-destination="linkedin">LinkedIn</a>
         </div>
       </nav>
     </header>
@@ -53,9 +52,9 @@
           <p class="hero-copy">I build data systems, analytics products, AI-assisted workflows, and source-grounded tools that turn messy information into usable decisions, artifacts, and operations.</p>
           <div class="hero-actions">
             <a class="button primary" href="projects/index.html">Explore Projects</a>
-            <a class="button secondary" href="#demos">Open Demos</a>
+            <a class="button secondary" href="demos/index.html">Open Demos</a>
           </div>
-          <p class="hero-proof">Start with the hotel decision brief, assessment dashboard, or live RAG demo. Each route includes inspectable source and validation evidence.</p>
+          <p class="hero-proof">Start with a project brief for context or open a demo to use the system. Every route includes source and validation evidence.</p>
         </div>
       </section>
 
@@ -80,16 +79,6 @@
         </div>
       </section>
 
-      <section class="intro-band" id="start" aria-labelledby="focus-heading" data-reveal>
-        <div class="section-shell intro-grid">
-          <div>
-            <p class="section-kicker">Start Here</p>
-            <h2 id="focus-heading">A simple map of the public work</h2>
-          </div>
-          <p>Use the project directory for the full portfolio, open the demos for working artifacts, or read the case studies for the system story behind selected builds. Source links live with each project so the homepage stays navigable.</p>
-        </div>
-      </section>
-
       <section class="section-shell" id="projects" aria-labelledby="projects-heading">
         <div class="section-heading" data-reveal>
           <p class="section-kicker">Project Portfolio</p>
@@ -97,7 +86,7 @@
         </div>
 
         <div class="artifact-list work-list">
-          <a class="artifact-link-card" href="projects/hotel-comp-policy-model/" data-home-project-id="hotel-comp-policy-model" data-track-project="hotel-comp-policy-model" data-track-destination="project-brief" data-reveal>
+          <a class="artifact-link-card" href="projects/hotel-comp-policy-model.html" data-home-project-id="hotel-comp-policy-model" data-track-project="hotel-comp-policy-model" data-track-destination="project-brief" data-reveal>
             <span class="artifact-kind">Flagship | decision support</span>
             <strong>Hotel Comp Policy Model</strong>
             <p>A five-policy comparison and shadow-validation recommendation balancing guest protection, manager judgment, operating constraints, and comp cost.</p>
@@ -123,47 +112,10 @@
         </div>
       </section>
 
-      <section class="statistical-methods-band" id="statistical-methods" aria-labelledby="statistical-methods-heading">
-        <div class="section-shell statistical-methods-layout">
-          <div data-reveal>
-            <p class="section-kicker">Statistical Methods</p>
-            <h2 id="statistical-methods-heading">Statistical methods behind the analytics work</h2>
-            <p>This supporting packet documents the methods I use across the portfolio: nonlinear model search, Fourier terms, GLMs, repeated cross-validation, calibration, thresholds, and residual diagnostics. The artifacts are public-safe derivatives of graduate statistics coursework.</p>
-            <div class="link-row">
-              <a class="button primary" href="projects/graduate-statistics-portfolio.html" data-track-project="graduate-statistics-portfolio" data-track-destination="project-brief">Open Methods Evidence</a>
-              <a class="button outline" href="https://github.com/grant-mccurdy/graduate-statistics-portfolio/blob/main/docs/skills-index.md" data-track-project="graduate-statistics-portfolio" data-track-destination="source">Skills Index</a>
-              <a class="text-link" href="https://github.com/grant-mccurdy/graduate-statistics-portfolio" data-track-project="graduate-statistics-portfolio" data-track-destination="source">Source repo</a>
-            </div>
-          </div>
-          <div class="statistical-methods-grid" aria-label="Statistical methods demonstrated" data-reveal>
-            <article>
-              <span>01</span>
-              <strong>Model Search</strong>
-              <p>Polynomial, sinusoidal, Fourier, and kernel smoothing benchmarks with complexity tuning.</p>
-            </article>
-            <article>
-              <span>02</span>
-              <strong>Validation</strong>
-              <p>Repeated stratified cross-validation, log-loss selection, Brier score, AUC, AIC, and BIC.</p>
-            </article>
-            <article>
-              <span>03</span>
-              <strong>Diagnostics</strong>
-              <p>Residual behavior, Q-Q checks, leverage, spread, calibration, and extrapolation plausibility.</p>
-            </article>
-            <article>
-              <span>04</span>
-              <strong>Decision Metrics</strong>
-              <p>Sensitivity, specificity, PPV, NPV, threshold analysis, and interpretation-focused sensitivity models.</p>
-            </article>
-          </div>
-        </div>
-      </section>
-
       <section class="section-shell" id="demos" aria-labelledby="demos-heading">
         <div class="section-heading" data-reveal>
           <p class="section-kicker">Demos</p>
-          <h2 id="demos-heading">Open these first</h2>
+          <h2 id="demos-heading">Use the featured systems</h2>
         </div>
 
         <div class="artifact-list demo-list">
@@ -174,63 +126,22 @@
           </a>
           <a class="artifact-link-card" href="dashboard/assessment.html" data-track-project="assessment-intelligence" data-track-destination="live-demo" data-reveal>
             <span class="artifact-kind">Interactive dashboard</span>
-            <strong>Assessment Analytics Dashboard</strong>
+            <strong>Assessment Analytics</strong>
             <p>SQL-extract-backed synthetic assessment data, browser-side aggregation, SVG charts, filters, and decision notes.</p>
           </a>
           <a class="artifact-link-card" href="data-lab.html" data-track-project="education-data-simulation-engine" data-track-destination="live-demo" data-reveal>
             <span class="artifact-kind">Analytic workspace</span>
-            <strong>Portfolio Data Lab</strong>
+            <strong>Education Data Lab</strong>
             <p>Structured chat surface for tables, summaries, charts, and cited analysis over a public-safe warehouse.</p>
           </a>
-          <a class="artifact-link-card" href="projects/content-intelligence.html#live-rag" data-track-project="content-intelligence" data-track-destination="live-demo" data-reveal>
+          <a class="artifact-link-card" href="demos/content-rag.html" data-track-project="content-intelligence" data-track-destination="live-demo" data-reveal>
             <span class="artifact-kind">Live retrieval surface</span>
             <strong>Content Intelligence RAG</strong>
             <p>Ask a reviewed public index about source adapters, information objects, citation grounding, and the safety boundary.</p>
           </a>
         </div>
-      </section>
-
-      <section class="case-band" id="case-studies" aria-labelledby="case-heading" data-reveal>
-        <div class="section-shell case-layout">
-          <div>
-            <p class="section-kicker">Case Studies</p>
-            <h2 id="case-heading">Public-safe examples with visible evidence</h2>
-          </div>
-          <div class="case-list">
-            <a href="case-studies/assessment-reporting.html">
-              <span>01</span>
-              <strong>Analytics Reporting Architecture</strong>
-            </a>
-            <a href="case-studies/instructional-ai-workflows.html">
-              <span>02</span>
-              <strong>Feedback, Review, and Action Artifacts</strong>
-            </a>
-            <a href="case-studies/content-intelligence.html">
-              <span>03</span>
-              <strong>Content Intelligence Pipeline</strong>
-            </a>
-          </div>
-        </div>
-      </section>
-
-      <section class="section-shell" id="principles" aria-labelledby="principles-heading">
-        <div class="section-heading" data-reveal>
-          <p class="section-kicker">Operating Principles</p>
-          <h2 id="principles-heading">Practical systems, public-safe evidence</h2>
-        </div>
-        <div class="principle-grid">
-          <div class="principle" data-reveal>
-            <h3>Public-safe by default</h3>
-            <p>Demos use synthetic, generated, or permission-safe data so the work can be inspected without exposing private records.</p>
-          </div>
-          <div class="principle" data-reveal>
-            <h3>Human-reviewed automation</h3>
-            <p>AI and scripts help draft, structure, and accelerate work, while review gates keep judgment and accountability explicit.</p>
-          </div>
-          <div class="principle" data-reveal>
-            <h3>Source-grounded reporting</h3>
-            <p>Outputs should trace back to declared source material, reproducible processing, and clear privacy boundaries.</p>
-          </div>
+        <div class="section-actions" data-reveal>
+          <a class="button outline" href="demos/index.html">Open Demo Directory</a>
         </div>
       </section>
     </main>
@@ -240,9 +151,7 @@
         <p>&copy; <span data-year></span> Grant McCurdy</p>
         <div class="footer-links">
           <a href="projects/index.html">Projects</a>
-          <a href="dashboard/assessment.html">Dashboard</a>
-          <a href="data-lab.html">Data Lab</a>
-          <a href="case-studies/index.html">Case Studies</a>
+          <a href="demos/index.html">Demos</a>
           <a href="https://github.com/grant-mccurdy" data-track-project="portfolio" data-track-destination="source">GitHub</a>
           <a href="https://www.linkedin.com/in/grant-mccurdy/" data-track-project="linkedin" data-track-destination="linkedin">LinkedIn</a>
         </div>
@@ -286,6 +195,7 @@
     </section>
 
     <script src="assets/js/site.js?v=20260717a"></script>
+    <script src="assets/js/chat-ui.js?v=20260720b"></script>
     <script src="assets/js/portfolio-helper.js?v=20260720a"></script>
   </body>
 </html>

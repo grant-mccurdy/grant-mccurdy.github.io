@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="en" data-asset-version="20260717a">
+<html lang="en" data-asset-version="20260720d">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Analytics Dashboard | Grant McCurdy</title>
+    <title>Assessment Analytics | Grant McCurdy</title>
     <meta name="description" content="Interactive public-safe analytics dashboard powered by static SQL extract data.">
     <meta property="og:title" content="Assessment Analytics Dashboard | Grant McCurdy">
     <meta property="og:description" content="Interactive assessment analytics generated from the same public-safe SQL extracts used by the Assessment Intelligence reporting workflow.">
@@ -13,123 +13,133 @@
     <meta name="twitter:card" content="summary_large_image">
     <link rel="canonical" href="https://grant-mccurdy.github.io/dashboard/assessment.html">
     <link rel="icon" href="../assets/images/grant-mccurdy-profile.jpg" type="image/jpeg">
-    <link rel="stylesheet" href="../assets/css/styles.css?v=20260717a">
+    <link rel="stylesheet" href="../assets/css/styles.css?v=20260720d">
   </head>
   <body>
+    <a class="skip-link" href="#main">Skip to content</a>
     <header class="site-header compact" data-header>
       <nav class="nav-shell" aria-label="Primary navigation">
-        <a class="brand" href="../index.html">
+        <a class="brand" href="../index.html" aria-label="Grant McCurdy home">
           <span class="brand-mark" aria-hidden="true"><img src="../assets/images/grant-mccurdy-profile.jpg" alt=""></span>
           <span class="brand-text">Grant McCurdy</span>
         </a>
-        <div class="nav-links static">
+        <button class="nav-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false" data-nav-toggle>
+          <span></span><span></span><span></span>
+        </button>
+        <div class="nav-links" data-nav-links>
           <a href="../projects/index.html">Projects</a>
-          <a href="../index.html#demos">Demos</a>
-          <a href="../case-studies/index.html">Case Studies</a>
-          <a href="../data-lab.html">Data Lab</a>
+          <a href="../demos/index.html">Demos</a>
           <a href="https://github.com/grant-mccurdy">GitHub</a>
+          <a href="https://www.linkedin.com/in/grant-mccurdy/">LinkedIn</a>
         </div>
       </nav>
     </header>
 
-    <main class="detail-main dashboard-main">
+    <main id="main" class="detail-main dashboard-main">
       <section class="detail-hero dashboard-hero">
         <p class="section-kicker">Interactive Dashboard</p>
-        <h1>Analytics Dashboard</h1>
-        <p>Turn public-safe assessment records into stakeholder-ready views of growth, performance, participation, completion, and data quality.</p>
+        <h1>Assessment Analytics</h1>
+        <p>Explore seven synthetic academic years of BOY and EOY standardized math assessment results, growth, participation, and data quality.</p>
       </section>
 
-      <section class="dashboard-shell" aria-labelledby="dashboard-heading">
-        <details class="dashboard-source-strip" aria-label="Dashboard data source">
-          <summary class="source-summary">
-            <span class="section-kicker">Data Source</span>
-            <strong>Public-safe SQL extract</strong>
-            <small>Build, privacy validation, and static JSON details</small>
-          </summary>
-          <dl class="source-meta-grid">
-            <div>
-              <dt>Project</dt>
-              <dd><a class="text-link" href="../projects/assessment-intelligence.html" id="source-project">assessment-intelligence</a></dd>
-            </div>
-            <div>
-              <dt>Generated</dt>
-              <dd id="source-generated">-</dd>
-            </div>
-            <div>
-              <dt>Rows</dt>
-              <dd id="source-counts">-</dd>
-            </div>
-            <div>
-              <dt>Contract</dt>
-              <dd id="source-contract">-</dd>
-            </div>
-          </dl>
-        </details>
-
-        <div class="metric-grid metric-grid-wide" aria-live="polite">
-          <article class="metric-card">
-            <span>Students represented</span>
-            <strong id="metric-students">-</strong>
-          </article>
-          <article class="metric-card">
-            <span id="metric-latest-label">Latest mean score</span>
-            <strong id="metric-latest">-</strong>
-          </article>
-          <article class="metric-card">
-            <span>Avg paired growth</span>
-            <strong id="metric-change">-</strong>
-          </article>
-          <article class="metric-card">
-            <span>Latest completion</span>
-            <strong id="metric-completion">-</strong>
-          </article>
-          <article class="metric-card">
-            <span>In target-level groups</span>
-            <strong id="metric-target">-</strong>
-          </article>
+      <section class="dashboard-shell" aria-label="Assessment analytics dashboard">
+        <div class="dashboard-task-tabs" role="tablist" aria-label="Dashboard tasks">
+          <button id="dashboard-tab-overview" type="button" role="tab" data-dashboard-view="overview" aria-controls="assessment-overview" aria-selected="true">Overview</button>
+          <button id="dashboard-tab-compare" type="button" role="tab" data-dashboard-view="compare" aria-controls="assessment-compare" aria-selected="false" tabindex="-1">Compare groups</button>
+          <button id="dashboard-tab-quality" type="button" role="tab" data-dashboard-view="quality" aria-controls="assessment-data-quality" aria-selected="false" tabindex="-1">Data quality</button>
         </div>
 
-        <div class="dashboard-toolbar dashboard-toolbar-expanded">
-          <div>
-            <p class="section-kicker">Analytics Surface</p>
-            <h2 id="dashboard-heading">Comparison Windows</h2>
+        <section class="dashboard-view is-active" id="assessment-overview" role="tabpanel" aria-labelledby="dashboard-tab-overview" data-dashboard-panel="overview">
+          <div class="metric-grid" aria-live="polite">
+            <article class="metric-card">
+              <span id="metric-latest-label">Latest mean score</span>
+              <strong id="metric-latest">-</strong>
+            </article>
+            <article class="metric-card">
+              <span>Avg paired growth</span>
+              <strong id="metric-change">-</strong>
+            </article>
+            <article class="metric-card">
+              <span>Latest completion</span>
+              <strong id="metric-completion">-</strong>
+            </article>
+            <article class="metric-card">
+              <span title="Completed students represented by groups whose latest mean score meets that course's synthetic benchmark">Students in groups meeting course benchmark</span>
+              <strong id="metric-target">-</strong>
+            </article>
           </div>
-          <div class="comparison-builder" aria-label="Comparison builder">
-            <div class="slice-filter-header">
-              <div>
-                <span>Comparison builder</span>
-                <strong id="slice-filter-summary">Comparing all subjects; filters: all teachers, all sections</strong>
+
+          <div class="dashboard-overview-lead">
+            <article class="dashboard-panel time-panel">
+              <div class="panel-heading">
+                <div>
+                  <p class="panel-kicker">Performance over time</p>
+                  <h2>Assessment trends</h2>
+                  <span id="time-caption">Beginning and end reporting windows</span>
+                </div>
+                <div class="legend" id="time-legend"></div>
               </div>
-              <button type="button" id="slice-filter-clear">Clear selections</button>
+              <div class="trend-controls" aria-label="Assessment trend controls">
+                <label>
+                  Academic-year history
+                  <select id="trend-history-select">
+                    <option value="3">Latest 3 years</option>
+                    <option value="5" selected>Latest 5 years</option>
+                    <option value="all">All 7 years</option>
+                  </select>
+                </label>
+                <label class="trend-benchmark-toggle">
+                  <input type="checkbox" id="toggle-mastery-line" checked>
+                  <span>Show benchmark</span>
+                </label>
+                <label>
+                  Benchmark course
+                  <select id="trend-benchmark-course"></select>
+                </label>
+              </div>
+              <div id="time-chart" class="chart-frame time-chart" role="img" aria-label="Assessment trend chart" tabindex="0"></div>
+            </article>
+
+            <article class="dashboard-panel insight-panel">
+              <div class="panel-heading">
+                <div>
+                  <p class="panel-kicker">Decision support</p>
+                  <h2>Decision signals</h2>
+                  <span>Descriptive findings and next questions</span>
+                </div>
+              </div>
+              <ul class="insight-list" id="insight-list"></ul>
+            </article>
+          </div>
+
+          <article class="dashboard-panel performance-growth-panel">
+            <div class="panel-heading">
+              <div>
+                <p class="panel-kicker">Synthesis view</p>
+                <h2>Current performance and growth</h2>
+                <span id="performance-growth-caption">Latest score plotted against average paired-window growth</span>
+              </div>
             </div>
+            <div id="performance-growth-chart" class="chart-frame performance-growth-chart" role="img" aria-label="Current performance versus paired growth chart"></div>
+          </article>
+        </section>
+
+        <section class="dashboard-view" id="assessment-compare" role="tabpanel" aria-labelledby="dashboard-tab-compare" data-dashboard-panel="compare" hidden>
+          <div class="dashboard-view-heading">
+            <div>
+              <p class="panel-kicker">Explore differences</p>
+              <h2>Compare groups</h2>
+            </div>
+            <p>Choose the comparison unit and metric, then open filters only when a narrower slice is needed.</p>
+          </div>
+
+          <div class="dashboard-primary-controls" aria-label="Primary comparison controls">
             <fieldset class="compare-by-control">
               <legend>Compare by</legend>
               <label><input type="radio" name="compare-by" value="course" checked> Subject</label>
               <label><input type="radio" name="compare-by" value="teacher"> Teacher</label>
               <label><input type="radio" name="compare-by" value="section"> Section</label>
             </fieldset>
-            <div class="slice-filter-grid">
-              <fieldset class="slice-filter-group">
-                <legend>Subject</legend>
-                <div class="slice-checklist" id="course-filter-options"></div>
-              </fieldset>
-              <fieldset class="slice-filter-group">
-                <legend>Teacher</legend>
-                <div class="slice-checklist" id="teacher-filter-options"></div>
-              </fieldset>
-              <fieldset class="slice-filter-group slice-filter-sections">
-                <legend>Section <small id="section-filter-count">All sections</small></legend>
-                <input type="search" id="section-filter-search" placeholder="Search sections" aria-label="Search sections">
-                <div class="slice-filter-actions">
-                  <button type="button" id="section-filter-select-visible">Select visible</button>
-                  <button type="button" id="section-filter-clear">Clear sections</button>
-                </div>
-                <div class="slice-checklist slice-checklist-scroll" id="section-filter-options"></div>
-              </fieldset>
-            </div>
-          </div>
-
-          <div class="control-row line-control-grid" aria-label="Line chart controls">
             <label>
               Metric
               <select id="metric-select">
@@ -143,209 +153,219 @@
               <input type="range" id="line-min-n" min="1" max="35" step="1" value="10">
             </label>
           </div>
-        </div>
 
-        <details class="advanced-dashboard-controls">
-          <summary>
-            <span>Advanced controls</span>
-            <small>Line filters, windows, ribbons, and display settings</small>
-          </summary>
-          <div class="viz-control-row advanced-line-controls" aria-label="Advanced line controls">
-            <label>
-              Window
-              <select id="season-select">
-                <option value="All">All Windows</option>
-                <option value="Beginning">Beginning Only</option>
-                <option value="End">End Only</option>
-              </select>
-            </label>
-            <label>
-              Sort / cut
-              <select id="line-sort-select">
-                <option value="latest">Latest value</option>
-                <option value="gain">Largest paired-window gain</option>
-                <option value="decline">Lowest paired-window movement</option>
-                <option value="name">Name A-Z</option>
-              </select>
-            </label>
-            <label class="line-filter-control">
-              Filter
-              <input type="search" id="line-filter" placeholder="Filter lines">
-            </label>
-            <label class="line-limit-control">
-              Lines shown
-              <select id="line-limit-select">
-                <option value="5">5</option>
-                <option value="8">8</option>
-                <option value="10" selected>10</option>
-                <option value="12">12</option>
-                <option value="all">All</option>
-              </select>
-            </label>
+          <details class="dashboard-comparison-tools" id="dashboard-comparison-tools">
+            <summary>
+              <span>Filters and display settings</span>
+              <small id="slice-filter-summary">Comparing all subjects; filters: all teachers, all sections</small>
+            </summary>
+            <div class="comparison-builder" aria-label="Comparison filters">
+              <div class="slice-filter-header">
+                <strong>Filter the comparison population</strong>
+                <button type="button" id="slice-filter-clear">Clear selections</button>
+              </div>
+              <div class="slice-filter-grid">
+                <fieldset class="slice-filter-group">
+                  <legend>Subject</legend>
+                  <div class="slice-checklist" id="course-filter-options"></div>
+                </fieldset>
+                <fieldset class="slice-filter-group">
+                  <legend>Teacher</legend>
+                  <div class="slice-checklist" id="teacher-filter-options"></div>
+                </fieldset>
+                <fieldset class="slice-filter-group slice-filter-sections">
+                  <legend>Section <small id="section-filter-count">All sections</small></legend>
+                  <input type="search" id="section-filter-search" placeholder="Search sections" aria-label="Search sections">
+                  <div class="slice-filter-actions">
+                    <button type="button" id="section-filter-select-visible">Select visible</button>
+                    <button type="button" id="section-filter-clear">Clear sections</button>
+                  </div>
+                  <div class="slice-checklist slice-checklist-scroll" id="section-filter-options"></div>
+                </fieldset>
+              </div>
+            </div>
+
+            <details class="advanced-dashboard-controls">
+              <summary>
+                <span>Advanced chart controls</span>
+                <small>Windows, ribbons, distributions, and line display</small>
+              </summary>
+              <div class="viz-control-row advanced-line-controls" aria-label="Advanced line controls">
+                <label>
+                  Window
+                  <select id="season-select">
+                    <option value="All">All Windows</option>
+                    <option value="Beginning">Beginning Only</option>
+                    <option value="End">End Only</option>
+                  </select>
+                </label>
+                <label>
+                  Sort / cut
+                  <select id="line-sort-select">
+                    <option value="latest">Latest value</option>
+                    <option value="gain">Largest paired-window gain</option>
+                    <option value="decline">Lowest paired-window movement</option>
+                    <option value="name">Name A-Z</option>
+                  </select>
+                </label>
+                <label class="line-filter-control">
+                  Filter
+                  <input type="search" id="line-filter" placeholder="Filter lines">
+                </label>
+                <label class="line-limit-control">
+                  Lines shown
+                  <select id="line-limit-select">
+                    <option value="5" selected>5</option>
+                    <option value="8">8</option>
+                    <option value="10">10</option>
+                    <option value="12">12</option>
+                    <option value="all">All</option>
+                  </select>
+                </label>
+              </div>
+
+              <div class="toggle-row" aria-label="Dashboard display toggles">
+                <label><input type="checkbox" id="toggle-department-band" checked> Main ribbon</label>
+                <label><input type="checkbox" id="toggle-network-band"> Context ribbon</label>
+                <label><input type="checkbox" id="toggle-violin-plots"> Violin plots</label>
+                <label><input type="checkbox" id="toggle-section-lines"> Section lines</label>
+              </div>
+
+              <div class="viz-control-row" aria-label="Ribbon controls">
+                <label>
+                  Ribbon Range
+                  <select id="ribbon-range-select">
+                    <option value="50">Middle 50%</option>
+                    <option value="60">Middle 60%</option>
+                    <option value="80">Middle 80%</option>
+                  </select>
+                </label>
+                <label>
+                  Center
+                  <select id="center-select">
+                    <option value="mean">Mean</option>
+                    <option value="median">Median</option>
+                  </select>
+                </label>
+                <label>
+                  Population
+                  <select id="ribbon-population-select">
+                    <option value="completed">Completed Only</option>
+                    <option value="assigned">Assigned + Missing</option>
+                  </select>
+                </label>
+                <label class="range-control">
+                  <span>Ribbon Opacity <output id="ribbon-opacity-value">16%</output></span>
+                  <input type="range" id="ribbon-opacity" min="0.08" max="0.42" step="0.02" value="0.16">
+                </label>
+                <label class="checkbox-control"><input type="checkbox" id="toggle-smooth-curves" checked> Smooth curves</label>
+              </div>
+            </details>
+          </details>
+
+          <div class="dashboard-grid comparison-result-grid">
+            <article class="dashboard-panel">
+              <div class="panel-heading">
+                <div><h2>Latest comparison</h2><span id="bar-caption"></span></div>
+              </div>
+              <div id="bar-chart" class="chart-frame" role="img" aria-label="Latest comparison bar chart" tabindex="0"></div>
+            </article>
+            <article class="dashboard-panel">
+              <div class="panel-heading">
+                <div><h2>Paired-window growth</h2><span id="growth-caption"></span></div>
+              </div>
+              <div id="growth-chart" class="chart-frame" role="img" aria-label="Beginning-to-end movement chart" tabindex="0"></div>
+            </article>
           </div>
 
-          <div class="toggle-row" aria-label="Dashboard display toggles">
-            <label><input type="checkbox" id="toggle-department-band" checked> Main ribbon</label>
-            <label><input type="checkbox" id="toggle-network-band" checked> Context ribbon</label>
-            <label><input type="checkbox" id="toggle-mastery-line" checked> Mastery benchmark</label>
-            <label><input type="checkbox" id="toggle-violin-plots" checked> Violin plots</label>
-            <label><input type="checkbox" id="toggle-section-lines"> Section lines</label>
-          </div>
+          <article class="dashboard-panel distribution-panel">
+            <div class="panel-heading">
+              <div><h2>Distribution detail</h2><span id="distribution-caption">Synthetic score spread by period</span></div>
+            </div>
+            <div id="distribution-chart" class="chart-frame distribution-chart" role="img" aria-label="Distribution detail chart" tabindex="0"></div>
+          </article>
+        </section>
 
-          <div class="viz-control-row" aria-label="Ribbon controls">
-            <label>
-              Ribbon Range
-              <select id="ribbon-range-select">
-                <option value="50">Middle 50%</option>
-                <option value="60">Middle 60%</option>
-                <option value="80">Middle 80%</option>
-              </select>
-            </label>
-            <label>
-              Center
-              <select id="center-select">
-                <option value="mean">Mean</option>
-                <option value="median">Median</option>
-              </select>
-            </label>
-            <label>
-              Population
-              <select id="ribbon-population-select">
-                <option value="completed">Completed Only</option>
-                <option value="assigned">Assigned + Missing</option>
-              </select>
-            </label>
-            <label class="range-control">
-              <span>Ribbon Opacity <output id="ribbon-opacity-value">20%</output></span>
-              <input type="range" id="ribbon-opacity" min="0.08" max="0.42" step="0.02" value="0.2">
-            </label>
-            <label class="checkbox-control"><input type="checkbox" id="toggle-smooth-curves" checked> Smooth curves</label>
-          </div>
-        </details>
-
-        <article class="dashboard-panel time-panel">
-          <div class="panel-heading">
+        <section class="dashboard-view" id="assessment-data-quality" role="tabpanel" aria-labelledby="dashboard-tab-quality" data-dashboard-panel="quality" hidden>
+          <div class="dashboard-view-heading">
             <div>
-              <h3>Assessment Trends</h3>
-              <span id="time-caption">Beginning and end reporting windows</span>
+              <p class="panel-kicker">Trust the evidence</p>
+              <h2>Data quality</h2>
             </div>
-            <div class="legend" id="time-legend"></div>
+            <p>Review participation, indicator coverage, source lineage, and the section-level records behind the summary.</p>
           </div>
-          <div id="time-chart" class="chart-frame time-chart" role="img" aria-label="Analytics time-series chart"></div>
-          <div class="mini-chart-block">
-            <div class="mini-chart-heading">
-              <h4>Completion By Window</h4>
-              <span id="completion-caption">Assigned vs completed records</span>
-            </div>
-            <div id="completion-chart" class="chart-frame mini-chart" role="img" aria-label="Completion rollout chart"></div>
-          </div>
-        </article>
 
-        <article class="dashboard-panel distribution-panel">
-          <div class="panel-heading">
-            <div>
-              <h3>Distribution Detail</h3>
-              <span id="distribution-caption">Synthetic score spread by period</span>
-            </div>
+          <div class="dashboard-quality-grid">
+            <article class="dashboard-panel quality-completion-panel">
+              <div class="panel-heading">
+                <div><h2>Completion by window</h2><span id="completion-caption">Assigned vs completed records</span></div>
+              </div>
+              <div id="completion-chart" class="chart-frame mini-chart" role="img" aria-label="Completion rollout chart" tabindex="0"></div>
+            </article>
+            <article class="dashboard-panel">
+              <div class="panel-heading">
+                <div><h2>Latest status heatmap</h2><span id="skill-caption"></span></div>
+              </div>
+              <div id="skill-chart" class="chart-frame heatmap-frame" role="img" aria-label="Synthetic status heatmap" tabindex="0"></div>
+            </article>
           </div>
-          <div id="distribution-chart" class="chart-frame distribution-chart" role="img" aria-label="Distribution detail chart"></div>
-        </article>
 
-        <div class="dashboard-grid">
-          <article class="dashboard-panel">
+          <details class="dashboard-source-strip" id="dashboard-data-source" aria-label="Dashboard data source">
+            <summary class="source-summary">
+              <span class="section-kicker">Data Source</span>
+              <strong>Public-safe SQL extract</strong>
+              <small>Build, privacy validation, and static JSON details</small>
+            </summary>
+            <dl class="source-meta-grid">
+              <div><dt>Project</dt><dd><a class="text-link" href="../projects/assessment-intelligence.html" id="source-project">assessment-intelligence</a></dd></div>
+              <div><dt>Generated</dt><dd id="source-generated">-</dd></div>
+              <div><dt>Rows</dt><dd id="source-counts">-</dd></div>
+              <div><dt>Latest population</dt><dd><span id="metric-students">-</span> students</dd></div>
+              <div><dt>Contract</dt><dd id="source-contract">-</dd></div>
+            </dl>
+          </details>
+
+          <article class="dashboard-panel section-detail-panel">
             <div class="panel-heading">
-              <h3>Latest Comparison</h3>
-              <span id="bar-caption"></span>
+              <div><h2>Section detail</h2><span>All public values are synthetic</span></div>
             </div>
-            <div id="bar-chart" class="chart-frame" role="img" aria-label="Latest comparison bar chart"></div>
-          </article>
-
-          <article class="dashboard-panel">
-            <div class="panel-heading">
-              <h3>Latest Status Heatmap</h3>
-              <span id="skill-caption"></span>
+            <div class="table-control-row" aria-label="Section detail filters">
+              <label>Subject<select id="table-course-filter"><option value="All">All Subjects</option></select></label>
+              <label>Grade<select id="table-grade-filter"><option value="All">All Grades</option></select></label>
+              <label>Teacher<select id="table-teacher-filter"><option value="All">All Teachers</option></select></label>
+              <label>Completion<select id="table-completion-filter"><option value="All">Any Completion</option><option value="95">95%+</option><option value="90">90%+</option><option value="85">85%+</option></select></label>
+              <button class="table-reset" type="button" id="table-reset">Reset</button>
+              <span class="table-count" id="table-count" aria-live="polite"></span>
             </div>
-            <div id="skill-chart" class="chart-frame heatmap-frame" role="img" aria-label="Synthetic skill heatmap" tabindex="0"></div>
-          </article>
-        </div>
-
-        <div class="dashboard-grid">
-          <article class="dashboard-panel">
-            <div class="panel-heading">
-              <h3>Paired-Window Growth</h3>
-              <span id="growth-caption"></span>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th><button type="button" class="table-sort" data-sort="course">Subject <span aria-hidden="true"></span></button></th>
+                    <th><button type="button" class="table-sort" data-sort="grade">Grade <span aria-hidden="true"></span></button></th>
+                    <th><button type="button" class="table-sort" data-sort="teacher">Teacher <span aria-hidden="true"></span></button></th>
+                    <th><button type="button" class="table-sort" data-sort="section">Section <span aria-hidden="true"></span></button></th>
+                    <th><button type="button" class="table-sort" data-sort="students">Students <span aria-hidden="true"></span></button></th>
+                    <th><button type="button" class="table-sort" data-sort="first" id="table-first-period">2019-20 BOY <span aria-hidden="true"></span></button></th>
+                    <th><button type="button" class="table-sort" data-sort="latest" id="table-latest-period">2025-26 EOY <span aria-hidden="true"></span></button></th>
+                    <th><button type="button" class="table-sort" data-sort="change">Avg paired growth <span aria-hidden="true"></span></button></th>
+                    <th><button type="button" class="table-sort" data-sort="completion">Completion <span aria-hidden="true"></span></button></th>
+                  </tr>
+                </thead>
+                <tbody id="course-table"></tbody>
+              </table>
             </div>
-            <div id="growth-chart" class="chart-frame" role="img" aria-label="BOY EOY movement chart"></div>
           </article>
-
-          <article class="dashboard-panel insight-panel">
-            <div class="panel-heading">
-              <h3>Decision Notes</h3>
-              <span>Generated from synthetic trends</span>
-            </div>
-            <ul class="insight-list" id="insight-list"></ul>
-          </article>
-        </div>
-
-        <article class="dashboard-panel">
-          <div class="panel-heading">
-            <h3>Section Detail</h3>
-            <span>All public values are synthetic</span>
-          </div>
-          <div class="table-control-row" aria-label="Section detail filters">
-            <label>
-              Subject
-              <select id="table-course-filter">
-                <option value="All">All Subjects</option>
-              </select>
-            </label>
-            <label>
-              Grade
-              <select id="table-grade-filter">
-                <option value="All">All Grades</option>
-              </select>
-            </label>
-            <label>
-              Teacher
-              <select id="table-teacher-filter">
-                <option value="All">All Teachers</option>
-              </select>
-            </label>
-            <label>
-              Completion
-              <select id="table-completion-filter">
-                <option value="All">Any Completion</option>
-                <option value="95">95%+</option>
-                <option value="90">90%+</option>
-                <option value="85">85%+</option>
-              </select>
-            </label>
-            <button class="table-reset" type="button" id="table-reset">Reset</button>
-            <span class="table-count" id="table-count" aria-live="polite"></span>
-          </div>
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th><button type="button" class="table-sort" data-sort="course">Subject <span aria-hidden="true"></span></button></th>
-                  <th><button type="button" class="table-sort" data-sort="grade">Grade <span aria-hidden="true"></span></button></th>
-                  <th><button type="button" class="table-sort" data-sort="teacher">Teacher <span aria-hidden="true"></span></button></th>
-                  <th><button type="button" class="table-sort" data-sort="section">Section <span aria-hidden="true"></span></button></th>
-                  <th><button type="button" class="table-sort" data-sort="students">Students <span aria-hidden="true"></span></button></th>
-                  <th><button type="button" class="table-sort" data-sort="first" id="table-first-period">Assignment 01 <span aria-hidden="true"></span></button></th>
-                  <th><button type="button" class="table-sort" data-sort="latest" id="table-latest-period">Assignment 14 <span aria-hidden="true"></span></button></th>
-                  <th><button type="button" class="table-sort" data-sort="change">Avg paired growth <span aria-hidden="true"></span></button></th>
-                  <th><button type="button" class="table-sort" data-sort="completion">Completion <span aria-hidden="true"></span></button></th>
-                </tr>
-              </thead>
-              <tbody id="course-table"></tbody>
-            </table>
-          </div>
-        </article>
+        </section>
       </section>
     </main>
 
-    <script src="../assets/js/site.js?v=20260717a"></script>
-    <script src="../assets/js/assessment-dashboard.js?v=20260717a"></script>
+    <footer class="site-footer">
+      <div class="footer-shell"><p>&copy; <span data-year></span> Grant McCurdy</p><div class="footer-links"><a href="../projects/index.html">Projects</a><a href="../demos/index.html">Demos</a><a href="https://github.com/grant-mccurdy">GitHub</a><a href="https://www.linkedin.com/in/grant-mccurdy/">LinkedIn</a></div></div>
+    </footer>
+    <script src="../assets/js/site.js?v=20260720b"></script>
+    <script src="../assets/js/assessment-core.js?v=20260720d"></script>
+    <script src="../assets/js/assessment-charts.js?v=20260720d"></script>
+    <script src="../assets/js/assessment-dashboard.js?v=20260720d"></script>
   </body>
 </html>
