@@ -3,100 +3,19 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Assessment Reporting Case Study | Grant McCurdy</title>
-    <meta name="description" content="Case study for a public-safe synthetic assessment reporting and dashboard workflow.">
-    <link rel="stylesheet" href="../assets/css/styles.css?v=20260717a">
+    <meta name="robots" content="noindex,follow">
+    <meta http-equiv="refresh" content="0; url=../projects/assessment-intelligence.html">
+    <title>Assessment Intelligence | Grant McCurdy</title>
+    <meta name="description" content="Assessment reporting architecture and evidence in the Assessment Intelligence project brief.">
+    <link rel="canonical" href="https://grant-mccurdy.github.io/projects/assessment-intelligence.html">
+    <link rel="stylesheet" href="../assets/css/styles.css?v=20260720b">
   </head>
-  <body>
-    <header class="site-header compact" data-header>
-      <nav class="nav-shell" aria-label="Primary navigation">
-        <a class="brand" href="../index.html">
-          <span class="brand-mark" aria-hidden="true"><img src="../assets/images/grant-mccurdy-profile.jpg" alt=""></span>
-          <span class="brand-text">Grant McCurdy</span>
-        </a>
-        <div class="nav-links static">
-          <a href="../projects/index.html">Projects</a>
-          <a href="../index.html#demos">Demos</a>
-          <a href="index.html">Case Studies</a>
-          <a href="../data-lab.html">Data Lab</a>
-          <a href="https://github.com/grant-mccurdy">GitHub</a>
-        </div>
-      </nav>
-    </header>
-
-    <main class="detail-main">
-      <section class="detail-hero">
-        <p class="section-kicker">Case Study</p>
-        <h1>Assessment reporting architecture</h1>
-        <p>A public-safe workflow for turning private-reference assessment patterns into synthetic data, SQL-backed extracts, validation artifacts, dashboard-ready outputs, and decision-support reporting.</p>
-        <div class="hero-actions detail-actions">
-          <a class="button primary" href="../dashboard/assessment.html">Open Dashboard</a>
-          <a class="button outline" href="../projects/assessment-intelligence.html">Project Brief</a>
-          <a class="button outline" href="../projects/assessment-gradebook-synthesis.html">Gradebook Evidence</a>
-          <a class="button outline" href="https://github.com/grant-mccurdy/assessment-intelligence">GitHub Repo</a>
-        </div>
-      </section>
-
-      <section class="section-shell case-study-grid" aria-labelledby="assessment-case-heading">
-        <div class="section-heading case-study-heading">
-          <p class="section-kicker">System Story</p>
-          <h2 id="assessment-case-heading">From private assessment shape to public dashboard</h2>
-        </div>
-
-        <article class="case-step">
-          <span>01</span>
-          <h3>Problem</h3>
-          <p>Assessment teams need trend analysis, completion monitoring, skill-level views, and leadership-ready recommendations, but public portfolio work cannot expose real students, rosters, grades, LMS exports, or private institutional artifacts.</p>
-        </article>
-
-        <article class="case-step">
-          <span>02</span>
-          <h3>Solution</h3>
-          <p>The project separates private profiling from public output: private-reference distributions inform synthetic generation, then validation and export steps produce public-safe data for a static dashboard and reporting artifacts.</p>
-        </article>
-
-        <article class="case-step">
-          <span>03</span>
-          <h3>Tools and Methods</h3>
-          <p>The source repositories use Python and DuckDB for LMS-to-SQL extraction, star-schema marts, and validation; SQL for assessment extracts; R for synthesis and modeling; and small Python utilities for privacy validation and dry-run AI-assisted memo generation.</p>
-        </article>
-
-        <article class="case-step">
-          <span>04</span>
-          <h3>Result and Value</h3>
-          <p>The hosted dashboard demonstrates course, grade, teacher, section, growth, completion, skill, and distribution views using synthetic assessment records. The source workflow now also produces SQL-backed extracts for course-section performance, growth diagnostics, non-participation analysis, roster QA, and readiness reporting.</p>
-        </article>
-
-        <article class="case-step">
-          <span>05</span>
-          <h3>Serving and Review Layer</h3>
-          <p>DuckDB remains the reproducible local warehouse, while the optional Supabase extract path demonstrates a hosted public-safe serving contract. Dry-run AI review then summarizes deterministic extracts without becoming a data-generation step.</p>
-        </article>
-
-        <article class="case-step">
-          <span>06</span>
-          <h3>What I Learned</h3>
-          <p>The privacy boundary is strongest when synthetic generation, validation, dashboard export, and reporting language are designed as one pipeline. That makes the public artifact useful without implying it contains real school records.</p>
-        </article>
-      </section>
-
-      <section class="section-shell detail-grid">
-        <div>
-          <p class="section-kicker">Evidence</p>
-          <h2>Inspection path</h2>
-          <p>The case study is backed by a hosted dashboard, a public R gradebook synthesis report, and validation summaries that document the public/private boundary.</p>
-        </div>
-        <div class="detail-panel">
-          <h2>Open Artifacts</h2>
-          <ul class="clean-list">
-            <li><a class="text-link" href="../dashboard/assessment.html">Interactive assessment dashboard</a></li>
-            <li><a class="text-link" href="../projects/assessment-gradebook-synthesis.html">Gradebook synthesis brief</a></li>
-            <li><a class="text-link" href="../artifacts/assessment-intelligence/gradebook_synthesis_report.html">Rendered R synthesis report</a></li>
-            <li><a class="text-link" href="../artifacts/assessment-intelligence/gradebook_reconstruction_validation.md">Validation summary</a></li>
-          </ul>
-        </div>
-      </section>
+  <body class="redirect-page">
+    <main id="main" class="redirect-shell">
+      <p class="section-kicker">Project Brief</p>
+      <h1>Assessment Intelligence</h1>
+      <p>The project brief contains the reporting architecture and inspection path.</p>
+      <a class="button primary" href="../projects/assessment-intelligence.html">Open Project Brief</a>
     </main>
-    <script src="../assets/js/site.js?v=20260717a"></script>
   </body>
 </html>

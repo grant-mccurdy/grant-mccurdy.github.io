@@ -1,12 +1,12 @@
 {
   "schemaVersion": "assessment-dashboard-manifest-v1",
   "contract": "sql-extract-dashboard-json-v1",
-  "generatedAt": "2026-07-19T00:00:00Z",
+  "generatedAt": "2026-07-20T18:53:23Z",
   "dashboard": {
     "path": "data/synthetic/assessment-dashboard.json",
-    "generatedDate": "2026-07-19",
-    "bytes": 2707933,
-    "sha256": "47473aefc2f6b497a79efe29346f1bdb12534e760393b16ff574bf091f876428",
+    "generatedDate": "2026-07-20",
+    "bytes": 2829465,
+    "sha256": "dfffa288669295589da299629f5ed95f98af671860b79f931e6d2f06244da299",
     "recordCounts": {
       "periods": 14,
       "sections": 174,
@@ -21,7 +21,7 @@
   },
   "builder": {
     "path": "scripts/build_sql_dashboard_json.py",
-    "sha256": "5321af64f785b28fe1bc714fde58d998b8789e9546ef16eb368118582c6c54b1"
+    "sha256": "56c2a9838acb393434211409c8ba9a3e7f0442bb36085bb67561d401011ecc39"
   },
   "extracts": [
     {

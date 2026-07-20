@@ -10,16 +10,18 @@
   <body>
     <header class="site-header compact" data-header>
       <nav class="nav-shell" aria-label="Primary navigation">
-        <a class="brand" href="../index.html">
+        <a class="brand" href="../index.html" aria-label="Grant McCurdy home">
           <span class="brand-mark" aria-hidden="true"><img src="../assets/images/grant-mccurdy-profile.jpg" alt=""></span>
           <span class="brand-text">Grant McCurdy</span>
         </a>
-        <div class="nav-links static">
+        <button class="nav-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false" data-nav-toggle>
+          <span></span><span></span><span></span>
+        </button>
+        <div class="nav-links" data-nav-links>
           <a href="../projects/index.html">Projects</a>
-          <a href="../index.html#demos">Demos</a>
-          <a href="../case-studies/index.html">Case Studies</a>
-          <a href="../data-lab.html">Data Lab</a>
+          <a href="../demos/index.html">Demos</a>
           <a href="https://github.com/grant-mccurdy">GitHub</a>
+          <a href="https://www.linkedin.com/in/grant-mccurdy/">LinkedIn</a>
         </div>
       </nav>
     </header>
@@ -91,7 +93,6 @@
             <a class="text-link" href="https://github.com/grant-mccurdy/assessment-intelligence">Source repo</a>
             <a class="text-link" href="assessment-intelligence.html">Assessment brief</a>
             <a class="text-link" href="../artifacts/assessment-intelligence/gradebook_reconstruction_validation.md">Validation summary</a>
-            <a class="text-link" href="../case-studies/assessment-reporting.html">Case study</a>
           </div>
         </div>
       </section>
@@ -106,6 +107,9 @@
         </div>
       </section>
     </main>
-    <script src="../assets/js/site.js?v=20260717a"></script>
+    <footer class="site-footer">
+      <div class="footer-shell"><p>&copy; <span data-year></span> Grant McCurdy</p><div class="footer-links"><a href="../projects/index.html">Projects</a><a href="../demos/index.html">Demos</a><a href="https://github.com/grant-mccurdy">GitHub</a><a href="https://www.linkedin.com/in/grant-mccurdy/">LinkedIn</a></div></div>
+    </footer>
+    <script src="../assets/js/site.js?v=20260720b"></script>
   </body>
 </html>

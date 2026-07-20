@@ -17,16 +17,18 @@
   <body>
     <header class="site-header compact" data-header>
       <nav class="nav-shell" aria-label="Primary navigation">
-        <a class="brand" href="../index.html">
+        <a class="brand" href="../index.html" aria-label="Grant McCurdy home">
           <span class="brand-mark" aria-hidden="true"><img src="../assets/images/grant-mccurdy-profile.jpg" alt=""></span>
           <span class="brand-text">Grant McCurdy</span>
         </a>
-        <div class="nav-links static">
+        <button class="nav-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false" data-nav-toggle>
+          <span></span><span></span><span></span>
+        </button>
+        <div class="nav-links" data-nav-links>
           <a href="../projects/index.html">Projects</a>
-          <a href="../index.html#demos">Demos</a>
-          <a href="../case-studies/index.html">Case Studies</a>
-          <a href="../data-lab.html">Data Lab</a>
+          <a href="../demos/index.html">Demos</a>
           <a href="https://github.com/grant-mccurdy">GitHub</a>
+          <a href="https://www.linkedin.com/in/grant-mccurdy/">LinkedIn</a>
         </div>
       </nav>
     </header>
@@ -61,12 +63,11 @@
             <li>GPT-5.5 item review marked <code>POLISH_RECOMMENDED</code></li>
             <li>GPT-5.5 visual review with no presentation blocker</li>
             <li>Offline Canvas New Quizzes payload with 36 included items</li>
-            <li>Public-safe project brief and portfolio case-study draft</li>
+            <li>Public-safe project brief and reproducible review packet</li>
           </ul>
           <div class="link-row detail-action">
             <a class="text-link" href="https://grant-mccurdy.github.io/assessment-to-remediation-pipeline/previews/student_form.html" data-track-project="assessment-to-remediation-pipeline" data-track-destination="live-demo">Student preview</a>
             <a class="text-link" href="https://grant-mccurdy.github.io/assessment-to-remediation-pipeline/previews/instructor_review.html" data-track-project="assessment-to-remediation-pipeline" data-track-destination="live-demo">Instructor review</a>
-            <a class="text-link" href="https://github.com/grant-mccurdy/assessment-to-remediation-pipeline/blob/main/docs/portfolio-case-study-draft.md" data-track-project="assessment-to-remediation-pipeline" data-track-destination="case-study">Case-study draft</a>
           </div>
         </div>
       </section>
@@ -108,6 +109,9 @@
         </div>
       </section>
     </main>
-    <script src="../assets/js/site.js?v=20260717a"></script>
+    <footer class="site-footer">
+      <div class="footer-shell"><p>&copy; <span data-year></span> Grant McCurdy</p><div class="footer-links"><a href="../projects/index.html">Projects</a><a href="../demos/index.html">Demos</a><a href="https://github.com/grant-mccurdy">GitHub</a><a href="https://www.linkedin.com/in/grant-mccurdy/">LinkedIn</a></div></div>
+    </footer>
+    <script src="../assets/js/site.js?v=20260720b"></script>
   </body>
 </html>

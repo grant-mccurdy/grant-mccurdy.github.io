@@ -67,8 +67,10 @@ that the public helper can only answer from the portfolio sources.
 ## Best Evidence Pages
 
 - Homepage: https://grant-mccurdy.github.io/
-- Hotel Comp Policy Model: https://grant-mccurdy.github.io/projects/hotel-comp-policy-model/
-- Portfolio Data Lab: https://grant-mccurdy.github.io/data-lab.html
+- Hotel Comp Policy Model: https://grant-mccurdy.github.io/projects/hotel-comp-policy-model.html
+- Education Data Lab: https://grant-mccurdy.github.io/data-lab.html
+- Assessment Analytics: https://grant-mccurdy.github.io/dashboard/assessment.html
+- Content Intelligence RAG: https://grant-mccurdy.github.io/demos/content-rag.html
 - Analytics dashboard: https://grant-mccurdy.github.io/dashboard/assessment.html
 - Education Data Simulation Engine: https://grant-mccurdy.github.io/projects/education-data-simulation-engine.html
 - Assessment Intelligence: https://grant-mccurdy.github.io/projects/assessment-intelligence.html

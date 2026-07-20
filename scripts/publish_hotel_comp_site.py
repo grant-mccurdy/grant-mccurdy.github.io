@@ -4,8 +4,11 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import html
+import json
 import re
+import subprocess
 from pathlib import Path
 from urllib.parse import urlparse
 
@@ -84,6 +87,17 @@ def parse_args() -> argparse.Namespace:
         type=Path,
         default=DEFAULT_SOURCE,
         help="Path to the separately maintained hotel-comp-policy-model repository.",
+    )
+    parser.add_argument(
+        "--output",
+        type=Path,
+        default=OUTPUT_DIR,
+        help="Destination directory for the static publication bundle.",
+    )
+    parser.add_argument(
+        "--check",
+        action="store_true",
+        help="Fail if the published bundle differs from the source repository.",
     )
     return parser.parse_args()
 
@@ -254,26 +268,30 @@ def report_page(output_name: str, title: str, description: str, content: str) ->
     <meta property="og:image" content="https://grant-mccurdy.github.io/assets/images/workflow-hero-poster.jpg">
     <link rel="canonical" href="{canonical_url}">
     <link rel="icon" href="../../assets/images/grant-mccurdy-profile.jpg" type="image/jpeg">
-    <link rel="stylesheet" href="../../assets/css/styles.css?v=20260717a">
-    <link rel="stylesheet" href="appendix.css?v=20260717a">
+    <link rel="stylesheet" href="../../assets/css/styles.css?v=20260720b">
+    <link rel="stylesheet" href="appendix.css?v=20260720b">
   </head>
   <body>
+    <a class="skip-link" href="#main">Skip to content</a>
     <header class="site-header compact" data-header>
       <nav class="nav-shell" aria-label="Primary navigation">
-        <a class="brand" href="../../index.html">
+        <a class="brand" href="../../index.html" aria-label="Grant McCurdy home">
           <span class="brand-mark" aria-hidden="true"><img src="../../assets/images/grant-mccurdy-profile.jpg" alt=""></span>
           <span class="brand-text">Grant McCurdy</span>
         </a>
-        <div class="nav-links static">
-          <a href="index.html">Decision Brief</a>
-          <a href="simulation-audit.html">Simulation Audit</a>
+        <button class="nav-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false" data-nav-toggle>
+          <span></span><span></span><span></span>
+        </button>
+        <div class="nav-links" data-nav-links>
           <a href="../index.html">Projects</a>
-          <a href="{SOURCE_URL}">Source</a>
+          <a href="../../demos/index.html">Demos</a>
+          <a href="https://github.com/grant-mccurdy">GitHub</a>
+          <a href="https://www.linkedin.com/in/grant-mccurdy/">LinkedIn</a>
         </div>
       </nav>
     </header>
 
-    <main class="report-main">
+    <main id="main" class="report-main">
       <section class="report-hero">
         <p class="section-kicker">Hotel Comp Policy Model | Technical Evidence</p>
         <h1>{html.escape(title)}</h1>
@@ -288,7 +306,18 @@ def report_page(output_name: str, title: str, description: str, content: str) ->
           {content}
       </article>
     </main>
-    <script src="../../assets/js/site.js?v=20260717a"></script>
+    <footer class="site-footer">
+      <div class="footer-shell">
+        <p>&copy; <span data-year></span> Grant McCurdy</p>
+        <div class="footer-links">
+          <a href="../index.html">Projects</a>
+          <a href="../../demos/index.html">Demos</a>
+          <a href="https://github.com/grant-mccurdy">GitHub</a>
+          <a href="https://www.linkedin.com/in/grant-mccurdy/">LinkedIn</a>
+        </div>
+      </div>
+    </footer>
+    <script src="../../assets/js/site.js?v=20260720b"></script>
   </body>
 </html>
 """
@@ -439,9 +468,64 @@ def validate_publication(files: dict[str, str]) -> None:
         raise ValueError("Publication safety checks failed:\n" + "\n".join(failures))
 
 
+def sha256(value: bytes) -> str:
+    return hashlib.sha256(value).hexdigest()
+
+
+def git_value(source_dir: Path, *args: str) -> str:
+    result = subprocess.run(
+        ["git", "-C", str(source_dir), *args],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    return result.stdout.strip()
+
+
+def publication_manifest(
+    source_dir: Path,
+    source_paths: list[Path],
+    output_files: dict[str, bytes],
+) -> bytes:
+    payload = {
+        "schemaVersion": 1,
+        "sourceRepository": SOURCE_URL,
+        "sourceRevision": git_value(source_dir, "rev-parse", "HEAD"),
+        "sourceCommitDate": git_value(source_dir, "show", "-s", "--format=%cI", "HEAD"),
+        "sourceArtifacts": {
+            path.relative_to(source_dir).as_posix(): sha256(path.read_bytes())
+            for path in sorted(source_paths)
+        },
+        "outputs": {
+            name: sha256(content)
+            for name, content in sorted(output_files.items())
+        },
+    }
+    return (json.dumps(payload, indent=2, sort_keys=True) + "\n").encode("utf-8")
+
+
+def check_publication(output_dir: Path, expected: dict[str, bytes]) -> list[str]:
+    failures: list[str] = []
+    existing_names = {
+        path.relative_to(output_dir).as_posix()
+        for path in output_dir.rglob("*")
+        if path.is_file()
+    } if output_dir.is_dir() else set()
+    expected_names = set(expected)
+    for name in sorted(expected_names - existing_names):
+        failures.append(f"missing {name}")
+    for name in sorted(existing_names - expected_names):
+        failures.append(f"unexpected {name}")
+    for name in sorted(existing_names & expected_names):
+        if (output_dir / name).read_bytes() != expected[name]:
+            failures.append(f"stale {name}")
+    return failures
+
+
 def main() -> int:
     args = parse_args()
     source_dir = args.source.resolve()
+    output_dir = args.output.resolve()
     required = [
         source_dir / "index.html",
         source_dir / "reports" / "hotel-comp-decision-framework.pdf",
@@ -493,14 +577,28 @@ def main() -> int:
         files[output_name] = report_page(output_name, title, description, render_markdown(markdown))
 
     validate_publication(files)
-    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-    for name, content in files.items():
-        (OUTPUT_DIR / name).write_text(content.rstrip() + "\n", encoding="utf-8")
-
     pdf_source = source_dir / "reports" / "hotel-comp-decision-framework.pdf"
-    (OUTPUT_DIR / "hotel-comp-decision-framework.pdf").write_bytes(pdf_source.read_bytes())
+    output_files = {
+        name: (content.rstrip() + "\n").encode("utf-8")
+        for name, content in files.items()
+    }
+    output_files["hotel-comp-decision-framework.pdf"] = pdf_source.read_bytes()
+    output_files["publication-manifest.json"] = publication_manifest(source_dir, required, output_files)
 
-    print(f"Published {len(files) + 1} static files to {OUTPUT_DIR.relative_to(ROOT)}")
+    if args.check:
+        failures = check_publication(output_dir, output_files)
+        if failures:
+            print("Hotel Comp publication is stale:\n" + "\n".join(f"- {failure}" for failure in failures))
+            return 1
+        print(f"Hotel Comp publication matches source revision {git_value(source_dir, 'rev-parse', '--short', 'HEAD')}.")
+        return 0
+
+    output_dir.mkdir(parents=True, exist_ok=True)
+    for name, content in output_files.items():
+        (output_dir / name).write_bytes(content)
+
+    destination = output_dir.relative_to(ROOT) if output_dir.is_relative_to(ROOT) else output_dir
+    print(f"Published {len(output_files)} static files to {destination}")
     return 0
 
 

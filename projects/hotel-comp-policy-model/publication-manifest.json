@@ -1,0 +1,35 @@
+{
+  "outputs": {
+    "appendix.css": "6b7a44f51afa67053814f4b8e07c73df60cabf9c26ce6bed0bb784184eb69f55",
+    "data-lineage.html": "8adaef487a4560a3652dd5b42bf2bbde1a3085a45fb77f968ccf05e9d19adc72",
+    "engineering-evidence.html": "4459743f951b02dc19a79e4dc89f2fce56b0a4d2d4c18255e9e1dff30da5733a",
+    "hotel-comp-decision-framework.pdf": "511a7ea2aaacf92f6a6d7d1f292eee593ef4b9adb8b35caa043ec3fd865f45af",
+    "index.html": "474668232edd7bff03896308c6fbdc0c7a4098618602dba2675bae96091de543",
+    "methodology.html": "9e9abd409869917a2d542f6c52435b4ed584714ba5cb4f04ef768d1caf039c85",
+    "policy-decision-analysis.html": "1dcb0e95408b722cca0d98374d307fa572d756e89ba1123d4e5173a6cad620d3",
+    "policy-sensitivity.html": "1d49831f8dd8e4a87f0df70887953d2dcebc1d14bedc86d1c962e872c429e1f8",
+    "public-context.html": "417b0709e529d15d53af64d25e5f37a3a5cb8db28950383f12df62ed74229ed1",
+    "simulation-audit.html": "410d8787c26d342eacbbdcad3a0fc04b11684df7913b158a43f9f5715c3be16f",
+    "technical-appendix.html": "99fdc2efd9d5aa9a4aa691ac7b001c837b2ca732ccb47586419e23cc5d3bf63d",
+    "technical-prototype.html": "28b9bc90eadb90d7970e5943ad588f86b2fb79ec19c5c1fa325ef3f45ba537b1",
+    "warehouse-validation.html": "e3d5585e42eec48a7524657f5787bd21c3c1b04405c23f9d862d58a57f347d21"
+  },
+  "schemaVersion": 1,
+  "sourceArtifacts": {
+    "index.html": "1d341f7ca4d89b3b522b05b8974de3e78939000b6f1ac8b4b0daec24f514b015",
+    "reports/comp-optimization-dashboard.html": "cdfbbf9be1c77313c9e70f09a865227c07db8cf690c445b8d5dbe807579559d2",
+    "reports/data-lineage.md": "a4783b17347c9883ed84ee2202e0f34755352ccbef19fd2415543898b5550d53",
+    "reports/engineering-evidence.md": "a7dac6b62c3d3ec1ea2d0cc2765752553a6f09408a049149310873b258ee0e84",
+    "reports/hotel-comp-decision-framework.pdf": "511a7ea2aaacf92f6a6d7d1f292eee593ef4b9adb8b35caa043ec3fd865f45af",
+    "reports/interactive-policy-prototype.html": "da1ca16503208f323e10dbe807a12ca6dde3a873f54f66ccfc424684c9aef5f8",
+    "reports/methodology-and-assumptions.md": "7c1689771d0fec02fa97ab1588ea8138da16023b4b9eeb4e46ba6bb2486621b8",
+    "reports/policy-decision-analysis.md": "cb14a5d7fa2f7b752fb8dcfeb7ee06ab5acf0990961685eba21e7490a3a2dc12",
+    "reports/policy-selection-technical-appendix.html": "d44fcdcfc1ba1c78a91b3fbeafd8f67551ab93182c6c0a221c74fdac88964c1f",
+    "reports/policy-sensitivity.md": "31664a55174a43dbfa80d7c9796fda1889ff7de556d63a74cfc3775786eeae67",
+    "reports/proper-public-context.md": "2573b04f98703120eb8392e6acc1eb167d8a30ed82e62185cd0ac0223a09f66e",
+    "reports/snowflake-validation.md": "af5aa769c66ee1330d5d7ef786914d79153f946c9dc7c5a86830d61a64979a66"
+  },
+  "sourceCommitDate": "2026-07-20T11:58:46-07:00",
+  "sourceRepository": "https://github.com/grant-mccurdy/hotel-comp-policy-model",
+  "sourceRevision": "b651dcb0f834c03706a71c09b14aa0d1f047a6f0"
+}

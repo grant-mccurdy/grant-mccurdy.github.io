@@ -1,11 +1,15 @@
 const contentRag = document.querySelector("[data-content-rag]");
 
 if (contentRag) {
+  const { escapeHtml, renderInlineMarkdown, safeHttpUrl } = window.PortfolioChatUI;
   const thread = contentRag.querySelector("[data-chat-thread]");
   const form = contentRag.querySelector("[data-chat-form]");
   const input = contentRag.querySelector("[data-chat-input]");
   const submitButton = form.querySelector("button");
   const presetButtons = [...contentRag.querySelectorAll("[data-question]")];
+  const sourceMeta = contentRag.querySelector(".content-rag-live-meta");
+  const sourceStatus = contentRag.querySelector("[data-content-source-status]");
+  const sourceFingerprint = contentRag.querySelector("[data-content-fingerprint]");
   const REQUEST_TIMEOUT_MS = 30000;
   const params = new URLSearchParams(window.location.search);
   const endpoint =
@@ -13,28 +17,11 @@ if (contentRag) {
     contentRag.dataset.apiEndpoint ||
     window.PORTFOLIO_CONTENT_RAG_ENDPOINT ||
     "";
+  const sourcesEndpoint =
+    params.get("content_sources_endpoint") ||
+    contentRag.dataset.sourcesEndpoint ||
+    (endpoint ? endpoint.replace(/\/content\/query$/, "/content/sources") : "");
   const demoToken = params.get("demo_token") || contentRag.dataset.demoToken || window.PORTFOLIO_CONTENT_RAG_TOKEN || "";
-
-  const escapeHtml = (value) =>
-    String(value ?? "")
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;");
-
-  const renderInlineMarkdown = (value) =>
-    escapeHtml(value)
-      .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
-      .replace(/`([^`]+)`/g, "<code>$1</code>");
-
-  const safeHttpUrl = (value) => {
-    try {
-      const url = new URL(String(value || ""), window.location.href);
-      return ["http:", "https:"].includes(url.protocol) ? url.href : "";
-    } catch {
-      return "";
-    }
-  };
 
   const renderText = (value) =>
     String(value || "")
@@ -116,6 +103,30 @@ if (contentRag) {
   const setBusy = (busy) => {
     submitButton.disabled = busy;
     input.disabled = busy;
+  };
+
+  const loadCorpusMetadata = async () => {
+    if (!sourceMeta || !sourceStatus || !sourcesEndpoint) return;
+    const controller = new AbortController();
+    const timeoutId = window.setTimeout(() => controller.abort(), 10000);
+    try {
+      const response = await fetch(sourcesEndpoint, { signal: controller.signal });
+      const payload = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error("Corpus metadata unavailable");
+      const count = Number(payload.chunks || 0);
+      const mode = payload.retrievalMode === "hybrid" ? "hybrid retrieval" : "lexical retrieval";
+      sourceStatus.textContent = count > 0 ? `${count.toLocaleString()} reviewed records · ${mode}` : `Published corpus · ${mode}`;
+      sourceMeta.classList.add("is-ready");
+      if (sourceFingerprint && payload.corpusFingerprint) {
+        sourceFingerprint.textContent = `${String(payload.corpusFingerprint).slice(0, 12)}…`;
+        sourceFingerprint.title = `Corpus fingerprint: ${payload.corpusFingerprint}`;
+      }
+    } catch {
+      sourceStatus.textContent = "Published public-safe corpus; live metadata unavailable";
+      sourceMeta.classList.add("is-unavailable");
+    } finally {
+      window.clearTimeout(timeoutId);
+    }
   };
 
   const runQuestion = async (question) => {
@@ -208,4 +219,5 @@ if (contentRag) {
       "The index contains public-safe records for source adapters, artifact conversion, information objects, retrieval, citations, and safety review."
     )
   );
+  loadCorpusMetadata();
 }

@@ -124,6 +124,17 @@ function staticServer() {
       );
       return;
     }
+    if (pathname === "/mock-content-sources") {
+      response.writeHead(200, { "Content-Type": "application/json; charset=utf-8" });
+      response.end(
+        JSON.stringify({
+          chunks: 92,
+          retrievalMode: "hybrid",
+          corpusFingerprint: "77ed1a608b9286fc2be12646242aae91f94bce003671ee053c9af268f1776b2c",
+        }),
+      );
+      return;
+    }
     const relativePath = pathname === "/" ? "index.html" : pathname.replace(/^\/+/, "");
     const target = path.resolve(root, relativePath);
 
@@ -266,12 +277,12 @@ async function inspectHelper(page, label) {
       status: 200,
       contentType: "application/json; charset=utf-8",
       body: JSON.stringify({
-        answer: "Start with the Analytics Dashboard, then open the Portfolio Data Lab. For methods evidence, visit Statistical Methods Evidence.",
+        answer: "Start with Assessment Analytics, then open the Education Data Lab. For methods evidence, visit Statistical Methods Evidence.",
         blocks: [
           {
             type: "text",
             content:
-              "Start with the **Analytics Dashboard**, then open the Portfolio Data Lab. For methods evidence, visit Statistical Methods Evidence."
+              "Start with **Assessment Analytics**, then open the Education Data Lab. For methods evidence, visit Statistical Methods Evidence."
           },
           {
             type: "capability_note",
@@ -285,7 +296,7 @@ async function inspectHelper(page, label) {
             questions: ["Which project shows analytics work?"]
           }
         ],
-        links: [{ title: "Analytics Dashboard", url: "/dashboard/assessment.html" }]
+        links: [{ title: "Assessment Analytics", url: "/dashboard/assessment.html" }]
       }),
     });
   });
@@ -346,8 +357,8 @@ async function inspectHelper(page, label) {
       handoffUrl?.searchParams.get("question") === "create a trend line" &&
       handoffUrl?.searchParams.get("autorun") === "1",
     recommendationLinks:
-      recommendationLinks.some((link) => link.href.endsWith("/dashboard/assessment.html") && link.text.includes("Analytics Dashboard")) &&
-      recommendationLinks.some((link) => link.href.endsWith("/data-lab.html") && link.text.includes("Portfolio Data Lab")) &&
+      recommendationLinks.some((link) => link.href.endsWith("/dashboard/assessment.html") && link.text.includes("Assessment Analytics")) &&
+      recommendationLinks.some((link) => link.href.endsWith("/data-lab.html") && link.text.includes("Education Data Lab")) &&
       recommendationLinks.some((link) => link.href.endsWith("/projects/graduate-statistics-portfolio.html")),
     supportedScopeHidden:
       !recommendationText.includes("Supported scope") &&
@@ -365,12 +376,12 @@ async function inspectDataLabPrefill(page, label) {
 
 async function inspectDataLabCatalog(page, label) {
   if (label !== "data-lab-catalog") return null;
-  await page.getByText("Synthetic Education Warehouse").waitFor({ state: "visible", timeout: 1500 });
+  await page.locator("[data-dataset-name]").waitFor({ state: "attached", timeout: 1500 });
   return {
-    datasetName: (await page.locator("[data-dataset-name]").innerText()).includes("Synthetic Education Warehouse"),
-    datasetTables: (await page.locator("[data-dataset-tables]").innerText()).includes("15 tables"),
-    datasetMode: (await page.locator("[data-dataset-mode]").innerText()).includes("sqlite analyst"),
-    datasetUpdated: (await page.locator("[data-dataset-updated]").innerText()).includes("2026"),
+    datasetName: (await page.locator("[data-dataset-name]").textContent()).includes("Synthetic Education Warehouse"),
+    datasetTables: (await page.locator("[data-dataset-tables]").textContent()).includes("15 tables"),
+    datasetMode: (await page.locator("[data-dataset-mode]").textContent()).includes("sqlite analyst"),
+    datasetUpdated: (await page.locator("[data-dataset-updated]").textContent()).includes("2026"),
   };
 }
 
@@ -387,13 +398,14 @@ async function inspectDataLabCapability(page, label) {
 async function inspectContentRag(page, label) {
   if (!label.startsWith("content-rag-")) return null;
   const thread = page.locator("[data-chat-thread]");
-  await thread.getByText("Content Intelligence RAG").waitFor({ state: "visible", timeout: 1500 });
+  await thread.getByText("Content Intelligence RAG").waitFor({ state: "visible", timeout: 5000 });
+  await page.getByText("92 reviewed records").waitFor({ state: "visible", timeout: 5000 });
   await page.locator("[data-chat-input]").fill("How does the artifact-to-RAG workflow work?");
   const submitButton = page.locator("[data-chat-form] button[type='submit']");
   await submitButton.scrollIntoViewIfNeeded();
   const pageScrollBeforeResponse = await page.evaluate(() => window.scrollY);
   await submitButton.click();
-  await thread.getByText("Source-grounded answer").waitFor({ state: "visible", timeout: 1500 });
+  await thread.getByText("Source-grounded answer").waitFor({ state: "visible", timeout: 5000 });
   await page.waitForFunction(
     () => {
       const chatThread = document.querySelector("[data-chat-thread]");
@@ -439,12 +451,26 @@ async function inspectContentRag(page, label) {
       })),
   );
   return {
+    corpusMetadata:
+      (await page.locator("[data-content-source-status]").innerText()).includes("92 reviewed records") &&
+      (await page.locator("[data-content-fingerprint]").getAttribute("title")) ===
+        "Corpus fingerprint: 77ed1a608b9286fc2be12646242aae91f94bce003671ee053c9af268f1776b2c",
     rendered: text.includes("Source-grounded answer") && text.includes("Follow-up questions"),
     citation: Boolean(sourceHref?.includes("content-intelligence/blob/main/sample_outputs/rag-index.json")),
     diagnosticsHidden,
     threadScroll,
     overflow,
   };
+}
+
+async function inspectContentArtifacts(page, label) {
+  if (label !== "content-desktop") return null;
+  return page.locator("[data-source-artifacts] a").evaluateAll((links) => ({
+    count: links.length,
+    openInNewTabs: links.every(
+      (link) => link.target === "_blank" && link.rel.split(/\s+/).includes("noopener")
+    ),
+  }));
 }
 
 async function inspectHotelComp(page, label) {
@@ -596,6 +622,10 @@ const cases = [
   ["home-mobile", "index.html", 390, 900],
   ["projects-directory-desktop", path.join("projects", "index.html"), 1440, 1000],
   ["projects-directory-mobile", path.join("projects", "index.html"), 390, 900],
+  ["demos-directory-desktop", path.join("demos", "index.html"), 1440, 1000],
+  ["demos-directory-mobile", path.join("demos", "index.html"), 390, 900],
+  ["hotel-comp-brief-desktop", path.join("projects", "hotel-comp-policy-model.html"), 1440, 1000],
+  ["hotel-comp-brief-mobile", path.join("projects", "hotel-comp-policy-model.html"), 390, 900],
   ["hotel-comp-decision-desktop", path.join("projects", "hotel-comp-policy-model", "index.html"), 1440, 1000],
   ["hotel-comp-decision-mobile", path.join("projects", "hotel-comp-policy-model", "index.html"), 390, 900],
   ["hotel-comp-appendix-desktop", path.join("projects", "hotel-comp-policy-model", "technical-appendix.html"), 1440, 1000],
@@ -623,8 +653,8 @@ const cases = [
   ["remediation-mobile", path.join("projects", "assessment-to-remediation-pipeline.html"), 390, 900],
   ["content-desktop", path.join("projects", "content-intelligence.html"), 1440, 1000],
   ["content-mobile", path.join("projects", "content-intelligence.html"), 390, 900],
-  ["content-rag-desktop", "projects/content-intelligence.html?content_endpoint=/mock-content-rag", 1440, 1000],
-  ["content-rag-mobile", "projects/content-intelligence.html?content_endpoint=/mock-content-rag", 390, 900],
+  ["content-rag-desktop", "demos/content-rag.html?content_endpoint=/mock-content-rag&content_sources_endpoint=/mock-content-sources", 1440, 1000],
+  ["content-rag-mobile", "demos/content-rag.html?content_endpoint=/mock-content-rag&content_sources_endpoint=/mock-content-sources", 390, 900],
   ["workflow-desktop", path.join("projects", "instructional-ai-workflows.html"), 1440, 1000],
   ["workflow-mobile", path.join("projects", "instructional-ai-workflows.html"), 390, 900],
   ["dashboard-desktop", path.join("dashboard", "assessment.html"), 1440, 1000],
@@ -636,9 +666,15 @@ const server = staticServer();
 const baseUrl = await listen(server);
 const browser = await chromium.launch({ headless: true });
 const results = [];
+const caseFilter = String(process.env.VISUAL_SMOKE_FILTER || "").trim();
+const selectedCases = caseFilter ? cases.filter(([label]) => label.includes(caseFilter)) : cases;
+
+if (!selectedCases.length) {
+  throw new Error(`No visual smoke cases matched VISUAL_SMOKE_FILTER=${caseFilter}`);
+}
 
 try {
-  for (const [label, file, width, height] of cases) {
+  for (const [label, file, width, height] of selectedCases) {
     const page = await browser.newPage({ viewport: { width, height } });
     await page.goto(`${baseUrl}/${file.replaceAll(path.sep, "/")}`, { waitUntil: "networkidle" });
     results.push({
@@ -650,6 +686,7 @@ try {
       dataLabCatalog: await inspectDataLabCatalog(page, label),
       capability: await inspectDataLabCapability(page, label),
       contentRag: await inspectContentRag(page, label),
+      contentArtifacts: await inspectContentArtifacts(page, label),
       hotelComp: await inspectHotelComp(page, label),
     });
     await page.close();
@@ -701,6 +738,7 @@ const failures = results.filter(
     result.dataLabCatalog?.datasetMode === false ||
     result.dataLabCatalog?.datasetUpdated === false ||
     result.capability?.capabilityNote === false ||
+    result.contentRag?.corpusMetadata === false ||
     result.contentRag?.rendered === false ||
     result.contentRag?.citation === false ||
     result.contentRag?.diagnosticsHidden === false ||
@@ -708,6 +746,8 @@ const failures = results.filter(
     result.contentRag?.threadScroll?.latestAnswerVisible === false ||
     result.contentRag?.threadScroll?.pageStayedPut === false ||
     result.contentRag?.overflow.length ||
+    result.contentArtifacts?.count !== undefined && result.contentArtifacts.count !== 8 ||
+    result.contentArtifacts?.openInNewTabs === false ||
     result.hotelComp?.boundary === false ||
     result.hotelComp?.decisionFramework === false ||
     result.hotelComp?.workedRecommendation === false ||

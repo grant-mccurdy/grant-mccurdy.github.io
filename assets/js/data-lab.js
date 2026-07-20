@@ -1,6 +1,7 @@
 const lab = document.querySelector("[data-data-lab]");
 
 if (lab) {
+  const { escapeHtml, renderInlineMarkdown } = window.PortfolioChatUI;
   const thread = lab.querySelector("[data-chat-thread]");
   const form = lab.querySelector("[data-chat-form]");
   const input = lab.querySelector("[data-chat-input]");
@@ -26,18 +27,6 @@ if (lab) {
   const datasetMode = lab.querySelector("[data-dataset-mode]");
   const datasetUpdated = lab.querySelector("[data-dataset-updated]");
   let activeDatasetId = "";
-
-  const escapeHtml = (value) =>
-    String(value ?? "")
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;");
-
-  const renderInlineMarkdown = (value) =>
-    escapeHtml(value)
-      .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
-      .replace(/`([^`]+)`/g, "<code>$1</code>");
 
   const orderedMarkerPattern = /(^|\s)(\d+)\.\s+/g;
   const orderedLinePattern = /^\d+\.\s+/;
@@ -332,7 +321,7 @@ if (lab) {
 
   const renderCapabilityNote = (block) => {
     const nextBestAction = block.nextBestAction ? `<p>Next best action: ${escapeHtml(block.nextBestAction)}</p>` : "";
-    return `<div class="chat-status ${escapeHtml(block.status || "info")}"><strong>${escapeHtml(block.title || "Supported scope")}</strong><p>${escapeHtml(block.content || "")}</p>${nextBestAction}</div>`;
+    return `<div class="chat-status ${escapeHtml(block.status || "info")}"><strong>${escapeHtml(block.title || "Analysis note")}</strong><p>${escapeHtml(block.content || "")}</p>${nextBestAction}</div>`;
   };
 
   const renderStatus = (kind, title, content) =>
@@ -350,27 +339,11 @@ if (lab) {
   };
 
   const renderInitialLabIntro = () =>
-    [
-      renderStatus(
-        "info",
-        "Connected analyst workspace",
-        "Ask broad inspection questions, compare segments, request trends, check relationships, or ask what the dataset can and cannot support."
-      ),
-      renderAnalysisNote({
-        title: "Good first pass",
-        content:
-          "Start with Analyst readout to let the backend inspect coverage and choose high-signal follow-up analyses before drilling into one metric."
-      }),
-      renderSuggestions({
-        title: "Try one of these",
-        questions: [
-          "What stands out in the data?",
-          "Which courses show the strongest average observed growth?",
-          "How does average observed growth change by school year?",
-          "What should I not conclude from this?"
-        ]
-      })
-    ].join("");
+    renderStatus(
+      "info",
+      "Connected analyst workspace",
+      "Choose a prompt or ask a question about growth, readiness, attendance, coverage, or validation."
+    );
 
   const updateDatasetStatus = (dataset, generatedAt = "") => {
     if (!dataset) return;

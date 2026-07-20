@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Live Demos | Grant McCurdy</title>
+    <meta name="description" content="Use Grant McCurdy's public portfolio demos for decision support, assessment analytics, education data analysis, and cited content retrieval.">
+    <meta property="og:title" content="Live Demos | Grant McCurdy">
+    <meta property="og:description" content="Four working public demos with clear tasks, data boundaries, project briefs, and source code.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://grant-mccurdy.github.io/demos/">
+    <meta property="og:image" content="https://grant-mccurdy.github.io/assets/images/social/portfolio.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="canonical" href="https://grant-mccurdy.github.io/demos/">
+    <link rel="icon" href="../assets/images/grant-mccurdy-profile.jpg" type="image/jpeg">
+    <link rel="stylesheet" href="../assets/css/styles.css?v=20260720d">
+    <link rel="stylesheet" href="../assets/css/demos.css?v=20260720a">
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header compact" data-header>
+      <nav class="nav-shell" aria-label="Primary navigation">
+        <a class="brand" href="../index.html" aria-label="Grant McCurdy home">
+          <span class="brand-mark" aria-hidden="true"><img src="../assets/images/grant-mccurdy-profile.jpg" alt=""></span>
+          <span class="brand-text">Grant McCurdy</span>
+        </a>
+        <button class="nav-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false" data-nav-toggle>
+          <span></span><span></span><span></span>
+        </button>
+        <div class="nav-links" data-nav-links>
+          <a href="../projects/index.html">Projects</a>
+          <a href="index.html" aria-current="page">Demos</a>
+          <a href="https://github.com/grant-mccurdy">GitHub</a>
+          <a href="https://www.linkedin.com/in/grant-mccurdy/">LinkedIn</a>
+        </div>
+      </nav>
+    </header>
+
+    <main id="main" class="detail-main">
+      <section class="detail-hero directory-hero">
+        <p class="section-kicker">Live Demos</p>
+        <h1>Use the systems</h1>
+        <p>Each demo starts with a concrete task and states the data boundary up front. Project briefs explain the design; source links expose the implementation.</p>
+      </section>
+
+      <section class="section-shell demo-directory" aria-labelledby="demo-directory-heading">
+        <div class="section-heading compact-heading">
+          <p class="section-kicker">Choose A Task</p>
+          <h2 id="demo-directory-heading">Four working review paths</h2>
+        </div>
+        <div class="demo-directory-list">
+          <article class="demo-directory-item" data-demo-project-id="hotel-comp-policy-model">
+            <div class="demo-directory-index" aria-hidden="true">01</div>
+            <div class="demo-directory-copy">
+              <p class="artifact-kind">Decision support</p>
+              <h3>Hotel Decision Desk</h3>
+              <p>Run a synthetic service-recovery scenario and inspect the recommendation, alternatives, cost assumptions, and manager review path.</p>
+              <p class="demo-boundary"><strong>Data boundary:</strong> Built-in or user-entered synthetic scenarios only; no guest records or internal hotel policy.</p>
+            </div>
+            <div class="demo-directory-actions">
+              <a class="button primary" href="https://hotel-comp-decision-desk.grant-mccurdy.workers.dev/" data-track-project="hotel-comp-policy-model" data-track-destination="live-demo">Open desk</a>
+              <a class="text-link" href="../projects/hotel-comp-policy-model.html">Project brief</a>
+              <a class="text-link" href="https://github.com/grant-mccurdy/hotel-comp-policy-model">Source</a>
+            </div>
+          </article>
+
+          <article class="demo-directory-item" data-demo-project-id="assessment-intelligence">
+            <div class="demo-directory-index" aria-hidden="true">02</div>
+            <div class="demo-directory-copy">
+              <p class="artifact-kind">Interactive analytics</p>
+              <h3>Assessment Analytics</h3>
+              <p>Inspect trends, compare groups, and review readiness signals generated from the published assessment extracts.</p>
+              <p class="demo-boundary"><strong>Data boundary:</strong> Synthetic records generated from the same public SQL extracts used by the reporting workflow.</p>
+            </div>
+            <div class="demo-directory-actions">
+              <a class="button primary" href="../dashboard/assessment.html" data-track-project="assessment-intelligence" data-track-destination="live-demo">Open dashboard</a>
+              <a class="text-link" href="../projects/assessment-intelligence.html">Project brief</a>
+              <a class="text-link" href="https://github.com/grant-mccurdy/assessment-intelligence">Source</a>
+            </div>
+          </article>
+
+          <article class="demo-directory-item" data-demo-project-id="education-data-simulation-engine">
+            <div class="demo-directory-index" aria-hidden="true">03</div>
+            <div class="demo-directory-copy">
+              <p class="artifact-kind">Analyst workspace</p>
+              <h3>Education Data Lab</h3>
+              <p>Ask statistical and operational questions and receive structured tables, charts, and analysis notes.</p>
+              <p class="demo-boundary"><strong>Data boundary:</strong> Read-only analysis over a validated synthetic education warehouse.</p>
+            </div>
+            <div class="demo-directory-actions">
+              <a class="button primary" href="../data-lab.html" data-track-project="education-data-simulation-engine" data-track-destination="live-demo">Open lab</a>
+              <a class="text-link" href="../projects/education-data-simulation-engine.html">Project brief</a>
+              <a class="text-link" href="https://github.com/grant-mccurdy/education-data-simulation-engine">Source</a>
+            </div>
+          </article>
+
+          <article class="demo-directory-item" data-demo-project-id="content-intelligence">
+            <div class="demo-directory-index" aria-hidden="true">04</div>
+            <div class="demo-directory-copy">
+              <p class="artifact-kind">Cited retrieval</p>
+              <h3>Content Intelligence RAG</h3>
+              <p>Ask how the conversion, information-object, retrieval, citation, and safety workflows operate.</p>
+              <p class="demo-boundary"><strong>Data boundary:</strong> Reviewed public-safe method and evidence records; raw private source material is excluded.</p>
+            </div>
+            <div class="demo-directory-actions">
+              <a class="button primary" href="content-rag.html" data-track-project="content-intelligence" data-track-destination="live-demo">Open RAG</a>
+              <a class="text-link" href="../projects/content-intelligence.html">Project brief</a>
+              <a class="text-link" href="https://github.com/grant-mccurdy/content-intelligence">Source</a>
+            </div>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-shell">
+        <p>&copy; <span data-year></span> Grant McCurdy</p>
+        <div class="footer-links">
+          <a href="../projects/index.html">Projects</a>
+          <a href="index.html">Demos</a>
+          <a href="https://github.com/grant-mccurdy">GitHub</a>
+          <a href="https://www.linkedin.com/in/grant-mccurdy/">LinkedIn</a>
+        </div>
+      </div>
+    </footer>
+    <script src="../assets/js/site.js?v=20260720b"></script>
+  </body>
+</html>

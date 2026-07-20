@@ -9,7 +9,7 @@
     {
       "id": "hotel-comp-policy-model",
       "title": "Hotel Comp Policy Model",
-      "url": "https://grant-mccurdy.github.io/projects/hotel-comp-policy-model/",
+      "url": "https://grant-mccurdy.github.io/projects/hotel-comp-policy-model.html",
       "summary": "Explainable luxury-hospitality service-recovery prototype balancing guest recovery, manager judgment, operational constraints, and comp cost.",
       "bestFor": ["hospitality analytics", "decision support", "policy simulation", "data reconciliation", "explainability", "sensitivity analysis"],
       "evidence": ["interactive scenario explorer", "430-case synthetic policy audit", "recommendation stability tests", "Snowflake reconciliation", "public property context"],
@@ -70,8 +70,8 @@
       "boundary": "Public examples use synthetic, sanitized, public-domain, or clearly licensed source material."
     },
     {
-      "id": "portfolio-data-lab",
-      "title": "Portfolio Data Lab",
+      "id": "education-data-lab",
+      "title": "Education Data Lab",
       "url": "https://grant-mccurdy.github.io/data-lab.html",
       "summary": "Structured analytic chat over a public-safe synthetic education warehouse.",
       "bestFor": ["statistical questions", "tables", "charts", "synthetic warehouse analysis", "follow-up analytic questions"],
@@ -79,8 +79,8 @@
       "boundary": "For synthetic education analytics only; not a source for private student data or private school records."
     },
     {
-      "id": "analytics-dashboard",
-      "title": "Analytics Dashboard",
+      "id": "assessment-analytics",
+      "title": "Assessment Analytics",
       "url": "https://grant-mccurdy.github.io/dashboard/assessment.html",
       "summary": "Static GitHub Pages dashboard over public-safe synthetic warehouse extracts with browser-side aggregation, SVG charts, and filters.",
       "bestFor": ["interactive demo", "dashboarding", "visual analytics", "assessment reporting", "front-end data product"],
@@ -91,11 +91,11 @@
   "routingRules": [
     {
       "intent": "visitor wants a quick overview",
-      "recommend": ["hotel-comp-policy-model", "analytics-dashboard", "portfolio-data-lab", "content-intelligence"]
+      "recommend": ["hotel-comp-policy-model", "assessment-analytics", "education-data-lab", "content-intelligence"]
     },
     {
       "intent": "visitor asks about statistics or computation over education data",
-      "recommend": ["portfolio-data-lab"]
+      "recommend": ["education-data-lab"]
     },
     {
       "intent": "visitor asks about Grant's technical strengths",
@@ -103,7 +103,7 @@
     },
     {
       "intent": "visitor asks about R, statistics, validation, expected growth, or section performance models",
-      "recommend": ["statistical-risk-modeling-r", "assessment-intelligence", "analytics-dashboard"]
+      "recommend": ["statistical-risk-modeling-r", "assessment-intelligence", "assessment-analytics"]
     },
     {
       "intent": "visitor asks about hospitality, service recovery, business decisions, explainability, or policy simulation",

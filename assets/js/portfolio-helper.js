@@ -1,6 +1,7 @@
 const helper = document.querySelector("[data-portfolio-helper]");
 
 if (helper) {
+  const { escapeHtml, renderInlineMarkdown, safeHttpUrl } = window.PortfolioChatUI;
   const endpoint = helper.dataset.apiEndpoint || "";
   const toggle = helper.querySelector("[data-helper-toggle]");
   const closeButton = helper.querySelector("[data-helper-close]");
@@ -22,12 +23,22 @@ if (helper) {
       patterns: [/\bprojects?\s+(directory|index|overview|page|list)\b/i, /\bexplore\s+projects?\b/i]
     },
     {
-      title: "Analytics Dashboard",
+      title: "Live demos",
+      href: "demos/index.html",
+      patterns: [/\bdemos?\s+(directory|index|overview|page|list)\b/i, /\bworking\s+demos?\b/i]
+    },
+    {
+      title: "Hotel Comp Policy Model",
+      href: "projects/hotel-comp-policy-model.html",
+      patterns: [/\bhotel\s+comp\b/i, /\bservice[-\s]+recovery\b/i, /\bdecision\s+desk\b/i]
+    },
+    {
+      title: "Assessment Analytics",
       href: "dashboard/assessment.html",
       patterns: [/\banalytics?\s+dashboard\b/i, /\bdashboard\b/i, /\binteractive\s+demo\b/i]
     },
     {
-      title: "Portfolio Data Lab",
+      title: "Education Data Lab",
       href: "data-lab.html",
       patterns: [/\bportfolio\s+data\s+lab\b/i, /\bdata\s+lab\b/i, /\banalytic\s+chat\b/i]
     },
@@ -54,7 +65,12 @@ if (helper) {
     {
       title: "Content Intelligence",
       href: "projects/content-intelligence.html",
-      patterns: [/\bcontent\s+intelligence\b/i, /\brag\b/i, /\bartifact-to-rag\b/i, /\bsource-grounded\b/i, /\bcorpus\s+construction\b/i]
+      patterns: [/\bcontent\s+intelligence\b/i, /\bartifact-to-rag\b/i, /\bsource-grounded\b/i, /\bcorpus\s+construction\b/i]
+    },
+    {
+      title: "Content Intelligence RAG",
+      href: "demos/content-rag.html",
+      patterns: [/\bcontent\s+rag\b/i, /\blive\s+rag\b/i, /\bcited\s+retrieval\b/i]
     },
     {
       title: "Instructional AI Workflows",
@@ -67,23 +83,11 @@ if (helper) {
       patterns: [/\bassessment-to-remediation\s+pipeline\b/i, /\bremediation\s+pipeline\b/i, /\bdiagnostic\s+evidence\b/i]
     },
     {
-      title: "Case studies",
-      href: "case-studies/index.html",
+      title: "Projects directory",
+      href: "projects/index.html",
       patterns: [/\bcase\s+studies\b/i, /\bcase\s+study\b/i]
     }
   ];
-
-  const escapeHtml = (value) =>
-    String(value ?? "")
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;");
-
-  const renderInlineMarkdown = (value) =>
-    escapeHtml(value)
-      .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
-      .replace(/`([^`]+)`/g, "<code>$1</code>");
 
   const orderedMarkerPattern = /(^|\s)(\d+)\.\s+/g;
   const orderedLinePattern = /^\d+\.\s+/;
@@ -147,12 +151,7 @@ if (helper) {
       .join("");
 
   const safeHref = (value) => {
-    try {
-      const url = new URL(value || "#", window.location.href);
-      return ["http:", "https:"].includes(url.protocol) ? url.href : "#";
-    } catch {
-      return "#";
-    }
+    return safeHttpUrl(value, window.location.href) || "#";
   };
 
   const normalizeLink = (link) => {
@@ -288,8 +287,8 @@ if (helper) {
   const renderTextBlock = (block) => renderMarkdownText(block.content || "");
 
   const renderCapabilityNote = (block) => {
-    const title = String(block.title || "Supported scope").trim();
-    if (title.toLowerCase() === "supported scope") return "";
+    const title = String(block.title || "").trim();
+    if (!title || title.toLowerCase() === "supported scope") return "";
     const nextBestAction = block.nextBestAction ? `<p>Next best action: ${escapeHtml(block.nextBestAction)}</p>` : "";
     return `<div class="portfolio-helper-status ${escapeHtml(block.status || "info")}"><strong>${escapeHtml(title)}</strong><p>${escapeHtml(block.content || "")}</p>${nextBestAction}</div>`;
   };
@@ -451,5 +450,5 @@ if (helper) {
     if (event.key === "Escape" && !panel.hidden) closePanel();
   });
 
-  addMessage("assistant", "<p>Hi. I can help you find the right project, demo, or case study on this portfolio.</p>");
+  addMessage("assistant", "<p>Hi. I can help you find the right project brief or live demo on this portfolio.</p>");
 }

@@ -1,3 +1,23 @@
+const {
+  averageFinite,
+  boyEoyPairs,
+  clamp,
+  escapeHtml,
+  escapeSvgText,
+  fmtPct,
+  fmtPts,
+  fmtPtsAuto,
+  mean,
+  quantile,
+  unique,
+} = window.AssessmentCore;
+const {
+  layoutRightLabels,
+  niceTicks,
+  pointsToCurvePath: buildCurvePath,
+  pointsToPath,
+} = window.AssessmentCharts;
+
 const state = {
   source: null,
   records: [],
@@ -8,7 +28,7 @@ const state = {
     department: true,
     network: false,
     mastery: true,
-    violins: true,
+    violins: false,
     sections: false,
   },
   visual: {
@@ -22,14 +42,21 @@ const state = {
     minN: 10,
     sortCut: "latest",
     filter: "",
-    limit: "10",
-    recentWindowCount: 4,
+    limit: "5",
+  },
+  trend: {
+    historyYears: "5",
+    benchmarkCourse: "",
   },
   filters: {
     courses: [],
     teachers: [],
     sections: [],
     sectionQuery: "",
+  },
+  ui: {
+    activeView: "overview",
+    sectionFiltersRendered: false,
   },
   table: {
     course: "All",
@@ -58,9 +85,14 @@ const palette = ["#2563eb", "#0891b2", "#16a34a", "#7c3aed", "#db2777", "#4f46e5
 const assetVersion = document.documentElement.dataset.assetVersion || "dashboard-views-v1";
 
 const els = {
+  taskButtons: [...document.querySelectorAll("[data-dashboard-view]")],
+  taskPanels: [...document.querySelectorAll("[data-dashboard-panel]")],
+  comparisonTools: document.querySelector("#dashboard-comparison-tools"),
   compareBy: [...document.querySelectorAll("input[name='compare-by']")],
   metric: document.querySelector("#metric-select"),
   season: document.querySelector("#season-select"),
+  trendHistory: document.querySelector("#trend-history-select"),
+  trendBenchmarkCourse: document.querySelector("#trend-benchmark-course"),
   departmentBand: document.querySelector("#toggle-department-band"),
   networkBand: document.querySelector("#toggle-network-band"),
   masteryLine: document.querySelector("#toggle-mastery-line"),
@@ -105,6 +137,8 @@ const els = {
   distributionCaption: document.querySelector("#distribution-caption"),
   barChart: document.querySelector("#bar-chart"),
   growthChart: document.querySelector("#growth-chart"),
+  performanceGrowthChart: document.querySelector("#performance-growth-chart"),
+  performanceGrowthCaption: document.querySelector("#performance-growth-caption"),
   skillChart: document.querySelector("#skill-chart"),
   table: document.querySelector("#course-table"),
   tableCourse: document.querySelector("#table-course-filter"),
@@ -122,78 +156,8 @@ const els = {
   insights: document.querySelector("#insight-list"),
 };
 
-const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
-const fmtPct = (value) => `${Math.round(value)}%`;
-const unique = (items) => [...new Set(items)].sort((a, b) => String(a).localeCompare(String(b), undefined, { numeric: true }));
-
-function fmtPts(value, precision = 0) {
-  if (!Number.isFinite(value)) return "-";
-  const rounded = Number(value.toFixed(precision));
-  const displayValue = Object.is(rounded, -0) ? 0 : rounded;
-  return `${displayValue > 0 ? "+" : ""}${displayValue.toFixed(precision)} pts`;
-}
-
-function fmtPtsAuto(value) {
-  const precision = Math.abs(value) > 0 && Math.abs(value) < 1 ? 1 : 0;
-  return fmtPts(value, precision);
-}
-
-function quantile(values, pct) {
-  const sorted = values.filter((value) => Number.isFinite(value)).sort((a, b) => a - b);
-  if (!sorted.length) return 0;
-  const index = (sorted.length - 1) * pct;
-  const low = Math.floor(index);
-  const high = Math.ceil(index);
-  if (low === high) return sorted[low];
-  return sorted[low] * (high - index) + sorted[high] * (index - low);
-}
-
-function mean(values) {
-  const numeric = values.filter((value) => Number.isFinite(value));
-  if (!numeric.length) return 0;
-  return numeric.reduce((sum, value) => sum + value, 0) / numeric.length;
-}
-
 function centerValue(values) {
   return state.visual.center === "median" ? quantile(values, 0.5) : mean(values);
-}
-
-function averageFinite(values) {
-  const numeric = values.filter((value) => Number.isFinite(value));
-  return numeric.length ? numeric.reduce((sum, value) => sum + value, 0) / numeric.length : NaN;
-}
-
-function periodWindowText(period) {
-  return `${period.assessmentWindow ?? ""} ${period.season ?? ""} ${period.label ?? ""}`.toLowerCase();
-}
-
-function isBeginningWindow(period) {
-  const text = periodWindowText(period);
-  return text.includes("beginning") || /\bboy\b/.test(text);
-}
-
-function isEndWindow(period) {
-  const text = periodWindowText(period);
-  return text.includes("end") || /\beoy\b/.test(text);
-}
-
-function boyEoyPairs(periods) {
-  const sorted = [...periods].sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
-  const pairs = [];
-
-  sorted.forEach((period, index) => {
-    if (!isBeginningWindow(period)) return;
-    for (let nextIndex = index + 1; nextIndex < sorted.length; nextIndex += 1) {
-      const candidate = sorted[nextIndex];
-      if (isBeginningWindow(candidate)) break;
-      if (isEndWindow(candidate)) {
-        pairs.push({ begin: period, end: candidate });
-        break;
-      }
-    }
-  });
-
-  return pairs;
 }
 
 function averageBoyEoyDeltaForRows(rows, metricKey = state.metric, pairs = null) {
@@ -301,45 +265,31 @@ function periodDisplayLabel(period) {
   return period.shortLabel ?? period.label;
 }
 
-function assignmentLabelParts(period) {
-  const rawLabel = String(period.label ?? period.shortLabel ?? "");
-  const compactLabel = String(period.shortLabel ?? "");
-  const match = rawLabel.match(/\bassignment\s*0*(\d+)\b/i) ?? compactLabel.match(/^A\s*0*(\d+)$/i);
-  if (!match) return null;
-
-  const assignmentNumber = match[1].padStart(2, "0");
-  return {
-    primary: "Task",
-    secondary: assignmentNumber,
-    compact: `Task ${assignmentNumber}`,
-    title: `Assignment ${assignmentNumber}`,
-  };
-}
-
-function periodWindowNumber(period) {
+function inferredAcademicYear(period) {
+  if (period.academicYear) return String(period.academicYear);
   const order = Number(period.order);
-  return Number.isFinite(order) && order > 0 ? Math.ceil(order / 2) : null;
+  if (!Number.isFinite(order) || order < 1) return "";
+  const start = 2019 + Math.floor((order - 1) / 2);
+  return `${start}-${String(start + 1).slice(-2)}`;
 }
 
-function periodPhaseLabel(period, compact = false) {
+function periodWindowCode(period, compact = false) {
+  const explicit = String(period.windowCode ?? "").toUpperCase();
+  if (explicit === "BOY" || explicit === "EOY") return compact ? explicit[0] : explicit;
   const phase = String(period.assessmentWindow ?? period.season ?? "").toLowerCase();
-  if (phase.includes("beginning")) return compact ? "B" : "Begin";
-  if (phase.includes("end")) return compact ? "E" : "End";
-  return compact ? (period.shortLabel ?? period.label) : (period.season ?? period.shortLabel ?? period.label);
+  if (phase.includes("beginning")) return compact ? "B" : "BOY";
+  if (phase.includes("end")) return compact ? "E" : "EOY";
+  return "";
 }
 
 function periodAxisLabelParts(period) {
-  const assignmentLabel = assignmentLabelParts(period);
-  if (assignmentLabel) return assignmentLabel;
-
-  const windowNumber = periodWindowNumber(period);
-  const phase = periodPhaseLabel(period);
-
-  if (windowNumber && (phase === "Begin" || phase === "End")) {
+  const academicYear = inferredAcademicYear(period);
+  const windowCode = periodWindowCode(period);
+  if (academicYear && windowCode) {
     return {
-      primary: `W${windowNumber}`,
-      secondary: phase,
-      title: `${phase} assessment window ${windowNumber}`,
+      primary: academicYear,
+      secondary: windowCode,
+      title: period.label ?? `${academicYear} ${windowCode} standardized math assessment`,
     };
   }
 
@@ -351,12 +301,9 @@ function periodAxisLabelParts(period) {
 }
 
 function periodCompactAxisLabel(period) {
-  const assignmentLabel = assignmentLabelParts(period);
-  if (assignmentLabel) return assignmentLabel.compact;
-
-  const windowNumber = periodWindowNumber(period);
-  const phase = periodPhaseLabel(period, true);
-  return windowNumber && (phase === "B" || phase === "E") ? `${phase}${windowNumber}` : periodDisplayLabel(period);
+  const academicYear = inferredAcademicYear(period);
+  const windowCode = periodWindowCode(period, true);
+  return academicYear && windowCode ? `${academicYear.slice(2)} ${windowCode}` : periodDisplayLabel(period);
 }
 
 function periodAxisLabel(period, x, y, options = {}) {
@@ -382,21 +329,27 @@ function periodAxisLabel(period, x, y, options = {}) {
   `;
 }
 
-function escapeSvgText(value) {
-  return String(value)
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;");
-}
-
-function escapeHtml(value) {
-  return String(value)
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#39;");
+function trendAxisLabels(periods, x, height, compact) {
+  const windowY = height - (compact ? 39 : 45);
+  const yearY = height - (compact ? 18 : 22);
+  const windowLabels = periods.map((period, index) => `
+    <text x="${x(index)}" y="${windowY}" class="axis-label x-label trend-window-label" text-anchor="middle">
+      <title>${escapeSvgText(period.label ?? periodDisplayLabel(period))}</title>
+      ${escapeSvgText(periodWindowCode(period))}
+    </text>
+  `).join("");
+  const yearGroups = new Map();
+  periods.forEach((period, index) => {
+    const academicYear = inferredAcademicYear(period);
+    if (!yearGroups.has(academicYear)) yearGroups.set(academicYear, []);
+    yearGroups.get(academicYear).push(index);
+  });
+  const yearLabels = [...yearGroups.entries()].map(([academicYear, indexes]) => {
+    const center = indexes.reduce((sum, index) => sum + x(index), 0) / indexes.length;
+    const label = compact ? academicYear.slice(2) : academicYear;
+    return `<text x="${center}" y="${yearY}" class="axis-label trend-year-label" text-anchor="middle">${escapeSvgText(label)}</text>`;
+  }).join("");
+  return `${windowLabels}${yearLabels}`;
 }
 
 function compactDirectLabel(value, maxLength = 18) {
@@ -658,10 +611,48 @@ function metricAllowsBands() {
   return state.metric === "score";
 }
 
+function benchmarkCourses() {
+  return Object.keys(state.source?.bands?.mastery?.byCourse ?? {})
+    .sort((left, right) => left.localeCompare(right, undefined, { numeric: true }));
+}
+
+function benchmarkValueForCourse(course, period, index = 0) {
+  const mastery = state.source?.bands?.mastery ?? {};
+  const configured = mastery.byCourse?.[course];
+  if (Number.isFinite(configured)) return configured;
+  if (Array.isArray(configured)) {
+    return configured[period?.order - 1] ?? configured[index] ?? mastery.line?.[period?.order - 1] ?? 70;
+  }
+  if (configured && typeof configured === "object") {
+    const line = configured.line;
+    if (Array.isArray(line)) return line[period?.order - 1] ?? line[index] ?? configured.value ?? 70;
+    if (Number.isFinite(configured.value)) return configured.value;
+  }
+  return mastery.line?.[period?.order - 1] ?? mastery.line?.[index] ?? 70;
+}
+
+function activeBenchmarkCourse() {
+  const courses = benchmarkCourses();
+  if (courses.includes(state.trend.benchmarkCourse)) return state.trend.benchmarkCourse;
+  return courses[0] ?? "";
+}
+
+function activeBenchmarkDescriptor(periods = []) {
+  const course = activeBenchmarkCourse();
+  const values = periods.map((period, index) => benchmarkValueForCourse(course, period, index));
+  const uniqueValues = [...new Set(values.filter(Number.isFinite).map((value) => Number(value.toFixed(1))))];
+  const valueLabel = uniqueValues.length === 1 ? ` (${uniqueValues[0]}%)` : "";
+  return {
+    course,
+    values,
+    label: course ? `${course} proficiency benchmark${valueLabel}` : `Program reference benchmark${valueLabel}`,
+  };
+}
+
 function renderMetrics(records) {
   const latest = latestPeriodData(records);
   const latestRows = latest?.rows ?? [];
-  els.latestLabel.textContent = `Latest ${currentMetricLabel().toLowerCase()}`;
+  els.latestLabel.textContent = "Latest mean score";
 
   if (!latestRows.length) {
     els.students.textContent = "0";
@@ -672,11 +663,10 @@ function renderMetrics(records) {
     return;
   }
 
-  const latestValue = latest ? latest[state.metric] : 0;
-  const averageDelta = averageBoyEoyDeltaForPeriodData(periodDataForTimeSeries(records));
+  const latestValue = latest ? latest.score : 0;
+  const averageDelta = averageBoyEoyDeltaForPeriodData(periodDataForTimeSeries(records), "score");
   const students = latestRows.reduce((sum, row) => sum + row.students, 0);
-  const targetScore = state.source.bands?.mastery?.line?.[(latest?.period?.order ?? 1) - 1] ?? 70;
-  const targetRows = latestRows.filter((row) => row.score >= targetScore);
+  const targetRows = latestRows.filter((row) => row.score >= benchmarkValueForCourse(row.course, latest.period));
   const completed = latestRows.reduce((sum, row) => sum + (row.completed ?? row.students), 0);
 
   els.students.textContent = students.toLocaleString();
@@ -686,44 +676,20 @@ function renderMetrics(records) {
   els.target.textContent = completed ? fmtPct((targetRows.reduce((sum, row) => sum + (row.completed ?? row.students), 0) / completed) * 100) : "-";
 }
 
-function pointsToPath(points) {
-  return points.map((point, index) => `${index === 0 ? "M" : "L"} ${point.x.toFixed(1)} ${point.y.toFixed(1)}`).join(" ");
-}
-
 function pointsToCurvePath(points, firstCommand = "M") {
-  if (!state.visual.smoothCurves || points.length < 3) return pointsToPath(points).replace(/^M/, firstCommand);
-
-  const tension = 0.82;
-  const start = `${firstCommand} ${points[0].x.toFixed(1)} ${points[0].y.toFixed(1)}`;
-  const segments = [];
-
-  for (let index = 0; index < points.length - 1; index += 1) {
-    const p0 = points[index - 1] ?? points[index];
-    const p1 = points[index];
-    const p2 = points[index + 1];
-    const p3 = points[index + 2] ?? p2;
-    const c1 = {
-      x: p1.x + ((p2.x - p0.x) / 6) * tension,
-      y: p1.y + ((p2.y - p0.y) / 6) * tension,
-    };
-    const c2 = {
-      x: p2.x - ((p3.x - p1.x) / 6) * tension,
-      y: p2.y - ((p3.y - p1.y) / 6) * tension,
-    };
-    segments.push(`C ${c1.x.toFixed(1)} ${c1.y.toFixed(1)}, ${c2.x.toFixed(1)} ${c2.y.toFixed(1)}, ${p2.x.toFixed(1)} ${p2.y.toFixed(1)}`);
-  }
-
-  return [start, ...segments].join(" ");
+  return buildCurvePath(points, { firstCommand, smooth: state.visual.smoothCurves });
 }
 
 function visiblePeriodWindow(periodData) {
-  if (state.source?.source?.contract === "sql-extract-dashboard-json-v1") {
-    return periodData;
-  }
-  if (state.season === "All" && periodData.length > state.lines.recentWindowCount) {
-    return periodData.slice(-state.lines.recentWindowCount);
-  }
-  return periodData;
+  if (state.trend.historyYears === "all") return periodData;
+  const requestedYears = Math.max(1, Number(state.trend.historyYears) || 1);
+  const orderedYears = [];
+  periodData.forEach(({ period }) => {
+    const academicYear = inferredAcademicYear(period);
+    if (academicYear && !orderedYears.includes(academicYear)) orderedYears.push(academicYear);
+  });
+  const visibleYears = new Set(orderedYears.slice(-requestedYears));
+  return periodData.filter(({ period }) => visibleYears.has(inferredAcademicYear(period)));
 }
 
 function buildLineSeries(periodData) {
@@ -782,29 +748,6 @@ function lineLimitValue() {
   return state.lines.limit === "all" ? Number.POSITIVE_INFINITY : Number(state.lines.limit);
 }
 
-function niceTicks(rawMin, rawMax, targetCount = 5) {
-  if (!Number.isFinite(rawMin) || !Number.isFinite(rawMax)) return { min: 0, max: 100, ticks: [0, 25, 50, 75, 100] };
-  const span = Math.max(1, rawMax - rawMin);
-  const rawStep = span / Math.max(1, targetCount - 1);
-  const magnitude = 10 ** Math.floor(Math.log10(rawStep));
-  const normalized = rawStep / magnitude;
-  const stepFactor = normalized <= 1 ? 1 : normalized <= 2 ? 2 : normalized <= 2.5 ? 2.5 : normalized <= 5 ? 5 : 10;
-  const step = stepFactor * magnitude;
-  let min = Math.floor(rawMin / step) * step;
-  let max = Math.ceil(rawMax / step) * step;
-  if (min === max) {
-    min -= step * 2;
-    max += step * 2;
-  }
-  const ticks = [];
-
-  for (let tick = min; tick <= max + step * 0.5; tick += step) {
-    ticks.push(Number(tick.toFixed(6)));
-  }
-
-  return { min, max, ticks };
-}
-
 function lineChartDomain(series, periods) {
   const values = series.flatMap((line) => line.values.map((value) => value.value));
 
@@ -831,6 +774,10 @@ function lineChartDomain(series, periods) {
     ]));
   }
 
+  if (state.toggles.mastery && metricAllowsBands()) {
+    values.push(...activeBenchmarkDescriptor(periods).values);
+  }
+
   const numeric = values.filter(Number.isFinite);
   if (!numeric.length) return { min: 0, max: 100, ticks: [0, 25, 50, 75, 100] };
   const minValue = Math.min(...numeric);
@@ -841,46 +788,16 @@ function lineChartDomain(series, periods) {
   return niceTicks(floor, ceiling, 5);
 }
 
-function layoutRightLabels(series, y, top, bottom) {
-  const minGap = 22;
-  const labels = series.map((line) => ({
-    key: line.key,
-    targetY: y(line.latest.value),
-    y: y(line.latest.value),
-  })).sort((a, b) => a.targetY - b.targetY);
-
-  let cursor = top;
-  labels.forEach((label) => {
-    label.y = Math.max(label.targetY, cursor);
-    cursor = label.y + minGap;
-  });
-
-  for (let index = labels.length - 1; index >= 0; index -= 1) {
-    const maxY = index === labels.length - 1 ? bottom : labels[index + 1].y - minGap;
-    labels[index].y = Math.min(labels[index].y, maxY);
-  }
-
-  cursor = top;
-  labels.forEach((label) => {
-    label.y = Math.max(label.y, cursor);
-    cursor = label.y + minGap;
-  });
-
-  return new Map(labels.map((label) => [label.key, label.y]));
-}
-
 function renderTimeSeries(records) {
   const compact = isCompactViewport();
-  const width = compact ? 620 : 1120;
-  const height = compact ? 400 : 470;
+  const width = compact ? 560 : 1120;
+  const height = compact ? 380 : 470;
   const margin = compact
     ? { top: 42, right: 24, bottom: 58, left: 52 }
     : { top: 46, right: 300, bottom: 72, left: 74 };
   const innerWidth = width - margin.left - margin.right;
   const innerHeight = height - margin.top - margin.bottom;
-  const allPeriodData = visiblePeriodWindow(periodDataForTimeSeries(records));
-  const preserveSparseSqlWindows = state.source?.source?.contract === "sql-extract-dashboard-json-v1";
-  const periodData = compact && !preserveSparseSqlWindows ? allPeriodData.slice(-7) : allPeriodData;
+  const periodData = visiblePeriodWindow(periodDataForTimeSeries(records));
   const periods = periodData.map((item) => item.period);
   const lineSeries = sortLineSeries(buildLineSeries(periodData));
   const explicitComparison = hasExplicitComparisonSelection();
@@ -902,7 +819,7 @@ function renderTimeSeries(records) {
 
   const departmentBand = !compact && state.toggles.department && metricAllowsBands() ? renderBand("department", periods, x, bandScale) : "";
   const networkBand = !compact && state.toggles.network && metricAllowsBands() ? renderBand("network", periods, x, bandScale) : "";
-  const masteryLine = !compact && state.toggles.mastery && metricAllowsBands() ? renderBenchmark(periods, x, y) : "";
+  const masteryLine = state.toggles.mastery && metricAllowsBands() ? renderBenchmark(periods, x, y) : "";
   const violinPlots = !compact && state.toggles.violins && metricAllowsBands() ? renderViolinPlots(periods, selectedSeries, x, y, yMin, yMax) : "";
 
   const labelY = layoutRightLabels(selectedSeries, y, margin.top + 12, margin.top + innerHeight - 10);
@@ -942,9 +859,7 @@ function renderTimeSeries(records) {
 
   const sectionLines = !compact && state.toggles.sections ? renderSectionLines(records, periods, x, y) : "";
 
-  const xLabels = periods.map((period, index) =>
-    periodAxisLabel(period, x(index), height - 47),
-  ).join("");
+  const xLabels = trendAxisLabels(periods, x, height, compact);
 
   const emptyState = selectedSeries.length ? "" : `
     <text x="${margin.left + innerWidth / 2}" y="${margin.top + innerHeight / 2}" class="empty-chart-text" text-anchor="middle">No lines match the current filters.</text>
@@ -969,13 +884,14 @@ function renderTimeSeries(records) {
   `;
 
   const lineLabel = `${selectedSeries.length} ${currentSliceLabel()} line${selectedSeries.length === 1 ? "" : "s"}`;
-  const windowLabel = `${periods.length} reporting window${periods.length === 1 ? "" : "s"}`;
+  const academicYearCount = new Set(periods.map(inferredAcademicYear).filter(Boolean)).size;
+  const windowLabel = `${academicYearCount} academic year${academicYearCount === 1 ? "" : "s"} (${periods.length} assessment window${periods.length === 1 ? "" : "s"})`;
   const pairCount = boyEoyPairs(periods).length;
   const deltaNote = pairCount
     ? `Labels show average End-minus-Beginning delta across ${pairCount} complete pair${pairCount === 1 ? "" : "s"}.`
     : "No complete BOY/EOY pairs are available for the current window filter.";
-  els.timeCaption.textContent = `${lineLabel} shown from ${windowLabel}. ${deltaNote}`;
-  renderLegend(selectedSeries, periods.length);
+  els.timeCaption.textContent = `${lineLabel} shown across ${windowLabel}. ${deltaNote}`;
+  renderLegend(selectedSeries, periods);
 }
 
 function renderBand(key, periods, x, y) {
@@ -1015,8 +931,9 @@ function bandFromStudentRecords(key, periods) {
 }
 
 function renderBenchmark(periods, x, y) {
-  const points = periods.map((period, index) => ({ x: x(index), y: y(state.source.bands.mastery.line[period.order - 1]) }));
-  return `<path d="${pointsToCurvePath(points)}" class="benchmark-line"></path>`;
+  const benchmark = activeBenchmarkDescriptor(periods);
+  const points = periods.map((period, index) => ({ x: x(index), y: y(benchmark.values[index]) }));
+  return `<path d="${pointsToCurvePath(points)}" class="benchmark-line"><title>${escapeSvgText(benchmark.label)}. Synthetic demonstration threshold.</title></path>`;
 }
 
 function renderViolinPlots(periods, selectedSeries, x, y, yMin, yMax) {
@@ -1259,13 +1176,13 @@ function renderSectionLines(records, periods, x, y) {
   }).join("");
 }
 
-function renderLegend(series, periodCount) {
+function renderLegend(series, periods) {
   const populationLabel = state.visual.ribbonPopulation === "completed" ? "completed" : "assigned";
   const rangeLabel = `middle ${state.visual.ribbonRange}%`;
   const departmentLabel = `Main ${rangeLabel} ${populationLabel}`;
   const networkLabel = `Wider context ${populationLabel}`;
-  const masteryLabel = state.source.bands.mastery.label ?? "Mastery benchmark";
-  const lineSummary = `<span>${series.length} ${currentSliceLabel(true)} from ${periodCount} windows</span>`;
+  const masteryLabel = activeBenchmarkDescriptor(periods).label;
+  const lineSummary = `<span>${series.length} ${currentSliceLabel(true)} from ${periods.length} windows</span>`;
   const ribbonItems = [
     lineSummary,
     state.toggles.department && metricAllowsBands() ? `<span><i class="legend-swatch ribbon-key department-key"></i>${departmentLabel}</span>` : "",
@@ -1362,6 +1279,111 @@ function renderBoyEoyMovementBars(records) {
     : "No complete BOY/EOY pairs match the current window filter.";
 }
 
+function renderPerformanceGrowthMap(records) {
+  const compact = isCompactViewport();
+  const width = compact ? 620 : 940;
+  const height = compact ? 390 : 420;
+  const margin = compact
+    ? { top: 38, right: 24, bottom: 62, left: 58 }
+    : { top: 42, right: 48, bottom: 68, left: 68 };
+  const innerWidth = width - margin.left - margin.right;
+  const innerHeight = height - margin.top - margin.bottom;
+  const latest = latestPeriodData(records);
+  const growthByGroup = new Map(
+    boyEoyDeltasByGroup(periodDataForTimeSeries(records), "score").map((group) => [group.key, group]),
+  );
+  const minN = Math.max(1, Number(state.lines.minN) || 1);
+  const items = latest.groups
+    .filter((group) => groupSampleSize(group) >= minN && growthByGroup.has(group.key))
+    .map((group) => ({
+      key: group.key,
+      score: group.score,
+      growth: growthByGroup.get(group.key).value,
+      pairCount: growthByGroup.get(group.key).count,
+      n: groupSampleSize(group),
+    }))
+    .filter((item) => Number.isFinite(item.score) && Number.isFinite(item.growth))
+    .sort((left, right) => left.key.localeCompare(right.key, undefined, { numeric: true }));
+
+  if (!items.length) {
+    els.performanceGrowthChart.innerHTML = `<svg viewBox="0 0 ${width} ${height}" aria-hidden="true" focusable="false"><text x="${width / 2}" y="${height / 2}" class="empty-chart-text" text-anchor="middle">No groups have both current-score and paired-growth evidence for this slice.</text></svg>`;
+    els.performanceGrowthCaption.textContent = "No groups meet the current minimum sample and paired-window requirements.";
+    return;
+  }
+
+  const benchmark = state.source.bands?.mastery?.line?.[(latest.period?.order ?? 1) - 1] ?? 70;
+  const scores = items.map((item) => item.score);
+  const growthValues = items.map((item) => item.growth);
+  const xDomain = niceTicks(
+    clamp(Math.min(benchmark, ...scores) - 4, 0, 100),
+    clamp(Math.max(benchmark, ...scores) + 4, 0, 100),
+    5,
+  );
+  const yDomain = niceTicks(Math.min(0, ...growthValues), Math.max(0, ...growthValues) + 1, 5);
+  const x = (value) => margin.left + ((value - xDomain.min) / (xDomain.max - xDomain.min)) * innerWidth;
+  const y = (value) => margin.top + innerHeight - ((value - yDomain.min) / (yDomain.max - yDomain.min)) * innerHeight;
+
+  const verticalGrid = xDomain.ticks.map((tick) => `
+    <g>
+      <line x1="${x(tick)}" x2="${x(tick)}" y1="${margin.top}" y2="${margin.top + innerHeight}" class="axis-grid"></line>
+      <text x="${x(tick)}" y="${height - 35}" class="axis-label" text-anchor="middle">${Math.round(tick)}</text>
+    </g>
+  `).join("");
+  const horizontalGrid = yDomain.ticks.map((tick) => `
+    <g>
+      <line x1="${margin.left}" x2="${margin.left + innerWidth}" y1="${y(tick)}" y2="${y(tick)}" class="axis-grid"></line>
+      <text x="${margin.left - 12}" y="${y(tick) + 4}" class="axis-label" text-anchor="end">${tick > 0 ? "+" : ""}${Number(tick.toFixed(1))}</text>
+    </g>
+  `).join("");
+  const zeroY = y(clamp(0, yDomain.min, yDomain.max));
+  const benchmarkX = x(clamp(benchmark, xDomain.min, xDomain.max));
+  const highlightedItems = [...new Map([
+    items.reduce((lowest, item) => item.score < lowest.score ? item : lowest),
+    items.reduce((highest, item) => item.score > highest.score ? item : highest),
+    items.reduce((strongest, item) => item.growth > strongest.growth ? item : strongest),
+    items.reduce((largest, item) => item.n > largest.n ? item : largest),
+  ].map((item) => [item.key, item])).values()];
+  const highlightIndexByKey = new Map(highlightedItems.map((item, index) => [item.key, index]));
+  const points = items.map((item, index) => {
+    const px = x(item.score);
+    const py = y(item.growth);
+    const radius = clamp(5 + Math.sqrt(item.n) * 0.22, 6, 11);
+    const highlightIndex = highlightIndexByKey.get(item.key);
+    const isHighlighted = Number.isInteger(highlightIndex);
+    const labelOnLeft = px > margin.left + innerWidth * 0.62;
+    const labelX = labelOnLeft ? px - radius - 9 : px + radius + 9;
+    const labelY = py + (highlightIndex % 2 === 0 ? -12 : 18);
+    const label = compactDirectLabel(item.key, compact ? 14 : 20);
+    const directLabel = isHighlighted ? `
+        <line x1="${px}" y1="${py}" x2="${labelX}" y2="${labelY - 4}" class="performance-growth-leader"></line>
+        <text x="${labelX}" y="${labelY}" class="performance-growth-label" text-anchor="${labelOnLeft ? "end" : "start"}">${escapeSvgText(label)}</text>` : "";
+    return `
+      <g class="performance-growth-item${isHighlighted ? " is-highlighted" : ""}">
+        <title>${escapeSvgText(item.key)}: latest mean ${Math.round(item.score)}%, average paired growth ${escapeSvgText(fmtPtsAuto(item.growth))}, n=${item.n}, ${item.pairCount} complete pairs</title>
+        <circle cx="${px}" cy="${py}" r="${radius}" fill="${palette[index % palette.length]}" class="performance-growth-point"></circle>
+        ${directLabel}
+      </g>
+    `;
+  }).join("");
+
+  els.performanceGrowthChart.innerHTML = `
+    <svg viewBox="0 0 ${width} ${height}" aria-hidden="true" focusable="false">
+      <rect x="0" y="0" width="${width}" height="${height}" class="chart-bg"></rect>
+      ${verticalGrid}
+      ${horizontalGrid}
+      <line x1="${benchmarkX}" x2="${benchmarkX}" y1="${margin.top}" y2="${margin.top + innerHeight}" class="performance-benchmark-line"></line>
+      <line x1="${margin.left}" x2="${margin.left + innerWidth}" y1="${zeroY}" y2="${zeroY}" class="performance-zero-line"></line>
+      <text x="${benchmarkX + 7}" y="${margin.top + 14}" class="performance-guide-label">Program reference ${Math.round(benchmark)}%</text>
+      ${points}
+      <line x1="${margin.left}" x2="${margin.left + innerWidth}" y1="${margin.top + innerHeight}" y2="${margin.top + innerHeight}" class="axis-line"></line>
+      <line x1="${margin.left}" x2="${margin.left}" y1="${margin.top}" y2="${margin.top + innerHeight}" class="axis-line"></line>
+      <text x="${margin.left + innerWidth / 2}" y="${height - 8}" class="axis-title" text-anchor="middle">Latest mean score</text>
+      <text x="18" y="${margin.top + innerHeight / 2}" class="axis-title" text-anchor="middle" transform="rotate(-90 18 ${margin.top + innerHeight / 2})">Average paired growth</text>
+    </svg>
+  `;
+  els.performanceGrowthCaption.textContent = `${latest.period?.label ?? "Latest window"}: score versus average paired growth for ${items.length} ${currentSliceLabel(true)}; circle size reflects n. Labels mark decision-relevant extremes. Descriptive, not causal.`;
+}
+
 function renderSkillHeatmap(records) {
   const latest = latestPeriodData(records);
   const rows = latest.rows;
@@ -1412,8 +1434,8 @@ function renderTable(records) {
   const displayedPeriods = state.source.periods.filter((period) => state.season === "All" || period.season === state.season);
   const firstOrder = Math.min(...displayedPeriods.map((period) => period.order));
   const lastOrder = Math.max(...displayedPeriods.map((period) => period.order));
-  const firstLabel = periodByOrder(firstOrder).label;
-  const lastLabel = periodByOrder(lastOrder).label;
+  const firstLabel = periodDisplayLabel(periodByOrder(firstOrder));
+  const lastLabel = periodDisplayLabel(periodByOrder(lastOrder));
   const pairs = boyEoyPairs(displayedPeriods);
   const sections = aggregate(records, "section");
   const sectionRows = buildSectionTableRows(sections, firstOrder, lastOrder, pairs);
@@ -1561,21 +1583,44 @@ function renderInsights(records) {
   const completion = weightedAverage(latest.rows, "completion");
   const completionLabel = completion < 95 && Math.round(completion) === 95 ? `${completion.toFixed(1)}%` : fmtPct(completion);
   const completionPosition = completion >= 95 ? "at or above" : "below";
-  const band = state.source.bands.department;
-  const latestTarget = band.lower[(latest.period?.order ?? 1) - 1];
-  const sqlBacked = state.source.source?.contract === "sql-extract-dashboard-json-v1";
 
   const notes = [
-    strongest ? `${strongest.key} has the strongest average paired-window growth at ${fmtPtsAuto(strongest.value)} across ${strongest.count} complete pair${strongest.count === 1 ? "" : "s"}, with at least ${minN} students represented in each included window.` : `No complete paired-window movement meets the minimum n of ${minN}.`,
-    watch ? `${watch.key} is the lowest latest comparison at ${fmtPct(watch.score)} (n=${groupSampleSize(watch).toLocaleString()}), making it a candidate for item-level review or targeted supports.` : `No latest comparison meets the minimum n of ${minN}.`,
-    `Latest completion is ${completionLabel}, which is ${completionPosition} the operating target of 95%.`,
-    sqlBacked
-      ? `The score ribbons are computed from the SQL student readiness extract and use the same public-safe source layer as the assessment report artifacts.`
-      : `The score ribbons are calibrated from a private assessment score distribution, then regenerated as synthetic 30-question assessment data with declining non-participation over time.`,
-    `The main range lower bound for the latest period is ${fmtPct(latestTarget)}; use the ribbon to compare current performance with the synthetic benchmark corridor.`
+    strongest
+      ? {
+          label: "Momentum",
+          title: `${strongest.key} shows the strongest paired growth`,
+          detail: `${fmtPtsAuto(strongest.value)} across ${strongest.count} complete pair${strongest.count === 1 ? "" : "s"}. Check whether the pattern persists across sections and student groups.`
+        }
+      : {
+          label: "Momentum",
+          title: "Paired growth is not available",
+          detail: `No complete beginning-to-end pair meets the minimum n of ${minN}.`
+        },
+    watch
+      ? {
+          label: "Review priority",
+          title: `${watch.key} has the lowest latest mean`,
+          detail: `${fmtPct(watch.score)} with n=${groupSampleSize(watch).toLocaleString()}. Use item and section detail to investigate before assigning a cause.`
+        }
+      : {
+          label: "Review priority",
+          title: "No group meets the comparison threshold",
+          detail: `Lower the minimum n only when the smaller-group uncertainty is acceptable.`
+        },
+    {
+      label: "Participation",
+      title: `Completion is ${completionPosition} target`,
+      detail: `${completionLabel} in ${latest.period?.label ?? "the latest window"} against the 95% operating target. Review missingness before interpreting score movement.`
+    }
   ];
 
-  els.insights.innerHTML = notes.map((note) => `<li>${note}</li>`).join("");
+  els.insights.innerHTML = notes.map((note) => `
+    <li>
+      <span class="insight-label">${escapeHtml(note.label)}</span>
+      <strong>${escapeHtml(note.title)}</strong>
+      <p>${escapeHtml(note.detail)}</p>
+    </li>
+  `).join("");
 }
 
 function countedOptions(items, key) {
@@ -1667,8 +1712,19 @@ function renderCheckboxOptions(container, key, options) {
 }
 
 function renderSectionFilters() {
+  if (!state.ui.sectionFiltersRendered) {
+    els.sectionFilters.innerHTML = `<p class="slice-empty">Section options load when comparison tools are opened.</p>`;
+    renderSliceSummary();
+    return;
+  }
   renderCheckboxOptions(els.sectionFilters, "sections", visibleSectionOptions());
   renderSliceSummary();
+}
+
+function ensureSectionFilters() {
+  if (state.ui.sectionFiltersRendered || !state.source) return;
+  state.ui.sectionFiltersRendered = true;
+  renderSectionFilters();
 }
 
 function renderSliceFilters() {
@@ -1734,9 +1790,12 @@ function syncControls() {
   syncCompareControls();
   els.metric.value = state.metric;
   els.season.value = state.season;
+  els.trendHistory.value = state.trend.historyYears;
   els.departmentBand.checked = state.toggles.department;
   els.networkBand.checked = state.toggles.network;
   els.masteryLine.checked = state.toggles.mastery;
+  els.trendBenchmarkCourse.value = activeBenchmarkCourse();
+  els.trendBenchmarkCourse.disabled = !state.toggles.mastery;
   els.violinPlots.checked = state.toggles.violins;
   els.sectionLines.checked = state.toggles.sections;
   els.ribbonRange.value = state.visual.ribbonRange;
@@ -1761,6 +1820,7 @@ function render() {
   renderDistributionChart();
   renderComparisonBars(records);
   renderBoyEoyMovementBars(records);
+  renderPerformanceGrowthMap(records);
   renderSkillHeatmap(records);
   renderTable(records);
   renderInsights(records);
@@ -1768,6 +1828,13 @@ function render() {
 
 function initControls() {
   const courses = unique(state.source.sections.map((section) => section.course));
+  const configuredBenchmarkCourses = benchmarkCourses();
+  state.trend.benchmarkCourse = configuredBenchmarkCourses.includes(state.trend.benchmarkCourse)
+    ? state.trend.benchmarkCourse
+    : configuredBenchmarkCourses[0] ?? "";
+  els.trendBenchmarkCourse.innerHTML = configuredBenchmarkCourses.length
+    ? configuredBenchmarkCourses.map((course) => `<option value="${escapeHtml(course)}">${escapeHtml(course)} (${benchmarkValueForCourse(course, state.source.periods.at(-1))}%)</option>`).join("")
+    : `<option value="">Program reference</option>`;
   els.tableCourse.innerHTML = [`<option value="All">All Subjects</option>`, ...courses.map((course) => `<option value="${course}">${course}</option>`)].join("");
   els.tableGrade.innerHTML = [`<option value="All">All Grades</option>`, ...unique(state.source.sections.map((section) => section.grade)).map((grade) => `<option value="${grade}">${grade}</option>`)].join("");
   els.tableTeacher.innerHTML = [`<option value="All">All Teachers</option>`, ...unique(state.source.sections.map((section) => section.teacher)).map((teacher) => `<option value="${teacher}">${teacher}</option>`)].join("");
@@ -1777,6 +1844,7 @@ function initControls() {
     input.addEventListener("change", (event) => {
       if (!event.target.checked) return;
       state.groupBy = event.target.value;
+      if (state.groupBy === "section") ensureSectionFilters();
       renderSliceFilters();
       render();
     });
@@ -1787,6 +1855,7 @@ function initControls() {
   });
 
   els.sectionFilterSearch.addEventListener("input", (event) => {
+    ensureSectionFilters();
     state.filters.sectionQuery = event.target.value;
     renderSectionFilters();
   });
@@ -1795,6 +1864,48 @@ function initControls() {
   els.sectionFilterClear.addEventListener("click", clearSectionFilters);
   els.sliceClear.addEventListener("click", clearAllSliceFilters);
 
+  const setActiveTask = (view) => {
+    if (!els.taskPanels.some((panel) => panel.dataset.dashboardPanel === view)) return;
+    state.ui.activeView = view;
+    els.taskButtons.forEach((button) => {
+      const active = button.dataset.dashboardView === view;
+      button.setAttribute("aria-selected", String(active));
+      button.tabIndex = active ? 0 : -1;
+    });
+    els.taskPanels.forEach((panel) => {
+      const active = panel.dataset.dashboardPanel === view;
+      panel.hidden = !active;
+      panel.classList.toggle("is-active", active);
+    });
+    if (view === "compare") ensureSectionFilters();
+  };
+
+  els.taskButtons.forEach((button, index) => {
+    button.addEventListener("click", () => setActiveTask(button.dataset.dashboardView));
+    button.addEventListener("keydown", (event) => {
+      const lastIndex = els.taskButtons.length - 1;
+      const targetIndex = event.key === "ArrowRight"
+        ? (index + 1) % els.taskButtons.length
+        : event.key === "ArrowLeft"
+          ? (index - 1 + els.taskButtons.length) % els.taskButtons.length
+          : event.key === "Home"
+            ? 0
+            : event.key === "End"
+              ? lastIndex
+              : -1;
+      if (targetIndex < 0) return;
+      event.preventDefault();
+      const target = els.taskButtons[targetIndex];
+      setActiveTask(target.dataset.dashboardView);
+      target.focus();
+    });
+  });
+  els.comparisonTools.addEventListener("toggle", () => {
+    if (!els.comparisonTools.open) return;
+    ensureSectionFilters();
+  });
+  setActiveTask(state.ui.activeView);
+
   els.metric.addEventListener("change", (event) => {
     state.metric = event.target.value;
     render();
@@ -1802,6 +1913,16 @@ function initControls() {
 
   els.season.addEventListener("change", (event) => {
     state.season = event.target.value;
+    render();
+  });
+
+  els.trendHistory.addEventListener("change", (event) => {
+    state.trend.historyYears = event.target.value;
+    render();
+  });
+
+  els.trendBenchmarkCourse.addEventListener("change", (event) => {
+    state.trend.benchmarkCourse = event.target.value;
     render();
   });
 
@@ -1885,6 +2006,7 @@ function initControls() {
 
   els.masteryLine.addEventListener("change", (event) => {
     state.toggles.mastery = event.target.checked;
+    els.trendBenchmarkCourse.disabled = !state.toggles.mastery;
     render();
   });
 
