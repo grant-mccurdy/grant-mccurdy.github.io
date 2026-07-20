@@ -362,6 +362,7 @@ async function snapshot(page) {
       timeChartText: document.querySelector("#time-chart")?.textContent ?? "",
       trendHistory: document.querySelector("#trend-history-select")?.value ?? "",
       trendWindowCount: document.querySelectorAll("#time-chart .x-label").length,
+      trendYearLabelCount: document.querySelectorAll("#time-chart .trend-year-label").length,
       benchmarkChecked: document.querySelector("#toggle-mastery-line")?.checked ?? false,
       benchmarkCourse: document.querySelector("#trend-benchmark-course")?.value ?? "",
       benchmarkCourseDisabled: document.querySelector("#trend-benchmark-course")?.disabled ?? false,
@@ -424,7 +425,7 @@ async function runDesktopChecks(page, expected, emptyCombo) {
   assertCondition(failures, overview.performanceGrowthLabels >= 2 && overview.performanceGrowthLabels <= 4, "synthesis labels only decision-relevant extremes", overview.performanceGrowthLabels);
   assertCondition(failures, overview.decisionSignalCount === 3, "overview contains three decision signals", overview.decisionSignalCount);
   assertCondition(failures, cardsMatch(overview.cards, expected.cards), "overview metrics match source JSON", { actual: overview.cards, expected: expected.cards });
-  assertCondition(failures, overview.trendHistory === "5" && overview.trendWindowCount === 10, "trend defaults to five paired academic years", overview);
+  assertCondition(failures, overview.trendHistory === "5" && overview.trendWindowCount === 10 && overview.trendYearLabelCount === 5, "trend defaults to five paired academic years", overview);
   assertCondition(failures, overview.timeCaption.includes("5 academic years (10 assessment windows)"), "trend caption names the academic-year interval", overview.timeCaption);
   assertCondition(failures, !/\b(?:assignment|task)\b/i.test(overview.timeChartText), "trend does not expose generic task labels", overview.timeChartText);
   assertCondition(failures, overview.benchmarkCourseOptions === expected.benchmarkCourseCount, "course benchmark selector covers every course", overview.benchmarkCourseOptions);
@@ -442,10 +443,10 @@ async function runDesktopChecks(page, expected, emptyCombo) {
 
   await setSelect(page, "#trend-history-select", "3");
   const threeYears = await snapshot(page);
-  assertCondition(failures, threeYears.trendWindowCount === 6 && threeYears.timeCaption.includes("3 academic years (6 assessment windows)"), "trend can shorten to three academic years", threeYears);
+  assertCondition(failures, threeYears.trendWindowCount === 6 && threeYears.trendYearLabelCount === 3 && threeYears.timeCaption.includes("3 academic years (6 assessment windows)"), "trend can shorten to three academic years", threeYears);
   await setSelect(page, "#trend-history-select", "all");
   const allYears = await snapshot(page);
-  assertCondition(failures, allYears.trendWindowCount === expected.academicYearCount * 2 && allYears.timeCaption.includes(`${expected.academicYearCount} academic years`), "trend can expand to the full academic-year history", allYears);
+  assertCondition(failures, allYears.trendWindowCount === expected.academicYearCount * 2 && allYears.trendYearLabelCount === expected.academicYearCount && allYears.timeCaption.includes(`${expected.academicYearCount} academic years`), "trend can expand to the full academic-year history", allYears);
 
   await selectDashboardView(page, "compare");
   const compareView = await snapshot(page);

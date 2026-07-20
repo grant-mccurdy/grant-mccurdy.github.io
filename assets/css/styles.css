@@ -2343,6 +2343,17 @@ h3 {
   border-top-color: var(--viz-benchmark);
 }
 
+.trend-window-label {
+  fill: var(--muted);
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.trend-year-label {
+  fill: var(--ink);
+  font-weight: 850;
+}
+
 .overall-key {
   border-top-color: var(--viz-overall);
 }

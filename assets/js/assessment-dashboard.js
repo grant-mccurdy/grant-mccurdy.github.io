@@ -329,6 +329,29 @@ function periodAxisLabel(period, x, y, options = {}) {
   `;
 }
 
+function trendAxisLabels(periods, x, height, compact) {
+  const windowY = height - (compact ? 39 : 45);
+  const yearY = height - (compact ? 18 : 22);
+  const windowLabels = periods.map((period, index) => `
+    <text x="${x(index)}" y="${windowY}" class="axis-label x-label trend-window-label" text-anchor="middle">
+      <title>${escapeSvgText(period.label ?? periodDisplayLabel(period))}</title>
+      ${escapeSvgText(periodWindowCode(period))}
+    </text>
+  `).join("");
+  const yearGroups = new Map();
+  periods.forEach((period, index) => {
+    const academicYear = inferredAcademicYear(period);
+    if (!yearGroups.has(academicYear)) yearGroups.set(academicYear, []);
+    yearGroups.get(academicYear).push(index);
+  });
+  const yearLabels = [...yearGroups.entries()].map(([academicYear, indexes]) => {
+    const center = indexes.reduce((sum, index) => sum + x(index), 0) / indexes.length;
+    const label = compact ? academicYear.slice(2) : academicYear;
+    return `<text x="${center}" y="${yearY}" class="axis-label trend-year-label" text-anchor="middle">${escapeSvgText(label)}</text>`;
+  }).join("");
+  return `${windowLabels}${yearLabels}`;
+}
+
 function compactDirectLabel(value, maxLength = 18) {
   const label = String(value);
   return label.length > maxLength ? `${label.slice(0, maxLength - 3)}...` : label;
@@ -836,9 +859,7 @@ function renderTimeSeries(records) {
 
   const sectionLines = !compact && state.toggles.sections ? renderSectionLines(records, periods, x, y) : "";
 
-  const xLabels = periods.map((period, index) =>
-    periodAxisLabel(period, x(index), height - 47),
-  ).join("");
+  const xLabels = trendAxisLabels(periods, x, height, compact);
 
   const emptyState = selectedSeries.length ? "" : `
     <text x="${margin.left + innerWidth / 2}" y="${margin.top + innerHeight / 2}" class="empty-chart-text" text-anchor="middle">No lines match the current filters.</text>
