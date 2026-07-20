@@ -359,12 +359,12 @@
         "AP Precalculus": 70.0,
         "Algebra 1": 65.0,
         "Algebra 2": 68.0,
-        "Beyond Core Math Sequence": 65.0,
+        "Beyond Core Math Sequence": 75.0,
         "Geometry": 66.0,
         "Honors Algebra 2": 70.0,
         "Precalculus": 68.0
       },
-      "method": "Synthetic course-level cut scores configured for this portfolio demonstration; they are illustrative and are not policy or validation thresholds."
+      "method": "Synthetic course-level cut scores reflect expected sequence attainment; Beyond Core Math Sequence has the highest cut score because it represents study after the core sequence. These illustrative values are not policy or validation thresholds."
     }
   },
   "sections": [
@@ -1263,7 +1263,7 @@
       "courseTrack": "beyond_core",
       "skills": {
         "Score": 70.4,
-        "Proficiency": 100.0,
+        "Proficiency": 25.0,
         "Completion": 100.0,
         "Readiness": 69.6
       }
@@ -2145,7 +2145,7 @@
       "courseTrack": "beyond_core",
       "skills": {
         "Score": 81.7,
-        "Proficiency": 80.0,
+        "Proficiency": 60.0,
         "Completion": 83.3,
         "Readiness": 67.0
       }
@@ -3063,7 +3063,7 @@
       "courseTrack": "beyond_core",
       "skills": {
         "Score": 74.8,
-        "Proficiency": 80.0,
+        "Proficiency": 60.0,
         "Completion": 100.0,
         "Readiness": 73.9
       }
@@ -3495,7 +3495,7 @@
       "courseTrack": "beyond_core",
       "skills": {
         "Score": 62.5,
-        "Proficiency": 50.0,
+        "Proficiency": 25.0,
         "Completion": 100.0,
         "Readiness": 62.3
       }
@@ -6360,7 +6360,7 @@
       "completed": 4,
       "notCompleted": 0,
       "score": 67.3,
-      "proficiency": 50.0,
+      "proficiency": 0.0,
       "completion": 100.0,
       "growth": 0.0,
       "rawMean": 20.18,
@@ -6368,7 +6368,7 @@
       "courseTrack": "beyond_core",
       "skills": {
         "Score": 67.3,
-        "Proficiency": 50.0,
+        "Proficiency": 0.0,
         "Completion": 100.0,
         "Readiness": 69.6
       }
@@ -6389,7 +6389,7 @@
       "completed": 4,
       "notCompleted": 0,
       "score": 70.4,
-      "proficiency": 100.0,
+      "proficiency": 25.0,
       "completion": 100.0,
       "growth": 0.0,
       "rawMean": 21.11,
@@ -6397,7 +6397,7 @@
       "courseTrack": "beyond_core",
       "skills": {
         "Score": 70.4,
-        "Proficiency": 100.0,
+        "Proficiency": 25.0,
         "Completion": 100.0,
         "Readiness": 69.6
       }
@@ -9202,7 +9202,7 @@
       "completed": 6,
       "notCompleted": 0,
       "score": 75.1,
-      "proficiency": 83.3,
+      "proficiency": 33.3,
       "completion": 100.0,
       "growth": 0.0,
       "rawMean": 22.52,
@@ -9210,7 +9210,7 @@
       "courseTrack": "beyond_core",
       "skills": {
         "Score": 75.1,
-        "Proficiency": 83.3,
+        "Proficiency": 33.3,
         "Completion": 100.0,
         "Readiness": 67.0
       }
@@ -9231,7 +9231,7 @@
       "completed": 5,
       "notCompleted": 1,
       "score": 81.7,
-      "proficiency": 80.0,
+      "proficiency": 60.0,
       "completion": 83.3,
       "growth": 0.0,
       "rawMean": 24.51,
@@ -9239,7 +9239,7 @@
       "courseTrack": "beyond_core",
       "skills": {
         "Score": 81.7,
-        "Proficiency": 80.0,
+        "Proficiency": 60.0,
         "Completion": 83.3,
         "Readiness": 67.0
       }
@@ -12160,7 +12160,7 @@
       "completed": 4,
       "notCompleted": 1,
       "score": 68.0,
-      "proficiency": 75.0,
+      "proficiency": 50.0,
       "completion": 80.0,
       "growth": 0.0,
       "rawMean": 20.41,
@@ -12168,7 +12168,7 @@
       "courseTrack": "beyond_core",
       "skills": {
         "Score": 68.0,
-        "Proficiency": 75.0,
+        "Proficiency": 50.0,
         "Completion": 80.0,
         "Readiness": 73.9
       }
@@ -12189,7 +12189,7 @@
       "completed": 5,
       "notCompleted": 0,
       "score": 74.8,
-      "proficiency": 80.0,
+      "proficiency": 60.0,
       "completion": 100.0,
       "growth": 0.0,
       "rawMean": 22.43,
@@ -12197,7 +12197,7 @@
       "courseTrack": "beyond_core",
       "skills": {
         "Score": 74.8,
-        "Proficiency": 80.0,
+        "Proficiency": 60.0,
         "Completion": 100.0,
         "Readiness": 73.9
       }
@@ -13581,7 +13581,7 @@
       "completed": 4,
       "notCompleted": 0,
       "score": 62.5,
-      "proficiency": 50.0,
+      "proficiency": 25.0,
       "completion": 100.0,
       "growth": 0.0,
       "rawMean": 18.76,
@@ -13589,7 +13589,7 @@
       "courseTrack": "beyond_core",
       "skills": {
         "Score": 62.5,
-        "Proficiency": 50.0,
+        "Proficiency": 25.0,
         "Completion": 100.0,
         "Readiness": 62.3
       }

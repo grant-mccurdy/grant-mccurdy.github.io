@@ -196,7 +196,10 @@ function sourceExpectations(source) {
     }).length, 0);
   const benchmarkEntries = Object.entries(source.bands.mastery.byCourse ?? {})
     .sort(([left], [right]) => left.localeCompare(right, undefined, { numeric: true }));
-  const benchmarkTest = benchmarkEntries.find(([, value]) => value !== benchmarkEntries[0]?.[1]) ?? benchmarkEntries[0] ?? ["", 70];
+  const benchmarkTest = benchmarkEntries.reduce(
+    (highest, entry) => entry[1] > highest[1] ? entry : highest,
+    benchmarkEntries[0] ?? ["", 70],
+  );
 
   return {
     assetVersion: readDashboardAssetVersion(),
@@ -383,6 +386,16 @@ async function snapshot(page) {
       trendStartOptions: document.querySelectorAll("#trend-start-select option").length,
       trendEndOptions: document.querySelectorAll("#trend-end-select option").length,
       trendEndOptionIds: [...document.querySelectorAll("#trend-end-select option")].map((option) => option.value),
+      trendOverlayControlsInOverview: [
+        "#toggle-department-band",
+        "#toggle-network-band",
+        "#toggle-violin-plots",
+        "#toggle-section-lines",
+        "#ribbon-range-select",
+        "#ribbon-population-select",
+      ].every((selector) => document.querySelector(`#assessment-overview ${selector}`)),
+      mainRibbonCount: document.querySelectorAll("#time-chart .ribbon-department").length,
+      contextRibbonCount: document.querySelectorAll("#time-chart .ribbon-network").length,
       trendWindowCount: document.querySelectorAll("#time-chart .x-label").length,
       trendYearLabelCount: document.querySelectorAll("#time-chart .trend-year-label").length,
       benchmarkChecked: document.querySelector("#toggle-mastery-line")?.checked ?? false,
@@ -461,8 +474,22 @@ async function runDesktopChecks(page, expected, emptyCombo) {
   assertCondition(failures, JSON.stringify(overview.trendEndOptionIds) === JSON.stringify(expected.defaultTrendEndOptionIds), "trend end exposes only windows at or after the selected start", overview.trendEndOptionIds);
   assertCondition(failures, !/\b(?:assignment|task)\b/i.test(overview.timeChartText), "trend does not expose generic task labels", overview.timeChartText);
   assertCondition(failures, overview.benchmarkCourseOptions === expected.benchmarkCourseCount, "course benchmark selector covers every course", overview.benchmarkCourseOptions);
+  assertCondition(failures, expected.benchmarkTestCourse === "Beyond Core Math Sequence" && expected.benchmarkTestValue === 75, "Beyond Core Math Sequence retains the highest benchmark", { course: expected.benchmarkTestCourse, value: expected.benchmarkTestValue });
+  assertCondition(failures, overview.trendOverlayControlsInOverview && overview.mainRibbonCount === 1 && overview.contextRibbonCount === 0 && overview.violinCount === 0, "trend overlay controls live with the overview chart and preserve restrained defaults", overview);
   assertCondition(failures, overview.benchmarkChecked && !overview.benchmarkCourseDisabled && overview.benchmarkLineCount === 1, "course benchmark is visible by default", overview);
   assertCondition(failures, overview.benchmarkLegend.includes(overview.benchmarkCourse) && overview.benchmarkLegend.includes("%"), "benchmark legend names the selected course and cut score", overview.benchmarkLegend);
+
+  await page.locator("#trend-overlay-settings").evaluate((details) => { details.open = true; });
+  await page.locator("#toggle-violin-plots").check();
+  await page.locator("#toggle-department-band").uncheck();
+  await page.locator("#toggle-network-band").check();
+  await page.waitForTimeout(100);
+  const overlays = await snapshot(page);
+  assertCondition(failures, overlays.violinCount > 0 && overlays.mainRibbonCount === 0 && overlays.contextRibbonCount === 1, "overview overlay controls toggle violin distributions and ribbon context", overlays);
+  await page.locator("#toggle-network-band").uncheck();
+  await page.locator("#toggle-department-band").check();
+  await page.locator("#toggle-violin-plots").uncheck();
+  await page.locator("#trend-overlay-settings").evaluate((details) => { details.open = false; });
 
   await page.locator("#toggle-mastery-line").uncheck();
   await page.waitForTimeout(100);

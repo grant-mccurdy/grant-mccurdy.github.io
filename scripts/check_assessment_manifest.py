@@ -86,6 +86,11 @@ def main() -> None:
         fail("course benchmarks must be numeric values on the 0-100 score scale")
     if len(set(course_benchmarks.values())) < 2:
         fail("course benchmarks must preserve course-level specificity")
+    advanced_sequence = "Beyond Core Math Sequence"
+    advanced_benchmark = course_benchmarks.get(advanced_sequence)
+    other_benchmarks = [value for course, value in course_benchmarks.items() if course != advanced_sequence]
+    if advanced_benchmark is None or advanced_benchmark <= max(other_benchmarks, default=0):
+        fail("Beyond Core Math Sequence must have the highest course benchmark")
 
     counts = dashboard_meta["recordCounts"]
     print(

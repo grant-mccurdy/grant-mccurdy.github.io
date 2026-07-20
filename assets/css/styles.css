@@ -2093,6 +2093,36 @@ h3 {
   background: #fff;
 }
 
+.trend-overlay-settings {
+  margin: -0.8rem 0 0.8rem;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  border-radius: 0;
+  background: transparent;
+}
+
+.trend-overlay-settings summary {
+  padding-right: 0;
+  padding-left: 0;
+}
+
+.trend-overlay-settings .toggle-row {
+  margin: 0.65rem 0 0.55rem;
+}
+
+.trend-overlay-settings .viz-control-row {
+  margin: 0 0 0.75rem;
+  padding: 0.65rem 0;
+  border-right: 0;
+  border-left: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+.trend-overlay-settings .viz-control-row label {
+  letter-spacing: 0;
+}
+
 .viz-control-row {
   display: flex;
   flex-wrap: wrap;
