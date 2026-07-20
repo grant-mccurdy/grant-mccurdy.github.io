@@ -1352,7 +1352,7 @@ function renderPerformanceGrowthMap(records) {
       ${horizontalGrid}
       <line x1="${benchmarkX}" x2="${benchmarkX}" y1="${margin.top}" y2="${margin.top + innerHeight}" class="performance-benchmark-line"></line>
       <line x1="${margin.left}" x2="${margin.left + innerWidth}" y1="${zeroY}" y2="${zeroY}" class="performance-zero-line"></line>
-      <text x="${benchmarkX + 7}" y="${margin.top + 14}" class="performance-guide-label">Benchmark ${Math.round(benchmark)}%</text>
+      <text x="${benchmarkX + 7}" y="${margin.top + 14}" class="performance-guide-label">Program reference ${Math.round(benchmark)}%</text>
       ${points}
       <line x1="${margin.left}" x2="${margin.left + innerWidth}" y1="${margin.top + innerHeight}" y2="${margin.top + innerHeight}" class="axis-line"></line>
       <line x1="${margin.left}" x2="${margin.left}" y1="${margin.top}" y2="${margin.top + innerHeight}" class="axis-line"></line>
@@ -1413,8 +1413,8 @@ function renderTable(records) {
   const displayedPeriods = state.source.periods.filter((period) => state.season === "All" || period.season === state.season);
   const firstOrder = Math.min(...displayedPeriods.map((period) => period.order));
   const lastOrder = Math.max(...displayedPeriods.map((period) => period.order));
-  const firstLabel = periodByOrder(firstOrder).label;
-  const lastLabel = periodByOrder(lastOrder).label;
+  const firstLabel = periodDisplayLabel(periodByOrder(firstOrder));
+  const lastLabel = periodDisplayLabel(periodByOrder(lastOrder));
   const pairs = boyEoyPairs(displayedPeriods);
   const sections = aggregate(records, "section");
   const sectionRows = buildSectionTableRows(sections, firstOrder, lastOrder, pairs);
