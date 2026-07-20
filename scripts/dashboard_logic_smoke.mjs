@@ -179,9 +179,8 @@ function sourceExpectations(source) {
   const latestScore = weightedAverage(latestRows, "score");
   const averageBoyEoyDelta = averageBoyEoyDeltaForPeriodData(aggregateScorePeriodData(source));
   const completed = latestRows.reduce((sum, row) => sum + (Number(row.completed) || 0), 0);
-  const targetScore = source.bands.mastery.line[latestPeriod.order - 1];
   const targetCompleted = latestRows
-    .filter((row) => row.score >= targetScore)
+    .filter((row) => row.score >= (source.bands.mastery.byCourse?.[row.course] ?? source.bands.mastery.line[latestPeriod.order - 1]))
     .reduce((sum, row) => sum + (Number(row.completed) || 0), 0);
   const subjectLineCount = new Set(records.map((row) => row.course)).size;
   const tableRows = new Set(latestRows.map((row) => row.course)).size;
@@ -195,6 +194,9 @@ function sourceExpectations(source) {
       ));
       return scores.length >= 5;
     }).length, 0);
+  const benchmarkEntries = Object.entries(source.bands.mastery.byCourse ?? {})
+    .sort(([left], [right]) => left.localeCompare(right, undefined, { numeric: true }));
+  const benchmarkTest = benchmarkEntries.find(([, value]) => value !== benchmarkEntries[0]?.[1]) ?? benchmarkEntries[0] ?? ["", 70];
 
   return {
     assetVersion: readDashboardAssetVersion(),
@@ -208,6 +210,10 @@ function sourceExpectations(source) {
     subjectLineCount,
     tableRows,
     subjectViolinCount,
+    academicYearCount: new Set(periods.map((period) => period.academicYear)).size,
+    benchmarkCourseCount: benchmarkEntries.length,
+    benchmarkTestCourse: benchmarkTest[0],
+    benchmarkTestValue: benchmarkTest[1],
   };
 }
 
@@ -293,6 +299,7 @@ async function resetDashboard(page) {
   await setInput(page, "#line-filter", "");
   await setSelect(page, "#metric-select", "score");
   await setSelect(page, "#season-select", "All");
+  await setSelect(page, "#trend-history-select", "all");
   await setSelect(page, "#line-sort-select", "latest");
   await setSelect(page, "#line-limit-select", "10");
   await setRange(page, "#line-min-n", "5");
@@ -301,6 +308,11 @@ async function resetDashboard(page) {
     if (violin && !violin.checked) {
       violin.checked = true;
       violin.dispatchEvent(new Event("change", { bubbles: true }));
+    }
+    const benchmark = document.querySelector("#toggle-mastery-line");
+    if (benchmark && !benchmark.checked) {
+      benchmark.checked = true;
+      benchmark.dispatchEvent(new Event("change", { bubbles: true }));
     }
   });
   await page.waitForTimeout(120);
@@ -347,6 +359,15 @@ async function snapshot(page) {
         target: document.querySelector("#metric-target")?.textContent.trim() ?? "",
       },
       timeCaption: document.querySelector("#time-caption")?.textContent ?? "",
+      timeChartText: document.querySelector("#time-chart")?.textContent ?? "",
+      trendHistory: document.querySelector("#trend-history-select")?.value ?? "",
+      trendWindowCount: document.querySelectorAll("#time-chart .x-label").length,
+      benchmarkChecked: document.querySelector("#toggle-mastery-line")?.checked ?? false,
+      benchmarkCourse: document.querySelector("#trend-benchmark-course")?.value ?? "",
+      benchmarkCourseDisabled: document.querySelector("#trend-benchmark-course")?.disabled ?? false,
+      benchmarkCourseOptions: document.querySelectorAll("#trend-benchmark-course option").length,
+      benchmarkLineCount: document.querySelectorAll("#time-chart .benchmark-line").length,
+      benchmarkLegend: document.querySelector("#time-legend")?.textContent ?? "",
       movementCaption: document.querySelector("#growth-caption")?.textContent ?? "",
       lineCount: document.querySelectorAll(".comparison-series-line").length,
       lineLabels: [...document.querySelectorAll(".right-label-text")].map((node) => node.textContent.trim()).slice(0, 8),
@@ -403,6 +424,28 @@ async function runDesktopChecks(page, expected, emptyCombo) {
   assertCondition(failures, overview.performanceGrowthLabels >= 2 && overview.performanceGrowthLabels <= 4, "synthesis labels only decision-relevant extremes", overview.performanceGrowthLabels);
   assertCondition(failures, overview.decisionSignalCount === 3, "overview contains three decision signals", overview.decisionSignalCount);
   assertCondition(failures, cardsMatch(overview.cards, expected.cards), "overview metrics match source JSON", { actual: overview.cards, expected: expected.cards });
+  assertCondition(failures, overview.trendHistory === "5" && overview.trendWindowCount === 10, "trend defaults to five paired academic years", overview);
+  assertCondition(failures, overview.timeCaption.includes("5 academic years (10 assessment windows)"), "trend caption names the academic-year interval", overview.timeCaption);
+  assertCondition(failures, !/\b(?:assignment|task)\b/i.test(overview.timeChartText), "trend does not expose generic task labels", overview.timeChartText);
+  assertCondition(failures, overview.benchmarkCourseOptions === expected.benchmarkCourseCount, "course benchmark selector covers every course", overview.benchmarkCourseOptions);
+  assertCondition(failures, overview.benchmarkChecked && !overview.benchmarkCourseDisabled && overview.benchmarkLineCount === 1, "course benchmark is visible by default", overview);
+  assertCondition(failures, overview.benchmarkLegend.includes(overview.benchmarkCourse) && overview.benchmarkLegend.includes("%"), "benchmark legend names the selected course and cut score", overview.benchmarkLegend);
+
+  await page.locator("#toggle-mastery-line").uncheck();
+  await page.waitForTimeout(100);
+  const benchmarkOff = await snapshot(page);
+  assertCondition(failures, benchmarkOff.benchmarkLineCount === 0 && benchmarkOff.benchmarkCourseDisabled, "benchmark toggle removes the line and disables its course selector", benchmarkOff);
+  await page.locator("#toggle-mastery-line").check();
+  await setSelect(page, "#trend-benchmark-course", expected.benchmarkTestCourse);
+  const benchmarkCourse = await snapshot(page);
+  assertCondition(failures, benchmarkCourse.benchmarkLineCount === 1 && benchmarkCourse.benchmarkLegend.includes(expected.benchmarkTestCourse) && benchmarkCourse.benchmarkLegend.includes(`${expected.benchmarkTestValue}%`), "benchmark selector renders the chosen course threshold", benchmarkCourse);
+
+  await setSelect(page, "#trend-history-select", "3");
+  const threeYears = await snapshot(page);
+  assertCondition(failures, threeYears.trendWindowCount === 6 && threeYears.timeCaption.includes("3 academic years (6 assessment windows)"), "trend can shorten to three academic years", threeYears);
+  await setSelect(page, "#trend-history-select", "all");
+  const allYears = await snapshot(page);
+  assertCondition(failures, allYears.trendWindowCount === expected.academicYearCount * 2 && allYears.timeCaption.includes(`${expected.academicYearCount} academic years`), "trend can expand to the full academic-year history", allYears);
 
   await selectDashboardView(page, "compare");
   const compareView = await snapshot(page);
@@ -479,11 +522,11 @@ async function runDesktopChecks(page, expected, emptyCombo) {
   await resetDashboard(page);
   await setSelect(page, "#season-select", "Beginning");
   const beginning = await snapshot(page);
-  assertCondition(failures, beginning.timeCaption.includes("7 reporting windows"), "Beginning season limits to 7 windows", beginning.timeCaption);
+  assertCondition(failures, beginning.timeCaption.includes("7 academic years (7 assessment windows)"), "Beginning season limits to one BOY window per academic year", beginning.timeCaption);
   assertCondition(failures, beginning.cards.change === "-" && beginning.movementCaption.includes("No complete BOY/EOY pairs"), "Beginning-only window shows no BOY/EOY delta", beginning);
   await setSelect(page, "#season-select", "End");
   const ending = await snapshot(page);
-  assertCondition(failures, ending.timeCaption.includes("7 reporting windows"), "End season limits to 7 windows", ending.timeCaption);
+  assertCondition(failures, ending.timeCaption.includes("7 academic years (7 assessment windows)"), "End season limits to one EOY window per academic year", ending.timeCaption);
   assertCondition(failures, ending.cards.change === "-" && ending.movementCaption.includes("No complete BOY/EOY pairs"), "End-only window shows no BOY/EOY delta", ending);
 
   await page.locator("#section-filter-search").fill("01-01");

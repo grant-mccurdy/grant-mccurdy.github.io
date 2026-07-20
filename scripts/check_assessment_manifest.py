@@ -61,6 +61,32 @@ def main() -> None:
     if not SHA256.fullmatch(str(builder_digest)):
         fail("builder digest is missing or invalid")
 
+    periods = dashboard.get("periods", [])
+    if len(periods) != 14:
+        fail("dashboard must contain seven paired BOY/EOY academic years")
+    for index, period in enumerate(periods):
+        academic_start = 2019 + index // 2
+        academic_year = f"{academic_start}-{str(academic_start + 1)[-2:]}"
+        window_code = "BOY" if index % 2 == 0 else "EOY"
+        expected_source = f"Assignment {index + 1:02d}"
+        if period.get("academicYear") != academic_year or period.get("windowCode") != window_code:
+            fail(f"period {index + 1} has invalid academic-year window metadata")
+        if period.get("shortLabel") != f"{academic_year} {window_code}":
+            fail(f"period {index + 1} has an invalid display label")
+        if period.get("sourceLabel") != expected_source:
+            fail(f"period {index + 1} does not preserve its raw source label")
+        if re.search(r"\b(?:assignment|task)\b", str(period.get("label", "")), re.IGNORECASE):
+            fail(f"period {index + 1} exposes a generic task label")
+
+    course_names = {section.get("course") for section in dashboard.get("sections", [])}
+    course_benchmarks = dashboard.get("bands", {}).get("mastery", {}).get("byCourse", {})
+    if set(course_benchmarks) != course_names:
+        fail("course benchmark coverage does not match dashboard courses")
+    if not all(isinstance(value, (int, float)) and 0 < value <= 100 for value in course_benchmarks.values()):
+        fail("course benchmarks must be numeric values on the 0-100 score scale")
+    if len(set(course_benchmarks.values())) < 2:
+        fail("course benchmarks must preserve course-level specificity")
+
     counts = dashboard_meta["recordCounts"]
     print(
         "Assessment manifest valid: "
