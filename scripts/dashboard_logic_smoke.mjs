@@ -407,6 +407,7 @@ async function snapshot(page) {
       performanceGrowthPoints: document.querySelectorAll(".performance-growth-point").length,
       performanceGrowthLabels: document.querySelectorAll(".performance-growth-label").length,
       performanceGrowthCaption: document.querySelector("#performance-growth-caption")?.textContent ?? "",
+      performanceGrowthGuide: document.querySelector("#performance-growth-guide")?.textContent.replace(/\s+/g, " ").trim() ?? "",
       performanceGrowthReviewReasons: [...document.querySelectorAll(".performance-growth-item[data-review-reasons]")]
         .flatMap((node) => node.dataset.reviewReasons.split(",").filter(Boolean)),
       performanceGrowthBenchmarkLines: document.querySelectorAll("#performance-growth-chart .performance-benchmark-line").length,
@@ -446,10 +447,11 @@ async function runDesktopChecks(page, expected, emptyCombo) {
   assertCondition(failures, overview.taskTabCount === 3, "three semantic task tabs render", overview.taskTabCount);
   assertCondition(failures, overview.lineCount === Math.min(5, expected.subjectLineCount), "overview limits the default trend to five lines", overview.lineCount);
   assertCondition(failures, overview.violinCount === 0, "overview omits distribution overlays by default", overview.violinCount);
-  assertCondition(failures, overview.performanceGrowthPoints > 0 && overview.performanceGrowthCaption.includes("Descriptive, not causal"), "overview renders a bounded performance-growth synthesis", overview);
+  assertCondition(failures, overview.performanceGrowthPoints > 0 && overview.performanceGrowthGuide.includes("Descriptive, not causal"), "overview renders a bounded performance-growth synthesis", overview);
   assertCondition(failures, overview.performanceGrowthLabels >= 2 && overview.performanceGrowthLabels <= 4, "synthesis renders only the disclosed boundary labels", overview.performanceGrowthLabels);
   assertCondition(failures, ["lowest-latest-mean", "highest-latest-mean", "weakest-observed-growth", "strongest-observed-growth"].every((reason) => overview.performanceGrowthReviewReasons.includes(reason)), "synthesis labels cover the four disclosed boundary rules", overview.performanceGrowthReviewReasons);
-  assertCondition(failures, overview.performanceGrowthCaption.includes("Every eligible subject is plotted") && overview.performanceGrowthCaption.includes("lowest and highest latest mean") && overview.performanceGrowthCaption.includes("weakest and strongest observed growth"), "synthesis caption explains inclusion, interpretation, and label selection", overview.performanceGrowthCaption);
+  assertCondition(failures, overview.performanceGrowthCaption.includes("meet n >= 10 in the latest window and at least one complete BOY/EOY pair") && overview.performanceGrowthCaption.includes("every eligible subject is shown"), "synthesis caption explains eligibility and complete inclusion", overview.performanceGrowthCaption);
+  assertCondition(failures, overview.performanceGrowthGuide.includes("Right is a higher latest mean") && overview.performanceGrowthGuide.includes("Lowest and highest latest mean") && overview.performanceGrowthGuide.includes("weakest and strongest observed growth"), "synthesis guide explains position, size, and label selection", overview.performanceGrowthGuide);
   assertCondition(failures, overview.performanceGrowthBenchmarkLines === 0, "cross-course synthesis omits the inapplicable single program benchmark", overview.performanceGrowthBenchmarkLines);
   assertCondition(failures, overview.decisionSignalCount === 3, "overview contains three decision signals", overview.decisionSignalCount);
   assertCondition(failures, cardsMatch(overview.cards, expected.cards), "overview metrics match source JSON", { actual: overview.cards, expected: expected.cards });

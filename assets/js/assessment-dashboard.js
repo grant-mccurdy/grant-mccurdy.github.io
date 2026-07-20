@@ -1408,7 +1408,8 @@ function renderPerformanceGrowthMap(records) {
       <text x="18" y="${margin.top + innerHeight / 2}" class="axis-title" text-anchor="middle" transform="rotate(-90 18 ${margin.top + innerHeight / 2})">Average observed EOY-minus-BOY change</text>
     </svg>
   `;
-  els.performanceGrowthCaption.textContent = `${latest.period?.label ?? "Latest window"}: each circle is one ${currentSliceLabel()}; right means a higher latest mean, up means a larger average EOY-minus-BOY change, and size reflects latest n. Every eligible ${currentSliceLabel()} is plotted. Labels identify one group at each boundary: lowest and highest latest mean, plus weakest and strongest observed growth; duplicates appear once. Descriptive, not causal.`;
+  const availableGroups = latest.groups.length;
+  els.performanceGrowthCaption.textContent = `${latest.period?.label ?? "Latest window"}: ${items.length} of ${availableGroups} ${currentSliceLabel(true)} meet n >= ${minN} in the latest window and at least one complete BOY/EOY pair; every eligible ${currentSliceLabel()} is shown.`;
 }
 
 function renderSkillHeatmap(records) {
