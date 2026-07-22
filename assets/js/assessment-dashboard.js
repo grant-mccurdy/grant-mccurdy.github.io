@@ -647,6 +647,16 @@ function activeBenchmarkDescriptor(periods = []) {
   };
 }
 
+function activeBenchmarkColor(lineSeries = []) {
+  const course = activeBenchmarkCourse();
+  const matchingCourseLine = state.groupBy === "course"
+    ? lineSeries.find((line) => line.key === course)
+    : null;
+  if (matchingCourseLine) return matchingCourseLine.color;
+  const courseIndex = benchmarkCourses().indexOf(course);
+  return palette[(courseIndex >= 0 ? courseIndex : 0) % palette.length];
+}
+
 function renderMetrics(records) {
   const latest = latestPeriodData(records);
   const latestRows = latest?.rows ?? [];
@@ -849,8 +859,18 @@ function renderTimeSeries(records) {
   const lineSeries = sortLineSeries(buildLineSeries(periodData));
   const explicitComparison = hasExplicitComparisonSelection();
   const maxLines = explicitComparison ? Number.POSITIVE_INFINITY : lineLimitValue();
-  const selectedSeries = lineSeries.slice(0, compact && !explicitComparison ? Math.min(maxLines, 5) : maxLines);
+  const selectedLimit = compact && !explicitComparison ? Math.min(maxLines, 5) : maxLines;
+  let selectedSeries = lineSeries.slice(0, selectedLimit);
+  const benchmarkCourseLine = state.groupBy === "course" && state.toggles.mastery && metricAllowsBands()
+    ? lineSeries.find((line) => line.key === activeBenchmarkCourse())
+    : null;
+  if (benchmarkCourseLine && !selectedSeries.some((line) => line.key === benchmarkCourseLine.key)) {
+    selectedSeries = selectedSeries.length >= selectedLimit
+      ? [...selectedSeries.slice(0, -1), benchmarkCourseLine]
+      : [...selectedSeries, benchmarkCourseLine];
+  }
   const distributionSeries = metricAllowsBands() ? buildDistributionSeries(periods, selectedSeries) : [];
+  const benchmarkColor = activeBenchmarkColor(lineSeries);
   const domain = lineChartDomain(selectedSeries, periods, distributionSeries);
   const yMax = domain.max;
   const yMin = domain.min;
@@ -868,7 +888,7 @@ function renderTimeSeries(records) {
   `).join("");
 
   const distributionRibbons = showDistributions ? renderDistributionRibbons(distributionSeries, seriesX, y) : "";
-  const masteryLine = state.toggles.mastery && metricAllowsBands() ? renderBenchmark(periods, x, y) : "";
+  const masteryLine = state.toggles.mastery && metricAllowsBands() ? renderBenchmark(periods, x, y, benchmarkColor) : "";
   const violinPlots = state.visual.distributionDisplay === "ribbons-violins" && metricAllowsBands()
     ? renderViolinPlots(distributionSeries, seriesX, y, yMin, yMax, distributionLayout.maxHalfWidth)
     : "";
@@ -902,7 +922,7 @@ function renderTimeSeries(records) {
       </g>
     `;
     return `
-      <path d="${pointsToCurvePath(points)}" fill="none" stroke="${line.color}" class="series-line comparison-series-line ${lineClass}"></path>
+      <path d="${pointsToCurvePath(points)}" fill="none" stroke="${line.color}" class="series-line comparison-series-line ${lineClass}" data-series-key="${escapeHtml(line.key)}"></path>
       ${circles}
       ${directLabel}
     `;
@@ -941,7 +961,7 @@ function renderTimeSeries(records) {
     ? `Labels show average End-minus-Beginning delta across ${pairCount} complete pair${pairCount === 1 ? "" : "s"}.`
     : "No complete BOY/EOY pairs are available for the current window filter.";
   els.timeCaption.textContent = `${lineLabel} shown across ${windowLabel}. ${deltaNote}`;
-  renderLegend(selectedSeries, periods);
+  renderLegend(selectedSeries, periods, benchmarkColor);
 }
 
 function contiguousDistributionSegments(distributions) {
@@ -979,10 +999,10 @@ function renderDistributionRibbons(distributionSeries, seriesX, y) {
   )).join("");
 }
 
-function renderBenchmark(periods, x, y) {
+function renderBenchmark(periods, x, y, color) {
   const benchmark = activeBenchmarkDescriptor(periods);
   const points = periods.map((period, index) => ({ x: x(index), y: y(benchmark.values[index]) }));
-  return `<path d="${pointsToCurvePath(points)}" class="benchmark-line"><title>${escapeSvgText(benchmark.label)}. Synthetic demonstration threshold.</title></path>`;
+  return `<path d="${pointsToCurvePath(points)}" class="benchmark-line" data-benchmark-course="${escapeHtml(benchmark.course)}" style="--benchmark-color: ${color}"><title>${escapeSvgText(benchmark.label)}. Synthetic demonstration threshold.</title></path>`;
 }
 
 function renderViolinPlots(distributionSeries, seriesX, y, yMin, yMax, maxHalfWidth) {
@@ -1212,7 +1232,7 @@ function renderSectionLines(records, periods, x, y) {
   }).join("");
 }
 
-function renderLegend(series, periods) {
+function renderLegend(series, periods, benchmarkColor) {
   const populationLabel = state.visual.ribbonPopulation === "completed" ? "completed" : "assigned";
   const distributionLabel = `Middle ${state.visual.ribbonRange}% ${populationLabel} distributions by ${currentSliceLabel()}`;
   const violinLabel = state.visual.distributionDisplay === "ribbons-violins" ? " with violin profiles" : "";
@@ -1221,7 +1241,7 @@ function renderLegend(series, periods) {
   const ribbonItems = [
     lineSummary,
     state.visual.distributionDisplay !== "none" && metricAllowsBands() ? `<span><i class="legend-swatch distribution-ribbon-key"></i>${distributionLabel}${violinLabel}</span>` : "",
-    state.toggles.mastery && metricAllowsBands() ? `<span><i class="legend-line benchmark-key"></i>${masteryLabel}</span>` : "",
+    state.toggles.mastery && metricAllowsBands() ? `<span><i class="legend-line benchmark-key" style="--legend-color: ${benchmarkColor}"></i>${masteryLabel}</span>` : "",
     state.toggles.sections ? `<span><i class="legend-line section-key"></i>Section lines</span>` : "",
   ].filter(Boolean).join("");
 

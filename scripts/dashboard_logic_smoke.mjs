@@ -349,6 +349,11 @@ async function snapshot(page) {
   return page.evaluate(() => {
     const pageText = document.body.innerText;
     const svgText = [...document.querySelectorAll("svg")].map((svg) => svg.outerHTML).join("\n");
+    const benchmarkCourse = document.querySelector("#trend-benchmark-course")?.value ?? "";
+    const benchmarkLine = document.querySelector("#time-chart .benchmark-line");
+    const benchmarkCourseLine = [...document.querySelectorAll("#time-chart .comparison-series-line")]
+      .find((node) => node.dataset.seriesKey === benchmarkCourse);
+    const benchmarkLegendKey = document.querySelector("#time-legend .benchmark-key");
     return {
       dashboardError: pageText.includes("Dashboard data did not load"),
       badTextValue: /NaN|undefined|Infinity/.test(pageText),
@@ -402,11 +407,14 @@ async function snapshot(page) {
       trendWindowCount: document.querySelectorAll("#time-chart .x-label").length,
       trendYearLabelCount: document.querySelectorAll("#time-chart .trend-year-label").length,
       benchmarkChecked: document.querySelector("#toggle-mastery-line")?.checked ?? false,
-      benchmarkCourse: document.querySelector("#trend-benchmark-course")?.value ?? "",
+      benchmarkCourse,
       benchmarkCourseDisabled: document.querySelector("#trend-benchmark-course")?.disabled ?? false,
       benchmarkCourseOptions: document.querySelectorAll("#trend-benchmark-course option").length,
       benchmarkLineCount: document.querySelectorAll("#time-chart .benchmark-line").length,
       benchmarkLegend: document.querySelector("#time-legend")?.textContent ?? "",
+      benchmarkLineColor: benchmarkLine?.style.getPropertyValue("--benchmark-color").trim() ?? "",
+      benchmarkCourseLineColor: benchmarkCourseLine?.getAttribute("stroke") ?? "",
+      benchmarkLegendColor: benchmarkLegendKey?.style.getPropertyValue("--legend-color").trim() ?? "",
       movementCaption: document.querySelector("#growth-caption")?.textContent ?? "",
       lineCount: document.querySelectorAll(".comparison-series-line").length,
       lineLabels: [...document.querySelectorAll(".right-label-text")].map((node) => node.textContent.trim()).slice(0, 8),
@@ -504,6 +512,12 @@ async function runDesktopChecks(page, expected, emptyCombo) {
   assertCondition(failures, overview.legacyPooledRibbonCount === 0, "legacy pooled ribbons are absent", overview.legacyPooledRibbonCount);
   assertCondition(failures, overview.benchmarkChecked && !overview.benchmarkCourseDisabled && overview.benchmarkLineCount === 1, "course benchmark is visible by default", overview);
   assertCondition(failures, overview.benchmarkLegend.includes(overview.benchmarkCourse) && overview.benchmarkLegend.includes("%"), "benchmark legend names the selected course and cut score", overview.benchmarkLegend);
+  assertCondition(
+    failures,
+    overview.benchmarkLineColor && overview.benchmarkLineColor === overview.benchmarkCourseLineColor && overview.benchmarkLineColor === overview.benchmarkLegendColor,
+    "benchmark line and legend use the selected course series color",
+    overview,
+  );
 
   await page.locator("#trend-overlay-settings").evaluate((details) => { details.open = true; });
   await setSelect(page, "#distribution-display-select", "ribbons");
@@ -534,9 +548,17 @@ async function runDesktopChecks(page, expected, emptyCombo) {
   const benchmarkOff = await snapshot(page);
   assertCondition(failures, benchmarkOff.benchmarkLineCount === 0 && benchmarkOff.benchmarkCourseDisabled, "benchmark toggle removes the line and disables its course selector", benchmarkOff);
   await page.locator("#toggle-mastery-line").check();
+  await setRange(page, "#line-min-n", "1");
   await setSelect(page, "#trend-benchmark-course", expected.benchmarkTestCourse);
   const benchmarkCourse = await snapshot(page);
   assertCondition(failures, benchmarkCourse.benchmarkLineCount === 1 && benchmarkCourse.benchmarkLegend.includes(expected.benchmarkTestCourse) && benchmarkCourse.benchmarkLegend.includes(`${expected.benchmarkTestValue}%`), "benchmark selector renders the chosen course threshold", benchmarkCourse);
+  assertCondition(
+    failures,
+    benchmarkCourse.benchmarkLineColor && benchmarkCourse.benchmarkLineColor === benchmarkCourse.benchmarkCourseLineColor && benchmarkCourse.benchmarkLineColor === benchmarkCourse.benchmarkLegendColor,
+    "changing the benchmark course updates the line and legend to that course color",
+    benchmarkCourse,
+  );
+  await setRange(page, "#line-min-n", "10");
 
   await setSelect(page, "#trend-start-select", expected.arbitraryTrendStartId);
   await setSelect(page, "#trend-end-select", expected.arbitraryTrendEndId);

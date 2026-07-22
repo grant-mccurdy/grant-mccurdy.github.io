@@ -2365,7 +2365,7 @@ h3 {
 
 .benchmark-key {
   border-top-style: dashed;
-  border-top-color: var(--viz-benchmark);
+  border-top-color: var(--legend-color, var(--viz-benchmark));
 }
 
 .trend-window-label {
@@ -2539,7 +2539,7 @@ h3 {
 
 .benchmark-line {
   fill: none;
-  stroke: var(--viz-benchmark);
+  stroke: var(--benchmark-color, var(--viz-benchmark));
   stroke-width: 2.4;
   stroke-dasharray: 7 6;
 }
