@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" data-asset-version="20260720h">
+<html lang="en" data-asset-version="20260720i">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -13,7 +13,7 @@
     <meta name="twitter:card" content="summary_large_image">
     <link rel="canonical" href="https://grant-mccurdy.github.io/dashboard/assessment.html">
     <link rel="icon" href="../assets/images/grant-mccurdy-profile.jpg" type="image/jpeg">
-    <link rel="stylesheet" href="../assets/css/styles.css?v=20260720h">
+    <link rel="stylesheet" href="../assets/css/styles.css?v=20260720i">
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
@@ -100,17 +100,19 @@
               <details class="advanced-dashboard-controls trend-overlay-settings" id="trend-overlay-settings">
                 <summary>
                   <span>Chart overlays</span>
-                  <small>Ribbons, distributions, section traces, and curve display</small>
+                  <small>Distribution shapes, section traces, and curve display</small>
                 </summary>
-                <div class="toggle-row" aria-label="Trend overlay toggles">
-                  <label><input type="checkbox" id="toggle-department-band" checked> Main ribbon</label>
-                  <label><input type="checkbox" id="toggle-network-band"> Context ribbon</label>
-                  <label><input type="checkbox" id="toggle-violin-plots"> Violin plots</label>
-                  <label><input type="checkbox" id="toggle-section-lines"> Section traces</label>
-                </div>
-                <div class="viz-control-row" aria-label="Ribbon controls">
+                <div class="viz-control-row" aria-label="Trend display controls">
                   <label>
-                    Ribbon range
+                    Distributions
+                    <select id="distribution-display-select">
+                      <option value="none">None</option>
+                      <option value="ribbons">Ribbons</option>
+                      <option value="ribbons-violins">Ribbons + violins</option>
+                    </select>
+                  </label>
+                  <label>
+                    Distribution range
                     <select id="ribbon-range-select">
                       <option value="50">Middle 50%</option>
                       <option value="60">Middle 60%</option>
@@ -125,7 +127,7 @@
                     </select>
                   </label>
                   <label>
-                    Population
+                    Score population
                     <select id="ribbon-population-select">
                       <option value="completed">Completed only</option>
                       <option value="assigned">Assigned + missing</option>
@@ -135,6 +137,7 @@
                     <span>Ribbon opacity <output id="ribbon-opacity-value">16%</output></span>
                     <input type="range" id="ribbon-opacity" min="0.08" max="0.42" step="0.02" value="0.16">
                   </label>
+                  <label class="checkbox-control"><input type="checkbox" id="toggle-section-lines"> Section traces</label>
                   <label class="checkbox-control"><input type="checkbox" id="toggle-smooth-curves" checked> Smooth curves</label>
                 </div>
               </details>
@@ -377,6 +380,6 @@
     <script src="../assets/js/site.js?v=20260720b"></script>
     <script src="../assets/js/assessment-core.js?v=20260720h"></script>
     <script src="../assets/js/assessment-charts.js?v=20260720h"></script>
-    <script src="../assets/js/assessment-dashboard.js?v=20260720h"></script>
+    <script src="../assets/js/assessment-dashboard.js?v=20260720i"></script>
   </body>
 </html>

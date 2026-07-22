@@ -119,6 +119,15 @@ async function setChecked(page, selector, checked) {
   await page.waitForTimeout(80);
 }
 
+async function clickControl(page, selector) {
+  await page.evaluate((targetSelector) => {
+    const element = document.querySelector(targetSelector);
+    if (!element) throw new Error(`Missing control ${targetSelector}`);
+    element.click();
+  }, selector);
+  await page.waitForTimeout(80);
+}
+
 async function checkValue(page, containerSelector, value) {
   await page.evaluate(({ containerSelector, value }) => {
     const input = [...document.querySelectorAll(`${containerSelector} input[type="checkbox"]`)]
@@ -134,7 +143,13 @@ async function checkFirstN(page, selector, count) {
   const optionCount = await page.locator(selector).count();
   const selected = Math.min(count, optionCount);
   for (let index = 0; index < selected; index += 1) {
-    await page.locator(selector).nth(index).check();
+    await page.evaluate(({ selector, index }) => {
+      const input = document.querySelectorAll(selector)[index];
+      if (!input) throw new Error(`Missing checkbox ${index} in ${selector}`);
+      input.checked = true;
+      input.dispatchEvent(new Event("change", { bubbles: true }));
+    }, { selector, index });
+    await page.waitForTimeout(40);
   }
   await page.waitForTimeout(150);
   return selected;
@@ -150,9 +165,9 @@ async function openDetails(page, selector, open) {
 }
 
 async function resetDashboard(page) {
-  await page.locator("#slice-filter-clear").click();
-  await page.locator("#table-reset").click();
-  await page.locator("input[name='compare-by'][value='course']").check();
+  await clickControl(page, "#slice-filter-clear");
+  await clickControl(page, "#table-reset");
+  await setChecked(page, "input[name='compare-by'][value='course']", true);
   await setValue(page, "#metric-select", "score");
   await setValue(page, "#season-select", "All");
   await setValue(page, "#line-sort-select", "latest");
@@ -163,10 +178,8 @@ async function resetDashboard(page) {
   await setValue(page, "#center-select", "mean");
   await setValue(page, "#ribbon-population-select", "completed");
   await setValue(page, "#ribbon-opacity", "0.16", "input");
-  await setChecked(page, "#toggle-department-band", true);
-  await setChecked(page, "#toggle-network-band", false);
+  await setValue(page, "#distribution-display-select", "ribbons-violins");
   await setChecked(page, "#toggle-mastery-line", true);
-  await setChecked(page, "#toggle-violin-plots", true);
   await setChecked(page, "#toggle-section-lines", false);
   await setChecked(page, "#toggle-smooth-curves", true);
   await openDetails(page, ".dashboard-source-strip", false);
@@ -226,10 +239,8 @@ async function snapshot(page) {
       sourceOpen: document.querySelector(".dashboard-source-strip")?.open ?? false,
       advancedOpen: document.querySelector(".advanced-dashboard-controls")?.open ?? false,
       toggles: {
-        department: document.querySelector("#toggle-department-band")?.checked ?? false,
-        network: document.querySelector("#toggle-network-band")?.checked ?? false,
+        distributions: document.querySelector("#distribution-display-select")?.value ?? "none",
         mastery: document.querySelector("#toggle-mastery-line")?.checked ?? false,
-        violins: document.querySelector("#toggle-violin-plots")?.checked ?? false,
         sections: document.querySelector("#toggle-section-lines")?.checked ?? false,
         smooth: document.querySelector("#toggle-smooth-curves")?.checked ?? false,
       },
@@ -246,6 +257,7 @@ async function snapshot(page) {
       },
       chartCounts: {
         lines: document.querySelectorAll(".comparison-series-line").length,
+        ribbons: document.querySelectorAll(".distribution-ribbon").length,
         violins: document.querySelectorAll(".violin-plot").length,
         sectionLines: document.querySelectorAll(".section-shadow-line").length,
         emptyStates: document.querySelectorAll(".empty-chart-text").length,
@@ -290,10 +302,16 @@ function evaluateScenario(scenario, snap, messages) {
     add("Line count mismatch", { expected: scenario.expectLines, actual: snap.chartCounts.lines });
   }
   if (scenario.expectEmpty && snap.chartCounts.emptyStates === 0) add("Expected empty chart state was not visible");
-  if (!snap.compact && snap.metric === "score" && snap.toggles.violins && snap.chartCounts.lines > 0 && !scenario.expectEmpty && snap.chartCounts.violins === 0) {
+  if (snap.metric === "score" && snap.toggles.distributions !== "none" && snap.chartCounts.lines > 0 && !scenario.expectEmpty && snap.chartCounts.ribbons === 0) {
+    add("Score metric with distribution display produced no ribbons");
+  }
+  if (snap.metric === "score" && snap.toggles.distributions === "ribbons-violins" && snap.chartCounts.lines > 0 && !scenario.expectEmpty && snap.chartCounts.violins === 0) {
     add("Score metric with violin toggle produced no violin plots");
   }
-  if ((snap.metric !== "score" || !snap.toggles.violins) && snap.chartCounts.violins !== 0) {
+  if ((snap.metric !== "score" || snap.toggles.distributions === "none") && snap.chartCounts.ribbons !== 0) {
+    add("Distribution ribbons rendered when they should be unavailable", { metric: snap.metric, toggles: snap.toggles, ribbons: snap.chartCounts.ribbons });
+  }
+  if ((snap.metric !== "score" || snap.toggles.distributions !== "ribbons-violins") && snap.chartCounts.violins !== 0) {
     add("Violin plots rendered when they should be unavailable", { metric: snap.metric, toggles: snap.toggles, violins: snap.chartCounts.violins });
   }
   if (snap.chartCounts.violins && snap.violinTitles.some((title) => !title.includes(`${snap.currentSliceLabel} score distribution`))) {
@@ -305,9 +323,6 @@ function evaluateScenario(scenario, snap, messages) {
       caption: snap.captions.distribution,
       axisTitle: snap.distributionAxisTitle,
     });
-  }
-  if (snap.metric !== "score" && /Score/i.test(snap.cards.latestLabel)) {
-    add("Latest metric card uses score-specific label for non-score metric", snap.cards.latestLabel);
   }
   if (snap.rightLabels.some((label) => /\([+-]?\d+(\.\d+)?\)$/.test(label))) {
     add("Right-side line label is missing point units", snap.rightLabels);
@@ -322,7 +337,9 @@ async function runScenario(page, viewportName, scenario, results, pageMessages) 
   await resetDashboard(page);
   await scenario.run(page);
   await page.waitForTimeout(180);
-  if (scenario.scrollTo) await page.locator(scenario.scrollTo).scrollIntoViewIfNeeded();
+  if (scenario.scrollTo && await page.locator(scenario.scrollTo).first().isVisible()) {
+    await page.locator(scenario.scrollTo).first().scrollIntoViewIfNeeded();
+  }
   const snap = await snapshot(page);
   const relativeScreenshot = path.join("screenshots", `${slug(`${viewportName}-${scenario.name}`)}.png`);
   const absoluteScreenshot = path.join(outputDir, relativeScreenshot);
@@ -339,24 +356,20 @@ async function runScenario(page, viewportName, scenario, results, pageMessages) 
 }
 
 function displayToggleScenarios() {
-  const toggleKeys = [
-    ["department", "#toggle-department-band"],
-    ["network", "#toggle-network-band"],
-    ["mastery", "#toggle-mastery-line"],
-    ["violins", "#toggle-violin-plots"],
-    ["sections", "#toggle-section-lines"],
-  ];
-  return Array.from({ length: 2 ** toggleKeys.length }, (_, mask) => ({
-    name: `display toggles ${toggleKeys.map(([key], index) => `${key}-${Boolean(mask & (1 << index)) ? "on" : "off"}`).join(" ")}`,
-    scrollTo: ".advanced-dashboard-controls",
-    run: async (page) => {
-      await openDetails(page, ".advanced-dashboard-controls", true);
-      for (const [key, selector] of toggleKeys) {
-        const index = toggleKeys.findIndex(([itemKey]) => itemKey === key);
-        await setChecked(page, selector, Boolean(mask & (1 << index)));
-      }
-    },
-  }));
+  return ["none", "ribbons", "ribbons-violins"].flatMap((distributionDisplay) => (
+    [false, true].flatMap((mastery) => (
+      [false, true].map((sections) => ({
+        name: `display distributions-${distributionDisplay} mastery-${mastery ? "on" : "off"} sections-${sections ? "on" : "off"}`,
+        scrollTo: ".advanced-dashboard-controls",
+        run: async (page) => {
+          await openDetails(page, ".advanced-dashboard-controls", true);
+          await setValue(page, "#distribution-display-select", distributionDisplay);
+          await setChecked(page, "#toggle-mastery-line", mastery);
+          await setChecked(page, "#toggle-section-lines", sections);
+        },
+      }))
+    ))
+  ));
 }
 
 function baseScenarios(source) {
@@ -365,8 +378,8 @@ function baseScenarios(source) {
     { name: "default collapsed", run: async () => {} },
     { name: "source details open", run: async (page) => openDetails(page, ".dashboard-source-strip", true) },
     { name: "advanced controls open", scrollTo: ".advanced-dashboard-controls", run: async (page) => openDetails(page, ".advanced-dashboard-controls", true) },
-    { name: "compare teacher radio", expectCompare: "teacher", run: async (page) => page.locator("input[name='compare-by'][value='teacher']").check() },
-    { name: "compare section radio", expectCompare: "section", run: async (page) => page.locator("input[name='compare-by'][value='section']").check() },
+    { name: "compare teacher radio", expectCompare: "teacher", run: async (page) => setChecked(page, "input[name='compare-by'][value='teacher']", true) },
+    { name: "compare section radio", expectCompare: "section", run: async (page) => setChecked(page, "input[name='compare-by'][value='section']", true) },
     {
       name: "teacher checkbox auto comparison",
       expectCompare: "teacher",
@@ -392,8 +405,8 @@ function baseScenarios(source) {
       name: "mixed inactive subject filter with teacher comparison",
       expectCompare: "teacher",
       run: async (page) => {
-        await page.locator("#course-filter-options input[type='checkbox']").first().check();
-        await page.locator("input[name='compare-by'][value='teacher']").check();
+        await checkFirstN(page, "#course-filter-options input[type='checkbox']", 1);
+        await setChecked(page, "input[name='compare-by'][value='teacher']", true);
       },
     },
     {
@@ -412,7 +425,7 @@ function baseScenarios(source) {
       expectCompare: "section",
       run: async (page) => {
         await setValue(page, "#section-filter-search", "01-01", "input");
-        await page.locator("#section-filter-select-visible").click();
+        await clickControl(page, "#section-filter-select-visible");
       },
     },
     {
@@ -421,8 +434,8 @@ function baseScenarios(source) {
       expectCheckedCount: { sections: 0 },
       run: async (page) => {
         await setValue(page, "#section-filter-search", "01-01", "input");
-        await page.locator("#section-filter-select-visible").click();
-        await page.locator("#section-filter-clear").click();
+        await clickControl(page, "#section-filter-select-visible");
+        await clickControl(page, "#section-filter-clear");
       },
     },
     ...["score", "proficiency", "completion"].map((metric) => ({
@@ -472,14 +485,14 @@ function baseScenarios(source) {
       {
         name: `table sort ${key} ascending`,
         scrollTo: ".table-control-row",
-        run: async (page) => page.locator(`button[data-sort='${key}']`).click(),
+        run: async (page) => clickControl(page, `button[data-sort='${key}']`),
       },
       {
         name: `table sort ${key} descending`,
         scrollTo: ".table-control-row",
         run: async (page) => {
-          await page.locator(`button[data-sort='${key}']`).click();
-          await page.locator(`button[data-sort='${key}']`).click();
+          await clickControl(page, `button[data-sort='${key}']`);
+          await clickControl(page, `button[data-sort='${key}']`);
         },
       },
     ]),

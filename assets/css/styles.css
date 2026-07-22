@@ -24,8 +24,6 @@
   --viz-completion-line: #15803d;
   --viz-growth: #7c3aed;
   --viz-overall: #4f46e5;
-  --viz-main-range: #2563eb;
-  --viz-context-range: #0891b2;
   --viz-benchmark: #dc2626;
   --viz-distribution: #ea580c;
   --viz-section-context: #64748b;
@@ -2360,17 +2358,14 @@ h3 {
   border-radius: 3px;
 }
 
-.department-key {
-  background: var(--viz-main-range);
-}
-
-.network-key {
-  background: var(--viz-context-range);
+.distribution-ribbon-key {
+  border: 1px solid var(--ink);
+  background: #d1d5db;
 }
 
 .benchmark-key {
   border-top-style: dashed;
-  border-top-color: var(--viz-benchmark);
+  border-top-color: var(--legend-color, var(--viz-benchmark));
 }
 
 .trend-window-label {
@@ -2536,21 +2531,15 @@ h3 {
   opacity: 0.52;
 }
 
-.ribbon {
-  stroke: none;
-}
-
-.ribbon-department {
-  fill: var(--viz-main-range);
-}
-
-.ribbon-network {
-  fill: var(--viz-context-range);
+.distribution-ribbon {
+  fill: var(--distribution-color, var(--viz-distribution));
+  stroke: var(--distribution-color, var(--viz-distribution));
+  stroke-width: 0.8;
 }
 
 .benchmark-line {
   fill: none;
-  stroke: var(--viz-benchmark);
+  stroke: var(--benchmark-color, var(--viz-benchmark));
   stroke-width: 2.4;
   stroke-dasharray: 7 6;
 }
@@ -2653,27 +2642,27 @@ h3 {
 }
 
 .violin-shape {
-  fill: var(--violin-color, var(--viz-distribution));
+  fill: var(--distribution-color, var(--viz-distribution));
   opacity: 0.16;
-  stroke: var(--violin-color, var(--viz-distribution));
+  stroke: var(--distribution-color, var(--viz-distribution));
   stroke-width: 1.2;
 }
 
 .violin-whisker {
-  stroke: var(--violin-color, var(--viz-distribution));
+  stroke: var(--distribution-color, var(--viz-distribution));
   stroke-width: 1.25;
   stroke-linecap: round;
 }
 
-.violin-iqr {
-  stroke: var(--violin-color, var(--viz-benchmark));
+.violin-range {
+  stroke: var(--distribution-color, var(--viz-benchmark));
   stroke-width: 1.8;
   stroke-linecap: round;
 }
 
 .violin-median {
   fill: #ffffff;
-  stroke: var(--violin-color, var(--viz-benchmark));
+  stroke: var(--distribution-color, var(--viz-benchmark));
   stroke-width: 1.6;
 }
 
