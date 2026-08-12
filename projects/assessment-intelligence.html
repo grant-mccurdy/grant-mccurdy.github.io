@@ -6,7 +6,7 @@
     <title>Assessment Intelligence | Grant McCurdy</title>
     <meta name="description" content="Public-safe assessment intelligence project brief.">
     <meta property="og:title" content="Assessment Intelligence | Grant McCurdy">
-    <meta property="og:description" content="SQL, R, and Python assessment analytics with shared extracts, reproducible reports, and an interactive dashboard.">
+    <meta property="og:description" content="Governed dbt assessment marts, reproducible reports, and an interactive public-safe dashboard.">
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://grant-mccurdy.github.io/projects/assessment-intelligence.html">
     <meta property="og:image" content="https://grant-mccurdy.github.io/assets/images/social/assessment-intelligence.png">
@@ -50,7 +50,7 @@
         <div>
           <p class="section-kicker">Overview</p>
           <h2>Decision layer for assessment stakeholders</h2>
-          <p>The dashboard helps leaders see whether students are improving, where performance or participation signals are weakest, which groups warrant closer review, and whether the source data is reliable enough to support action. The current DuckDB analytics layer uses five SQL-backed synthetic extracts with 3,020 rows, including 2,009 readiness records across 174 course-section groups.</p>
+          <p>The dashboard helps leaders see whether students are improving, where performance or participation signals are weakest, which groups warrant closer review, and whether the source data is reliable enough to support action. The dbt-duckdb analytics layer builds five contracted marts with 3,020 rows, including 2,009 readiness records across 174 course-section groups.</p>
         </div>
         <div class="detail-panel">
           <h2>Inspect First</h2>
@@ -58,8 +58,8 @@
             <li>Hosted synthetic assessment dashboard</li>
             <li>Rendered R gradebook synthesis report and PDF export</li>
             <li>Validation summary for the synthetic gradebook reconstruction</li>
-            <li>SQL warehouse assessment report in the source repository</li>
-            <li>Dashboard data extracts generated from public-safe synthetic marts</li>
+            <li>Governed dbt sources, intermediate models, marts, and tests</li>
+            <li>Parity-validated dashboard extracts from public-safe synthetic marts</li>
             <li>Minimum-sample safeguards for ranked decision insights</li>
           </ul>
           <div class="link-row detail-action">
@@ -85,7 +85,7 @@
         <article class="case-step">
           <span>02</span>
           <h3>Approach</h3>
-          <p>Python and DuckDB build validated synthetic warehouse records; SQL produces shared extracts; R and browser code consume those extracts for reports and interactive analysis.</p>
+          <p>Python and DuckDB build validated synthetic warehouse records; dbt defines reusable intermediate models, contracted marts, and data tests; R and browser code consume parity-checked extracts for reporting and interactive analysis.</p>
         </article>
         <article class="case-step">
           <span>03</span>
@@ -95,7 +95,7 @@
         <article class="case-step">
           <span>04</span>
           <h3>Lesson</h3>
-          <p>The privacy boundary works best when generation, validation, SQL export, dashboard behavior, and reporting language are designed as one release pipeline.</p>
+          <p>The privacy boundary works best when generation, dbt contracts, parity checks, dashboard behavior, and reporting language operate as one release pipeline.</p>
         </article>
       </section>
 
@@ -116,7 +116,7 @@
         </article>
         <article class="artifact">
           <h3>Reproducible analytics</h3>
-          <p>SQL, Python, and R workflows produce course-section performance, growth, non-participation, roster reconciliation, readiness, modeling, and validation artifacts from the synthetic DuckDB warehouse.</p>
+          <p>dbt, SQL, Python, and R workflows produce course-section performance, growth, non-participation, roster reconciliation, readiness, modeling, and validation artifacts from the synthetic DuckDB warehouse.</p>
           <a class="text-link" href="education-data-simulation-engine.html">Simulation foundation</a>
         </article>
       </section>
