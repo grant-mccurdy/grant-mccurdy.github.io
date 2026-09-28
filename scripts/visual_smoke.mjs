@@ -242,6 +242,7 @@ async function inspect(page) {
     artifactCards: await page.locator(".artifact-link-card").count(),
     dashboardError: bodyText.includes("Dashboard data did not load"),
     heroVideo,
+    heroReport: await page.locator(".hero-report").evaluateAll((images) => images.map((img) => ({ loaded: img.complete && img.naturalWidth > 0, source: img.getAttribute("src") }))),
     overflow,
     shell: await page.evaluate(() => {
       if (!document.querySelector("[data-header]")) return null;
@@ -266,7 +267,7 @@ async function inspectNavigation(page, label) {
   return {
     opened,
     closed,
-    activeProject: (await links.locator('a[aria-current="page"]').innerText()) === "Projects",
+    activeProject: (await links.locator('a[aria-current="page"]').innerText()) === "Systems",
   };
 }
 
@@ -277,12 +278,12 @@ async function inspectHelper(page, label) {
       status: 200,
       contentType: "application/json; charset=utf-8",
       body: JSON.stringify({
-        answer: "Start with Assessment Analytics, then open the Education Data Lab. For methods evidence, visit Statistical Methods Evidence.",
+        answer: "Start with Statistical Risk Modeling in R, then open Assessment Analytics. Use the Education Data Lab as supporting evidence.",
         blocks: [
           {
             type: "text",
             content:
-              "Start with **Assessment Analytics**, then open the Education Data Lab. For methods evidence, visit Statistical Methods Evidence."
+              "Start with **Statistical Risk Modeling in R**, then open Assessment Analytics. Use the Education Data Lab as supporting evidence."
           },
           {
             type: "capability_note",
@@ -359,7 +360,7 @@ async function inspectHelper(page, label) {
     recommendationLinks:
       recommendationLinks.some((link) => link.href.endsWith("/dashboard/assessment.html") && link.text.includes("Assessment Analytics")) &&
       recommendationLinks.some((link) => link.href.endsWith("/data-lab.html") && link.text.includes("Education Data Lab")) &&
-      recommendationLinks.some((link) => link.href.endsWith("/projects/graduate-statistics-portfolio.html")),
+      recommendationLinks.some((link) => link.href.endsWith("/projects/statistical-risk-modeling-r.html") && link.text.includes("Statistical Risk Modeling in R")),
     supportedScopeHidden:
       !recommendationText.includes("Supported scope") &&
       !recommendationText.includes("This generic scope note should not appear in the portfolio helper."),
@@ -473,169 +474,19 @@ async function inspectContentArtifacts(page, label) {
   }));
 }
 
-async function inspectHotelComp(page, label) {
-  if (label.startsWith("hotel-comp-decision-")) {
-    const bodyText = await page.locator("body").innerText();
-    const pdfHref = await page
-      .getByRole("link", { name: "Executive brief PDF", exact: true })
-      .getAttribute("href");
-    const appendixHref = await page
-      .getByRole("link", { name: "Policy selection appendix", exact: true })
-      .getAttribute("href");
-    const decisionDeskHref = await page
-      .getByRole("link", { name: "Open the Decision Desk", exact: true })
-      .getAttribute("href");
-    return {
-      boundary:
-        bodyText.includes("historical comp actions, costs, and outcomes in this prototype are synthetic") &&
-        bodyText.includes("No Proper Hotels guest records"),
-      decisionFramework:
-        (await page.locator("h1").innerText()) === "A Comp Decision Engine for Luxury Hotel Service Recovery" &&
-        bodyText.includes("The business task") &&
-        bodyText.includes("The proposed decision product") &&
-        bodyText.includes("An illustrative recommendation") &&
-        bodyText.includes("How the real model would be chosen") &&
-        bodyText.includes("A focused first step") &&
-        bodyText.includes("four weeks or 50 eligible cases") &&
-        bodyText.includes("workflow discovery, not proof of impact") &&
-        bodyText.includes("90-minute data and policy workshop"),
-      workedRecommendation:
-        bodyText.includes("late checkout + personal manager note") &&
-        bodyText.includes("Modeled guest-facing value: $100") &&
-        bodyText.includes("Assumed internal-cost range: $8-$45") &&
-        bodyText.includes("not estimates of property economics"),
-      interactivePrototype:
-        bodyText.includes("Test the prototype") &&
-        bodyText.includes("Synthetic scenarios only") &&
-        bodyText.includes("Do not enter actual guest or reservation information") &&
-        decisionDeskHref === "https://hotel-comp-decision-desk.grant-mccurdy.workers.dev/",
-      artifactHierarchy:
-        pdfHref === "hotel-comp-decision-framework.pdf" &&
-        appendixHref === "technical-appendix.html" &&
-        decisionDeskHref === "https://hotel-comp-decision-desk.grant-mccurdy.workers.dev/",
-      focusBoundary:
-        !["Guardrailed recovery", "5,000", "Snowflake", "Cloudflare", "RAG"].some((text) =>
-          bodyText.includes(text),
-        ),
-      reportFormat:
-        pdfHref === "hotel-comp-decision-framework.pdf" &&
-        (await page.locator("table").count()) === 0 &&
-        (await page.locator("figure").count()) === 0 &&
-        (await page.locator("button, [role='tab']").count()) === 0,
-    };
-  }
-  if (label.startsWith("hotel-comp-appendix-")) {
-    const bodyText = await page.locator("body").innerText();
-    const briefHref = await page
-      .getByRole("link", { name: "Return to the executive brief", exact: true })
-      .getAttribute("href");
-    const pdfHref = await page
-      .getByRole("link", { name: "Download the executive PDF", exact: true })
-      .getAttribute("href");
-    const deskHref = await page
-      .getByRole("link", { name: "Open the synthetic Decision Desk", exact: true })
-      .getAttribute("href");
-    const tableScroll = await page.locator(".cell-output-display:has(table)").evaluateAll((containers) =>
-      containers.every((container) => {
-        const rect = container.getBoundingClientRect();
-        const style = window.getComputedStyle(container);
-        return (
-          style.overflowX === "auto" &&
-          rect.left >= -2 &&
-          rect.right <= document.documentElement.clientWidth + 2
-        );
-      }),
-    );
-    return {
-      appendixBoundary:
-        bodyText.includes("evaluates policy rules on synthetic hotel operations") &&
-        bodyText.includes("does not establish actual policy effectiveness, savings, margins, or guest outcomes"),
-      appendixMethod:
-        (await page.locator("h1").innerText()) === "Policy Selection Methodology" &&
-        bodyText.includes("policy selection, not final predictive-model selection") &&
-        bodyText.includes("2,150 matched case-policy evaluations") &&
-        bodyText.includes("10,000-draw paired case bootstrap") &&
-        bodyText.includes("5,000-draw shared-world assumption stress") &&
-        bodyText.includes("stress-median cost") &&
-        bodyText.includes("What real data must establish"),
-      appendixEvidence:
-        (await page.locator("table").count()) === 4 &&
-        (await page.locator("img[role='img']").count()) === 1 &&
-        (await page.locator(".selection-flow-list li").count()) === 6 &&
-        (await page.locator("figcaption").count()) >= 6 &&
-        bodyText.includes("$29,104") &&
-        bodyText.includes("$30,467") &&
-        bodyText.includes("$27,342-$33,944"),
-      appendixNavigation:
-        briefHref === "index.html" &&
-        pdfHref === "hotel-comp-decision-framework.pdf" &&
-        deskHref === "https://hotel-comp-decision-desk.grant-mccurdy.workers.dev/",
-      appendixFormat:
-        (await page.locator("button, [role='tab'], .site-header, .report-hero").count()) === 0 && tableScroll,
-    };
-  }
-  if (label.startsWith("hotel-comp-technical-")) {
-    const boundary = await page.locator("footer").innerText();
-    const scenarioButton = page.locator('[data-scenario="parking_friction"]');
-    await scenarioButton.click();
-    return {
-      boundary: boundary.includes("synthetic hotel operations") && boundary.includes("does not use or claim access"),
-      technicalPolicyDecision:
-        (await page.locator("h1").innerText()) === "Which Comp Policy Should Enter Shadow Validation?" &&
-        (await page.locator(".policy-plot-row").count()) === 5 &&
-        (await page.locator(".protection-cell").count()) === 5 &&
-        (await page.locator(".policy-plot-row.selected").count()) === 1 &&
-        (await page.locator(".policy-decision-figure figcaption").innerText()).includes(
-          "Policies must clear every guardrail",
-        ),
-      technicalScenarioChanged:
-        (await page.locator("#scenario-amount").innerText()) === "$100" &&
-        (await page.locator("#scenario-gesture").innerText()).includes("parking or destination-fee waiver") &&
-        (await scenarioButton.getAttribute("aria-pressed")) === "true",
-    };
-  }
-  if (label.startsWith("hotel-comp-audit-")) {
-    const bodyText = await page.locator("body").innerText();
-    return {
-      auditBoundary:
-        bodyText.includes("Synthetic policy simulation") &&
-        bodyText.includes("not Proper Hotels findings") &&
-        bodyText.includes("Selected-Policy Review Queue Preview") &&
-        bodyText.includes("Five-Policy Comparison"),
-    };
-  }
-  if (label.startsWith("hotel-comp-engineering-")) {
-    const bodyText = await page.locator("body").innerText();
-    return {
-      engineeringEvidence:
-        bodyText.includes("Decision Lineage") &&
-        bodyText.includes("Snowflake typed MARTS / AUDIT") &&
-        bodyText.includes("Data Contracts And Quality Gates") &&
-        bodyText.includes("Security And Cost Controls"),
-    };
-  }
-  return null;
-}
-
 const cases = [
   ["home-desktop", "index.html", 1440, 1000],
   ["home-mobile", "index.html", 390, 900],
+  ["about-desktop", "about.html", 1440, 1000],
+  ["about-mobile", "about.html", 390, 900],
+  ["evidence-desktop", "evidence-methods.html", 1440, 1000],
+  ["evidence-mobile", "evidence-methods.html", 390, 900],
   ["projects-directory-desktop", path.join("projects", "index.html"), 1440, 1000],
   ["projects-directory-mobile", path.join("projects", "index.html"), 390, 900],
   ["demos-directory-desktop", path.join("demos", "index.html"), 1440, 1000],
   ["demos-directory-mobile", path.join("demos", "index.html"), 390, 900],
-  ["hotel-comp-brief-desktop", path.join("projects", "hotel-comp-policy-model.html"), 1440, 1000],
-  ["hotel-comp-brief-mobile", path.join("projects", "hotel-comp-policy-model.html"), 390, 900],
-  ["hotel-comp-decision-desktop", path.join("projects", "hotel-comp-policy-model", "index.html"), 1440, 1000],
-  ["hotel-comp-decision-mobile", path.join("projects", "hotel-comp-policy-model", "index.html"), 390, 900],
-  ["hotel-comp-appendix-desktop", path.join("projects", "hotel-comp-policy-model", "technical-appendix.html"), 1440, 1000],
-  ["hotel-comp-appendix-mobile", path.join("projects", "hotel-comp-policy-model", "technical-appendix.html"), 390, 900],
-  ["hotel-comp-technical-desktop", path.join("projects", "hotel-comp-policy-model", "technical-prototype.html"), 1440, 1000],
-  ["hotel-comp-audit-desktop", path.join("projects", "hotel-comp-policy-model", "simulation-audit.html"), 1440, 1000],
-  ["hotel-comp-audit-mobile", path.join("projects", "hotel-comp-policy-model", "simulation-audit.html"), 390, 900],
-  ["hotel-comp-methodology-mobile", path.join("projects", "hotel-comp-policy-model", "methodology.html"), 390, 900],
-  ["hotel-comp-policy-analysis-mobile", path.join("projects", "hotel-comp-policy-model", "policy-decision-analysis.html"), 390, 900],
-  ["hotel-comp-engineering-mobile", path.join("projects", "hotel-comp-policy-model", "engineering-evidence.html"), 390, 900],
+  ["retired-project-desktop", path.join("projects", "hotel-comp-policy-model.html"), 1440, 1000],
+  ["retired-project-mobile", path.join("projects", "hotel-comp-policy-model", "index.html"), 390, 900],
   ["synthetic-desktop", path.join("projects", "education-data-simulation-engine.html"), 1440, 1000],
   ["synthetic-mobile", path.join("projects", "education-data-simulation-engine.html"), 390, 900],
   ["data-lab-desktop", "data-lab.html", 1440, 1000],
@@ -687,7 +538,14 @@ try {
       capability: await inspectDataLabCapability(page, label),
       contentRag: await inspectContentRag(page, label),
       contentArtifacts: await inspectContentArtifacts(page, label),
-      hotelComp: await inspectHotelComp(page, label),
+      retiredRoute: label.startsWith("retired-project-")
+        ? {
+            noindex: (await page.locator('meta[name="robots"]').getAttribute("content")) === "noindex, nofollow",
+            claimFree:
+              (await page.locator("h1").innerText()) === "Project evidence is unavailable." &&
+              (await page.getByRole("link", { name: "Return to Systems", exact: true }).count()) === 1,
+          }
+        : null,
     });
     await page.close();
   }
@@ -696,20 +554,9 @@ try {
   await closeServer(server);
 }
 
-const heroVideoFailed = (result) => {
+const heroMediaFailed = (result) => {
   if (!result.label.startsWith("home-")) return false;
-  return (
-    !result.heroVideo ||
-    !result.heroVideo.currentSrc.includes("assets/video/workflow-hero.mp4") ||
-    !result.heroVideo.loop ||
-    !result.heroVideo.muted ||
-    result.heroVideo.objectFit !== "cover" ||
-    result.heroVideo.playbackRate < 2.5 ||
-    result.heroVideo.rect.width < result.heroVideo.viewport.width ||
-    result.heroVideo.rect.height < result.heroVideo.viewport.height ||
-    result.heroVideo.videoWidth < 1 ||
-    result.heroVideo.videoHeight < 1
-  );
+  return result.heroReport.length !== 1 || !result.heroReport[0].loaded || !result.heroReport[0].source.includes("logos/course-distributions.png");
 };
 
 const failures = results.filter(
@@ -723,7 +570,7 @@ const failures = results.filter(
     result.navigation?.closed === false ||
     result.navigation?.activeProject === false ||
     result.dashboardError ||
-    heroVideoFailed(result) ||
+    heroMediaFailed(result) ||
     result.helper?.overflow.length ||
     result.helper?.opened === false ||
     result.helper?.closed === false ||
@@ -746,23 +593,10 @@ const failures = results.filter(
     result.contentRag?.threadScroll?.latestAnswerVisible === false ||
     result.contentRag?.threadScroll?.pageStayedPut === false ||
     result.contentRag?.overflow.length ||
-    result.contentArtifacts?.count !== undefined && result.contentArtifacts.count !== 8 ||
+    result.contentArtifacts?.count !== undefined && result.contentArtifacts.count !== 4 ||
     result.contentArtifacts?.openInNewTabs === false ||
-    result.hotelComp?.boundary === false ||
-    result.hotelComp?.decisionFramework === false ||
-    result.hotelComp?.workedRecommendation === false ||
-    result.hotelComp?.focusBoundary === false ||
-    result.hotelComp?.reportFormat === false ||
-    result.hotelComp?.artifactHierarchy === false ||
-    result.hotelComp?.appendixBoundary === false ||
-    result.hotelComp?.appendixMethod === false ||
-    result.hotelComp?.appendixEvidence === false ||
-    result.hotelComp?.appendixNavigation === false ||
-    result.hotelComp?.appendixFormat === false ||
-    result.hotelComp?.technicalPolicyDecision === false ||
-    result.hotelComp?.technicalScenarioChanged === false ||
-    result.hotelComp?.auditBoundary === false ||
-    result.hotelComp?.engineeringEvidence === false,
+    result.retiredRoute?.noindex === false ||
+    result.retiredRoute?.claimFree === false,
 );
 console.log(JSON.stringify(results, null, 2));
 

@@ -6,14 +6,14 @@
     <title>Assessment Intelligence | Grant McCurdy</title>
     <meta name="description" content="Public-safe assessment intelligence project brief.">
     <meta property="og:title" content="Assessment Intelligence | Grant McCurdy">
-    <meta property="og:description" content="Governed dbt assessment marts, reproducible reports, and an interactive public-safe dashboard.">
+    <meta property="og:description" content="A common mathematics assessment, an interactive dashboard, and a department report using the same synthetic data and figures.">
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://grant-mccurdy.github.io/projects/assessment-intelligence.html">
     <meta property="og:image" content="https://grant-mccurdy.github.io/assets/images/social/assessment-intelligence.png">
     <meta name="twitter:card" content="summary_large_image">
     <link rel="canonical" href="https://grant-mccurdy.github.io/projects/assessment-intelligence.html">
     <link rel="icon" href="../assets/images/grant-mccurdy-profile.jpg" type="image/jpeg">
-    <link rel="stylesheet" href="../assets/css/styles.css?v=20260717a">
+    <link rel="stylesheet" href="../assets/css/styles.css?v=20260816a">
   </head>
   <body>
     <header class="site-header compact" data-header>
@@ -26,10 +26,12 @@
           <span></span><span></span><span></span>
         </button>
         <div class="nav-links" data-nav-links>
-          <a href="../projects/index.html">Projects</a>
+          <a href="../index.html">Home</a>
+          <a href="index.html" aria-current="page">Systems</a>
           <a href="../demos/index.html">Demos</a>
-          <a href="https://github.com/grant-mccurdy">GitHub</a>
-          <a href="https://www.linkedin.com/in/grant-mccurdy/">LinkedIn</a>
+          <a href="../evidence-methods.html">Evidence &amp; Methods</a>
+          <a href="../about.html">About</a>
+          <a href="../about.html#contact">Contact</a>
         </div>
       </nav>
     </header>
@@ -38,10 +40,11 @@
       <section class="detail-hero">
         <p class="section-kicker">Project Brief</p>
         <h1>Assessment Intelligence</h1>
-        <p>An interactive decision layer that turns SQL-backed assessment records into stakeholder-ready views of growth, performance, participation, completion, and data quality.</p>
+        <p>A mathematics assessment becomes useful when a department can connect its results to a decision. This demonstration pairs the Logos assessment and department report with an interactive dashboard of the same data, figures, and teaching priorities.</p>
         <div class="hero-actions detail-actions">
           <a class="button primary" href="../dashboard/assessment.html">Open Dashboard</a>
-          <a class="button outline" href="../artifacts/assessment-intelligence/gradebook_synthesis_report.html">Read R Report</a>
+          <a class="button outline" href="https://logoseducation.group/sample-report/">Read Department Report</a>
+          <a class="button outline" href="https://logoseducation.group/assessment-preview/">Take the Assessment</a>
           <a class="button outline" href="https://github.com/grant-mccurdy/assessment-intelligence">GitHub Repo</a>
         </div>
       </section>
@@ -49,22 +52,22 @@
       <section class="section-shell detail-grid">
         <div>
           <p class="section-kicker">Overview</p>
-          <h2>Decision layer for assessment stakeholders</h2>
-          <p>The dashboard helps leaders see whether students are improving, where performance or participation signals are weakest, which groups warrant closer review, and whether the source data is reliable enough to support action. The dbt-duckdb analytics layer builds five contracted marts with 3,020 rows, including 2,009 readiness records across 174 course-section groups.</p>
+          <h2>One assessment, three connected experiences</h2>
+          <p>The 30-question form defines what is assessed. The dashboard exposes patterns across 500 fictional students and 21 classes. The report explains the evidence and proposes follow-up decisions for the department.</p>
+          <p>The same three findings guide both presentations: geometric readiness in Algebra II, uncertain differences between tracks, and variation among Regular Geometry classes.</p>
         </div>
         <div class="detail-panel">
           <h2>Inspect First</h2>
           <ul class="clean-list">
-            <li>Hosted synthetic assessment dashboard</li>
-            <li>Rendered R gradebook synthesis report and PDF export</li>
-            <li>Validation summary for the synthetic gradebook reconstruction</li>
-            <li>Governed dbt sources, intermediate models, marts, and tests</li>
-            <li>Parity-validated dashboard extracts from public-safe synthetic marts</li>
-            <li>Minimum-sample safeguards for ranked decision insights</li>
+            <li>Filterable course, class, content-area, and question results</li>
+            <li>Six original figures from the Logos department report</li>
+            <li>Planned comparisons with their original uncertainty and Holm adjustments</li>
+            <li>The paired practice assessment and question booklet</li>
+            <li>Reproducible publication checks and downloadable aggregate values</li>
           </ul>
           <div class="link-row detail-action">
             <a class="text-link" href="../dashboard/assessment.html">Dashboard</a>
-            <a class="text-link" href="../artifacts/assessment-intelligence/gradebook_synthesis_report.html">R report</a>
+            <a class="text-link" href="https://logoseducation.group/sample-report/">Department report</a>
             <a class="text-link" href="../artifacts/assessment-intelligence/gradebook_reconstruction_validation.md">Validation summary</a>
             <a class="text-link" href="assessment-gradebook-synthesis.html">Gradebook synthesis</a>
             <a class="text-link" href="https://github.com/grant-mccurdy/assessment-intelligence">Source repo</a>
@@ -80,45 +83,55 @@
         <article class="case-step">
           <span>01</span>
           <h3>Problem</h3>
-          <p>Assessment teams need growth, completion, skill, and data-quality views, while a public portfolio cannot expose real students, rosters, grades, LMS exports, or institutional reports.</p>
+          <p>Department averages can conceal readiness gaps and class variation. Educators need to inspect the same questions and understand what a comparison can support.</p>
         </article>
         <article class="case-step">
           <span>02</span>
           <h3>Approach</h3>
-          <p>Python and DuckDB build validated synthetic warehouse records; dbt defines reusable intermediate models, contracted marts, and data tests; R and browser code consume parity-checked extracts for reporting and interactive analysis.</p>
+          <p>A checked import brings reviewed synthetic aggregates, report interpretation, and six unchanged figures into the portfolio. Browser filters expose selected groups without recalculating the report's statistical tests.</p>
         </article>
         <article class="case-step">
           <span>03</span>
           <h3>Result</h3>
-          <p>The same published data supports course, grade, teacher, section, growth, completion, skill, distribution, readiness, and reporting views without duplicating analytic truth.</p>
+          <p>Users can trace a department finding to a course, class, or question, download the displayed values, and inspect the corresponding assessment and written interpretation.</p>
         </article>
         <article class="case-step">
           <span>04</span>
           <h3>Lesson</h3>
-          <p>The privacy boundary works best when generation, dbt contracts, parity checks, dashboard behavior, and reporting language operate as one release pipeline.</p>
+          <p>One administration can guide follow-up questions. It cannot establish growth, instructional effects, or a defensible placement cutoff.</p>
         </article>
       </section>
 
       <section class="section-shell artifact-grid" aria-labelledby="assessment-proof-heading">
         <div class="section-heading">
-          <p class="section-kicker">Proof Lanes</p>
-          <h2 id="assessment-proof-heading">Three proof lanes</h2>
+          <p class="section-kicker">Explore the work</p>
+          <h2 id="assessment-proof-heading">Assessment, analysis, and reporting</h2>
         </div>
         <article class="artifact">
           <h3>Stakeholder dashboard</h3>
-          <p>The dashboard runs on GitHub Pages from SQL-shaped synthetic extracts, with browser-side aggregation, SVG charts, filters, and decision notes tied to visible metrics.</p>
+          <p>Explore the report's synthetic aggregates by course and track, inspect class and question results, and retain the full-department figures alongside filtered values.</p>
           <a class="text-link" href="../dashboard/assessment.html">Open dashboard</a>
         </article>
         <article class="artifact">
-          <h3>Decision guardrails</h3>
-          <p>Performance and participation remain distinct, ranked insights exclude cohorts below the default minimum sample size, and validation checks the public data boundary before release.</p>
-          <a class="text-link" href="../artifacts/assessment-intelligence/gradebook_synthesis_report.html">Read R report</a>
+          <h3>Department report</h3>
+          <p>The written report connects statistical evidence to proposed teaching checks, responsible teams, and review points.</p>
+          <a class="text-link" href="https://logoseducation.group/sample-report/">Read department report</a>
         </article>
         <article class="artifact">
-          <h3>Reproducible analytics</h3>
-          <p>dbt, SQL, Python, and R workflows produce course-section performance, growth, non-participation, roster reconciliation, readiness, modeling, and validation artifacts from the synthetic DuckDB warehouse.</p>
-          <a class="text-link" href="education-data-simulation-engine.html">Simulation foundation</a>
+          <h3>Practice assessment</h3>
+          <p>Take the same 30-question form and inspect its browser-based feedback. Personal practice answers do not enter the fictional department data.</p>
+          <a class="text-link" href="https://logoseducation.group/assessment-preview/">Open assessment</a>
         </article>
+      </section>
+
+      <section class="section-shell proof-qualification" aria-labelledby="assessment-qualification-heading">
+        <details class="detail-panel">
+          <summary id="assessment-qualification-heading">Earlier warehouse implementation and source lineage</summary>
+          <p>The report-aligned dashboard is implemented in the portfolio repository and imports the reviewed Logos reporting bundle. It does not claim that the Logos data passed through the earlier dbt pipeline.</p>
+          <p>The <a href="../dashboard/longitudinal.html">separate longitudinal demo</a>, <a href="../artifacts/assessment-intelligence/gradebook_synthesis_report.html">R report</a>, and public Assessment Intelligence repository retain the earlier SQL/dbt/DuckDB workflow and its original data. They are separate demonstrations.</p>
+          <p class="section-kicker">Projects Qualification / August 2026 warehouse snapshot</p>
+          <p>Strongest education-data architecture candidate once the dbt check is relocatable. Static artifacts are reviewable now, but a live interview rebuild and public feature must use the repaired, release-synchronized commit.</p>
+        </details>
       </section>
 
       <section class="intro-band" aria-labelledby="assessment-safety-heading">
@@ -132,8 +145,8 @@
       </section>
     </main>
     <footer class="site-footer">
-      <div class="footer-shell"><p>&copy; <span data-year></span> Grant McCurdy</p><div class="footer-links"><a href="index.html">Projects</a><a href="../demos/index.html">Demos</a><a href="https://github.com/grant-mccurdy">GitHub</a><a href="https://www.linkedin.com/in/grant-mccurdy/">LinkedIn</a></div></div>
+      <div class="footer-shell"><p>&copy; <span data-year></span> Grant McCurdy</p><div class="footer-links"><a href="../index.html">Home</a><a href="index.html">Systems</a><a href="../demos/index.html">Demos</a><a href="../evidence-methods.html">Evidence &amp; Methods</a><a href="../about.html">About</a><a href="../about.html#contact">Contact</a></div></div>
     </footer>
-    <script src="../assets/js/site.js?v=20260720b"></script>
+    <script src="../assets/js/site.js?v=20260816a"></script>
   </body>
 </html>

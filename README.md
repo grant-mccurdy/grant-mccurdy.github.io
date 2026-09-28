@@ -1,8 +1,8 @@
 # grant-mccurdy.github.io
 
-GitHub Pages systems portfolio for Grant McCurdy.
+GitHub Pages learning-systems portfolio for Grant McCurdy.
 
-The site routes reviewers through two primary surfaces: project briefs explain the work, while demos provide a direct path into working public systems. Source and validation links stay attached to the project that owns them.
+The site presents Grant as a mathematics and learning-systems leader working across assessment, measurement, analytics, education data infrastructure, automation, and human-reviewed AI. Project briefs explain the work, demos provide a direct path into public systems, and source and validation links stay attached to the project that owns them.
 
 ## Role Of This Repo
 
@@ -26,6 +26,8 @@ grant-mccurdy.github.io/
 ## Template Files
 
 - `index.html` is the portfolio homepage.
+- `about.html` contains the canonical public positioning, professional throughline, role alignment, and contact routes.
+- `evidence-methods.html` explains evidence status, validation, limitations, the case-study template, and the portfolio/repository boundary.
 - `demos/index.html` is the canonical directory for working portfolio experiences.
 - `data-lab.html` is the Education Data Lab over the Worker-backed synthetic warehouse.
 - `projects/*.html` are lightweight project-brief pages.
@@ -34,19 +36,43 @@ grant-mccurdy.github.io/
 - `docs/github-profile/repository-metadata.md` records the recommended public repo descriptions, topics, homepages, and profile setup commands.
 - `assets/css/styles.css` controls the shared visual system and responsive experience layouts.
 - `assets/js/site.js` controls the mobile navigation and header state.
-- `data/portfolio-projects.json` is the curated project registry; repositories
-  are never added to the public directory automatically. It owns canonical
-  titles, status, summaries, evidence links, demo metadata, and sitemap dates.
-- `data/synthetic/assessment-dashboard.manifest.json` binds the hosted
-  assessment dashboard to its source extracts and builder.
-- `scripts/publish_hotel_comp_site.py` converts the approved stakeholder report, simulation audit, and Markdown evidence from the separately maintained hotel-comp project into a public-safe static Pages bundle.
+- `data/portfolio-projects.json` is the curated presentation registry;
+  repositories are never added automatically. Its seven campaign entries and
+  fourteen qualification-bound claims are bound to Projects
+  `portfolio-proof.v1` fingerprint
+  `75479d72822392455359e9517c0e2751d36256044adfb6cc5ccf956d7cb30566`.
+  The registry retains project eligibility, repository revisions, claim IDs,
+  statements, statuses, qualifications, evidence references, and item hashes.
+- `dashboard/assessment.html` presents the Logos department report as an
+  interactive dashboard: the same 500 students, 21 classes, 30 questions,
+  six figures, and reviewed interpretation.
+- `data/logos/manifest.json` binds that dashboard's aggregate data, narrative,
+  and figures to the reviewed Logos source. See
+  [the alignment guide](docs/logos-alignment.md) for refresh and verification.
+- `dashboard/longitudinal.html` preserves the earlier seven-year simulation.
+  `data/synthetic/assessment-dashboard.manifest.json` binds that separate
+  demonstration to its SQL extracts and builder.
 - `assets/js/data-lab.js` renders analytic response blocks from the private backend. Configure the endpoint through the `data-api-endpoint` attribute after Worker deployment, or use an `endpoint` query parameter for local testing.
-- `assets/video/workflow-hero.mp4` is the muted, grayscale homepage hero loop generated from the latest local workflow recording.
-- `assets/images/workflow-hero-poster.jpg` is the static poster and reduced-motion fallback for the homepage hero.
+- `assets/images/logos/course-distributions.png` is the homepage report image,
+  rendered from the checked original SVG by the review-capture script.
+  The earlier workflow video and poster are retained but are not used by the homepage.
 - `assets/images/social/` contains current 1280x640 review and social-preview captures for the curated portfolio surfaces.
 - `.nojekyll` keeps GitHub Pages from applying Jekyll processing.
 - `scripts/build_sitemap.mjs` generates the curated canonical sitemap from the project registry.
 - `sitemap.xml` and `robots.txt` expose canonical portal pages to crawlers.
+
+## Presentation And Evidence Boundary
+
+The portfolio site owns problem framing, intended audience, decision relevance,
+selected evidence, explicit status and limitations, demos, and routes to deeper
+inspection. Project repositories own code, setup, tests, data contracts, model
+cards, detailed architecture, generated artifacts, validation logic, and
+implementation history.
+
+The files in `content/rag/` are reviewed, public-safe source inputs. Editing
+them does not update the live homepage helper. A live knowledge update requires
+a separate corpus rebuild, validation, and explicitly authorized deployment in
+the private Worker repository.
 
 ## Local Testing
 

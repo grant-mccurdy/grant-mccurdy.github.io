@@ -6,7 +6,7 @@ import path from "node:path";
 
 const root = path.resolve(path.join(import.meta.dirname, ".."));
 const requireFromHere = createRequire(import.meta.url);
-const dashboardPath = path.join("dashboard", "assessment.html");
+const dashboardPath = path.join("dashboard", "longitudinal.html");
 const sourcePath = path.join(root, "data", "synthetic", "assessment-dashboard.json");
 const mimeTypes = {
   ".css": "text/css; charset=utf-8",

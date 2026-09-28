@@ -14,10 +14,10 @@ const mimeTypes = {
   ".json": "application/json; charset=utf-8",
   ".mp4": "video/mp4",
   ".png": "image/png",
+  ".svg": "image/svg+xml",
 };
 const captures = [
   ["portfolio", "/"],
-  ["hotel-comp-policy-model", "/projects/hotel-comp-policy-model/"],
   ["assessment-intelligence", "/dashboard/assessment.html"],
   ["content-intelligence", "/projects/content-intelligence.html"],
   ["education-data-simulation-engine", "/data-lab.html"],
@@ -50,7 +50,15 @@ const { port } = server.address();
 const browser = await chromium.launch({ headless: true });
 
 try {
-  for (const [name, pathname] of captures) {
+  if (process.env.CAPTURE_FILTER) {
+    const figurePage = await browser.newPage({ viewport: { width: 1440, height: 530 }, deviceScaleFactor: 1 });
+    await figurePage.setContent(`<html><body style="margin:0;background:white"><img src="http://127.0.0.1:${port}/assets/images/logos/course-distributions.svg" style="width:1440px;height:530px;object-fit:contain" alt="Course distributions"></body></html>`);
+    await figurePage.locator("img").evaluate((img) => img.decode());
+    await figurePage.screenshot({ path: path.join(root, "assets/images/logos/course-distributions.png"), omitBackground: false });
+    await figurePage.close();
+  }
+  const requested = (process.env.CAPTURE_FILTER || "").split(",").filter(Boolean);
+  for (const [name, pathname] of captures.filter(([name]) => !requested.length || requested.includes(name))) {
     const context = await browser.newContext({
       viewport: { width: 1280, height: 640 },
       deviceScaleFactor: 1,
@@ -87,6 +95,12 @@ try {
       document.querySelectorAll("video").forEach((video) => video.pause());
     });
     await page.screenshot({ path: path.join(output, `${name}.png`) });
+    if (requested.length) {
+      const review = path.join(root, "tmp", "logos-alignment");
+      fs.mkdirSync(review, { recursive: true });
+      await page.setViewportSize({ width: 390, height: 844 });
+      await page.screenshot({ path: path.join(review, `${name}-mobile-viewport.png`) });
+    }
     console.log(`captured assets/images/social/${name}.png`);
     await context.close();
   }

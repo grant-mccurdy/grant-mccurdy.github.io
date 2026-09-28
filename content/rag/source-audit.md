@@ -12,6 +12,10 @@ base. It is intentionally public-safe and excludes private source material.
   project-to-demo map.
 - `README.md`: public site role, testing, project areas, and safety rules.
 - `index.html`: homepage positioning, capabilities, selected work, and demos.
+- `about.html`: canonical public positioning, pillars, role direction, and
+  public contact routes.
+- `evidence-methods.html`: evidence statuses, case-study method, provenance
+  boundary, and portfolio-versus-repository responsibilities.
 - `demos/index.html` and `demos/content-rag.html`: task-based demo routing and
   the standalone cited-retrieval surface.
 - `data-lab.html`: public Data Lab page framing.
@@ -20,6 +24,16 @@ base. It is intentionally public-safe and excludes private source material.
   paths.
 - `projects/statistical-risk-modeling-r.html`: public project brief for the R
   assessment-growth analytics repo.
+
+## Campaign Evidence Binding
+
+Reusable 2026 Q3 technical claims are derived from the Projects-owned
+`portfolio-proof.v1` snapshot with source fingerprint
+`75479d72822392455359e9517c0e2751d36256044adfb6cc5ccf956d7cb30566`.
+The snapshot contains seven projects and fourteen claims. Statistical Risk
+Modeling in R, Assessment Intelligence, and Assessment-to-Remediation Pipeline
+are featured. Education Data Simulation Engine, Instructional AI Workflows,
+Content Intelligence, and Graduate Statistics Portfolio are supporting.
 
 ## Summarize Or Use Only After Public Review
 
@@ -44,3 +58,11 @@ module and bundled with the private backend. This keeps runtime simple, avoids
 shipping secrets to GitHub Pages, and lets the homepage helper answer quickly
 without a separate database. Database or vector hosting can be added later if
 the helper corpus becomes too large or needs updates without Worker redeploys.
+
+## Unpublished Corpus Dependency
+
+The source changes in this directory are local, reviewed inputs only. They do
+not alter the live homepage helper until the private backend rebuilds the
+generated corpus, validates its safety and retrieval behavior, and receives
+separate authorization to deploy the Worker. A site publication approval does
+not authorize that backend deployment.

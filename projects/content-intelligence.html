@@ -13,7 +13,7 @@
     <meta name="twitter:card" content="summary_large_image">
     <link rel="canonical" href="https://grant-mccurdy.github.io/projects/content-intelligence.html">
     <link rel="icon" href="../assets/images/grant-mccurdy-profile.jpg" type="image/jpeg">
-    <link rel="stylesheet" href="../assets/css/styles.css?v=20260717a">
+    <link rel="stylesheet" href="../assets/css/styles.css?v=20260816a">
   </head>
   <body>
     <header class="site-header compact" data-header>
@@ -26,10 +26,12 @@
           <span></span><span></span><span></span>
         </button>
         <div class="nav-links" data-nav-links>
-          <a href="../projects/index.html">Projects</a>
+          <a href="../index.html">Home</a>
+          <a href="index.html" aria-current="page">Systems</a>
           <a href="../demos/index.html">Demos</a>
-          <a href="https://github.com/grant-mccurdy">GitHub</a>
-          <a href="https://www.linkedin.com/in/grant-mccurdy/">LinkedIn</a>
+          <a href="../evidence-methods.html">Evidence &amp; Methods</a>
+          <a href="../about.html">About</a>
+          <a href="../about.html#contact">Contact</a>
         </div>
       </nav>
     </header>
@@ -38,7 +40,7 @@
       <section class="detail-hero">
         <p class="section-kicker">Project Brief</p>
         <h1>Content Intelligence</h1>
-        <p>An artifact-to-RAG pipeline that standardizes text, transcript-derived, and OCR-derived content into provenance-rich records and serves cited answers through hybrid retrieval.</p>
+        <p>The repository normalizes synthetic text, transcript-derived, OCR-derived, and Markdown material into provenance-rich objects, gates retrieval inputs for safety, produces local lexical/vector records, and exposes portable hybrid retrieval logic used by a public cited-answer demo.</p>
         <div class="hero-actions detail-actions">
           <a class="button primary" href="../demos/content-rag.html">Try Live RAG</a>
           <a class="button outline" href="content-intelligence-demo-report.html">Read Demo Report</a>
@@ -59,8 +61,8 @@
         <div>
           <p class="section-kicker">Implemented Pipeline</p>
           <h2>From source adapters to RAG-ready evidence</h2>
-          <p>Useful decisions often live in unstructured notes, PDFs, transcripts, and planning records. The pipeline turns approved inputs into normalized records while retaining source identity, checksums, citation labels, and review status through every downstream step.</p>
-          <p>The public implementation uses synthetic text, transcript-derived, and OCR-derived examples to demonstrate conversion, segmentation, safety review, retrieval, and cited answers without publishing private source material.</p>
+          <p>The pipeline preserves source identity, checksums, citations, safety state, and corpus fingerprints through retrieval.</p>
+          <p>Privacy and answer-grounding gates block unreviewed inputs and require cited, bounded responses.</p>
         </div>
         <div class="detail-panel">
           <h2>Inspect first</h2>
@@ -84,8 +86,8 @@
           <h2 id="artifact-heading">What the workflow proves</h2>
         </div>
         <article class="artifact">
-          <h3>Source adapters</h3>
-          <p>The project documents a generic source-adapter contract, with Dropbox API extraction treated as the first private adapter rather than the public boundary.</p>
+          <h3>Source identity</h3>
+          <p>Normalized objects retain checksums, citations, safety state, and corpus fingerprints through retrieval.</p>
         </article>
         <article class="artifact">
           <h3>Conversion and normalization</h3>
@@ -93,11 +95,11 @@
         </article>
         <article class="artifact">
           <h3>Retrieval-ready index</h3>
-          <p>Generated RAG index records add stable chunk IDs, source metadata, method/evidence collections, citation labels, safety levels, embedding metadata, and retrieval fields.</p>
+          <p>Generated lexical and vector records support portable hybrid retrieval for a public cited-answer demo.</p>
         </article>
         <article class="artifact">
           <h3>Evaluated boundary</h3>
-          <p>The validation step checks generated objects and requires a passing public-safety review before records can be treated as retrieval-ready.</p>
+          <p>Privacy and answer-grounding gates block unreviewed inputs and require cited, bounded responses.</p>
         </article>
       </section>
 
@@ -105,23 +107,27 @@
         <div>
           <p class="section-kicker">Serving Layer</p>
           <h2>Hybrid retrieval with a safe fallback</h2>
-          <p>The workflow produces Vectorize-ready records. With Cloudflare bindings configured, the portfolio Worker combines vector and lexical retrieval; otherwise, the demo uses lexical retrieval over the same safety-reviewed records.</p>
+          <p>The repository exposes portable hybrid retrieval logic over the same safety-reviewed records used by the public cited-answer demo.</p>
         </div>
         <div class="detail-panel">
           <h2>Inspect in source</h2>
           <ul class="clean-list" data-source-artifacts>
-            <li><a href="https://github.com/grant-mccurdy/content-intelligence/blob/main/docs/artifact-to-rag-workflow.md" target="_blank" rel="noopener"><code>docs/artifact-to-rag-workflow.md</code></a></li>
-            <li><a href="https://github.com/grant-mccurdy/content-intelligence/blob/main/docs/source-adapters.md" target="_blank" rel="noopener"><code>docs/source-adapters.md</code></a></li>
+            <li><a href="https://github.com/grant-mccurdy/content-intelligence/blob/main/README.md" target="_blank" rel="noopener"><code>README.md</code></a></li>
             <li><a href="https://github.com/grant-mccurdy/content-intelligence/blob/main/docs/rag-architecture.md" target="_blank" rel="noopener"><code>docs/rag-architecture.md</code></a></li>
             <li><a href="https://github.com/grant-mccurdy/content-intelligence/blob/main/sample_outputs/rag-index.json" target="_blank" rel="noopener"><code>sample_outputs/rag-index.json</code></a></li>
-            <li><a href="https://github.com/grant-mccurdy/content-intelligence/blob/main/sample_outputs/vector-records.jsonl" target="_blank" rel="noopener"><code>sample_outputs/vector-records.jsonl</code></a></li>
             <li><a href="https://github.com/grant-mccurdy/content-intelligence/blob/main/sample_outputs/public-safety-review.json" target="_blank" rel="noopener"><code>sample_outputs/public-safety-review.json</code></a></li>
-            <li><a href="https://github.com/grant-mccurdy/content-intelligence/blob/main/reports/artifact-conversion-and-agent-context-status.md" target="_blank" rel="noopener"><code>reports/artifact-conversion-and-agent-context-status.md</code></a></li>
-            <li><a href="https://github.com/grant-mccurdy/content-intelligence/blob/main/sample_outputs/analysis-method-pack.json" target="_blank" rel="noopener"><code>sample_outputs/analysis-method-pack.json</code></a></li>
           </ul>
           <div class="link-row detail-action">
             <a class="text-link" href="https://github.com/grant-mccurdy/content-intelligence" target="_blank" rel="noopener">Source repo</a>
           </div>
+        </div>
+      </section>
+
+      <section class="section-shell proof-qualification" aria-labelledby="content-qualification-heading">
+        <div class="detail-panel">
+          <p class="section-kicker">Projects Qualification</p>
+          <h2 id="content-qualification-heading">Supporting project · prototype claims · qualified use</h2>
+          <p>Strong general AI systems alternate with unusually clear provenance and governance evidence; less education-specific than the top three.</p>
         </div>
       </section>
 
@@ -139,13 +145,15 @@
       <div class="footer-shell">
         <p>&copy; <span data-year></span> Grant McCurdy</p>
         <div class="footer-links">
-          <a href="index.html">Projects</a>
+          <a href="../index.html">Home</a>
+          <a href="index.html">Systems</a>
           <a href="../demos/index.html">Demos</a>
-          <a href="https://github.com/grant-mccurdy">GitHub</a>
-          <a href="https://www.linkedin.com/in/grant-mccurdy/">LinkedIn</a>
+          <a href="../evidence-methods.html">Evidence &amp; Methods</a>
+          <a href="../about.html">About</a>
+          <a href="../about.html#contact">Contact</a>
         </div>
       </div>
     </footer>
-    <script src="../assets/js/site.js?v=20260720b"></script>
+    <script src="../assets/js/site.js?v=20260816a"></script>
   </body>
 </html>

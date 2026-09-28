@@ -10,6 +10,11 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 TEMPORAL_FILLER = re.compile(r"\b(now|currently|recently|newly)\b", re.IGNORECASE)
+VERBATIM_EVIDENCE_EXCEPTIONS = (
+    "Strongest education-data architecture candidate once the dbt check is relocatable. "
+    "Static artifacts are reviewable now, but a live interview rebuild and public feature "
+    "must use the repaired, release-synchronized commit.",
+)
 CURATED_PATTERNS = (
     "index.html",
     "data-lab.html",
@@ -17,15 +22,12 @@ CURATED_PATTERNS = (
     "data/portfolio-projects.json",
     "demos/*.html",
     "projects/*.html",
-    "projects/hotel-comp-policy-model/engineering-evidence.html",
     "case-studies/*.html",
     "dashboard/*.html",
     "content/rag/*.md",
     "docs/github-profile/*.md",
 )
-EXCLUDED_FILES = {
-    ROOT / "projects" / "hotel-comp-policy-model" / "technical-appendix.html",
-}
+EXCLUDED_FILES: set[Path] = set()
 SKIPPED_HTML_TAGS = {"code", "pre", "script", "style"}
 VISIBLE_ATTRIBUTES = {"alt", "aria-label", "placeholder", "title"}
 META_PROSE_KEYS = {"description", "og:description", "twitter:description"}
@@ -97,7 +99,10 @@ def main() -> int:
     findings: list[tuple[Path, int, str]] = []
     for path in curated_files():
         for line_number, fragment in prose_fragments(path):
-            if TEMPORAL_FILLER.search(fragment):
+            checked_fragment = fragment
+            for exception in VERBATIM_EVIDENCE_EXCEPTIONS:
+                checked_fragment = checked_fragment.replace(exception, "")
+            if TEMPORAL_FILLER.search(checked_fragment):
                 findings.append((path.relative_to(ROOT), line_number, fragment.strip()))
 
     if findings:

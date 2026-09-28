@@ -24,12 +24,10 @@ const addRoute = (url, lastmod) => {
 };
 
 addRoute("./", registry.siteLastReviewed);
+addRoute("about.html", registry.siteLastReviewed);
+addRoute("evidence-methods.html", registry.siteLastReviewed);
 addRoute("projects/", registry.siteLastReviewed);
 addRoute("demos/", registry.siteLastReviewed);
-addRoute(
-  "projects/hotel-comp-policy-model/",
-  registry.projects.find((project) => project.id === "hotel-comp-policy-model")?.lastReviewed
-);
 
 for (const project of registry.projects) {
   addRoute(project.portalPath, project.lastReviewed);

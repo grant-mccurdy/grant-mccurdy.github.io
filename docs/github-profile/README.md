@@ -1,39 +1,40 @@
 # Grant McCurdy
 
-Analytics and systems builder creating decision tools, validated data products, statistical models, and source-grounded AI workflows.
+Mathematics and learning-systems leader building AI-enabled, data-informed
+systems for assessment, learning, measurement, and organizational
+decision-making.
 
-My public work focuses on a practical question: how can messy operational or analytical inputs become decisions that another person can inspect, challenge, and use? The projects below pair working interfaces with source, validation, and explicit data boundaries.
+My public work connects assessment and measurement, learning analytics,
+education data infrastructure, automation, and human-reviewed AI. The portfolio
+starts with the problem and decision; each project links to inspectable source,
+validation, status, and limitations.
 
-**[Portfolio](https://grant-mccurdy.github.io/)** | **[LinkedIn](https://www.linkedin.com/in/grant-mccurdy/)**
+**[Portfolio](https://grant-mccurdy.github.io/)** |
+**[LinkedIn](https://www.linkedin.com/in/grant-mccurdy/)** |
+**[Evidence & Methods](https://grant-mccurdy.github.io/evidence-methods.html)**
 
 ## Start Here
 
-- [Systems Portfolio](https://grant-mccurdy.github.io/) - the curated portal for project briefs, live demos, case studies, and evidence.
-- [Hotel Comp Decision Framework](https://grant-mccurdy.github.io/projects/hotel-comp-policy-model/) - a hospitality decision brief with policy comparison, uncertainty, and controlled shadow-validation design.
-- [Assessment Analytics Dashboard](https://grant-mccurdy.github.io/dashboard/assessment.html) - an interactive product generated from the same public-safe SQL extracts used by the Assessment Intelligence reporting workflow.
-- [Portfolio Data Lab](https://grant-mccurdy.github.io/data-lab.html) - structured analytic chat over a validated synthetic education warehouse.
+- [Statistical Risk Modeling in R](https://grant-mccurdy.github.io/projects/statistical-risk-modeling-r.html) — public-safe assessment-growth modeling, temporal and holdout validation, decision guardrails, and stakeholder reporting; current validity gates and the interview-rebuild limitation remain explicit.
+- [Assessment Intelligence](https://grant-mccurdy.github.io/projects/assessment-intelligence.html) — governed dbt/DuckDB assessment analytics, parity gates, disclosure guardrails, stakeholder reports, and a hash-bound dashboard payload; live rebuilding requires a repaired, release-synchronized commit.
+- [Assessment-to-Remediation Pipeline](https://grant-mccurdy.github.io/projects/assessment-to-remediation-pipeline.html) — the implemented 36-item authoring-review-export slice with advisory reviews and an offline Canvas payload; downstream scoring and remediation remain planned.
 
-## Flagship Systems
+## Supporting Evidence
 
-- [Hotel Comp Policy Model](https://github.com/grant-mccurdy/hotel-comp-policy-model) - explainable service-recovery decision support with a five-policy comparison, operating guardrails, sensitivity analysis, and a live Decision Desk.
-- [Assessment Intelligence](https://github.com/grant-mccurdy/assessment-intelligence) - SQL, R, and Python assessment analytics with reproducible extracts, diagnostics, reports, and a static dashboard publication contract.
-- [Content Intelligence](https://github.com/grant-mccurdy/content-intelligence) - artifact-to-RAG workflow for source adapters, provenance-rich information objects, reviewed retrieval records, and cited answers.
-- [Education Data Simulation Engine](https://github.com/grant-mccurdy/education-data-simulation-engine) - synthetic education data generation, validation, warehouse-ready models, and public-safe analytics foundations.
-
-## Technical Depth
-
-- [Assessment Growth Analytics in R](https://github.com/grant-mccurdy/statistical-risk-modeling-r) - expected-growth modeling, adjusted section signals, holdout validation, a model card, and stakeholder reporting.
-- [Graduate Statistics Portfolio](https://github.com/grant-mccurdy/graduate-statistics-portfolio) - curated R methods evidence covering nonlinear models, GLMs, repeated cross-validation, calibration, thresholds, and diagnostics.
-
-## Active Prototypes
-
-- [Assessment-to-Remediation Pipeline](https://grant-mccurdy.github.io/assessment-to-remediation-pipeline/) - review-gated diagnostic, dry-run LMS payload, feedback, and remediation workflow with a published review packet.
-- [Instructional AI Workflows](https://grant-mccurdy.github.io/instructional-ai-workflows/) - human-reviewed rubric evidence, feedback drafts, reviewer packets, and remediation actions in a live synthetic demo.
+- [Education Data Simulation Engine](https://grant-mccurdy.github.io/projects/education-data-simulation-engine.html) — a seven-year synthetic mathematics department, cross-table validation, Canvas-style records, a DuckDB star schema, and downstream marts; public featuring awaits separately approved remote release synchronization.
+- [Instructional AI Workflows](https://grant-mccurdy.github.io/projects/instructional-ai-workflows.html) — an offline, deterministic, teacher-controlled rubric-to-feedback workflow that does not grade raw work automatically.
+- [Content Intelligence](https://grant-mccurdy.github.io/projects/content-intelligence.html) — supporting general AI systems evidence for provenance-preserving, safety-gated hybrid retrieval and cited answers.
+- [Graduate Statistics Portfolio](https://grant-mccurdy.github.io/projects/graduate-statistics-portfolio.html) — supporting statistical-depth evidence covering model comparison, cross-validation, calibration, diagnostics, and cautious interpretation; public featuring awaits synchronization of its ahead-of-remote commit.
 
 ## Working Patterns
 
-Python, R, SQL, DuckDB, JavaScript, GitHub Pages, synthetic data, data contracts, reproducible reporting, browser-based analytics, statistical validation, source-grounded retrieval, and human review gates.
+Assessment design, educational measurement, learning analytics, SQL, Python, R,
+DuckDB, JavaScript, synthetic data, data contracts, reproducible reporting,
+workflow automation, source-grounded retrieval, and human review gates.
 
 ## Public-Safety Boundary
 
-Public projects use synthetic, generated, aggregate-safe, public, or permission-safe material. Private records, credentials, correspondence, student data, personnel data, and confidential institutional artifacts remain outside public repositories.
+Public projects use synthetic, generated, aggregate-safe, public, or
+permission-safe material. Private records, credentials, correspondence, student
+data, personnel data, and confidential institutional artifacts remain outside
+public repositories.

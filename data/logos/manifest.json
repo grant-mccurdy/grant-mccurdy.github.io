@@ -1,0 +1,32 @@
+{
+  "schema_version": "portfolio-logos-report-v1",
+  "classification": "synthetic-aggregate-only",
+  "report_url": "https://logoseducation.group/sample-report/",
+  "assessment_url": "https://logoseducation.group/assessment-preview/",
+  "form": {
+    "id": "LOGOS-MATH-V2",
+    "item_count": 30,
+    "revision": 5,
+    "scoring_version": "logos-scoring-v2.1",
+    "sha256": "af91b62f5581bef95f13432f739052d1ac3fe845bbdd8c4817e7fc86b780dabf",
+    "working_seconds": 2700
+  },
+  "scenario": {
+    "id": "geometry-transition-and-track-review-v1",
+    "kind": "designed-fictional-department",
+    "version": 1
+  },
+  "editorial_revision": 7,
+  "source_data_sha256": "1fae20cb0f8a26270b7ed931ae510b918a44e783354ae730857fe39dedf1c34f",
+  "editorial_source_sha256": "72461e442f7878c64179be5a07c1d188af470d96c65dbaeada50c32eccbbd7fb",
+  "files": {
+    "data/logos/report-data.json": "1fae20cb0f8a26270b7ed931ae510b918a44e783354ae730857fe39dedf1c34f",
+    "data/logos/report-narrative.json": "59d9c06123466e82689c379ac71e7043217e1a42621c4485891efa419671d8ec",
+    "assets/images/logos/course-distributions.svg": "d129388e4d944dcda3c815e8927677de955d0f594d0d69429081887aa72657a9",
+    "assets/images/logos/section-periods.svg": "077c45191a9fe840e43d4589e45b46add6c6afb8f6101e86b98b6f6fa10aa5ac",
+    "assets/images/logos/pairwise-audit.svg": "d68c895e696feccbfbd4726cdaa7117d4057718a0d364329f1a84c54d4622ab3",
+    "assets/images/logos/domain-course-track.svg": "1b93f8883da131d28229c6499bae6a154fe5cec5b59211bfc645e3c60819d9e6",
+    "assets/images/logos/item-priorities.svg": "90311fae0a511174b9b06229154268483cb0d700c22e201c0599dccd58be3bb9",
+    "assets/images/logos/item-course.svg": "0545ed7c5509ea2db73effaea650bed5974aefd3618abfc6618da95665ba0cd0"
+  }
+}

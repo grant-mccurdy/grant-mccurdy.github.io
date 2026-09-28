@@ -1,0 +1,132 @@
+{
+  "revision": 7,
+  "date": "2026-09-26",
+  "introduction": {
+    "title": "Mathematics program review.",
+    "lead": "A common assessment gives the department a shared view of mathematical readiness.",
+    "context": "This report examines course, track, and class patterns, then turns question-level results into priorities for instruction and program review."
+  },
+  "findings": [
+    {
+      "title": "Review the Geometry-to-Algebra II transition.",
+      "evidence": "Algebra II students answer 77% of Algebra questions correctly, compared with 46% of Geometry questions.",
+      "implication": "Check which geometric prerequisites need reinforcement, accounting for the demands of the individual tasks.",
+      "route": "teaching-priorities",
+      "link": "Review the teaching evidence"
+    },
+    {
+      "title": "Clarify what Honors placement should demonstrate.",
+      "evidence": "None of the four within-course track comparisons establishes a difference after adjustment for multiple comparisons.",
+      "implication": "That does not establish equivalence. Review common prerequisites and the additional depth expected in Honors.",
+      "route": "comparisons",
+      "link": "Inspect the track comparisons"
+    },
+    {
+      "title": "Investigate variation across Geometry classes.",
+      "evidence": "Regular Geometry class averages range from 52% to 67% on the same questions.",
+      "implication": "Compare incoming readiness, content exposure, and student work before deciding on support.",
+      "route": "class-patterns",
+      "link": "Examine the class patterns"
+    }
+  ],
+  "analysis": {
+    "course-patterns": {
+      "title": "Readiness varies within every course.",
+      "lead": "Average scores range from 48% in Algebra I to 82% in AP Calculus AB. Course membership alone does not describe an individual student\u2019s readiness.",
+      "paragraphs": [
+        "Start with the spread within each course. A group average can conceal students who need prerequisite support and students ready for greater challenge.",
+        "The main sequence tends toward higher scores in later courses, but these are different students assessed once. AP Statistics follows a separate pathway. Neither pattern measures growth or the effect of a course."
+      ],
+      "decision": "Use short prerequisite checks to plan flexible support within each course. Do not assign students to tracks from this total score."
+    },
+    "class-patterns": {
+      "title": "Begin the class review in Geometry.",
+      "lead": "The three Regular Geometry classes average 52%, 52%, 67%. The 15.3-point spread warrants a closer look at what sits behind the totals.",
+      "paragraphs": [
+        "Regular Geometry class R3 exceeds both R1 and R2 in the adjusted check across all 14 class comparisons. This reinforces the priority for review; it does not identify the cause of the difference.",
+        "Review the same question-level evidence with the Geometry team. Check whether classes had comparable opportunities to learn the assessed content and whether incoming readiness differed.",
+        "Collect recent student explanations and use a common scoring rubric. A recurring reasoning problem calls for a different response from unfamiliar content or an unusually difficult question.",
+        "Class and scheduled period are shown to help organize the review. These results do not isolate a teacher, timetable, or instructional effect."
+      ],
+      "decision": "Agree on a common follow-up task and review student work together before changing grouping, pacing, or staffing."
+    },
+    "comparisons": {
+      "title": "Track labels leave questions open.",
+      "lead": "Observed track gaps are uncertain. Treat the comparisons as prompts for program review, with confidence intervals alongside the estimates.",
+      "paragraphs": [
+        "Within-course Honors-minus-Regular gaps range from -1.6 to +2.5 percentage points. All four are inconclusive after Holm adjustment; none meets the illustrative five-point equivalence criterion.",
+        "All four adjacent steps from Algebra I through AP Calculus show higher pooled averages under the student-level model. The first three intervals remain above zero in the section-cluster sensitivity check; AP Calculus has only one class, so its clustered comparison is not estimable. With few classes, these checks remain provisional.",
+        "Enrollment, prior readiness, and instructional exposure can explain part of a group difference. A common benchmark also samples only some of the depth a course may teach."
+      ],
+      "decision": "Define the common readiness evidence and extension work expected in each track. Review those expectations alongside classroom work."
+    },
+    "content-areas": {
+      "title": "Look beneath the Algebra II total.",
+      "lead": "Algebra II averages 77% on Algebra questions and 46% on Geometry questions. That contrast directs attention to geometric readiness across the transition.",
+      "paragraphs": [
+        "Algebra and Advanced Math each contain ten questions. Data Analysis and Geometry each contain five. Shorter domains are particularly sensitive to the choice of questions.",
+        "Compare groups on the same domain, then inspect its tasks. Differences between domains can reflect question difficulty and coverage; they are not differences on a common proficiency scale.",
+        "In Geometry, the assessment ranges from triangle angles to a circle with a constrained center. A single average cannot tell the department which of those demands is secure."
+      ],
+      "decision": "Select a small number of prerequisite skills for follow-up, using the question evidence and confirmed teaching sequence."
+    },
+    "teaching-priorities": {
+      "title": "Check geometric readiness at the transition.",
+      "lead": "The priority review pairs all five Geometry questions with two quadratic tasks. Darker cells mark lower accuracy and areas to examine first.",
+      "paragraphs": [
+        "In Algebra II, 62% answer Q17 on triangle angles correctly; 26% answer Q26 on a constrained circle correctly. These questions make different demands. Use explanations to identify the barrier rather than treating the gap as lost learning.",
+        "Q4 asks students to identify a quadratic from a table (63% correct in Algebra II). Q10 asks which equivalent form reveals a minimum (51%). The contrast supports checking how students connect representations and structure.",
+        "The follow-up tasks below are proposed checks, not diagnoses inferred from a wrong answer. Confirm content exposure before deciding on reteaching."
+      ],
+      "decision": "Agree on success criteria, teach to the observed need, and use fresh tasks to decide whether support should continue, change, or be reduced."
+    }
+  },
+  "actions": [
+    {
+      "title": "Review the Geometry class spread.",
+      "owner": "Department lead and Geometry team",
+      "action": "Compare incoming readiness, pacing, and opportunities to learn; then review a common task using the same rubric.",
+      "evidence": "Student explanations, taught-content records, and question-level results across the three Regular classes.",
+      "review": "At the next course-team review, identify which differences persist on common, recently taught content before changing provision.",
+      "route": "class-patterns"
+    },
+    {
+      "title": "Test the reasoning behind priority tasks.",
+      "owner": "Geometry and Algebra II teams",
+      "action": "Use short tasks on similarity, circle constraints, and equivalent quadratic forms; ask students to explain each representation.",
+      "evidence": "New task responses and worked explanations, scored against agreed criteria.",
+      "review": "At the end of the relevant teaching sequence, check transfer to a fresh context. Treat this as instructional follow-up, not an equated growth score.",
+      "route": "teaching-priorities"
+    },
+    {
+      "title": "Make track expectations explicit.",
+      "owner": "Department lead and course leads",
+      "action": "Define common prerequisites and Honors extension expectations; examine how current entry guidance reflects both.",
+      "evidence": "Shared essential tasks, extension work, teacher judgments, and the uncertainty in the benchmark comparisons.",
+      "review": "Before revising entry guidance, confirm that several sources of evidence support the proposed criteria. Do not use this benchmark as a placement cutoff.",
+      "route": "comparisons"
+    }
+  ],
+  "teaching_checks": [
+    [
+      "Q5 \u00b7 Similar triangles and area",
+      "Distinguish a linear scale factor from an area factor.",
+      "Ask for a diagram and an explanation of why the factor is squared."
+    ],
+    [
+      "Q14, Q17 \u00b7 Right triangles and angles",
+      "Check angle relationships and identification of the sides used in a sine ratio.",
+      "Use a rotated triangle and ask students to label the relevant sides before calculating."
+    ],
+    [
+      "Q22, Q26 \u00b7 Circle equations",
+      "Connect radius and center to the equation, then impose the extra constraint.",
+      "Ask students to explain each substitution before completing the calculation."
+    ],
+    [
+      "Q4, Q10 \u00b7 Quadratic representations",
+      "Connect a table and equivalent expressions to a function\u2019s features.",
+      "Compare equivalent forms and ask which makes the minimum visible, and why."
+    ]
+  ]
+}

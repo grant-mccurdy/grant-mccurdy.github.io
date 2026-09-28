@@ -1,11 +1,19 @@
-.PHONY: all check prose links inventory sitemap site-shell chat-ui assessment-core assessment-manifest accessibility-smoke external-links live-services tracking-contract visual-smoke dashboard-logic publish-hotel-comp check-hotel-comp
+.PHONY: all check prose links inventory sitemap site-shell profile-positioning chat-ui assessment-core assessment-manifest accessibility-smoke external-links live-services tracking-contract visual-smoke dashboard-logic
 
 PYTHON ?= python3
 NODE ?= $(shell command -v node 2>/dev/null || command -v node.exe 2>/dev/null || printf node)
 
 all: check
 
-check: prose links inventory sitemap site-shell chat-ui assessment-core assessment-manifest tracking-contract visual-smoke accessibility-smoke dashboard-logic
+check: prose links inventory sitemap site-shell profile-positioning chat-ui assessment-core assessment-manifest logos-alignment department-dashboard tracking-contract visual-smoke accessibility-smoke dashboard-logic
+
+.PHONY: logos-alignment department-dashboard
+logos-alignment:
+	$(PYTHON) scripts/sync_logos_report.py --check
+	$(PYTHON) scripts/test_logos_import.py
+
+department-dashboard:
+	"$(NODE)" scripts/department_dashboard_smoke.mjs
 
 prose:
 	$(PYTHON) scripts/check_prose_conventions.py
@@ -21,6 +29,9 @@ sitemap:
 
 site-shell:
 	"$(NODE)" scripts/check_site_shell.mjs
+
+profile-positioning:
+	"$(NODE)" scripts/check_profile_positioning.mjs
 
 chat-ui:
 	"$(NODE)" scripts/chat_ui_smoke.mjs
@@ -48,9 +59,3 @@ accessibility-smoke:
 
 dashboard-logic:
 	"$(NODE)" scripts/dashboard_logic_smoke.mjs
-
-publish-hotel-comp:
-	$(PYTHON) scripts/publish_hotel_comp_site.py
-
-check-hotel-comp:
-	$(PYTHON) scripts/publish_hotel_comp_site.py --check

@@ -4,7 +4,6 @@ import path from "node:path";
 const root = path.resolve(import.meta.dirname, "..");
 const allowedProjects = new Set([
   "portfolio",
-  "hotel-comp-policy-model",
   "assessment-intelligence",
   "content-intelligence",
   "education-data-simulation-engine",
@@ -45,8 +44,9 @@ const siteScript = fs.readFileSync(path.join(root, "assets", "js", "site.js"), "
 if (!siteScript.includes("portfolio-event-v1") || !siteScript.includes("/events")) {
   errors.push("Site event sender is missing the versioned Worker contract.");
 }
-if (!files.every((relative) => fs.readFileSync(path.join(root, relative), "utf8").includes("https://www.linkedin.com/in/grant-mccurdy/"))) {
-  errors.push("A curated static shell is missing the approved LinkedIn URL.");
+const contactFiles = ["index.html", "about.html", "evidence-methods.html"];
+if (!contactFiles.every((relative) => fs.readFileSync(path.join(root, relative), "utf8").includes("https://www.linkedin.com/in/grant-mccurdy/"))) {
+  errors.push("A career or contact surface is missing the approved LinkedIn URL.");
 }
 if (trackedLinks < 20) errors.push(`Expected at least 20 curated tracked links; found ${trackedLinks}.`);
 

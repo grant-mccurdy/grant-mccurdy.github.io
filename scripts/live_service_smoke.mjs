@@ -30,10 +30,6 @@ const checks = [
     },
   },
   {
-    name: "hotel decision desk",
-    run: () => verifyMarker("https://hotel-comp-decision-desk.grant-mccurdy.workers.dev/", "Hotel"),
-  },
-  {
     name: "assessment dashboard",
     run: () => verifyMarker("https://grant-mccurdy.github.io/dashboard/assessment.html", "Assessment"),
   },

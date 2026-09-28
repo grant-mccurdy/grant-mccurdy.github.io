@@ -28,11 +28,6 @@ if (helper) {
       patterns: [/\bdemos?\s+(directory|index|overview|page|list)\b/i, /\bworking\s+demos?\b/i]
     },
     {
-      title: "Hotel Comp Policy Model",
-      href: "projects/hotel-comp-policy-model.html",
-      patterns: [/\bhotel\s+comp\b/i, /\bservice[-\s]+recovery\b/i, /\bdecision\s+desk\b/i]
-    },
-    {
       title: "Assessment Analytics",
       href: "dashboard/assessment.html",
       patterns: [/\banalytics?\s+dashboard\b/i, /\bdashboard\b/i, /\binteractive\s+demo\b/i]
@@ -53,12 +48,12 @@ if (helper) {
       patterns: [/\beducation\s+data\s+simulation\s+engine\b/i, /\bsynthetic\s+education\s+data\b/i, /\bsimulation\s+foundation\b/i]
     },
     {
-      title: "Assessment Growth Analytics in R",
+      title: "Statistical Risk Modeling in R",
       href: "projects/statistical-risk-modeling-r.html",
-      patterns: [/\bassessment\s+growth\s+analytics\s+in\s+r\b/i, /\bexpected-growth\s+model/i, /\bsection\s+signal\b/i]
+      patterns: [/\bstatistical\s+risk\s+modeling\s+in\s+r\b/i, /\bassessment\s+growth\s+analytics\s+in\s+r\b/i, /\bexpected-growth\s+model/i, /\bsection\s+signal\b/i]
     },
     {
-      title: "Statistical Methods Evidence",
+      title: "Graduate Statistics Portfolio",
       href: "projects/graduate-statistics-portfolio.html",
       patterns: [/\bstatistical\s+methods\s+evidence\b/i, /\bgraduate\s+statistics\s+portfolio\b/i, /\bgraduate\s+statistics\s+work\b/i, /\bexam\s+1\b/i, /\bfinal\s+project\b/i]
     },

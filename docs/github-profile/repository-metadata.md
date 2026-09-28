@@ -6,7 +6,7 @@ This file records the intended public profile configuration. Applying these sett
 
 Suggested public bio:
 
-> Analytics and systems builder creating decision tools, validated data products, statistical models, and source-grounded AI workflows.
+> Mathematics and learning-systems leader building AI-enabled, data-informed systems for assessment, learning, measurement, and organizational decision-making.
 
 Suggested website:
 
@@ -22,65 +22,52 @@ https://www.linkedin.com/in/grant-mccurdy/
 
 Suggested pinned repository order:
 
-1. `hotel-comp-policy-model`
+1. `statistical-risk-modeling-r`
 2. `assessment-intelligence`
-3. `content-intelligence`
-4. `education-data-simulation-engine`
-5. `statistical-risk-modeling-r`
-6. `grant-mccurdy.github.io`
+3. `assessment-to-remediation-pipeline`
+4. `grant-mccurdy.github.io`
 
-The Graduate Statistics Portfolio remains linked as supporting methods evidence. The active workflow prototypes remain discoverable through the portal without displacing the four flagships. Repositories pending human QA are not included.
+Education Data Simulation Engine, Instructional AI Workflows, Content Intelligence, and Graduate Statistics Portfolio remain linked as supporting evidence rather than pinned featured work. Prototype labels and every Projects qualification remain explicit. Projects outside the current Projects evidence snapshot are excluded.
 
 ## Repository Settings
 
 ```bash
-gh repo edit grant-mccurdy/hotel-comp-policy-model \
-  --description "Explainable hotel service-recovery decision support with policy comparison, sensitivity analysis, and controlled shadow validation." \
-  --homepage "https://grant-mccurdy.github.io/projects/hotel-comp-policy-model/"
-
 gh repo edit grant-mccurdy/assessment-intelligence \
-  --description "SQL, R, and Python assessment analytics with reproducible extracts, reporting artifacts, and an interactive dashboard." \
+  --description "Governed dbt/DuckDB assessment analytics with parity-controlled extracts, privacy validation, stakeholder reports, and a hash-bound dashboard payload." \
   --homepage "https://grant-mccurdy.github.io/projects/assessment-intelligence.html"
 
 gh repo edit grant-mccurdy/content-intelligence \
-  --description "Artifact-to-RAG workflow for provenance-rich information objects, reviewed retrieval records, and cited answers." \
+  --description "Supporting artifact-to-RAG workflow preserving provenance, safety state, corpus fingerprints, and bounded citations through retrieval." \
   --homepage "https://grant-mccurdy.github.io/projects/content-intelligence.html"
 
 gh repo edit grant-mccurdy/education-data-simulation-engine \
-  --description "Validated synthetic education data and warehouse models for public-safe analytics products and workflow prototypes." \
+  --description "Supporting seven-year synthetic mathematics data foundation with cross-table validation, Canvas-style records, and a DuckDB star schema." \
   --homepage "https://grant-mccurdy.github.io/projects/education-data-simulation-engine.html"
 
 gh repo edit grant-mccurdy/statistical-risk-modeling-r \
-  --description "Public-safe R assessment growth analytics with expected-growth validation, adjusted section signals, and stakeholder reporting." \
+  --description "Public-safe R assessment-growth modeling with model-family search, temporal and holdout validation, decision guardrails, and stakeholder reporting." \
   --homepage "https://grant-mccurdy.github.io/projects/statistical-risk-modeling-r.html"
 
 gh repo edit grant-mccurdy/graduate-statistics-portfolio \
-  --description "Curated R methods portfolio featuring nonlinear models, GLMs, cross-validation, calibration, thresholds, and diagnostics." \
+  --description "Supporting public-safe R portfolio with nonlinear signal and clinical risk GLM analysis, validation, calibration, diagnostics, and cautious interpretation." \
   --homepage "https://grant-mccurdy.github.io/projects/graduate-statistics-portfolio.html"
 
 gh repo edit grant-mccurdy/instructional-ai-workflows \
-  --description "Human-reviewed workflow prototypes for rubric evidence, feedback drafting, reviewer packets, and remediation actions." \
+  --description "Supporting offline, deterministic, teacher-controlled rubric-to-feedback workflow with inspectable human-review boundaries." \
   --homepage "https://grant-mccurdy.github.io/instructional-ai-workflows/"
 
 gh repo edit grant-mccurdy/assessment-to-remediation-pipeline \
-  --description "Review-gated math diagnostic authoring, static previews, public-safe LMS payloads, and remediation workflow design." \
+  --description "Qualified 36-item assessment authoring-review-export prototype with advisory reviews and an offline Canvas New Quizzes payload." \
   --homepage "https://grant-mccurdy.github.io/assessment-to-remediation-pipeline/"
 
 gh repo edit grant-mccurdy/grant-mccurdy.github.io \
-  --description "Curated portfolio portal for decision support, analytics systems, statistical modeling, and source-grounded AI workflows." \
+  --description "Learning-systems portfolio for assessment, measurement, education data, analytics, and human-reviewed AI workflows." \
   --homepage "https://grant-mccurdy.github.io/"
 ```
 
 ## Topics
 
 ```bash
-gh repo edit grant-mccurdy/hotel-comp-policy-model \
-  --add-topic decision-support \
-  --add-topic hospitality-analytics \
-  --add-topic simulation \
-  --add-topic sensitivity-analysis \
-  --add-topic data-validation
-
 gh repo edit grant-mccurdy/assessment-intelligence \
   --add-topic assessment \
   --add-topic analytics \

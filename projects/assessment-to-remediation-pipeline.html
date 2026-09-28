@@ -4,15 +4,15 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Assessment-to-Remediation Pipeline | Grant McCurdy</title>
-    <meta name="description" content="Public-safe math diagnostic, review gate, Canvas dry-run export, feedback, remediation, and mastery-evidence project brief.">
+    <meta name="description" content="A qualified assessment-authoring prototype with 36 original math-readiness items, reviewer previews, advisory reviews, and an offline Canvas New Quizzes payload.">
     <meta property="og:title" content="Assessment-to-Remediation Pipeline | Grant McCurdy">
-    <meta property="og:description" content="A review-gated math diagnostic workflow with static previews, validation, and public-safe LMS payload evidence.">
+    <meta property="og:description" content="A 36-item math-readiness assessment-authoring MVP with previews, a review gate, and offline Canvas payload validation.">
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://grant-mccurdy.github.io/projects/assessment-to-remediation-pipeline.html">
     <meta property="og:image" content="https://grant-mccurdy.github.io/assets/images/social/assessment-to-remediation-pipeline.png">
     <meta name="twitter:card" content="summary_large_image">
     <link rel="canonical" href="https://grant-mccurdy.github.io/projects/assessment-to-remediation-pipeline.html">
-    <link rel="stylesheet" href="../assets/css/styles.css?v=20260717a">
+    <link rel="stylesheet" href="../assets/css/styles.css?v=20260816a">
   </head>
   <body>
     <header class="site-header compact" data-header>
@@ -25,10 +25,12 @@
           <span></span><span></span><span></span>
         </button>
         <div class="nav-links" data-nav-links>
-          <a href="../projects/index.html">Projects</a>
+          <a href="../index.html">Home</a>
+          <a href="index.html" aria-current="page">Systems</a>
           <a href="../demos/index.html">Demos</a>
-          <a href="https://github.com/grant-mccurdy">GitHub</a>
-          <a href="https://www.linkedin.com/in/grant-mccurdy/">LinkedIn</a>
+          <a href="../evidence-methods.html">Evidence &amp; Methods</a>
+          <a href="../about.html">About</a>
+          <a href="../about.html#contact">Contact</a>
         </div>
       </nav>
     </header>
@@ -37,7 +39,7 @@
       <section class="detail-hero">
         <p class="section-kicker">Project Brief</p>
         <h1>Assessment-to-Remediation Pipeline</h1>
-        <p>A public-safe prototype for connecting math diagnostic evidence to feedback, remediation, mastery checks, and decision-support reporting.</p>
+        <p>The current slice produces a 36-item math-readiness diagnostic, validates its structure, renders student and instructor previews, records GPT-5.5 advisory reviews, and builds an offline Canvas New Quizzes payload. Scoring, simulated attempts, remediation, reassessment, and mastery reporting remain planned.</p>
         <div class="hero-actions detail-actions">
           <a class="button primary" href="https://grant-mccurdy.github.io/assessment-to-remediation-pipeline/" data-track-project="assessment-to-remediation-pipeline" data-track-destination="live-demo">Open Review Packet</a>
           <a class="button outline" href="https://github.com/grant-mccurdy/assessment-to-remediation-pipeline" data-track-project="assessment-to-remediation-pipeline" data-track-destination="source">GitHub Repo</a>
@@ -48,20 +50,18 @@
       <section class="section-shell detail-grid">
         <div>
           <p class="section-kicker">Overview</p>
-          <h2>From diagnostic design to instructional action</h2>
-          <p>This project shows an inspectable workflow for moving from a standards-aligned math-readiness diagnostic to reviewable instructional artifacts. The current public MVP focuses on assessment authoring, preview generation, automated review, and offline Canvas New Quizzes payloads.</p>
+          <h2>The implemented authoring-review-export slice</h2>
+          <p>The inspectable workflow validates 36 original math-readiness items, renders reviewer previews, and produces an offline Canvas New Quizzes payload.</p>
           <p>The workflow is intentionally local, static, and reproducible. It does not claim to be a validated standardized test, a live LMS deployment, or a production Canvas integration.</p>
         </div>
         <div class="detail-panel">
           <h2>Current Artifacts</h2>
           <ul class="clean-list">
             <li>36 original math-readiness diagnostic items</li>
-            <li>Two 30-minute modules scaled to a one-hour form</li>
             <li>Student-facing HTML preview</li>
             <li>Instructor review HTML preview</li>
             <li>Automated review gate with passing public artifact set</li>
-            <li>GPT-5.5 item review marked <code>POLISH_RECOMMENDED</code></li>
-            <li>GPT-5.5 visual review with no presentation blocker</li>
+            <li>GPT-5.5 advisory item and visual review records</li>
             <li>Offline Canvas New Quizzes payload with 36 included items</li>
             <li>Public-safe project brief and reproducible review packet</li>
           </ul>
@@ -78,12 +78,12 @@
           <h2 id="remediation-proof-heading">What this project demonstrates</h2>
         </div>
         <article class="artifact">
-          <h3>Assessment architecture</h3>
-          <p>The item bank uses an original math-readiness blueprint with SAT Math domain proportions scaled to Algebra, Advanced Math, Problem-Solving and Data Analysis, and Geometry and Trigonometry.</p>
+          <h3>Assessment-authoring workflow</h3>
+          <p>The current slice validates 36 original math-readiness items, renders student and instructor previews, and produces an inspectable export artifact.</p>
         </article>
         <article class="artifact">
           <h3>Review-gated release</h3>
-          <p>Generated previews, deterministic checks, GPT-5.5 item review, GPT-5.5 visual review, and an automated review gate create a public-safe release boundary.</p>
+          <p>GPT-5.5 item and visual reviews remain advisory inside a human-review boundary before LMS export.</p>
         </article>
         <article class="artifact">
           <h3>Canvas dry-run boundary</h3>
@@ -91,12 +91,20 @@
         </article>
         <article class="artifact">
           <h3>Analytics-to-action design</h3>
-          <p>The planned next slice connects synthetic attempts to scoring, item/domain analysis, misconception tags, feedback, remediation recommendations, and mastery-check evidence.</p>
+          <p>Scoring, simulated attempts, remediation, reassessment, and mastery reporting remain planned.</p>
         </article>
         <article class="artifact">
           <h3>Public-safety discipline</h3>
           <p>The repo forbids real student data, parent data, school-private records, grades, submissions, rosters, emails, API keys, OAuth tokens, and copied commercial assessment items.</p>
         </article>
+      </section>
+
+      <section class="section-shell proof-qualification" aria-labelledby="remediation-qualification-heading">
+        <div class="detail-panel">
+          <p class="section-kicker">Projects Qualification</p>
+          <h2 id="remediation-qualification-heading">Featured project · prototype claims · qualified use</h2>
+          <p>Strong visual and workflow story if explicitly framed as the implemented authoring-review-export slice. Accessibility and clean demo verification should be completed before a high-stakes interview walkthrough.</p>
+        </div>
       </section>
 
       <section class="intro-band" aria-labelledby="remediation-safety-heading">
@@ -110,8 +118,8 @@
       </section>
     </main>
     <footer class="site-footer">
-      <div class="footer-shell"><p>&copy; <span data-year></span> Grant McCurdy</p><div class="footer-links"><a href="../projects/index.html">Projects</a><a href="../demos/index.html">Demos</a><a href="https://github.com/grant-mccurdy">GitHub</a><a href="https://www.linkedin.com/in/grant-mccurdy/">LinkedIn</a></div></div>
+      <div class="footer-shell"><p>&copy; <span data-year></span> Grant McCurdy</p><div class="footer-links"><a href="../index.html">Home</a><a href="index.html">Systems</a><a href="../demos/index.html">Demos</a><a href="../evidence-methods.html">Evidence &amp; Methods</a><a href="../about.html">About</a><a href="../about.html#contact">Contact</a></div></div>
     </footer>
-    <script src="../assets/js/site.js?v=20260720b"></script>
+    <script src="../assets/js/site.js?v=20260816a"></script>
   </body>
 </html>

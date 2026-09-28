@@ -76,18 +76,19 @@ if (navLinks) {
 
   const currentPath = window.location.pathname.replace(/\/$/, "/index.html");
   navLinks.querySelectorAll("a").forEach((link) => {
+    link.removeAttribute("aria-current");
     const target = new URL(link.href, window.location.href);
     const targetPath = target.pathname.replace(/\/$/, "/index.html");
     const isProjectPage = targetPath.endsWith("/projects/index.html") && currentPath.includes("/projects/");
     const isDemoPage =
       targetPath.endsWith("/demos/index.html") &&
       (currentPath.includes("/demos/") ||
-        currentPath.endsWith("/dashboard/assessment.html") ||
+        currentPath.includes("/dashboard/") ||
         currentPath.endsWith("/data-lab.html"));
     const isCurrentPage =
       target.origin === window.location.origin &&
       targetPath === currentPath &&
-      (!target.hash || target.hash === window.location.hash);
+      (target.hash ? target.hash === window.location.hash : !window.location.hash);
     if (isProjectPage || isDemoPage || isCurrentPage) link.setAttribute("aria-current", "page");
   });
 }

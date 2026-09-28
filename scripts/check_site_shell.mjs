@@ -3,8 +3,9 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const expectedLabels = ["Projects", "Demos", "GitHub", "LinkedIn"];
+const expectedLabels = ["Home", "Systems", "Demos", "Evidence & Methods", "About", "Contact"];
 const errors = [];
+const decodeLabel = (value) => value.replaceAll("&amp;", "&").trim();
 
 const htmlFiles = [];
 const visit = (directory) => {
@@ -34,13 +35,13 @@ for (const file of htmlFiles) {
   }
 
   const nav = html.match(/<div class="nav-links" data-nav-links>([\s\S]*?)<\/div>/)?.[1] || "";
-  const navLabels = [...nav.matchAll(/<a\b[^>]*>([^<]+)<\/a>/g)].map((match) => match[1].trim());
+  const navLabels = [...nav.matchAll(/<a\b[^>]*>([^<]+)<\/a>/g)].map((match) => decodeLabel(match[1]));
   if (JSON.stringify(navLabels) !== JSON.stringify(expectedLabels)) {
     errors.push(`${file.relative}: primary navigation must be ${expectedLabels.join(", ")}.`);
   }
 
   const footer = html.match(/<footer class="site-footer">([\s\S]*?)<\/footer>/)?.[1] || "";
-  const footerLabels = [...footer.matchAll(/<a\b[^>]*>([^<]+)<\/a>/g)].map((match) => match[1].trim());
+  const footerLabels = [...footer.matchAll(/<a\b[^>]*>([^<]+)<\/a>/g)].map((match) => decodeLabel(match[1]));
   if (JSON.stringify(footerLabels) !== JSON.stringify(expectedLabels)) {
     errors.push(`${file.relative}: footer navigation must be ${expectedLabels.join(", ")}.`);
   }

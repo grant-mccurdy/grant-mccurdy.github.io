@@ -1,113 +1,126 @@
 {
   "purpose": "Public-safe structured project map for the homepage portfolio helper.",
   "site": {
-    "title": "Grant McCurdy Systems Portfolio",
+    "title": "Grant McCurdy Learning Systems Portfolio",
     "url": "https://grant-mccurdy.github.io/",
-    "summary": "A curated public portfolio for decision support, analytics products, validated data systems, statistical modeling, and source-grounded AI workflows."
+    "summary": "A problem-led public portfolio for assessment, measurement, learning analytics, education data systems, human-reviewed AI workflows, and technical implementation."
+  },
+  "campaignEvidence": {
+    "contract": "portfolio-proof.v1",
+    "producer": "projects",
+    "generatedAt": "2026-08-17T00:13:15.434Z",
+    "sourceFingerprint": "75479d72822392455359e9517c0e2751d36256044adfb6cc5ccf956d7cb30566",
+    "selectionSha256": "29abc0e9a3b07916348cffb27ed2b9f5e6ee7a2a3e9acfe1ae4d45dc12ee5808",
+    "projectCount": 7,
+    "claimCount": 14,
+    "featuredProjectIds": [
+      "statistical-risk-modeling-r",
+      "assessment-intelligence",
+      "assessment-to-remediation-pipeline"
+    ],
+    "supportingProjectIds": [
+      "education-data-simulation-engine",
+      "instructional-ai-workflows",
+      "content-intelligence",
+      "graduate-statistics-portfolio"
+    ],
+    "policy": "Use only the fourteen qualification-bound claims below for reusable 2026 Q3 campaign technical statements. Preserve project-level featured or supporting eligibility and each exact qualification."
   },
   "projects": [
     {
-      "id": "hotel-comp-policy-model",
-      "title": "Hotel Comp Policy Model",
-      "url": "https://grant-mccurdy.github.io/projects/hotel-comp-policy-model.html",
-      "summary": "Explainable luxury-hospitality service-recovery prototype balancing guest recovery, manager judgment, operational constraints, and comp cost.",
-      "bestFor": ["hospitality analytics", "decision support", "policy simulation", "data reconciliation", "explainability", "sensitivity analysis"],
-      "evidence": ["interactive scenario explorer", "430-case synthetic policy audit", "recommendation stability tests", "Snowflake reconciliation", "public property context"],
-      "boundary": "Uses synthetic hotel operating records and bounded public Santa Monica Proper context; it does not use or claim access to internal guest records, comp history, margins, inventory, or policy."
-    },
-    {
-      "id": "education-data-simulation-engine",
-      "title": "Education Data Simulation Engine",
-      "url": "https://grant-mccurdy.github.io/projects/education-data-simulation-engine.html",
-      "summary": "Public-safe simulation foundation for assessment analytics, LMS workflow prototyping, decision-support dashboards, and learning-systems development.",
-      "bestFor": ["data systems", "synthetic education data", "SQL-ready marts", "warehouse validation", "public-safety design"],
-      "evidence": ["seven-year synthetic school horizon", "DuckDB SQL warehouse", "star-schema marts", "20 / 20 validation checks passing", "Data Lab foundation"],
-      "boundary": "Uses synthetic generated records and aggregate diagnostics, not real students, LMS exports, private assessment artifacts, or credentials."
+      "id": "statistical-risk-modeling-r",
+      "title": "Statistical Risk Modeling in R",
+      "campaignEligibility": "featured",
+      "url": "https://grant-mccurdy.github.io/projects/statistical-risk-modeling-r.html",
+      "summary": "An R pipeline generates public-safe longitudinal assessment data, searches multiple model families, performs temporal and holdout validation, and renders analyst and executive decision-support artifacts.",
+      "claims": [
+        {"id": "srm-claim-1", "status": "prototype", "statement": "Built a public-safe R assessment-growth modeling workflow with model-family search, temporal validation, a locked holdout, and stakeholder-facing reporting."},
+        {"id": "srm-claim-2", "status": "prototype", "statement": "Designed decision guardrails that convert teacher, course, and section residuals into review priorities rather than automated evaluations."}
+      ],
+      "qualification": "Strongest campaign evidence for measurement, validation, and decision support. Public use should surface the below-target validity gates; an interview rebuild needs the reproducibility work item first."
     },
     {
       "id": "assessment-intelligence",
       "title": "Assessment Intelligence",
+      "campaignEligibility": "featured",
       "url": "https://grant-mccurdy.github.io/projects/assessment-intelligence.html",
-      "summary": "Assessment system work for SQL-backed extracts, analytics, reproducible R processing, dashboarding, diagnostics, and decision-support reporting.",
-      "bestFor": ["analytics products", "SQL extracts", "dashboards", "R reporting", "decision support"],
-      "evidence": ["hosted analytics dashboard", "five SQL-backed extract CSVs", "3,020 local DuckDB extract rows", "2,009 synthetic readiness records", "gradebook synthesis reports"],
-      "boundary": "Public artifacts exclude real student names, emails, IDs, grades, rosters, LMS exports, submissions, and private school reporting artifacts."
-    },
-    {
-      "id": "statistical-risk-modeling-r",
-      "title": "Assessment Growth Analytics in R",
-      "url": "https://grant-mccurdy.github.io/projects/statistical-risk-modeling-r.html",
-      "summary": "Public-safe R analytics project for BOY/EOY assessment growth, adjusted expected-growth modeling, section signal diagnostics, validation, and stakeholder decision support.",
-      "bestFor": ["statistical modeling", "R", "assessment growth", "section performance", "cross-validation", "executive decision support"],
-      "evidence": ["1,737 paired BOY/EOY records", "174 section-year groups", "readiness-augmented expected-growth model", "holdout RMSE 4.399", "holdout R-squared 0.181", "8 section-year groups above expected growth and 5 below", "model card and PDF report"],
-      "boundary": "Uses public-safe synthetic education assessment records only and is not intended for teacher evaluation, compensation, discipline, grading, student placement, or personnel decisions."
+      "summary": "The portfolio dashboard presents the same synthetic mathematics data, figures, and findings as the Logos department report. The public Assessment Intelligence repository retains the separate earlier SQL/dbt/DuckDB implementation; the proof claims below describe that earlier implementation.",
+      "claims": [
+        {"id": "ai-claim-1", "status": "qualified", "statement": "Designed a governed assessment analytics path from synthetic LMS-style warehouse records through dbt marts, parity gates, stakeholder reports, and a hash-bound dashboard payload."},
+        {"id": "ai-claim-2", "status": "qualified", "statement": "Implemented data-quality and disclosure guardrails that separate non-participation from achievement and suppress small cohorts from ranked findings."}
+      ],
+      "qualification": "Strongest education-data architecture candidate once the dbt check is relocatable. Static artifacts are reviewable now, but a live interview rebuild and public feature must use the repaired, release-synchronized commit."
     },
     {
       "id": "assessment-to-remediation-pipeline",
       "title": "Assessment-to-Remediation Pipeline",
+      "campaignEligibility": "featured",
       "url": "https://grant-mccurdy.github.io/projects/assessment-to-remediation-pipeline.html",
-      "summary": "Inspectable prototype connecting math diagnostic evidence to feedback, remediation, mastery checks, and decision-support reporting.",
-      "bestFor": ["assessment design", "workflow automation", "review gates", "Canvas dry-run payloads", "remediation"],
-      "evidence": ["36 original math-readiness diagnostic items", "student and instructor previews", "automated review gate", "offline Canvas New Quizzes payload"],
-      "boundary": "A public-safe assessment-authoring and review-gate MVP, not a validated standardized test, live LMS deployment, or production Canvas integration."
+      "summary": "The current slice produces a 36-item math-readiness diagnostic, validates its structure, renders student and instructor previews, records GPT-5.5 advisory reviews, and builds an offline Canvas New Quizzes payload. Scoring, simulated attempts, remediation, reassessment, and mastery reporting remain planned.",
+      "claims": [
+        {"id": "atr-claim-1", "status": "prototype", "statement": "Implemented an inspectable assessment-authoring workflow that validates 36 original math-readiness items, renders reviewer previews, and produces an offline Canvas New Quizzes payload."},
+        {"id": "atr-claim-2", "status": "prototype", "statement": "Designed a human-review boundary around AI-assisted item and visual review before LMS export."}
+      ],
+      "qualification": "Strong visual and workflow story if explicitly framed as the implemented authoring-review-export slice. Accessibility and clean demo verification should be completed before a high-stakes interview walkthrough."
+    },
+    {
+      "id": "education-data-simulation-engine",
+      "title": "Education Data Simulation Engine",
+      "campaignEligibility": "supporting",
+      "url": "https://grant-mccurdy.github.io/projects/education-data-simulation-engine.html",
+      "summary": "Generates a coherent seven-year synthetic mathematics department, validates cross-table invariants, builds Canvas-style records and a DuckDB star schema, and exports marts consumed by Assessment Intelligence.",
+      "claims": [
+        {"id": "edse-claim-1", "status": "qualified", "statement": "Built a deterministic synthetic education-data foundation with nested school structure, Canvas-style records, longitudinal assessment data, and a local analytics warehouse."},
+        {"id": "edse-claim-2", "status": "qualified", "statement": "Implemented validation that reconciles enrollment, assessment, non-participation, and LMS-style records before downstream reporting."}
+      ],
+      "qualification": "Strong supporting architecture evidence and the privacy foundation for Assessment Intelligence; the local commit is demo-ready, but public featuring must wait for separately approved remote release synchronization."
     },
     {
       "id": "instructional-ai-workflows",
       "title": "Instructional AI Workflows",
+      "campaignEligibility": "supporting",
       "url": "https://grant-mccurdy.github.io/projects/instructional-ai-workflows.html",
-      "summary": "LMS-agnostic workflow prototypes for rubric-defined evaluation, draft feedback generation, human review, and student-facing artifacts.",
-      "bestFor": ["human-reviewed AI", "feedback workflows", "rubric evidence", "teacher review", "remediation planning"],
-      "evidence": ["Precalculus FRQ synthetic rubric demo", "three synthetic learner evaluations", "teacher reviewer packet", "reviewed feedback", "remediation planning output"],
-      "boundary": "Uses synthetic submissions, synthetic rubrics, fake course identifiers, and public-safe sample outputs."
+      "summary": "A synthetic Precalculus free-response demo converts teacher-defined rubrics and observations into structured evaluations, a reviewer packet, student-facing feedback, and remediation plans without grading raw work automatically.",
+      "claims": [
+        {"id": "iaw-claim-1", "status": "prototype", "statement": "Built a teacher-controlled rubric-to-feedback workflow that makes evaluation evidence, review status, and remediation outputs inspectable."},
+        {"id": "iaw-claim-2", "status": "prototype", "statement": "Demonstrated an offline, deterministic human-in-the-loop design that requires no live LMS or AI service."}
+      ],
+      "qualification": "Clear supporting example of governed AI-assisted instructional workflow design; less technically deep than the top three campaign projects."
     },
     {
       "id": "content-intelligence",
       "title": "Content Intelligence",
+      "campaignEligibility": "supporting",
       "url": "https://grant-mccurdy.github.io/projects/content-intelligence.html",
-      "summary": "Pipeline for converting unstructured content into source-bounded information objects, searchable corpora, transcript enrichment packets, and source-grounded reports.",
-      "bestFor": ["RAG", "source grounding", "corpus construction", "OCR cleanup", "transcript enrichment", "cited reporting"],
-      "evidence": ["20 citation-preserving corpus segments", "9 normalized artifacts", "checksum-backed manifests", "keyword retrieval", "cited sample report", "AI-readable method pack"],
-      "boundary": "Public examples use synthetic, sanitized, public-domain, or clearly licensed source material."
+      "summary": "The repository normalizes synthetic text, transcript-derived, OCR-derived, and Markdown material into provenance-rich objects, gates retrieval inputs for safety, produces local lexical/vector records, and exposes portable hybrid retrieval logic used by a public cited-answer demo.",
+      "claims": [
+        {"id": "ci-claim-1", "status": "prototype", "statement": "Built an artifact-to-RAG pipeline that preserves source identity, checksums, citations, safety state, and corpus fingerprints through retrieval."},
+        {"id": "ci-claim-2", "status": "prototype", "statement": "Implemented privacy and answer-grounding gates that block unreviewed inputs and require cited, bounded responses."}
+      ],
+      "qualification": "Strong general AI systems alternate with unusually clear provenance and governance evidence; less education-specific than the top three."
     },
     {
-      "id": "education-data-lab",
-      "title": "Education Data Lab",
-      "url": "https://grant-mccurdy.github.io/data-lab.html",
-      "summary": "Structured analytic chat over a public-safe synthetic education warehouse.",
-      "bestFor": ["statistical questions", "tables", "charts", "synthetic warehouse analysis", "follow-up analytic questions"],
-      "evidence": ["Cloudflare Worker analytics route", "D1-backed synthetic education marts", "rendered tables, metrics, notes, and charts"],
-      "boundary": "For synthetic education analytics only; not a source for private student data or private school records."
-    },
-    {
-      "id": "assessment-analytics",
-      "title": "Assessment Analytics",
-      "url": "https://grant-mccurdy.github.io/dashboard/assessment.html",
-      "summary": "Static GitHub Pages dashboard over public-safe synthetic warehouse extracts with browser-side aggregation, SVG charts, and filters.",
-      "bestFor": ["interactive demo", "dashboarding", "visual analytics", "assessment reporting", "front-end data product"],
-      "evidence": ["course, grade, teacher, section, growth, completion, skill, and distribution views"],
-      "boundary": "Uses static public-safe synthetic extract data."
+      "id": "graduate-statistics-portfolio",
+      "title": "Graduate Statistics Portfolio",
+      "campaignEligibility": "supporting",
+      "url": "https://grant-mccurdy.github.io/projects/graduate-statistics-portfolio.html",
+      "summary": "Public-safe scripts regenerate a nonlinear signal analysis and a clinical risk GLM analysis, including candidate searches, cross-validation, diagnostics, calibration, threshold tables, figures, and narrative summaries.",
+      "claims": [
+        {"id": "gsp-claim-1", "status": "qualified", "statement": "Curated and rebuilt graduate statistical work as public-safe R pipelines with model comparison, cross-validation, calibration, diagnostics, and cautious interpretation."},
+        {"id": "gsp-claim-2", "status": "qualified", "statement": "Demonstrated both predictive-model evaluation and nonlinear model-family search using reproducible reviewer artifacts."}
+      ],
+      "qualification": "Strong supporting credential evidence for statistical depth and reproducibility; local artifacts are demo-ready, but public featuring must wait for separately approved synchronization of the ahead-of-remote commit."
     }
   ],
+  "analyticSurfaces": [
+    {"id": "assessment-analytics", "title": "Assessment Analytics", "url": "https://grant-mccurdy.github.io/dashboard/assessment.html", "boundary": "Logos synthetic report: 500 students, 21 classes, one 30-question administration. Separate from the longitudinal warehouse.", "reportUrl": "https://logoseducation.group/sample-report/", "assessmentUrl": "https://logoseducation.group/assessment-preview/"},
+    {"id": "education-data-lab", "title": "Education Data Lab", "url": "https://grant-mccurdy.github.io/data-lab.html", "boundary": "Read-only analysis over a public-safe synthetic education warehouse."}
+  ],
   "routingRules": [
-    {
-      "intent": "visitor wants a quick overview",
-      "recommend": ["hotel-comp-policy-model", "assessment-analytics", "education-data-lab", "content-intelligence"]
-    },
-    {
-      "intent": "visitor asks about statistics or computation over education data",
-      "recommend": ["education-data-lab"]
-    },
-    {
-      "intent": "visitor asks about Grant's technical strengths",
-      "recommend": ["hotel-comp-policy-model", "assessment-intelligence", "statistical-risk-modeling-r", "education-data-simulation-engine", "content-intelligence", "instructional-ai-workflows"]
-    },
-    {
-      "intent": "visitor asks about R, statistics, validation, expected growth, or section performance models",
-      "recommend": ["statistical-risk-modeling-r", "assessment-intelligence", "assessment-analytics"]
-    },
-    {
-      "intent": "visitor asks about hospitality, service recovery, business decisions, explainability, or policy simulation",
-      "recommend": ["hotel-comp-policy-model"]
-    }
+    {"intent": "visitor wants the strongest campaign evidence", "recommend": ["statistical-risk-modeling-r", "assessment-intelligence", "assessment-to-remediation-pipeline"]},
+    {"intent": "visitor asks about statistics, measurement, validation, or decision support", "recommend": ["statistical-risk-modeling-r", "assessment-intelligence", "assessment-analytics"]},
+    {"intent": "visitor asks about education data systems", "recommend": ["assessment-intelligence", "education-data-simulation-engine", "education-data-lab"]},
+    {"intent": "visitor asks about AI-assisted learning workflows", "recommend": ["assessment-to-remediation-pipeline", "instructional-ai-workflows"]},
+    {"intent": "visitor asks about RAG or source provenance", "recommend": ["content-intelligence"]}
   ]
 }

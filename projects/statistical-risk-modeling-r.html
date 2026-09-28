@@ -3,16 +3,16 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Assessment Growth Analytics in R | Grant McCurdy</title>
-    <meta name="description" content="Public-safe R analytics project for BOY/EOY assessment growth, adjusted section signals, validation diagnostics, and stakeholder reporting.">
-    <meta property="og:title" content="Assessment Growth Analytics in R | Grant McCurdy">
-    <meta property="og:description" content="Expected-growth modeling, temporal validation, adjusted section signals, and stakeholder reporting over public-safe data.">
+    <title>Statistical Risk Modeling in R | Grant McCurdy</title>
+    <meta name="description" content="Public-safe R assessment-growth modeling with model-family search, temporal and holdout validation, decision guardrails, and stakeholder reporting.">
+    <meta property="og:title" content="Statistical Risk Modeling in R | Grant McCurdy">
+    <meta property="og:description" content="Featured measurement evidence with explicit validity and reproducibility qualifications.">
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://grant-mccurdy.github.io/projects/statistical-risk-modeling-r.html">
     <meta property="og:image" content="https://grant-mccurdy.github.io/assets/images/social/statistical-risk-modeling-r.png">
     <meta name="twitter:card" content="summary_large_image">
     <link rel="canonical" href="https://grant-mccurdy.github.io/projects/statistical-risk-modeling-r.html">
-    <link rel="stylesheet" href="../assets/css/styles.css?v=20260717a">
+    <link rel="stylesheet" href="../assets/css/styles.css?v=20260816a">
   </head>
   <body>
     <header class="site-header compact" data-header>
@@ -25,10 +25,12 @@
           <span></span><span></span><span></span>
         </button>
         <div class="nav-links" data-nav-links>
-          <a href="../projects/index.html">Projects</a>
+          <a href="../index.html">Home</a>
+          <a href="index.html" aria-current="page">Systems</a>
           <a href="../demos/index.html">Demos</a>
-          <a href="https://github.com/grant-mccurdy">GitHub</a>
-          <a href="https://www.linkedin.com/in/grant-mccurdy/">LinkedIn</a>
+          <a href="../evidence-methods.html">Evidence &amp; Methods</a>
+          <a href="../about.html">About</a>
+          <a href="../about.html#contact">Contact</a>
         </div>
       </nav>
     </header>
@@ -36,8 +38,8 @@
     <main class="detail-main">
       <section class="detail-hero">
         <p class="section-kicker">Project Brief</p>
-        <h1>Assessment Growth Analytics in R</h1>
-        <p>Public-safe education analytics project that evaluates BOY-to-EOY assessment growth and identifies section-level improvement signals after accounting for starting performance, readiness, attendance, course track, grade level, and school-year context.</p>
+        <h1>Statistical Risk Modeling in R</h1>
+        <p>An R pipeline generates public-safe longitudinal assessment data, searches multiple model families, performs temporal and holdout validation, and renders analyst and executive decision-support artifacts.</p>
         <div class="hero-actions detail-actions">
           <a class="button primary" href="https://github.com/grant-mccurdy/statistical-risk-modeling-r">GitHub Repo</a>
           <a class="button outline" href="https://github.com/grant-mccurdy/statistical-risk-modeling-r/blob/main/reports/assessment_growth_section_performance_report.pdf">PDF Report</a>
@@ -48,21 +50,17 @@
       <section class="section-shell detail-grid">
         <div>
           <p class="section-kicker">Growth Analytics Surface</p>
-          <h2>Adjusted section signals, decision support</h2>
-          <p>The project uses base R to generate public-safe assessment data, compare expected-growth model families, validate holdout performance, and translate section-level growth signals into instructional review guidance.</p>
+          <h2>Measurement evidence with decision guardrails</h2>
+          <p>The project implements a public-safe R assessment-growth modeling workflow with model-family search, temporal validation, a locked holdout, and stakeholder-facing reporting.</p>
         </div>
         <div class="detail-panel">
           <h2>Evidence Packet</h2>
           <ul class="clean-list">
-            <li>1,737 paired BOY/EOY assessment records</li>
-            <li>174 section-year groups</li>
-            <li>Readiness-augmented expected-growth model</li>
-            <li>Context-only, linear, quadratic, piecewise, readiness, and spline candidates</li>
-            <li>Repeated 5-fold cross-validation with 6 repeats</li>
-            <li>Holdout RMSE, MAE, and R-squared diagnostics</li>
-            <li>Reliability-weighted section signal flags</li>
-            <li>Teacher/course summary views for instructional review</li>
-            <li>PDF report, executive brief, model card, methodology, and public-safety notes</li>
+            <li>SHA-256-verified README and model card</li>
+            <li>Model-family search with temporal validation and a locked holdout</li>
+            <li>Verified final-metrics and validity-target reports</li>
+            <li>Teacher, course, and section residuals framed as review priorities</li>
+            <li>Analyst and executive decision-support artifacts</li>
           </ul>
         </div>
       </section>
@@ -73,28 +71,28 @@
           <h2 id="risk-proof-heading">What reviewers can inspect</h2>
         </div>
         <article class="artifact">
-          <h3>Model Selection</h3>
-          <p>Candidate expected-growth models are compared with repeated cross-validation, with the readiness-augmented model selected as the simplest non-benchmark option within one standard error of the best RMSE.</p>
+          <h3>Modeling workflow</h3>
+          <p>Model-family search, temporal validation, and a locked holdout make the assessment-growth workflow inspectable.</p>
         </article>
         <article class="artifact">
-          <h3>Decision Metrics</h3>
-          <p>The evidence packet reports average raw BOY/EOY gain of 5.72 points across 1,737 paired records, holdout RMSE 4.399, holdout R-squared 0.181, and 8 section-year groups above expected growth with 5 below expected growth.</p>
+          <h3>Validity gates</h3>
+          <p>The public presentation surfaces that the present validity gates are below target rather than treating a completed pipeline as a validated operational model.</p>
         </article>
         <article class="artifact">
-          <h3>Growth Diagnostics</h3>
-          <p>The report compares raw gains with adjusted gains, reviews residual diagnostics, checks section sizes, and separates pattern-finding views from personnel decisions.</p>
+          <h3>Decision guardrails</h3>
+          <p>Teacher, course, and section residuals become review priorities rather than automated evaluations.</p>
         </article>
         <article class="artifact">
-          <h3>Public-Safe R Pipeline</h3>
-          <p>The repo uses synthetic records only, requires no packages or network access, and includes validation scripts that check for private-source leakage.</p>
+          <h3>Public-safe evidence</h3>
+          <p>The reviewed evidence includes documentation, a model card, final metrics, validity targets, and a Makefile at the bound repository revision.</p>
         </article>
       </section>
 
       <section class="section-shell detail-grid">
         <div>
           <p class="section-kicker">Inspect In Source Repo</p>
-          <h2>Reproducible R evidence path</h2>
-          <p>The project is intentionally lightweight: R scripts generate data, fit models, render reports, build figures, and validate the public boundary from a `make all` pipeline.</p>
+          <h2>Inspect the bound R evidence path</h2>
+          <p>The repository exposes scripts, reports, a model card, methodology, and public-safety notes. A high-stakes interview rebuild needs the reproducibility work item completed first.</p>
         </div>
         <div class="detail-panel">
           <h2>Open Artifacts</h2>
@@ -109,6 +107,14 @@
         </div>
       </section>
 
+      <section class="section-shell proof-qualification" aria-labelledby="risk-qualification-heading">
+        <div class="detail-panel">
+          <p class="section-kicker">Projects Qualification</p>
+          <h2 id="risk-qualification-heading">Featured project · prototype claims · qualified use</h2>
+          <p>Strongest campaign evidence for measurement, validation, and decision support. Public use should surface the below-target validity gates; an interview rebuild needs the reproducibility work item first.</p>
+        </div>
+      </section>
+
       <section class="intro-band" aria-labelledby="risk-boundary-heading">
         <div class="section-shell intro-grid">
           <div>
@@ -120,8 +126,8 @@
       </section>
     </main>
     <footer class="site-footer">
-      <div class="footer-shell"><p>&copy; <span data-year></span> Grant McCurdy</p><div class="footer-links"><a href="../projects/index.html">Projects</a><a href="../demos/index.html">Demos</a><a href="https://github.com/grant-mccurdy">GitHub</a><a href="https://www.linkedin.com/in/grant-mccurdy/">LinkedIn</a></div></div>
+      <div class="footer-shell"><p>&copy; <span data-year></span> Grant McCurdy</p><div class="footer-links"><a href="../index.html">Home</a><a href="index.html">Systems</a><a href="../demos/index.html">Demos</a><a href="../evidence-methods.html">Evidence &amp; Methods</a><a href="../about.html">About</a><a href="../about.html#contact">Contact</a></div></div>
     </footer>
-    <script src="../assets/js/site.js?v=20260720b"></script>
+    <script src="../assets/js/site.js?v=20260816a"></script>
   </body>
 </html>

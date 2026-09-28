@@ -4,15 +4,15 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Instructional AI Workflows | Grant McCurdy</title>
-    <meta name="description" content="Public-safe instructional AI workflow project brief.">
+    <meta name="description" content="Teacher-controlled instructional AI workflow prototypes with synthetic inputs, pre-authored teacher observations, and human review.">
     <meta property="og:title" content="Instructional AI Workflows | Grant McCurdy">
-    <meta property="og:description" content="Teacher-controlled rubric evidence, draft feedback, human review, and student-safe release artifacts.">
+    <meta property="og:description" content="Teacher-controlled workflow prototypes that separate private evidence, draft artifacts, human review, and student-facing outputs.">
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://grant-mccurdy.github.io/projects/instructional-ai-workflows.html">
     <meta property="og:image" content="https://grant-mccurdy.github.io/assets/images/social/instructional-ai-workflows.png">
     <meta name="twitter:card" content="summary_large_image">
     <link rel="canonical" href="https://grant-mccurdy.github.io/projects/instructional-ai-workflows.html">
-    <link rel="stylesheet" href="../assets/css/styles.css?v=20260717a">
+    <link rel="stylesheet" href="../assets/css/styles.css?v=20260816a">
   </head>
   <body>
     <header class="site-header compact" data-header>
@@ -25,10 +25,12 @@
           <span></span><span></span><span></span>
         </button>
         <div class="nav-links" data-nav-links>
-          <a href="../projects/index.html">Projects</a>
+          <a href="../index.html">Home</a>
+          <a href="index.html" aria-current="page">Systems</a>
           <a href="../demos/index.html">Demos</a>
-          <a href="https://github.com/grant-mccurdy">GitHub</a>
-          <a href="https://www.linkedin.com/in/grant-mccurdy/">LinkedIn</a>
+          <a href="../evidence-methods.html">Evidence &amp; Methods</a>
+          <a href="../about.html">About</a>
+          <a href="../about.html#contact">Contact</a>
         </div>
       </nav>
     </header>
@@ -37,7 +39,7 @@
       <section class="detail-hero">
         <p class="section-kicker">Project Brief</p>
         <h1>Instructional AI Workflows</h1>
-        <p>LMS-agnostic workflow prototypes for rubric-defined evaluation, draft feedback generation, human review, and student-facing artifacts.</p>
+        <p>A synthetic Precalculus free-response demo converts teacher-defined rubrics and observations into structured evaluations, a reviewer packet, student-facing feedback, and remediation plans without grading raw work automatically.</p>
         <div class="hero-actions detail-actions">
           <a class="button primary" href="https://grant-mccurdy.github.io/instructional-ai-workflows/" data-track-project="instructional-ai-workflows" data-track-destination="live-demo">Open Reviewer Demo</a>
           <a class="button outline" href="https://github.com/grant-mccurdy/instructional-ai-workflows" data-track-project="instructional-ai-workflows" data-track-destination="source">GitHub Repo</a>
@@ -48,14 +50,15 @@
         <div>
           <p class="section-kicker">Overview</p>
           <h2>Teacher-controlled AI assistance</h2>
-          <p>The project frames AI as workflow support, not automatic grading: teacher-defined rubric -> structured evaluation -> draft feedback -> human review -> student-facing feedback, review, or remediation artifact.</p>
+          <p>The teacher-controlled rubric-to-feedback workflow makes evaluation evidence, review status, and remediation outputs inspectable. Its offline, deterministic human-in-the-loop design requires no live LMS or AI service.</p>
+          <p>The public demo uses synthetic inputs and pre-authored teacher observations; it does not automatically grade raw student work.</p>
         </div>
         <div class="detail-panel">
           <h2>Current Artifacts</h2>
           <ul class="clean-list">
             <li>Precalculus FRQ synthetic rubric demo</li>
-            <li>Three synthetic learner evaluations</li>
-            <li>Two review-required feedback examples</li>
+            <li>Synthetic learner inputs</li>
+            <li>Pre-authored teacher observations</li>
             <li>Structured evaluation JSON</li>
             <li>Teacher reviewer packet</li>
             <li>Reviewed student-facing feedback</li>
@@ -83,12 +86,12 @@
         <article class="case-step">
           <span>02</span>
           <h3>Approach</h3>
-          <p>JSON rubrics and synthetic responses feed deterministic workflow logic that separates evidence capture, draft generation, teacher review, release language, and remediation planning.</p>
+          <p>JSON rubrics, synthetic responses, and pre-authored teacher observations feed deterministic workflow logic that separates evidence capture, draft generation, teacher review, release language, and remediation planning.</p>
         </article>
         <article class="case-step">
           <span>03</span>
           <h3>Result</h3>
-          <p>The Precalculus demo produces three synthetic evaluations, two review-required cases, a reviewer packet, approved feedback, and a rubric-organized remediation plan.</p>
+          <p>The Precalculus demo produces structured evaluation artifacts, review-required cases, a reviewer packet, approved feedback, and a rubric-organized remediation plan from synthetic inputs and pre-authored teacher observations.</p>
         </article>
         <article class="case-step">
           <span>04</span>
@@ -108,7 +111,7 @@
         </article>
         <article class="artifact">
           <h3>Structured evaluation</h3>
-          <p>The demo produces rubric-level evidence, scores, private teacher notes, and review-required flags for three synthetic learner examples.</p>
+          <p>The demo organizes pre-authored teacher observations into rubric-level evidence, scores, private teacher notes, and review-required flags for synthetic learner examples.</p>
         </article>
         <article class="artifact">
           <h3>Reviewed output</h3>
@@ -118,6 +121,14 @@
           <h3>Remediation planning</h3>
           <p>The demo groups rubric evidence into teacher-facing next steps for model setup, solving process, and context interpretation.</p>
         </article>
+      </section>
+
+      <section class="section-shell proof-qualification" aria-labelledby="workflow-qualification-heading">
+        <div class="detail-panel">
+          <p class="section-kicker">Projects Qualification</p>
+          <h2 id="workflow-qualification-heading">Supporting project · prototype claims · qualified use</h2>
+          <p>Clear supporting example of governed AI-assisted instructional workflow design; less technically deep than the top three campaign projects.</p>
+        </div>
       </section>
 
       <section class="intro-band" aria-labelledby="workflow-safety-heading">
@@ -131,8 +142,8 @@
       </section>
     </main>
     <footer class="site-footer">
-      <div class="footer-shell"><p>&copy; <span data-year></span> Grant McCurdy</p><div class="footer-links"><a href="index.html">Projects</a><a href="../demos/index.html">Demos</a><a href="https://github.com/grant-mccurdy">GitHub</a><a href="https://www.linkedin.com/in/grant-mccurdy/">LinkedIn</a></div></div>
+      <div class="footer-shell"><p>&copy; <span data-year></span> Grant McCurdy</p><div class="footer-links"><a href="../index.html">Home</a><a href="index.html">Systems</a><a href="../demos/index.html">Demos</a><a href="../evidence-methods.html">Evidence &amp; Methods</a><a href="../about.html">About</a><a href="../about.html#contact">Contact</a></div></div>
     </footer>
-    <script src="../assets/js/site.js?v=20260720b"></script>
+    <script src="../assets/js/site.js?v=20260816a"></script>
   </body>
 </html>
