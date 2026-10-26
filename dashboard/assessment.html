@@ -4,18 +4,20 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Assessment Analytics | Grant McCurdy</title>
-  <meta name="description" content="Explore the same 500-student synthetic mathematics assessment, figures, and teaching priorities as the Logos department report.">
+  <meta name="description" content="Interactive course, class, content-area, and question analysis of the synthetic Logos mathematics assessment.">
   <meta property="og:title" content="Assessment Analytics | Grant McCurdy">
-  <meta property="og:description" content="A common assessment, an interactive department dashboard, and a report that connects evidence to instruction.">
+  <meta property="og:description" content="Explore the evidence behind the Logos mathematics department report with interactive charts.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://grant-mccurdy.github.io/dashboard/assessment.html">
   <meta property="og:image" content="https://grant-mccurdy.github.io/assets/images/social/assessment-intelligence.png">
   <link rel="canonical" href="https://grant-mccurdy.github.io/dashboard/assessment.html">
   <link rel="icon" href="../assets/images/grant-mccurdy-profile.jpg" type="image/jpeg">
-  <link rel="stylesheet" href="../assets/css/styles.css?v=20260928">
-  <link rel="stylesheet" href="../assets/css/department-dashboard.css?v=20260928">
-  <script src="../assets/js/site.js?v=20260928" defer></script>
-  <script src="../assets/js/department-dashboard.js?v=20260928" type="module"></script>
+  <link rel="stylesheet" href="../assets/css/styles.css?v=20261005b">
+  <link rel="stylesheet" href="../assets/css/portfolio.css?v=20261005b">
+  <link rel="stylesheet" href="../assets/css/department-dashboard.css?v=20261026a">
+  <script src="../assets/js/site.js?v=20261005b" defer></script>
+  <script src="../assets/js/assessment-charts.js?v=20260720h" defer></script>
+  <script src="../assets/js/department-dashboard.js?v=20261026a" type="module"></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -23,73 +25,101 @@
     <nav class="nav-shell" aria-label="Primary navigation">
       <a class="brand" href="../index.html" aria-label="Grant McCurdy home"><span class="brand-mark" aria-hidden="true"><img src="../assets/images/grant-mccurdy-profile.jpg" alt=""></span><span class="brand-text">Grant McCurdy</span></a>
       <button class="nav-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false" data-nav-toggle><span></span><span></span><span></span></button>
-      <div class="nav-links" data-nav-links>
-        <a href="../index.html">Home</a><a href="../projects/index.html">Systems</a><a href="../demos/index.html" aria-current="page">Demos</a><a href="../evidence-methods.html">Evidence &amp; Methods</a><a href="../about.html">About</a><a href="../about.html#contact">Contact</a>
-      </div>
+      <div class="nav-links" data-nav-links><a href="../index.html">Home</a><a href="../projects/index.html">Systems</a><a href="../demos/index.html" aria-current="page">Demos</a><a href="../evidence-methods.html">Evidence &amp; Methods</a><a href="../about.html">About</a><a href="../about.html#contact">Contact</a></div>
     </nav>
   </header>
-  <main id="main" class="detail-main department-main">
-    <div class="department-heading">
-      <p class="section-kicker">Assessment Intelligence / Logos Education Group</p>
+  <main id="main" class="detail-main dashboard-main department-dashboard">
+    <section class="detail-hero dashboard-hero">
+      <p class="section-kicker">Interactive dashboard / Assessment Intelligence</p>
       <h1>Mathematics program review</h1>
-      <p class="department-lead">A shared view of readiness, from department patterns to the questions behind them.</p>
-      <div class="department-links"><a href="https://logoseducation.group/assessment-preview/">Take the 30-question assessment <span aria-hidden="true">&#8599;</span></a><a href="https://logoseducation.group/sample-report/">Read the department report <span aria-hidden="true">&#8599;</span></a><a href="../projects/assessment-intelligence.html">Project brief</a></div>
-      <p class="sample-context">Designed fictional scenario. One administration, 500 students, 21 classes. These are the same aggregate data and figures used in the Logos report.</p>
-    </div>
-    <p id="department-status" role="status">Loading assessment evidence...</p>
-    <noscript><p>The interactive dashboard requires JavaScript. <a href="https://logoseducation.group/sample-report/">Read the complete accessible department report</a>, or <a href="../data/logos/report-data.json">download the aggregate data</a>.</p></noscript>
-    <div id="department-app" hidden>
-      <nav class="department-tabs" aria-label="Assessment views">
-        <a href="#overview" data-view="overview" aria-current="page">Overview</a>
-        <a href="#courses" data-view="courses">Courses &amp; classes</a>
-        <a href="#content" data-view="content">Content areas</a>
-        <a href="#questions" data-view="questions">Questions</a>
-        <a href="#comparisons" data-view="comparisons">Comparisons</a>
-      </nav>
-      <section id="overview" class="department-view" aria-labelledby="overview-title">
-        <h2 id="overview-title" class="sr-only">Department overview</h2>
-        <dl id="department-metrics" class="department-metrics"></dl>
-        <div class="department-section-heading"><div><p class="section-kicker">Department priorities</p><h2>Three questions for review</h2></div><span>Whole department</span></div>
-        <div id="department-findings" class="department-findings"></div>
-        <div class="department-section-heading"><div><p class="section-kicker">Common assessment</p><h2>See the evidence from both sides</h2></div></div>
-        <div class="assessment-pair">
-          <div><h3>30 questions. Four content areas.</h3><p>Algebra and Advanced Math have ten questions each; Data Analysis and Geometry have five each. The dashboard and report use this exact question order and scoring revision.</p><p>Your practice answers stay in your browser and do not change this fictional department dataset.</p><div class="department-links"><a href="https://logoseducation.group/assessment-preview/">Open practice assessment <span aria-hidden="true">&#8599;</span></a><a href="https://logoseducation.group/assessment-preview/short/assessment.pdf">Assessment booklet (PDF)</a></div></div>
-          <figure><a href="#questions"><img src="../assets/images/logos/item-priorities.svg" alt="Seven priority questions across courses and tracks; darker blue indicates lower accuracy." width="1100" height="700"></a><figcaption>Question-level evidence from the same form. <a href="#questions">Explore teaching priorities</a>.</figcaption></figure>
+      <p>500 students. 21 classes. One common assessment. A designed fictional department using the same data as the Logos report.</p>
+      <div class="department-links"><a href="https://logoseducation.group/assessment-review/">Review the assessment &#8599;</a><a href="https://logoseducation.group/sample-report/">Logos interactive report &#8599;</a><a href="../projects/assessment-intelligence.html">Project brief</a></div>
+    </section>
+    <div class="dashboard-shell">
+      <p id="department-status" role="status">Loading assessment evidence...</p>
+      <noscript><p><a href="https://logoseducation.group/sample-report/supporting-evidence/">Read the complete department report</a> or <a href="../data/logos/report-data.json">download the aggregate data</a>.</p></noscript>
+      <div id="department-app" hidden>
+        <div class="dashboard-task-tabs" role="tablist" aria-label="Dashboard tasks">
+          <button id="tab-overview" type="button" role="tab" data-view="overview" aria-controls="overview" aria-selected="true">Course overview</button>
+          <button id="tab-compare" type="button" role="tab" data-view="compare" aria-controls="compare" aria-selected="false" tabindex="-1">Comparisons</button>
+          <button id="tab-questions" type="button" role="tab" data-view="questions" aria-controls="questions" aria-selected="false" tabindex="-1">Questions</button>
+          <button id="tab-quality" type="button" role="tab" data-view="quality" aria-controls="quality" aria-selected="false" tabindex="-1">Data &amp; methods</button>
         </div>
-        <div class="department-section-heading"><div><p class="section-kicker">Follow-through</p><h2>From findings to action</h2></div></div>
-        <div id="department-actions" class="department-actions"></div>
-      </section>
-      <section id="department-explore" aria-labelledby="explore-title" hidden>
-        <span id="courses" hidden></span><span id="content" hidden></span><span id="questions" hidden></span><span id="comparisons" hidden></span>
-        <div class="department-section-heading"><div><h2 id="explore-title"></h2><p id="explore-lead"></p></div></div>
-        <div class="department-filters">
+        <div class="department-filters" aria-label="Assessment population">
           <label>Course<select id="department-course"><option value="">All courses</option></select></label>
           <label>Track<select id="department-track"><option value="">All tracks</option><option>Regular</option><option>Honors/AP</option></select></label>
-          <label id="group-control">Group by<select id="department-group"><option value="course">Course and track</option><option value="section">Class</option></select></label>
-          <label id="domain-control" hidden>Content area<select id="department-domain"><option value="">All content areas</option></select></label>
-          <label id="question-control" hidden>Questions<select id="department-question-scope"><option value="priority">Teaching priorities</option><option value="all">All 30 questions</option></select></label>
-          <label id="family-control" hidden>Comparison family<select id="department-family"><option>Within-course tracks</option><option>Adjacent courses, tracks pooled</option><option>Classes within course and track</option></select></label>
-          <button type="button" id="department-reset" title="Reset filters" aria-label="Reset filters">&#8634;</button>
-          <button type="button" id="department-download" title="Download displayed values as CSV" aria-label="Download displayed values as CSV">&#8595;</button>
+          <button type="button" id="department-reset" class="chart-icon" title="Reset filters" aria-label="Reset filters">&#8634;</button>
+          <p id="department-selection" role="status"></p>
         </div>
-        <p id="department-selection" role="status"></p>
-        <div id="department-chart" class="department-chart"></div>
-        <div class="table-scroll department-table-wrap" tabindex="0" role="region" aria-label="Filtered assessment values"><table id="department-table"></table></div>
-        <p id="department-interpretation" class="department-note"></p>
-        <details class="department-report-figure" open>
-          <summary>Original report figure <span>Whole department</span></summary>
-          <figure><div class="table-scroll report-image-scroll" tabindex="0" role="region" aria-label="Full department report figure"><img id="department-figure" alt=""></div><figcaption><span id="department-figure-caption"></span><a id="department-figure-full" target="_blank" rel="noopener">Open full-size figure <span aria-hidden="true">&#8599;</span></a><a id="department-report-section">Read the interpretation</a></figcaption></figure>
-        </details>
-        <div id="department-reading" class="department-reading"></div>
-      </section>
+        <section id="overview" class="dashboard-view" role="tabpanel" aria-labelledby="tab-overview">
+          <dl id="department-metrics" class="metric-grid"></dl>
+          <section class="dashboard-panel violin-panel" aria-labelledby="course-title">
+            <div class="panel-heading"><div><p class="panel-kicker">Score distributions</p><h2 id="course-title">Course progression</h2></div><div class="track-legend"><span class="regular-key">Regular</span><span class="honors-key">Honors/AP</span></div></div>
+            <div class="chart-controls"><label class="check-control"><input id="department-reference" type="checkbox" checked> Department mean</label><button type="button" class="data-link" data-data-view="course">View data</button></div>
+            <div id="course-chart" class="native-chart" aria-label="Violin plots of assessment scores across courses"></div>
+            <p class="chart-note" id="course-note"></p>
+          </section>
+          <div class="dashboard-overview-lead">
+            <section class="dashboard-panel" aria-labelledby="pairwise-title">
+              <div class="panel-heading"><div><p class="panel-kicker">Course and track comparisons</p><h2 id="pairwise-title">Course-difference heatmap</h2></div><button type="button" class="data-link" data-data-view="pairwise">View data</button></div>
+              <div class="difference-legend"><span>Row lower</span><i aria-hidden="true"></i><span>Row higher</span><span>Gap in percentage points</span></div>
+              <div id="pairwise-chart" class="native-chart matrix-chart" aria-label="Course-difference heatmap"></div>
+              <p class="chart-note">Row mean minus column mean. Outlined cells compare tracks within a course. NS means inconclusive, not equivalent. All 45 original pairs retain their Holm correction; filters do not recalculate tests.</p>
+            </section>
+            <aside class="dashboard-panel insight-panel" aria-labelledby="signals-title"><div class="panel-heading"><div><p class="panel-kicker">Whole-department findings</p><h2 id="signals-title">Interpretation</h2></div></div><ul id="department-findings" class="insight-list"></ul></aside>
+          </div>
+        </section>
+        <section id="compare" class="dashboard-view" role="tabpanel" aria-labelledby="tab-compare" hidden>
+          <div class="dashboard-grid comparison-result-grid">
+            <section class="dashboard-panel" aria-labelledby="groups-title">
+              <div class="panel-heading"><div><p class="panel-kicker">Descriptive comparison</p><h2 id="groups-title">Class and course detail</h2></div></div>
+              <div class="chart-controls"><label>Compare by<select id="department-group"><option value="course">Course and track</option><option value="section">Class and period</option></select></label><label>Sort<select id="department-sort"><option value="course">Course order</option><option value="low">Lowest mean</option><option value="high">Highest mean</option></select></label></div>
+              <div id="group-chart" class="native-chart" aria-label="Group score chart"></div>
+              <p class="chart-note">Mean and student-level 95% confidence interval. Class and period are identifiers, not estimates of instructional or timetable effects.</p>
+            </section>
+            <section class="dashboard-panel" aria-labelledby="difference-title">
+              <div class="panel-heading"><div><p class="panel-kicker">Planned comparisons</p><h2 id="difference-title">Differences and uncertainty</h2></div></div>
+              <div class="chart-controls"><label>Comparison family<select id="department-family"><option>Within-course tracks</option><option>Adjacent courses, tracks pooled</option><option>Classes within course and track</option></select></label></div>
+              <div id="difference-chart" class="native-chart" aria-label="Planned difference chart"></div>
+              <p class="chart-note">A minus B, in percentage points. Student-level 95% intervals; decisions use the original Holm-adjusted p values. Inconclusive does not mean equivalent. The track filter does not redefine these tests.</p>
+            </section>
+          </div>
+          <section class="dashboard-panel" aria-labelledby="domain-title">
+            <div class="panel-heading"><div><p class="panel-kicker">Content areas</p><h2 id="domain-title">Content-area profiles</h2></div><label>Content area<select id="department-profile"><option value="">All content areas</option></select></label></div>
+            <div id="domain-legend" class="domain-legend"></div><div id="domain-chart" class="native-chart" aria-label="Content-area chart"></div>
+            <p class="chart-note">Different students assessed once, not growth. AP Statistics is a separate pathway. Domains have different questions and difficulty, not a common proficiency scale.</p>
+          </section>
+        </section>
+        <section id="questions" class="dashboard-view" role="tabpanel" aria-labelledby="tab-questions" hidden>
+          <section class="dashboard-panel" aria-labelledby="questions-title">
+            <div class="panel-heading"><div><p class="panel-kicker">Question analysis</p><h2 id="questions-title">Question performance by course</h2></div><a href="https://logoseducation.group/assessment-preview/short/assessment.pdf">Assessment booklet (PDF) &#8599;</a></div>
+            <div class="chart-controls"><label>Questions<select id="department-question-scope"><option value="priority">Teaching priorities</option><option value="all">All 30 questions</option></select></label><label>Content area<select id="department-domain"><option value="">All content areas</option></select></label><label>Order<select id="department-question-sort"><option value="form">Assessment order</option><option value="accuracy">Lowest accuracy</option></select></label><button type="button" id="department-download" title="Download selected question values as CSV">&#8595; Export CSV</button></div>
+            <div class="heatmap-legend"><span>Lower accuracy</span><i aria-hidden="true"></i><span>Higher accuracy</span></div>
+            <div id="question-chart" class="native-chart matrix-chart" aria-label="Question accuracy heatmap"></div>
+            <p class="chart-note">Percent correct includes unanswered questions. The outlined Geometry and Algebra II groups mark the transition under review. Wrong answers alone do not diagnose misconceptions.</p>
+            <div class="question-evidence" id="question-evidence" aria-live="polite"></div>
+          </section>
+          <section class="dashboard-panel" aria-labelledby="followup-title"><div class="panel-heading"><div><p class="panel-kicker">Instructional review</p><h2 id="followup-title">Follow-up tasks</h2></div></div><dl id="teaching-checks" class="teaching-checks"></dl></section>
+        </section>
+        <section id="quality" class="dashboard-view" role="tabpanel" aria-labelledby="tab-quality" hidden>
+          <div class="dashboard-quality-grid">
+            <section class="dashboard-panel" aria-labelledby="responses-title"><div class="panel-heading"><div><p class="panel-kicker">Whole department</p><h2 id="responses-title">Response coverage</h2></div></div><div id="response-chart" class="native-chart"></div><dl id="response-counts" class="response-counts"></dl><p class="chart-note">Response counts, not student completion rates. Attempted-response coverage is available only for the whole department.</p></section>
+            <section class="dashboard-panel" aria-labelledby="source-title"><div class="panel-heading"><div><p class="panel-kicker">Dataset</p><h2 id="source-title">Assessment and source</h2></div></div><dl id="source-meta" class="source-meta"></dl><p class="chart-note">Only reviewed synthetic aggregates are loaded. No practice responses are collected. These data do not establish growth, teacher effectiveness, or placement suitability.</p><div class="department-links"><a href="../data/logos/manifest.json">Publication manifest</a><a href="../data/logos/score-distributions.json" download>Score distributions</a><a href="../data/logos/report-data.json" download>Aggregate JSON</a></div></section>
+          </div>
+          <section class="dashboard-panel" aria-labelledby="values-title">
+            <div class="panel-heading"><div><p class="panel-kicker">Selected population</p><h2 id="values-title">Data tables</h2></div><label>Table<select id="department-table"><option value="course">Course summaries</option><option value="class">Class summaries</option><option value="domain">Content areas</option><option value="difference">Planned comparisons</option><option value="pairwise">Course differences</option><option value="question">Question results</option></select></label></div>
+            <div id="course-data" class="table-wrap" role="region" aria-label="Course values" tabindex="0" data-table="course"></div>
+            <div data-table="class" hidden><button type="button" id="class-download" title="Download selected classes as CSV">&#8595; Export CSV</button><div id="class-data" class="table-wrap" role="region" aria-label="Sortable class values" tabindex="0"></div></div>
+            <div id="domain-data" class="table-wrap" role="region" aria-label="Content-area values" tabindex="0" data-table="domain" hidden></div>
+            <div id="difference-data" class="table-wrap" role="region" aria-label="Planned comparison values" tabindex="0" data-table="difference" hidden></div>
+            <div id="pairwise-data" class="table-wrap" role="region" aria-label="Course-difference values" tabindex="0" data-table="pairwise" hidden></div>
+            <div id="question-data" class="table-wrap" role="region" aria-label="Question values" tabindex="0" data-table="question" hidden></div>
+          </section>
+          <section class="department-methods" aria-labelledby="methods-title"><h2 id="methods-title">Methods and limitations</h2><p>LOGOS-MATH-V2, revision 5. Violin shapes use the report's fictional score distributions and ggplot2 Gaussian density estimates, trimmed to the observed range and normalized to equal width within each group. Boxes show quartiles and the median; whiskers follow the report's 1.5-IQR rule. Diamonds show means; circles show outliers. The course order is cross-sectional, not individual student growth. AP Statistics is a separate pathway.</p><p>The 22 planned comparisons retain their original Holm families, including all 14 class comparisons in one family. The heatmap retains its separate 45-pair family. Filtering never recalculates tests. Pointwise 95% intervals are not Holm-adjusted simultaneous intervals: an interval can exclude zero while the adjusted comparison remains inconclusive. Student-level intervals can understate uncertainty when students share a class. Section-cluster sensitivity results are retained in the planned-comparison table; few clusters remain a limitation.</p><div class="department-links"><a href="https://logoseducation.group/sample-report/">Report &#8599;</a><a href="https://logoseducation.group/sample-report/supporting-evidence/#technical">Report methods &#8599;</a><a href="longitudinal.html">Separate longitudinal demo</a></div></section>
+        </section>
+      </div>
     </div>
-    <details class="department-methods">
-      <summary>Data, methods &amp; interpretation limits</summary>
-      <p>One synthetic administration of LOGOS-MATH-V2, revision 5. Group differences are descriptive and do not establish growth, teacher effectiveness, causal impact, or individual placement suitability. Course and domain percentages depend on the questions and instructional exposure.</p>
-      <p>Comparison estimates and intervals come from the report. The 22 planned comparisons use their original Holm correction families, including one family of 14 class comparisons. Filtering does not recompute tests. Inconclusive differences do not demonstrate equivalence. Student-level intervals can understate uncertainty when students share a class; the report includes section-cluster sensitivity checks.</p>
-      <p>Questions attempted is a percentage of item responses, not a student completion or pass rate. The original figures always show the whole department; the table and bars show the selected groups.</p>
-      <div class="department-links"><a href="https://logoseducation.group/sample-report/technical/">Supporting evidence &amp; sensitivity checks</a><a href="../data/logos/report-data.json" download>Aggregate JSON</a><a href="../data/logos/manifest.json">Publication manifest</a><a href="longitudinal.html">Separate longitudinal demo</a></div>
-    </details>
+    <div id="chart-tooltip" role="tooltip" aria-hidden="true" hidden></div>
   </main>
   <footer class="site-footer"><div class="footer-shell"><p>&copy; <span data-year></span> Grant McCurdy</p><div class="footer-links"><a href="../index.html">Home</a><a href="../projects/index.html">Systems</a><a href="../demos/index.html">Demos</a><a href="../evidence-methods.html">Evidence &amp; Methods</a><a href="../about.html">About</a><a href="../about.html#contact">Contact</a></div></div></footer>
 </body>

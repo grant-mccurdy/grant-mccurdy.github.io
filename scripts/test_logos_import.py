@@ -12,6 +12,12 @@ class ReportImportTests(unittest.TestCase):
     def test_reviewed_data(self):
         validate_data(self.data)
 
+    def test_public_report_routes(self):
+        manifest = json.loads((DEST / "manifest.json").read_text())
+        self.assertEqual(manifest["report_url"], "https://logoseducation.group/sample-report/")
+        self.assertEqual(manifest["supporting_report_url"], "https://logoseducation.group/sample-report/supporting-evidence/")
+        self.assertEqual(manifest["assessment_url"], "https://logoseducation.group/assessment-review/")
+
     def test_reject_non_synthetic_or_extra_fields(self):
         for mutation in ({"synthetic": False}, {"student_email": "fixture@example.invalid"}):
             with self.subTest(mutation=mutation), self.assertRaises(ValueError):

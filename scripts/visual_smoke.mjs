@@ -182,6 +182,8 @@ async function inspect(page) {
       .filter((el) => {
         if (el.closest(".hero-media")) return false;
         if (el.closest(".chart-frame, .table-wrap, .report-table-wrap, .table-scroll, .cell-output-display")) return false;
+        const chartViewport = el.closest(".chart-viewport");
+        if (chartViewport && chartViewport !== el && ["auto", "scroll"].includes(getComputedStyle(chartViewport).overflowX)) return false;
         const rect = el.getBoundingClientRect();
         return (
           rect.width &&
