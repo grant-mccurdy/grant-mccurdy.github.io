@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Logos Learning Systems | Grant McCurdy</title>
+    <meta name="description" content="Grant McCurdy's work on connected student practice, teacher review, and school insight: product design, synthetic education data, and role-scoped AI workflows.">
+    <meta property="og:title" content="Logos Learning Systems | Grant McCurdy">
+    <meta property="og:description" content="A connected-learning case study with concrete workflows, verified implementation, synthetic evidence, and explicit product limits.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://grant-mccurdy.github.io/projects/logos-learning-systems.html">
+    <meta property="og:image" content="https://grant-mccurdy.github.io/assets/images/social/logos-learning-systems.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="canonical" href="https://grant-mccurdy.github.io/projects/logos-learning-systems.html">
+    <link rel="icon" href="../assets/images/grant-mccurdy-profile.jpg" type="image/jpeg">
+    <link rel="stylesheet" href="../assets/css/styles.css?v=20261005b">
+    <link rel="stylesheet" href="../assets/css/portfolio.css?v=20261028b">
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header compact" data-header>
+      <nav class="nav-shell" aria-label="Primary navigation">
+        <a class="brand" href="../index.html" aria-label="Grant McCurdy home"><span class="brand-text">Grant McCurdy</span></a>
+        <button class="nav-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false" data-nav-toggle><span></span><span></span><span></span></button>
+        <div class="nav-links" data-nav-links><a href="../index.html#selected-work">Work</a><a href="../about.html">About</a><a href="../about.html#contact">Contact</a></div>
+      </nav>
+    </header>
+    <main id="main" class="detail-main">
+      <section class="detail-hero">
+        <p class="section-kicker">Case study / Logos Education Group</p>
+        <h1>Logos for Schools</h1>
+        <p>Student practice, teacher review, and department analysis using linked assessment and coursework records.</p>
+        <dl class="case-meta">
+          <div><dt>My role</dt><dd>Founder and builder of Logos Education Group: product and workflow design, AI-assisted implementation, validation, and review.</dd></div>
+          <div><dt>Audience</dt><dd>Students, mathematics teachers, and school leaders.</dd></div>
+          <div><dt>Maturity</dt><dd>Working synthetic demonstration in development. Evidence reviewed 5 October 2026.</dd></div>
+        </dl>
+        <div class="hero-actions detail-actions"><a class="button primary" href="https://logoseducation.group/schools/">Logos for Schools at my company</a><a class="text-link" href="#evidence">Evidence and limits</a></div>
+      </section>
+
+      <div class="section-shell case-body">
+        <section class="case-section" aria-labelledby="problem-heading">
+          <div><p class="section-kicker">Problem &amp; role</p><h2 id="problem-heading">Source records and instructional decisions</h2></div>
+          <div>
+            <p>A student's answer, an assignment status, and a department summary answer different questions. Bringing them into one interface is not enough: the system has to preserve what each signal means, who can inspect it, and what action it can reasonably support.</p>
+            <p>I founded Logos Education Group and built this product around connected student, teacher, and administrator workflows. My contributions include assessment logic, data definitions, role-specific workflows, review steps, and software implementation. AI-assisted development is paired with deterministic checks and human review.</p>
+            <p>My school-side experience includes Canvas/API-informed reporting and teacher-reviewed instructional workflows. This Logos product is separate development work; the fictional records here are not a disclosure of employment or client data.</p>
+          </div>
+        </section>
+
+        <section class="case-section" id="schools" aria-labelledby="schools-heading">
+          <div><p class="section-kicker">Logos for Schools</p><h2 id="schools-heading">Student, teacher, and administrator workflows</h2></div>
+          <div>
+            <figure><div class="walkthrough-preview" data-walkthrough><img src="../assets/images/previews/schools-workflow-v22-poster.png" data-walkthrough-image data-animation="../assets/images/previews/schools-workflow-v22.gif" alt="Teacher opens a student investigation, reviews the practice conversation, and inspects an independent attempt in Logos for Schools." width="1100" height="760" loading="lazy"><button class="walkthrough-toggle" data-walkthrough-toggle type="button" aria-label="Play Schools walkthrough" title="Play Schools walkthrough" hidden><img src="../assets/icons/play.svg" alt="" width="18" height="18"></button></div><figcaption>A teacher reviews student work and supporting evidence in the actual workspace. Fictional records; product in development.</figcaption></figure>
+            <ol class="connected-journey">
+              <li><span>01 / Student practice</span><h4>Check the work, not just the conversation.</h4><p>Bounded Algebra I and Geometry practice includes checked answers, hints, independent exit checks, and an exact record of attempts. Ambiguous answers remain provisional rather than being forced into a confident verdict.</p></li>
+              <li><span>02 / Teacher review</span><h4>Trace a concern to the underlying attempt.</h4><p>Teachers can inspect source-linked practice evidence, shared school conversations, class practice plans, and explicit requests for help. Hinted practice remains distinguishable from independent work.</p></li>
+              <li><span>03 / School investigation</span><h4>Keep calculations inspectable.</h4><p>Administrator investigations use scoped department records, checked calculations, and figures with supporting data. Narrative interpretation is tied to the records selected for the question.</p></li>
+            </ol>
+            <h3>Implementation choices</h3>
+            <ul>
+              <li><strong>React and TypeScript:</strong> role-specific interfaces, structured responses, and explicit state handling.</li>
+              <li><strong>SQL-backed records and Drizzle:</strong> structured learning evidence and saved application state.</li>
+              <li><strong>Tool-using AI:</strong> bounded source projections, role checks on each execution, streamed replies, cancellation, and cost accounting.</li>
+              <li><strong>KaTeX and charts:</strong> readable mathematics and figures that retain access to supporting values.</li>
+            </ul>
+            <p class="case-boundary">The demonstration uses a synthetic identity switch, not institutional authentication. The Canvas-shaped records are generated snapshots, not a live connection to a school's LMS.</p>
+          </div>
+        </section>
+
+        <section class="case-section" id="evidence" aria-labelledby="evidence-heading">
+          <div><p class="section-kicker">Evidence &amp; outcome</p><h2 id="evidence-heading">Validation and limitations</h2></div>
+          <div>
+            <p>The 1 October 2026 release recorded 385 passing automated checks and hosted evaluations of student advising, teacher figures, and administrator investigations. The 5 October read-only check confirmed role-scoped context and the configured live-AI mode; it was not a new paid model evaluation.</p>
+            <p><strong>Eight authored practice journeys are separate from the 500-student historical cohort.</strong> They illustrate the connected experience. They do not mean 500 students used the practice product, and they do not demonstrate learning gains.</p>
+            <p>The shared foundation is LOGOS-MATH-V2 revision 5: one 30-question, 45-minute assessment with 500 fictional students, 21 sections, and 15,000 synthetic responses. Additional coursework and practice evidence extend that foundation without replacing the assessment.</p>
+            <figure>
+              <a href="../dashboard/assessment.html"><img src="../assets/images/logos/dashboard-overview.png" alt="Separate portfolio dashboard showing the shared synthetic assessment foundation, with course score intervals and teaching priorities." width="1200" height="772" loading="lazy"></a>
+              <figcaption>The portfolio dashboard presents the shared assessment foundation. It is a separate interface, not a screenshot of the Schools application.</figcaption>
+            </figure>
+            <div class="link-row"><a class="text-link" href="../dashboard/assessment.html">Explore the shared assessment data</a><a class="text-link" href="https://logoseducation.group/sample-report/">Logos department report</a><a class="text-link" href="https://logoseducation.group/assessment-preview/">Logos assessment</a></div>
+            <h3>Not established by this demonstration</h3>
+            <ul>
+              <li>Production Canvas synchronization, institutional sign-in, or grade passback.</li>
+              <li>Deployment to a real school or evidence of client adoption.</li>
+              <li>Calibrated test scores, national norms, individual placement validity, or causal learning effects.</li>
+            </ul>
+            <p>The outcome is an inspectable product foundation and a demonstrated workflow, not a claim of educational impact.</p>
+          </div>
+        </section>
+
+        <section class="case-section" id="tutor" aria-labelledby="tutor-heading">
+          <div><p class="section-kicker">Related work / Limited beta</p><h2 id="tutor-heading">Logos Tutor</h2></div>
+          <div>
+            <p>Logos Tutor explores conversational mathematics support for an individual learner, with a user-controlled Ask Grant workflow. The design question is how AI support can hand a specific learning concern back to a person without removing learner control.</p>
+            <p>This complements the school workspace but is not the same product. On 5 October 2026, the native file upload passed, but image reading failed because the upstream provider rejected authentication. Signed-in history and instructor replies remained unverified because the required account was unavailable for that check.</p>
+            <p>This is limited-beta development work, not a live-ready end-to-end service. The upload, tutoring, and instructor-reply chain has not passed release verification. These Tutor-specific limits do not invalidate the separate Schools evidence above. The link below describes the product; it does not expose the unlisted application.</p>
+            <a class="text-link" href="https://logoseducation.group/contact/">Discuss Logos Tutor development</a>
+          </div>
+        </section>
+
+        <section class="case-section" aria-labelledby="fit-heading">
+          <div><p class="section-kicker">Skills demonstrated</p><h2 id="fit-heading">Education systems development</h2></div>
+          <div>
+            <p>The work demonstrates translating a learning problem into a data model, designing role-specific workflows, integrating AI behind evidence and review boundaries, and evaluating the resulting behavior. These are the skills I bring to learning engineering, education data, assessment technology, and technical EdTech roles.</p>
+            <div class="link-row"><a class="text-link" href="../about.html">Professional background</a><a class="text-link" href="../evidence-methods.html">Evidence and methods</a><a class="text-link" href="index.html">All systems</a></div>
+          </div>
+        </section>
+      </div>
+    </main>
+    <footer class="site-footer"><div class="footer-shell"><p>&copy; <span data-year></span> Grant McCurdy</p><div class="footer-links"><a href="../index.html#selected-work">Work</a><a href="../about.html">About</a><a href="../about.html#contact">Contact</a></div></div></footer>
+    <script src="../assets/js/site.js?v=20261028"></script>
+    <script src="../assets/js/walkthrough.js?v=20261028" defer></script>
+  </body>
+</html>

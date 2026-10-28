@@ -71,7 +71,7 @@ if (navLinks) {
   });
 
   window.addEventListener("resize", () => {
-    if (window.innerWidth > 860) closeNavigation();
+    if (window.innerWidth > 960) closeNavigation();
   });
 
   const currentPath = window.location.pathname.replace(/\/$/, "/index.html");
@@ -79,7 +79,8 @@ if (navLinks) {
     link.removeAttribute("aria-current");
     const target = new URL(link.href, window.location.href);
     const targetPath = target.pathname.replace(/\/$/, "/index.html");
-    const isProjectPage = targetPath.endsWith("/projects/index.html") && currentPath.includes("/projects/");
+    const isWorkLink = link.textContent.trim() === "Work";
+    const isProjectPage = isWorkLink && (currentPath.includes("/projects/") || currentPath.includes("/demos/") || currentPath.includes("/dashboard/") || currentPath.endsWith("/data-lab.html") || currentPath === "/index.html");
     const isDemoPage =
       targetPath.endsWith("/demos/index.html") &&
       (currentPath.includes("/demos/") ||
@@ -90,6 +91,7 @@ if (navLinks) {
       targetPath === currentPath &&
       (target.hash ? target.hash === window.location.hash : !window.location.hash);
     if (isProjectPage || isDemoPage || isCurrentPage) link.setAttribute("aria-current", "page");
+    if (currentPath.endsWith("/about.html") && window.location.hash !== "#contact" && link.textContent.trim() === "About") link.setAttribute("aria-current", "page");
   });
 }
 

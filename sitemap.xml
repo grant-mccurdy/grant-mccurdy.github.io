@@ -2,11 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://grant-mccurdy.github.io/</loc>
-    <lastmod>2026-08-17</lastmod>
+    <lastmod>2026-10-05</lastmod>
   </url>
   <url>
     <loc>https://grant-mccurdy.github.io/about.html</loc>
-    <lastmod>2026-08-17</lastmod>
+    <lastmod>2026-10-05</lastmod>
   </url>
   <url>
     <loc>https://grant-mccurdy.github.io/dashboard/assessment.html</loc>
@@ -18,7 +18,11 @@
   </url>
   <url>
     <loc>https://grant-mccurdy.github.io/demos/</loc>
-    <lastmod>2026-08-17</lastmod>
+    <lastmod>2026-10-05</lastmod>
+  </url>
+  <url>
+    <loc>https://grant-mccurdy.github.io/demos/assessment-evidence/index.html</loc>
+    <lastmod>2026-10-23</lastmod>
   </url>
   <url>
     <loc>https://grant-mccurdy.github.io/demos/content-rag.html</loc>
@@ -26,11 +30,11 @@
   </url>
   <url>
     <loc>https://grant-mccurdy.github.io/evidence-methods.html</loc>
-    <lastmod>2026-08-17</lastmod>
+    <lastmod>2026-10-05</lastmod>
   </url>
   <url>
     <loc>https://grant-mccurdy.github.io/projects/</loc>
-    <lastmod>2026-08-17</lastmod>
+    <lastmod>2026-10-05</lastmod>
   </url>
   <url>
     <loc>https://grant-mccurdy.github.io/projects/assessment-intelligence.html</loc>
@@ -55,6 +59,18 @@
   <url>
     <loc>https://grant-mccurdy.github.io/projects/instructional-ai-workflows.html</loc>
     <lastmod>2026-08-17</lastmod>
+  </url>
+  <url>
+    <loc>https://grant-mccurdy.github.io/projects/instructional-design.html</loc>
+    <lastmod>2026-10-23</lastmod>
+  </url>
+  <url>
+    <loc>https://grant-mccurdy.github.io/projects/logos-assessment.html</loc>
+    <lastmod>2026-10-06</lastmod>
+  </url>
+  <url>
+    <loc>https://grant-mccurdy.github.io/projects/logos-learning-systems.html</loc>
+    <lastmod>2026-10-05</lastmod>
   </url>
   <url>
     <loc>https://grant-mccurdy.github.io/projects/statistical-risk-modeling-r.html</loc>

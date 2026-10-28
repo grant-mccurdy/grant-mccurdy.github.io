@@ -200,7 +200,7 @@ for (const project of registry.projects) {
     errors.push(`${project.id}: missing from project directory.`);
   } else {
     if (!directoryBlock.includes(project.title)) errors.push(`${project.id}: directory title does not match registry.`);
-    if (!directoryBlock.includes(project.statusLabel)) errors.push(`${project.id}: directory status does not match registry.`);
+    // Qualifications remain verified on the linked case study, not repeated in the index.
     const expectedBrief = normalizedUrl(project.portalPath);
     if (![...directoryBlock.matchAll(/href="([^"]+)"/g)].some((match) => normalizedUrl(match[1], "projects/index.html") === expectedBrief)) {
       errors.push(`${project.id}: directory does not link to canonical portalPath.`);
@@ -231,8 +231,8 @@ const directoryIds = valuesFor(directoryHtml, "data-project-id");
 const demoIds = valuesFor(demosHtml, "data-demo-project-id");
 const featuredIds = valuesFor(homeHtml, "data-home-project-id");
 const registryFeatured = registry.projects.filter((project) => project.homeFeatured).map((project) => project.id);
-if (!same(registryFeatured, expectedFeaturedIds) || !same(featuredIds, expectedFeaturedIds)) {
-  errors.push("Homepage must feature only the three current Projects-featured entries, in order.");
+if (!same(registryFeatured, ["assessment-intelligence"]) || !same(featuredIds, ["assessment-intelligence"])) {
+  errors.push("Homepage must feature Assessment Intelligence once; other repository evidence belongs in the project index.");
 }
 if (directoryIds.length !== new Set(directoryIds).size) errors.push("Project directory contains duplicate project IDs.");
 if (!same(directoryIds, expectedProjectIds)) errors.push("Project directory must contain only the seven current Projects-proof projects, in order.");

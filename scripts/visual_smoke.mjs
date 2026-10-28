@@ -244,7 +244,7 @@ async function inspect(page) {
     artifactCards: await page.locator(".artifact-link-card").count(),
     dashboardError: bodyText.includes("Dashboard data did not load"),
     heroVideo,
-    heroReport: await page.locator(".hero-report").evaluateAll((images) => images.map((img) => ({ loaded: img.complete && img.naturalWidth > 0, source: img.getAttribute("src") }))),
+      projectPreview: await page.locator(".project-preview img").evaluateAll((images) => images.map((img) => ({ loaded: img.complete && img.naturalWidth > 0, source: img.getAttribute("src") }))),
     overflow,
     shell: await page.evaluate(() => {
       if (!document.querySelector("[data-header]")) return null;
@@ -269,7 +269,7 @@ async function inspectNavigation(page, label) {
   return {
     opened,
     closed,
-    activeProject: (await links.locator('a[aria-current="page"]').innerText()) === "Systems",
+    activeProject: (await links.locator('a[aria-current="page"]').innerText()) === "Work",
   };
 }
 
@@ -349,10 +349,8 @@ async function inspectHelper(page, label) {
   return {
     opened,
     closed,
-    toggleVisible:
-      label === "home-mobile"
-        ? toggleRect.width >= 48 && toggleRect.height >= 48
-        : toggleRect.width >= 100 && toggleRect.height >= 50,
+    // The restrained Logos-style control retains a 44px touch target.
+    toggleVisible: toggleRect.width >= 44 && toggleRect.height >= 44,
     initialText: initialText.includes("I can help you find the right project"),
     handoff:
       handoffText.includes("Open Data Lab") &&
@@ -477,6 +475,8 @@ async function inspectContentArtifacts(page, label) {
 }
 
 const cases = [
+  ["logos-desktop", "projects/logos-learning-systems.html", 1440, 1000],
+  ["logos-mobile", "projects/logos-learning-systems.html", 390, 900],
   ["home-desktop", "index.html", 1440, 1000],
   ["home-mobile", "index.html", 390, 900],
   ["about-desktop", "about.html", 1440, 1000],
@@ -529,7 +529,13 @@ if (!selectedCases.length) {
 try {
   for (const [label, file, width, height] of selectedCases) {
     const page = await browser.newPage({ viewport: { width, height } });
+    // Local tests must never send telemetry or consume a hosted model request.
+    await page.route("https://portfolio-rag-api.grant-mccurdy.workers.dev/**", (route) =>
+      route.fulfill({ status: 202, contentType: "application/json", body: "{}" }));
     await page.goto(`${baseUrl}/${file.replaceAll(path.sep, "/")}`, { waitUntil: "networkidle" });
+    await page.locator(".project-preview img").evaluateAll(async (images) => {
+      for (const img of images) { img.loading = "eager"; await img.decode(); }
+    });
     results.push({
       label,
       ...(await inspect(page)),
@@ -556,9 +562,9 @@ try {
   await closeServer(server);
 }
 
-const heroMediaFailed = (result) => {
+const projectMediaFailed = (result) => {
   if (!result.label.startsWith("home-")) return false;
-  return result.heroReport.length !== 1 || !result.heroReport[0].loaded || !result.heroReport[0].source.includes("logos/course-distributions.png");
+  return result.projectPreview.length !== 3 || result.projectPreview.some((preview) => !preview.loaded) || !result.projectPreview[0].source.includes("previews/logos-assessment.png");
 };
 
 const failures = results.filter(
@@ -572,7 +578,7 @@ const failures = results.filter(
     result.navigation?.closed === false ||
     result.navigation?.activeProject === false ||
     result.dashboardError ||
-    heroMediaFailed(result) ||
+    projectMediaFailed(result) ||
     result.helper?.overflow.length ||
     result.helper?.opened === false ||
     result.helper?.closed === false ||

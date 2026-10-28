@@ -6,16 +6,17 @@ the site, and the public project work.
 
 ## Canonical Positioning
 
-Grant is a mathematics and learning-systems leader who designs AI-enabled,
-data-informed education systems—combining assessment and measurement,
-analytics, automation, and implementation to improve student success,
-instructional quality, and organizational decision-making.
+Grant's background includes mathematics teaching and department leadership.
+His work includes assessment design, statistical reporting, education data
+systems, and AI-assisted instructional workflows with human review.
 
 The short public identity is:
 
-> Mathematics and learning-systems leader building AI-enabled, data-informed
-> systems for assessment, learning, measurement, and organizational
-> decision-making.
+> Assessment analytics, education data systems, and AI-assisted instructional
+> workflows.
+
+Use plain, factual language. Describe skills, contributions, artifacts, and
+limitations without slogans or implying demonstrated learning gains.
 
 Present this as professional evolution: Grant has led quantitative educational
 systems and is extending that work through analytics, automation, data
@@ -36,17 +37,52 @@ Prioritize these connected themes:
 
 ## Logos Assessment And Reporting
 
-Grant's portfolio connects to Logos Education Group's mathematics assessment
+Grant founded Logos Education Group and builds its assessment, reporting, and
+school software workflows. His portfolio presents this founder/builder work
+through distinct assessment-design, reporting, and Schools case studies.
+The portfolio connects to his company's mathematics assessment
 and reporting work. The Assessment Analytics dashboard and department report
 share the same designed fictional scenario: 500 students, 21 classes, and one
 30-question assessment administration. Both highlight geometric readiness in
 Algebra II, uncertain track differences, and variation among Regular Geometry
 classes. They do not establish growth, causal impact, or placement suitability.
 
-The portfolio implements this dashboard from a checked aggregate import and
-six unchanged report figures. The earlier SQL/dbt/DuckDB pipeline and its
+The portfolio implements this dashboard from a checked aggregate import, using
+native interactive course-progression violins, course-difference heatmaps,
+content-area profiles, planned comparisons, and question charts. Violin
+densities and empirical boxplots are derived from the same fictional scores
+as the report, not approximated from means and standard deviations.
+Original report figures remain reference assets. The earlier SQL/dbt/DuckDB pipeline and its
 longitudinal dashboard use a separate dataset. The provenance below describes
 that earlier repository implementation, not the Logos import.
+
+## Logos Connected Learning
+
+The separately reviewed case study at
+https://grant-mccurdy.github.io/projects/logos-learning-systems.html describes
+Logos for Schools and related Tutor development. Schools connects checked
+student practice, teacher review, and scoped administrator investigations.
+Eight authored practice journeys are distinct from the historical 500-student
+synthetic assessment cohort. There is no production Canvas sync, institutional
+authentication, grade passback, client-adoption claim, or measured learning gain.
+
+Product's 1 October 2026 release recorded 385 passing automated checks and
+hosted role evaluations. The 5 October read-only context check was not a new
+paid model evaluation. Tutor's 5 October native upload check passed, but image
+reading failed provider authentication. Signed-in history and instructor
+replies remained unverified. Do not describe Tutor as live-ready, or infer that
+this Tutor failure invalidates the separate Schools evidence.
+
+Use the public company description, labeled as a preview:
+https://logoseducation.group/schools/.
+Do not expose unlisted application origins. The company's branded domain still
+served an older presentation at the 5 October review.
+
+School-side employment is separate from these products. Grant's Pacifica work
+included mathematics teaching and department leadership, readiness and growth
+reporting, Canvas/API-informed dashboards, and Python/Google Colab workflows
+using OpenAI and Canvas APIs with teacher review. Do not attribute the Logos
+SQL implementation, production integrations, or client adoption to employment.
 
 ## Featured Campaign Evidence
 
@@ -94,8 +130,9 @@ Projects selects seven projects and fourteen qualification-bound claims through
 `75479d72822392455359e9517c0e2751d36256044adfb6cc5ccf956d7cb30566`.
 Project-level profile eligibility controls the three featured and four
 supporting entries. Preserve each claim's prototype or qualified status and its
-exact qualification. Exclude projects that are not in the current Projects
-snapshot.
+exact qualification. Do not add repository claims outside that snapshot.
+The October Logos company case study has a separate Product-owner review in
+`data/company-case-studies.json`; it does not amend the August proof.
 
 ## Skills And Methods To Surface
 

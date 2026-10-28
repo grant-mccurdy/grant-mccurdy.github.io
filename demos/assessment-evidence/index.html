@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Reading Assessment Evidence | Learning Sample</title>
+  <meta name="description" content="A self-paced instructional-design demonstration for teachers: distributions, missing responses, and evidence-informed decisions.">
+  <link rel="stylesheet" href="course.css">
+  <script src="course.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to lesson</a>
+<header class="course-header"><a href="../../index.html">Grant McCurdy</a><a href="../../projects/instructional-design.html">Design case study</a></header>
+<div class="course-layout">
+  <aside>
+    <p class="eyebrow">Professional learning / Demonstration</p>
+    <h1>Reading Assessment Evidence</h1>
+    <nav aria-label="Course modules"><ol>
+      <li><a href="#start">Start here</a></li>
+      <li><a href="#compare">1. Look beyond the mean</a></li>
+      <li><a href="#missing">2. Account for missing responses</a></li>
+      <li><a href="#decide">3. Choose the next step</a></li>
+      <li><a href="#brief">Your decision brief</a></li>
+    </ol></nav>
+    <p id="progress" role="status">0 of 3 knowledge checks correct</p>
+    <progress id="meter" max="3" value="0" aria-label="Correct knowledge checks"></progress>
+    <p class="small">Self-paced. Approx. 25 minutes.<br>No timer or certificate.</p>
+    <p class="small" id="save-status">No account required. Nothing is submitted.</p>
+    <button type="button" id="reset" hidden>Reset this attempt</button>
+  </aside>
+  <main id="main" tabindex="-1">
+    <noscript><p class="notice">All lessons are available below. Interactive checks and local saving require JavaScript; use the answer guide at the end for offline review.</p></noscript>
+    <section id="start" class="lesson" aria-labelledby="start-title">
+      <p class="eyebrow">Start here / 3 minutes</p><h2 id="start-title" tabindex="-1">From a score to a useful next step</h2>
+      <img class="course-graphic" src="evidence-path.svg" width="960" height="280" alt="Three steps: compare the pattern, check the missing evidence, and choose a reversible teaching response.">
+      <p>You are preparing for a mathematics team meeting. Two classes have the same average score. Should they receive the same follow-up lesson? Work through a small fictional example, then write a short recommendation.</p>
+      <h3>By the end, you will be able to</h3>
+      <ol><li>Compare two score distributions without treating a class mean as an individual diagnosis.</li><li>Separate missing responses from observed incorrect answers and name the denominator in a percentage.</li><li>Recommend a targeted response, acknowledge uncertainty, and specify evidence to collect next.</li></ol>
+      <h3>What you need</h3><p>Familiarity with percentages and classroom assessment. No statistical software or prior data-analysis course is required. A mean is the sum of the observed scores divided by the number of observed scores.</p>
+      <h3>Choose your route</h3><p>Follow the modules in order, or revisit any module from the course outline. Each example is available as both a visual and a data table. You can draft your final response as prose or bullets; alternatively, explain it aloud using the same rubric before typing a short summary.</p>
+      <p class="notice">New portfolio demonstration, not a Canvas course or a record of prior client delivery. All learners, scores, and scenarios are fictional. Do not enter real student information.</p>
+      <a class="button" href="#compare">Begin module 1</a>
+    </section>
+    <section id="compare" class="lesson" aria-labelledby="compare-title">
+      <p class="eyebrow">Module 1 / 7 minutes</p><h2 id="compare-title" tabindex="-1">Look beyond the mean</h2>
+      <p class="objective"><strong>Objective:</strong> distinguish equal averages from equal learning needs.</p>
+      <p>Both classes completed the same 10-point assessment under comparable conditions. Each has eight observed scores. The means are both 6 out of 10, but the distributions tell different stories.</p>
+      <figure><img class="course-graphic" src="distributions.svg" width="960" height="400" alt="Class A clusters at scores 5, 6, and 7. Class B has scores spread from 2 to 10. Both means are 6. Exact values follow in the table."><figcaption>One dot represents one fictional student. The dotted line marks the shared mean, not a mastery threshold.</figcaption></figure>
+      <table><caption>All observed scores, out of 10</caption><thead><tr><th scope="col">Class</th><th scope="col">Scores in ascending order</th><th scope="col">Mean</th><th scope="col">Range</th></tr></thead><tbody><tr><th scope="row">A</th><td>5, 5, 6, 6, 6, 6, 7, 7</td><td>6</td><td>2</td></tr><tr><th scope="row">B</th><td>2, 3, 4, 5, 7, 8, 9, 10</td><td>6</td><td>8</td></tr></tbody></table>
+      <h3>A worked interpretation</h3><p>Class A is clustered near the mean. Class B has wider variation, so its average hides more of the differences between students. This does not prove why scores differ or identify any particular misconception. Examine question responses and student work before choosing support.</p>
+      <p><strong>Try it:</strong> compare the ranges: 7 minus 5 equals 2 for A; 10 minus 2 equals 8 for B. Range describes the spread between the smallest and largest observed scores, not the quality of teaching.</p>
+      <form data-check="compare"><fieldset><legend>Which conclusion is best supported?</legend>
+        <label><input type="radio" name="compare" value="same">Both classes need the same lesson because their means match.</label>
+        <label><input type="radio" name="compare" value="spread">Class B shows more varied scores; examine individual work before deciding support.</label>
+        <label><input type="radio" name="compare" value="teacher">Class B's teacher is less effective because the scores are more spread out.</label>
+      </fieldset><button type="submit">Check reasoning</button><p class="feedback" role="status"></p></form>
+      <nav class="lesson-nav" aria-label="Module navigation"><a href="#start">Back: Start here</a><a class="button" href="#missing">Next: Missing responses</a></nav>
+    </section>
+    <section id="missing" class="lesson" aria-labelledby="missing-title">
+      <p class="eyebrow">Module 2 / 6 minutes</p><h2 id="missing-title" tabindex="-1">Account for missing responses</h2>
+      <p class="objective"><strong>Objective:</strong> state a percentage with its denominator and describe what remains unknown.</p>
+      <p>Ten students were assigned an exit ticket. Eight responded: six answered correctly and two incorrectly. Two did not respond. Their reasons are not recorded.</p>
+      <div class="response-strip" role="img" aria-label="10 assigned students: 6 correct responses, 2 incorrect responses, 2 missing responses"><span>6 correct</span><span>2 incorrect</span><span>2 missing</span></div>
+      <table><caption>Three distinct questions</caption><thead><tr><th scope="col">Measure</th><th scope="col">Calculation</th><th scope="col">Interpretation</th></tr></thead><tbody><tr><th scope="row">Accuracy among respondents</th><td>6 / 8 = 75%</td><td>Of those who responded, 75% were correct.</td></tr><tr><th scope="row">Response rate</th><td>8 / 10 = 80%</td><td>80% of assigned students provided a response.</td></tr><tr><th scope="row">Correct responses among all assigned</th><td>6 / 10 = 60%</td><td>60% of all assigned students supplied a correct answer.</td></tr></tbody></table>
+      <h3>Do not silently change the question</h3><p>Seventy-five percent and 60% are both valid calculations, but they answer different questions. Neither establishes mastery. A missing response is not observed evidence of an incorrect solution. Check access, attendance, time, and follow-up work before interpreting it.</p>
+      <form data-check="missing"><fieldset><legend>Which summary preserves the evidence?</legend>
+        <label><input type="radio" name="missing" value="mastery">75% of the class has mastered the skill.</label>
+        <label><input type="radio" name="missing" value="denominator">6 of 8 respondents were correct; 2 of 10 assigned students have no response yet.</label>
+        <label><input type="radio" name="missing" value="zeros">Four students demonstrated an incorrect solution.</label>
+      </fieldset><button type="submit">Check reasoning</button><p class="feedback" role="status"></p></form>
+      <nav class="lesson-nav" aria-label="Module navigation"><a href="#compare">Back: Distributions</a><a class="button" href="#decide">Next: Instructional response</a></nav>
+    </section>
+    <section id="decide" class="lesson" aria-labelledby="decide-title">
+      <p class="eyebrow">Module 3 / 5 minutes</p><h2 id="decide-title" tabindex="-1">Choose the next step</h2>
+      <p class="objective"><strong>Objective:</strong> connect a tentative interpretation to a targeted, reversible instructional response.</p>
+      <p>The exit ticket asked students to distribute a negative sign. Both incorrect responses show the same sign error. You have not yet spoken with those students or collected work from the two nonrespondents.</p>
+      <h3>Evidence, interpretation, action</h3><ol class="decision-steps"><li><strong>Evidence:</strong> two submitted responses contain the same sign error; two responses are missing.</li><li><strong>Interpretation:</strong> the repeated error suggests a possible need for focused practice. It does not show whether the cause is conceptual, procedural, or a momentary slip.</li><li><strong>Action:</strong> ask the two respondents to explain their reasoning, then use a worked example and a fresh item. Contact the nonrespondents about access and arrange a low-stakes opportunity to respond.</li><li><strong>Check:</strong> compare explanations and a fresh response after the follow-up. Do not treat repetition of the original question as independent evidence of learning.</li></ol>
+      <form data-check="decide"><fieldset><legend>Which plan is most proportionate to the evidence?</legend>
+        <label><input type="radio" name="decide" value="repeat">Reteach the entire unit to everyone and repeat the same exit ticket.</label>
+        <label><input type="radio" name="decide" value="targeted">Check reasoning on the sign error, follow up on missing responses separately, and use a fresh item afterward.</label>
+        <label><input type="radio" name="decide" value="placement">Move all four students into a lower course immediately.</label>
+      </fieldset><button type="submit">Check reasoning</button><p class="feedback" role="status"></p></form>
+      <nav class="lesson-nav" aria-label="Module navigation"><a href="#missing">Back: Missing responses</a><a class="button" href="#brief">Apply: Decision brief</a></nav>
+    </section>
+    <section id="brief" class="lesson" aria-labelledby="brief-title">
+      <p class="eyebrow">Apply / 4 minutes</p><h2 id="brief-title" tabindex="-1">Write your decision brief</h2>
+      <p>Use the exit-ticket scenario to recommend a next step for your team. Include the observed evidence, one limitation, a specific action, and a way to check whether it helped. Use a short paragraph or four bullets. This is a self-review, not an automated evaluation of your writing.</p>
+      <label for="reflection">Your recommendation</label><textarea id="reflection" rows="7" maxlength="4000" aria-describedby="reflection-help"></textarea>
+      <p id="reflection-help" class="small">Saved on this device when browser storage is available. Use only the fictional scenario. You can download a plain-text copy or reset the attempt to remove it.</p>
+      <fieldset class="rubric"><legend>Review your brief against these criteria</legend>
+        <label><input type="checkbox" data-rubric="evidence">Evidence: I state 6/8 correct responses and 2/10 missing responses.</label>
+        <label><input type="checkbox" data-rubric="limit">Limit: I do not infer mastery, cause, or ability from one item.</label>
+        <label><input type="checkbox" data-rubric="action">Action: I separate targeted feedback from nonresponse follow-up.</label>
+        <label><input type="checkbox" data-rubric="check">Follow-up: I specify a fresh item or explanation to collect next.</label>
+      </fieldset>
+      <div class="actions"><button type="button" id="download">Download brief</button><button type="button" id="print">Print learning packet</button></div>
+      <p id="brief-status" role="status"></p>
+      <button type="button" id="model-toggle" aria-expanded="false" aria-controls="model">Compare with an example</button>
+      <div id="model"><h3>Example decision brief</h3><p>Six of eight respondents answered correctly; two of ten assigned students have not responded. The two submitted errors share a sign pattern, but one question cannot establish mastery or its cause. I would ask those students to explain their reasoning and offer a worked example, while checking access with nonrespondents separately. I would then use a fresh item and a brief explanation to decide whether further support is needed.</p></div>
+      <div class="answer-guide"><h3>Knowledge-check answer guide</h3><p><strong>1:</strong> Greater variation in B calls for examining individual work. Equal means do not establish equal needs.</p><p><strong>2:</strong> Report 6/8 correct and 2/10 missing separately; neither number is a mastery estimate.</p><p><strong>3:</strong> Use targeted follow-up and fresh evidence. A single item does not support placement decisions.</p></div>
+      <nav class="lesson-nav" aria-label="Module navigation"><a href="#decide">Back: Instructional response</a><a href="../../projects/instructional-design.html">Review the design case study</a></nav>
+    </section>
+  </main>
+</div>
+<footer>Original learning sample developed with AI assistance for Grant McCurdy's portfolio. Human review and learner testing pending. No student records or external AI service.</footer>
+<dialog id="reset-dialog" aria-labelledby="reset-heading"><h2 id="reset-heading">Reset this attempt?</h2><p>This removes your saved answers, brief, and self-review from this browser.</p><form method="dialog"><button value="cancel" autofocus>Keep my work</button><button id="confirm-reset" value="reset">Reset attempt</button></form></dialog>
+</body></html>

@@ -1,10 +1,10 @@
 :root {
   color-scheme: light;
   --ink: #202020;
-  --muted: #595959;
+  --muted: #606060;
   --surface: #ffffff;
   --surface-soft: #f8f8f8;
-  --line: #dedede;
+  --line: #e8e8e8;
   --navy: #000000;
   --navy-2: #000000;
   --gold: #000000;
@@ -29,7 +29,7 @@
   --viz-section-context: #64748b;
   --viz-track: #e5e7eb;
   --radius: 8px;
-  --max: 1180px;
+  --max: 1200px;
   --motion-fast: 160ms;
   --motion-medium: 240ms;
   --motion-slow: 360ms;
@@ -49,7 +49,7 @@ body {
   color: var(--ink);
   background: var(--surface);
   font-family: Arial, Helvetica, sans-serif;
-  line-height: 1.6;
+  line-height: 1.7;
 }
 
 a {

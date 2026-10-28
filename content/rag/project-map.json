@@ -1,5 +1,16 @@
 {
   "purpose": "Public-safe structured project map for the homepage portfolio helper.",
+  "companyCaseStudies": [
+    {
+      "id": "logos-learning-systems",
+      "url": "https://grant-mccurdy.github.io/projects/logos-learning-systems.html",
+      "evidenceManifest": "data/company-case-studies.json",
+      "reviewedAt": "2026-10-05",
+      "boundary": "Separate Product-owner-reviewed company work, not a new claim in the August Projects snapshot. Schools is a synthetic demonstration; eight practice journeys are separate from 500 historical students. Tutor is not live-ready: upload passed, image reading failed provider authentication, history and instructor replies remain unverified.",
+      "publicDescription": "https://logoseducation.group/schools/",
+      "assessmentCaseStudy": "https://grant-mccurdy.github.io/projects/logos-assessment.html"
+    }
+  ],
   "site": {
     "title": "Grant McCurdy Learning Systems Portfolio",
     "url": "https://grant-mccurdy.github.io/",
@@ -44,7 +55,7 @@
       "title": "Assessment Intelligence",
       "campaignEligibility": "featured",
       "url": "https://grant-mccurdy.github.io/projects/assessment-intelligence.html",
-      "summary": "The portfolio dashboard presents the same synthetic mathematics data, figures, and findings as the Logos department report. The public Assessment Intelligence repository retains the separate earlier SQL/dbt/DuckDB implementation; the proof claims below describe that earlier implementation.",
+      "summary": "The portfolio dashboard presents the Logos report's synthetic mathematics data and findings through native interactive charts. The public Assessment Intelligence repository retains the separate earlier SQL/dbt/DuckDB implementation; the proof claims below describe that earlier implementation.",
       "claims": [
         {"id": "ai-claim-1", "status": "qualified", "statement": "Designed a governed assessment analytics path from synthetic LMS-style warehouse records through dbt marts, parity gates, stakeholder reports, and a hash-bound dashboard payload."},
         {"id": "ai-claim-2", "status": "qualified", "statement": "Implemented data-quality and disclosure guardrails that separate non-participation from achievement and suppress small cohorts from ranked findings."}

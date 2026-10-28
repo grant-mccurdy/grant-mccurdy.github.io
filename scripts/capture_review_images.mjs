@@ -17,8 +17,9 @@ const mimeTypes = {
   ".svg": "image/svg+xml",
 };
 const captures = [
-  ["portfolio", "/"],
   ["assessment-intelligence", "/dashboard/assessment.html"],
+  ["portfolio", "/"],
+  ["logos-learning-systems", "/projects/logos-learning-systems.html"],
   ["content-intelligence", "/projects/content-intelligence.html"],
   ["education-data-simulation-engine", "/data-lab.html"],
   ["statistical-risk-modeling-r", "/projects/statistical-risk-modeling-r.html"],
@@ -94,12 +95,30 @@ try {
       document.querySelectorAll("[data-reveal]").forEach((element) => element.classList.add("is-visible"));
       document.querySelectorAll("video").forEach((video) => video.pause());
     });
+    if (name === "assessment-intelligence") {
+      await page.setViewportSize({ width: 1280, height: 1100 });
+      await page.locator("#course-chart svg").waitFor();
+      await page.locator(".violin-panel").screenshot({
+        path: path.join(root, "assets/images/logos/dashboard-overview.png"),
+      });
+      await page.setViewportSize({ width: 1280, height: 640 });
+      await page.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
+    }
     await page.screenshot({ path: path.join(output, `${name}.png`) });
     if (requested.length) {
       const review = path.join(root, "tmp", "logos-alignment");
       fs.mkdirSync(review, { recursive: true });
+      await page.setViewportSize({ width: 1440, height: 1000 });
+      await page.screenshot({ path: path.join(review, `${name}-desktop-full.png`), fullPage: true });
       await page.setViewportSize({ width: 390, height: 844 });
       await page.screenshot({ path: path.join(review, `${name}-mobile-viewport.png`) });
+      await page.screenshot({ path: path.join(review, `${name}-mobile-full.png`), fullPage: true });
+      if (name === "portfolio") {
+        await page.setViewportSize({ width: 632, height: 602 });
+        await page.locator(".site-footer").scrollIntoViewIfNeeded();
+        await page.waitForFunction(() => getComputedStyle(document.querySelector("[data-portfolio-helper]")).opacity === "1");
+        await page.screenshot({ path: path.join(review, "portfolio-footer-632.png") });
+      }
     }
     console.log(`captured assets/images/social/${name}.png`);
     await context.close();

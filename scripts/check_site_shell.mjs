@@ -3,7 +3,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const expectedLabels = ["Home", "Systems", "Demos", "Evidence & Methods", "About", "Contact"];
+const expectedLabels = ["Work", "About", "Contact"];
 const errors = [];
 const decodeLabel = (value) => value.replaceAll("&amp;", "&").trim();
 
@@ -13,7 +13,7 @@ const visit = (directory) => {
     const absolute = path.join(directory, entry.name);
     const relative = path.relative(root, absolute).replaceAll(path.sep, "/");
     if (entry.isDirectory()) {
-      if ([".git", "node_modules", "artifacts"].includes(entry.name)) continue;
+      if ([".git", "node_modules", "artifacts", "tmp"].includes(entry.name)) continue;
       if (relative === "projects/hotel-comp-policy-model") continue;
       visit(absolute);
     } else if (entry.name.endsWith(".html")) {

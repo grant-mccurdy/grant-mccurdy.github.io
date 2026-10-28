@@ -1,6 +1,6 @@
 {
   "schemaVersion": 4,
-  "siteLastReviewed": "2026-08-17",
+  "siteLastReviewed": "2026-10-05",
   "policy": "Curated public portfolio entries only. Public repositories are never added automatically.",
   "portfolioProof": {
     "contract": "portfolio-proof.v1",
@@ -31,7 +31,7 @@
       "content-intelligence",
       "graduate-statistics-portfolio"
     ],
-    "policy": "Projects owns technical truth. Project-level profile eligibility controls featured versus supporting presentation; every reusable claim retains its Projects status, qualification, evidence references, and item hash. Projects outside this snapshot are excluded from the current public profile."
+    "policy": "Projects owns repository technical truth. Project-level eligibility controls featured versus supporting repository presentation; every reusable claim retains its Projects status, qualification, evidence references, and item hash. Company case studies require separate Product-owner review in data/company-case-studies.json and do not amend this snapshot."
   },
   "projects": [
     {
@@ -40,7 +40,7 @@
       "tier": "featured",
       "proofProfileEligibility": "featured",
       "statusLabel": "Featured | prototype | qualified",
-      "homeFeatured": true,
+      "homeFeatured": false,
       "lastReviewed": "2026-08-17",
       "portalPath": "projects/statistical-risk-modeling-r.html",
       "sourceUrl": "https://github.com/grant-mccurdy/statistical-risk-modeling-r",
@@ -60,7 +60,11 @@
           "status": "prototype",
           "profileEligibility": "qualified",
           "qualification": "Strongest campaign evidence for measurement, validation, and decision support. Public use should surface the below-target validity gates; an interview rebuild needs the reproducibility work item first.",
-          "evidenceIds": ["srm-readme", "srm-model-card", "srm-final-metrics"],
+          "evidenceIds": [
+            "srm-readme",
+            "srm-model-card",
+            "srm-final-metrics"
+          ],
           "itemHash": "ae4d976f02b8c136ce202ba143fca4674d1d1c6de6e48e872286741ec12a433a"
         },
         {
@@ -69,7 +73,9 @@
           "status": "prototype",
           "profileEligibility": "qualified",
           "qualification": "Strongest campaign evidence for measurement, validation, and decision support. Public use should surface the below-target validity gates; an interview rebuild needs the reproducibility work item first.",
-          "evidenceIds": ["srm-model-card"],
+          "evidenceIds": [
+            "srm-model-card"
+          ],
           "itemHash": "46ed0efefa30fe20ed991a099c268f10f9fbc2461338687c31a1e732f659744f"
         }
       ]
@@ -86,7 +92,7 @@
       "sourceUrl": "https://github.com/grant-mccurdy/assessment-intelligence",
       "sourceRevision": "272e879a2dc62c710283edf3bc30540c571ed535",
       "primaryEvidenceUrl": "dashboard/assessment.html",
-      "summary": "The portfolio dashboard presents the same synthetic mathematics data, figures, and findings as the Logos department report. The public Assessment Intelligence repository retains the separate earlier SQL/dbt/DuckDB analytics implementation.",
+      "summary": "The portfolio dashboard presents the Logos report's synthetic mathematics data and findings through native interactive charts. The public Assessment Intelligence repository retains the separate earlier SQL/dbt/DuckDB analytics implementation.",
       "capabilities": [
         "SQL analytics",
         "dbt and DuckDB",
@@ -100,7 +106,11 @@
           "status": "qualified",
           "profileEligibility": "qualified",
           "qualification": "Strongest education-data architecture candidate once the dbt check is relocatable. Static artifacts are reviewable now, but a live interview rebuild and public feature must use the repaired, release-synchronized commit.",
-          "evidenceIds": ["ai-readme", "ai-dbt-architecture", "ai-publication-manifest"],
+          "evidenceIds": [
+            "ai-readme",
+            "ai-dbt-architecture",
+            "ai-publication-manifest"
+          ],
           "itemHash": "8ee3cf13a819adee8e2380ffa378d68eef076d66b9687bc0d6fcb392d7f3b39a"
         },
         {
@@ -109,7 +119,10 @@
           "status": "qualified",
           "profileEligibility": "qualified",
           "qualification": "Strongest education-data architecture candidate once the dbt check is relocatable. Static artifacts are reviewable now, but a live interview rebuild and public feature must use the repaired, release-synchronized commit.",
-          "evidenceIds": ["ai-readme", "ai-sql-report"],
+          "evidenceIds": [
+            "ai-readme",
+            "ai-sql-report"
+          ],
           "itemHash": "0bd902f3881ae3daefeefd169b287d4eccbbbde376b275416a0cb40511faef14"
         }
       ],
@@ -130,7 +143,7 @@
       "tier": "featured",
       "proofProfileEligibility": "featured",
       "statusLabel": "Featured | prototype | review gated",
-      "homeFeatured": true,
+      "homeFeatured": false,
       "lastReviewed": "2026-08-17",
       "portalPath": "projects/assessment-to-remediation-pipeline.html",
       "sourceUrl": "https://github.com/grant-mccurdy/assessment-to-remediation-pipeline",
@@ -149,7 +162,11 @@
           "status": "prototype",
           "profileEligibility": "qualified",
           "qualification": "Strong visual and workflow story if explicitly framed as the implemented authoring-review-export slice. Accessibility and clean demo verification should be completed before a high-stakes interview walkthrough.",
-          "evidenceIds": ["atr-readme", "atr-gate", "atr-export-manifest"],
+          "evidenceIds": [
+            "atr-readme",
+            "atr-gate",
+            "atr-export-manifest"
+          ],
           "itemHash": "cf51a160bf9d1380fc395054ed504a0eb2194e9f2b039d3637118cce5b6c24b6"
         },
         {
@@ -158,7 +175,10 @@
           "status": "prototype",
           "profileEligibility": "qualified",
           "qualification": "Strong visual and workflow story if explicitly framed as the implemented authoring-review-export slice. Accessibility and clean demo verification should be completed before a high-stakes interview walkthrough.",
-          "evidenceIds": ["atr-gate", "atr-visual-review"],
+          "evidenceIds": [
+            "atr-gate",
+            "atr-visual-review"
+          ],
           "itemHash": "6b1a1b8e50593be06fdddfb8825a8211997f1ff9431aada0e96c8a9f9e3d8844"
         }
       ]
@@ -188,7 +208,10 @@
           "status": "qualified",
           "profileEligibility": "qualified",
           "qualification": "Strong supporting architecture evidence and the privacy foundation for Assessment Intelligence; the local commit is demo-ready, but public featuring must wait for separately approved remote release synchronization.",
-          "evidenceIds": ["edse-readme", "edse-lineage"],
+          "evidenceIds": [
+            "edse-readme",
+            "edse-lineage"
+          ],
           "itemHash": "34fb3ae8f62aa67d6e6321fb30018fe11a24cc92a4c70945bca4d0bb6e1c8789"
         },
         {
@@ -197,7 +220,10 @@
           "status": "qualified",
           "profileEligibility": "qualified",
           "qualification": "Strong supporting architecture evidence and the privacy foundation for Assessment Intelligence; the local commit is demo-ready, but public featuring must wait for separately approved remote release synchronization.",
-          "evidenceIds": ["edse-validation-summary", "edse-lineage"],
+          "evidenceIds": [
+            "edse-validation-summary",
+            "edse-lineage"
+          ],
           "itemHash": "9bc34bb53486648df9403cc3dd57cf635a24ebc3c3b50d8eae9ff6449069b095"
         }
       ],
@@ -233,7 +259,11 @@
           "status": "prototype",
           "profileEligibility": "qualified",
           "qualification": "Clear supporting example of governed AI-assisted instructional workflow design; less technically deep than the top three campaign projects.",
-          "evidenceIds": ["iaw-readme", "iaw-workflow", "iaw-output"],
+          "evidenceIds": [
+            "iaw-readme",
+            "iaw-workflow",
+            "iaw-output"
+          ],
           "itemHash": "f16fda11a6062a878c9c7800de00d5b18bfa4c3c103a781bdee5838e593169ac"
         },
         {
@@ -242,7 +272,10 @@
           "status": "prototype",
           "profileEligibility": "qualified",
           "qualification": "Clear supporting example of governed AI-assisted instructional workflow design; less technically deep than the top three campaign projects.",
-          "evidenceIds": ["iaw-readme", "iaw-validator"],
+          "evidenceIds": [
+            "iaw-readme",
+            "iaw-validator"
+          ],
           "itemHash": "1bb2c7a62fbc22c97ec142d29444fb1b85f0c545068ae18bbe89489d0fc00d8d"
         }
       ]
@@ -272,7 +305,11 @@
           "status": "prototype",
           "profileEligibility": "qualified",
           "qualification": "Strong general AI systems alternate with unusually clear provenance and governance evidence; less education-specific than the top three.",
-          "evidenceIds": ["ci-readme", "ci-rag-architecture", "ci-rag-index"],
+          "evidenceIds": [
+            "ci-readme",
+            "ci-rag-architecture",
+            "ci-rag-index"
+          ],
           "itemHash": "c6508cb67632816703a5e7bbe9a4ae3d1441a1a2bb7b104d8fda1550e6bca1d5"
         },
         {
@@ -281,7 +318,10 @@
           "status": "prototype",
           "profileEligibility": "qualified",
           "qualification": "Strong general AI systems alternate with unusually clear provenance and governance evidence; less education-specific than the top three.",
-          "evidenceIds": ["ci-readme", "ci-safety-review"],
+          "evidenceIds": [
+            "ci-readme",
+            "ci-safety-review"
+          ],
           "itemHash": "4c35666bbb861cab904f06dd22adaefd8460f5beda9649964c228331e1ca2d2a"
         }
       ],
@@ -317,7 +357,11 @@
           "status": "qualified",
           "profileEligibility": "qualified",
           "qualification": "Strong supporting credential evidence for statistical depth and reproducibility; local artifacts are demo-ready, but public featuring must wait for separately approved synchronization of the ahead-of-remote commit.",
-          "evidenceIds": ["gsp-readme", "gsp-clinical-summary", "gsp-nonlinear-summary"],
+          "evidenceIds": [
+            "gsp-readme",
+            "gsp-clinical-summary",
+            "gsp-nonlinear-summary"
+          ],
           "itemHash": "6b315c6ac54bb2cbfbf7a4d14a77f80ea7d55a1d2ceef993d54d2aabd645be3a"
         },
         {
@@ -326,7 +370,10 @@
           "status": "qualified",
           "profileEligibility": "qualified",
           "qualification": "Strong supporting credential evidence for statistical depth and reproducibility; local artifacts are demo-ready, but public featuring must wait for separately approved synchronization of the ahead-of-remote commit.",
-          "evidenceIds": ["gsp-clinical-summary", "gsp-nonlinear-summary"],
+          "evidenceIds": [
+            "gsp-clinical-summary",
+            "gsp-nonlinear-summary"
+          ],
           "itemHash": "858f325382942afd2290becf520fc965d26e15869e36279738deed14ebe85699"
         }
       ]

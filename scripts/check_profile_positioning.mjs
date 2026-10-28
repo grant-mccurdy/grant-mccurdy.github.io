@@ -31,29 +31,22 @@ const requireText = (source, text, label) => {
 };
 const same = (actual, expected) => JSON.stringify(actual) === JSON.stringify(expected);
 
-requireText(home, "<title>Grant McCurdy | AI-Enabled Learning, Assessment &amp; Data Systems</title>", "Homepage metadata");
-requireText(
-  home,
-  '<meta name="description" content="Mathematics and learning-systems leader designing AI-enabled, data-informed systems for assessment, measurement, learning analytics, and organizational decision-making.">',
-  "Homepage metadata",
-);
-const hero = home.match(/<section class="hero[^\"]*">([\s\S]*?)<\/section>/)?.[1] || "";
-requireText(hero, "Mathematics and learning-systems leader", "Homepage hero");
-requireText(
-  hero,
-  "<h1>Grant McCurdy</h1>",
-  "Homepage hero",
-);
-requireText(
-  hero,
-  "I build assessment systems, education data workflows, and AI-assisted instructional tools.",
-  "Homepage hero",
-);
-requireText(hero, 'href="https://logoseducation.group/"', "Homepage Logos connection");
-requireText(hero, 'href="dashboard/assessment.html"', "Homepage assessment path");
-for (const term of ["assessment and measurement", "learning analytics", "lms/api automation", "human-reviewed ai", "leadership"]) {
-  requireText(hero.toLowerCase(), term, "Homepage first screen");
+for (const term of ["Grant McCurdy", "Assessment", "Data", "Learning Systems"]) {
+  requireText(home.match(/<title>(.*?)<\/title>/)?.[1] || "", term, "Homepage title");
 }
+for (const term of ["assessment analytics", "education data", "AI-assisted"]) {
+  requireText(home.match(/<meta name="description" content="([^"]+)"/)?.[1] || "", term, "Homepage description");
+}
+const intro = home.match(/<section class="section-shell work-intro"[^>]*>([\s\S]*?)<\/section>/)?.[1] || "";
+requireText(intro, '<h1 id="background-heading">Background</h1>', "Background-first introduction");
+  for (const term of ["assessment analytics", "education data", "AI-assisted", "department leadership"]) {
+  requireText(intro, term, "Homepage introduction");
+}
+if (intro.replace(/<[^>]+>/g, '').includes("Grant McCurdy") || home.includes('class="hero-proof"')) errors.push("Homepage repeats identity or positioning instead of featuring work.");
+requireText(home, 'href="https://logoseducation.group/"', "Homepage Logos connection");
+requireText(home, 'href="https://logoseducation.group/sample-report/"', "Homepage interactive report path");
+requireText(home, "Founder and builder of Logos Education Group", "Company ownership");
+requireText(home, 'href="projects/logos-assessment.html"', "Original assessment case study");
 
 for (const phrase of ["Aspiring data analyst", "Career changer", "Teacher trying to leave education", "Entry-level technologist", "Machine-learning engineer"]) {
   if ([home, about, evidence, systems].some((source) => source.toLowerCase().includes(phrase.toLowerCase()))) {
@@ -61,22 +54,20 @@ for (const phrase of ["Aspiring data analyst", "Career changer", "Teacher trying
   }
 }
 
-requireText(
-  about,
-  "Mathematics and learning-systems leader who designs AI-enabled, data-informed education systems—combining assessment and measurement, analytics, automation, and implementation to improve student success, instructional quality, and organizational decision-making.",
-  "About page",
-);
+for (const term of ["Mathematics teaching and department leadership", "assessment", "analytics", "human-reviewed AI"]) {
+  requireText(about, term, "About positioning");
+}
 for (const label of ["Problem", "Role", "System", "Evidence", "Outcome", "Limitations"]) {
   requireText(evidence, `<strong>${label}</strong>`, "Evidence case-study template");
 }
 
 const featured = registry.projects.filter((project) => project.homeFeatured).map((project) => project.id);
-if (!same(featured, expectedFeatured)) errors.push(`Homepage featured order must be ${expectedFeatured.join(", ")}.`);
+if (!same(featured, ["assessment-intelligence"])) errors.push(`Homepage repository feature must be Assessment Intelligence.`);
 if (!same(registry.portfolioProof?.featuredProjectIds, expectedFeatured)) errors.push("Registry featured eligibility is stale.");
 if (!same(registry.portfolioProof?.supportingProjectIds, expectedSupporting)) errors.push("Registry supporting eligibility is stale.");
 if (registry.portfolioProof?.sourceFingerprint !== proofFingerprint) errors.push("Registry is not bound to the current Projects proof fingerprint.");
 if (registry.portfolioProof?.projectCount !== 7 || registry.portfolioProof?.claimCount !== 14) errors.push("Registry must bind seven projects and fourteen claims.");
-for (const id of expectedFeatured) requireText(home, `data-home-project-id="${id}"`, "Homepage systems");
+requireText(home, 'data-home-project-id="assessment-intelligence"', "Homepage analytics feature");
 for (const id of expectedSupporting) {
   if (home.includes(`data-home-project-id="${id}"`)) errors.push(`${id}: supporting project appears as a homepage feature.`);
 }
@@ -128,7 +119,7 @@ for (const url of ["https://www.linkedin.com/in/grant-mccurdy/", "https://github
 }
 if (/mailto:|tel:/i.test(contact)) errors.push("Contact section must use LinkedIn and GitHub only.");
 
-requireText(ragProfile, "Mathematics and learning-systems leader building AI-enabled, data-informed", "RAG profile");
+requireText(ragProfile, "Assessment analytics, education data systems, and AI-assisted instructional", "RAG profile");
 requireText(ragProfile, proofFingerprint, "RAG profile proof binding");
 requireText(evidence, "does not update the live homepage helper by itself", "Corpus deployment boundary");
 requireText(evidence, proofFingerprint, "Evidence page proof binding");

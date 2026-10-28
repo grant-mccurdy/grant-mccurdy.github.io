@@ -18,8 +18,11 @@ VERBATIM_EVIDENCE_EXCEPTIONS = (
 CURATED_PATTERNS = (
     "index.html",
     "data-lab.html",
+    "about.html",
+    "evidence-methods.html",
     "README.md",
     "data/portfolio-projects.json",
+    "data/company-case-studies.json",
     "demos/*.html",
     "projects/*.html",
     "case-studies/*.html",

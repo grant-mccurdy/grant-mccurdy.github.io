@@ -16,6 +16,10 @@ const mimeTypes = {
   ".png": "image/png",
 };
 const cases = [
+  { path: "/projects/logos-assessment.html", viewport: { width: 1280, height: 900 } },
+  { path: "/projects/logos-assessment.html", viewport: { width: 390, height: 844 } },
+  { path: "/projects/logos-learning-systems.html", viewport: { width: 1280, height: 900 } },
+  { path: "/projects/logos-learning-systems.html", viewport: { width: 390, height: 844 } },
   { path: "/", viewport: { width: 1440, height: 1000 } },
   { path: "/", viewport: { width: 390, height: 844 } },
   { path: "/about.html", viewport: { width: 1280, height: 900 } },

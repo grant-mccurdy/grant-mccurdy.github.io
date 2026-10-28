@@ -5,12 +5,26 @@ NODE ?= $(shell command -v node 2>/dev/null || command -v node.exe 2>/dev/null |
 
 all: check
 
-check: prose links inventory sitemap site-shell profile-positioning chat-ui assessment-core assessment-manifest logos-alignment department-dashboard tracking-contract visual-smoke accessibility-smoke dashboard-logic
+check: prose links inventory sitemap site-shell profile-positioning portfolio-refresh chat-ui assessment-core assessment-manifest logos-alignment department-dashboard tracking-contract visual-smoke accessibility-smoke dashboard-logic learning-course walkthrough
+
+.PHONY: walkthrough
+walkthrough:
+	"$(NODE)" scripts/walkthrough_smoke.mjs
+
+.PHONY: learning-course
+learning-course:
+	"$(NODE)" scripts/learning_course_smoke.mjs
+
+.PHONY: portfolio-refresh
+portfolio-refresh:
+	"$(NODE)" scripts/portfolio_refresh_smoke.mjs
 
 .PHONY: logos-alignment department-dashboard
 logos-alignment:
 	$(PYTHON) scripts/sync_logos_report.py --check
 	$(PYTHON) scripts/test_logos_import.py
+	$(PYTHON) scripts/sync_logos_distributions.py --check
+	$(PYTHON) scripts/test_logos_distributions.py
 
 department-dashboard:
 	"$(NODE)" scripts/department_dashboard_smoke.mjs

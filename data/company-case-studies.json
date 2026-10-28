@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "reviewedAt": "2026-10-05",
+  "policy": "Product-owner-reviewed company work, separate from the August Projects proof snapshot. Descriptions and synthetic evidence only; application origins remain unlisted.",
+  "caseStudies": [
+    {
+      "id": "logos-learning-systems",
+      "title": "Logos learning systems",
+      "portalPath": "projects/logos-learning-systems.html",
+      "lastReviewed": "2026-10-05",
+      "classification": "synthetic-demonstration",
+      "companyPreviewUrl": "https://logoseducation.group/schools/",
+      "evidence": [
+        {"id": "schools-release-2026-10-01", "kind": "owner-release-record", "automatedChecksPassed": 385, "hostedRoleEvaluations": true},
+        {"id": "schools-context-2026-10-05", "kind": "owner-read-only-check", "newPaidModelEvaluation": false},
+        {"id": "tutor-release-check-2026-10-05", "kind": "owner-release-check", "nativeUpload": "passed", "imageReading": "blocked-provider-authentication", "signedInHistory": "unverified", "instructorReply": "unverified", "liveReady": false}
+      ],
+      "schools": {
+        "maturity": "working-demonstration-in-development",
+        "authoredPracticeJourneys": 8,
+        "historicalStudents": 500,
+        "liveSchoolAuthentication": false,
+        "productionCanvasSync": false,
+        "gradePassback": false,
+        "realStudentData": false
+      },
+      "sharedAssessment": {
+        "manifest": "data/logos/manifest.json",
+        "id": "LOGOS-MATH-V2",
+        "revision": 5,
+        "questions": 30,
+        "workingSeconds": 2700,
+        "sections": 21,
+        "responses": 15000,
+        "formSha256": "af91b62f5581bef95f13432f739052d1ac3fe845bbdd8c4817e7fc86b780dabf"
+      },
+      "excludedClaims": ["client adoption", "measured learning gains", "production school deployment", "national norms", "individual placement validity"]
+    }
+  ]
+}

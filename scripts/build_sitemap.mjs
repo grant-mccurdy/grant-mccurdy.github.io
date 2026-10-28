@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const registry = JSON.parse(fs.readFileSync(path.join(root, "data", "portfolio-projects.json"), "utf8"));
+const company = JSON.parse(fs.readFileSync(path.join(root, "data", "company-case-studies.json"), "utf8"));
 const outputPath = path.join(root, "sitemap.xml");
 const checkOnly = process.argv.includes("--check");
 const baseUrl = "https://grant-mccurdy.github.io/";
@@ -28,11 +29,16 @@ addRoute("about.html", registry.siteLastReviewed);
 addRoute("evidence-methods.html", registry.siteLastReviewed);
 addRoute("projects/", registry.siteLastReviewed);
 addRoute("demos/", registry.siteLastReviewed);
+addRoute("projects/logos-assessment.html", "2026-10-06");
+addRoute("projects/instructional-design.html", "2026-10-23");
+addRoute("demos/assessment-evidence/index.html", "2026-10-23");
 
 for (const project of registry.projects) {
   addRoute(project.portalPath, project.lastReviewed);
   if (project.demo) addRoute(project.demo.url, project.lastReviewed);
 }
+
+for (const study of company.caseStudies) addRoute(study.portalPath, study.lastReviewed);
 
 const entries = [...routes.entries()]
   .sort(([left], [right]) => left.localeCompare(right))

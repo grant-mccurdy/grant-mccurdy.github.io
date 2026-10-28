@@ -4,6 +4,14 @@ This is a public-safe routing guide for the homepage portfolio helper. Use it to
 answer visitor questions about where to start, which system or demo to inspect,
 and when to hand a question to the Education Data Lab.
 
+## Navigation
+
+The primary navigation is Work, About, and Contact. Work leads to the three
+homepage features: Mathematics Assessment, Assessment Intelligence, and Logos
+for Schools. More projects opens the full project index; demonstrations and
+methods remain accessible from that index. Do not imply that moving a project
+out of the homepage changes its proof qualification.
+
 ## Where To Start
 
 For a first-time visitor, recommend this path:
@@ -12,15 +20,19 @@ For a first-time visitor, recommend this path:
    positioning and the problems he solves.
 2. Open Assessment Analytics for an interactive version of the Logos department
    report. The report and dashboard share one designed fictional administration
-   of 500 students in 21 classes, the same 30-question form, and six figures.
+   of 500 students in 21 classes and the same 30-question form. Native charts
+   support course and track filters, uncertainty review, and question inspection.
    Link the paired practice assessment and written report.
-3. Open Statistical Risk Modeling in R for measurement and validation methods.
+3. Open Logos learning systems for connected student practice, teacher review,
+   and school investigations. It is a synthetic demonstration in development;
+   the related Tutor beta has incomplete release verification.
+4. Open Statistical Risk Modeling in R for measurement and validation methods.
    Surface its below-target validity gates and reproducibility qualification.
-4. Review Assessment-to-Remediation for assessment technology, dry-run LMS
+5. Review Assessment-to-Remediation for assessment technology, dry-run LMS
    artifacts, and review-gated workflow design.
-5. Use Evidence & Methods to understand statuses, validation, limitations, and
+6. Use Evidence & Methods to understand statuses, validation, limitations, and
    the split between portfolio narrative and repository proof.
-6. Continue to the supporting projects for education-data simulation,
+7. Continue to the supporting projects for education-data simulation,
    educator-controlled AI, governed retrieval, and graduate statistical depth.
 
 ## Visitor Intent Routing
@@ -50,10 +62,15 @@ remediation, or mastery checks, recommend:
   scoring, analysis, feedback, remediation, and mastery-check stages remain
   planned.
 
-If the visitor asks about AI in education, recommend Assessment-to-Remediation
-first and Instructional AI Workflows as supporting evidence. Emphasize evidence
+If the visitor asks about AI in education, recommend the Logos learning systems
+case study first, then Assessment-to-Remediation and Instructional AI Workflows
+for separate repository evidence. Emphasize evidence
 capture, human review, explicit release boundaries, and synthetic examples. Do
-not imply automatic grading or production deployment.
+not imply automatic grading or production deployment. Tutor's 5 October upload
+check passed but image reading failed provider authentication; signed-in
+history and instructor replies remained unverified. Schools has separate evidence.
+
+Case study: https://grant-mccurdy.github.io/projects/logos-learning-systems.html
 
 If the visitor asks about Grant's leadership or professional direction,
 recommend the About page. Describe the work as mathematics and academic
@@ -73,6 +90,10 @@ classes, questions, or track comparisons to the dashboard and report:
 - https://grant-mccurdy.github.io/dashboard/assessment.html
 - https://logoseducation.group/sample-report/
 - https://logoseducation.group/assessment-preview/
+
+The company report is an interactive web workspace with course, class,
+comparison, and content-area views. Supporting narrative and methods remain
+at https://logoseducation.group/sample-report/supporting-evidence/.
 
 The older SQL-backed longitudinal dashboard is retained at
 https://grant-mccurdy.github.io/dashboard/longitudinal.html. Its growth data
