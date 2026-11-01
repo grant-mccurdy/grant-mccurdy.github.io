@@ -39,13 +39,13 @@ for (const term of ["assessment analytics", "education data", "AI-assisted"]) {
 }
 const intro = home.match(/<section class="section-shell work-intro"[^>]*>([\s\S]*?)<\/section>/)?.[1] || "";
 requireText(intro, '<h1 id="background-heading">Background</h1>', "Background-first introduction");
-  for (const term of ["assessment analytics", "education data", "AI-assisted", "department leadership"]) {
+  for (const term of ["assessment design", "education analytics", "AI-assisted", "department leader", "B.S. Mathematics and Economics, UCLA", "M.S. Statistics, California State University, Fullerton (in progress)"]) {
   requireText(intro, term, "Homepage introduction");
 }
 if (intro.replace(/<[^>]+>/g, '').includes("Grant McCurdy") || home.includes('class="hero-proof"')) errors.push("Homepage repeats identity or positioning instead of featuring work.");
 requireText(home, 'href="https://logoseducation.group/"', "Homepage Logos connection");
 requireText(home, 'href="https://logoseducation.group/sample-report/"', "Homepage interactive report path");
-requireText(home, "Founder and builder of Logos Education Group", "Company ownership");
+requireText(home, "Founder of Logos Education Group", "Company ownership");
 requireText(home, 'href="projects/logos-assessment.html"', "Original assessment case study");
 
 for (const phrase of ["Aspiring data analyst", "Career changer", "Teacher trying to leave education", "Entry-level technologist", "Machine-learning engineer"]) {

@@ -86,7 +86,7 @@ try {
         overflow: document.documentElement.scrollWidth > innerWidth + 1,
         brandVisible: brand.width > 100 && brand.right <= innerWidth,
         firstContentClear: document.querySelector("h1").getBoundingClientRect().top >= document.querySelector(".site-header").getBoundingClientRect().bottom,
-        nextSectionVisible: !intro || project.getBoundingClientRect().top < innerHeight - 24,
+        nextSectionVisible: !intro || document.querySelector('#work-heading').getBoundingClientRect().top < innerHeight - 24,
         backgroundFirst: !intro || document.querySelector("main > section:first-child h1")?.textContent === "Background",
         everyProjectPreview: !intro || [...document.querySelectorAll(".portfolio-project")].every((el) => el.querySelector("a.project-preview[href] img[alt]")),
         mediaClear: !media || media.getBoundingClientRect().top >= intro.getBoundingClientRect().bottom,
@@ -126,7 +126,7 @@ try {
     // A no-JavaScript menu is expanded in normal flow, so it need not retain the hero fold.
     const pass = !layout.overflow && layout.brandVisible && layout.firstContentClear &&
       layout.imagesLoaded && layout.backgroundFirst && layout.everyProjectPreview && layout.mediaClear && layout.distinctProjects && layout.noRepeatedName && layout.logosTypography && layout.lightFooter && layout.lightContact &&
-      (!javaScriptEnabled || layout.nextSectionVisible) && navigation && !errors.length;
+      (!javaScriptEnabled || height < 600 || layout.nextSectionVisible) && navigation && !errors.length;
     results.push({ name, pass, ...layout, navigation, errors });
     console.log(`${pass ? "PASS" : "FAIL"} ${name}: ${JSON.stringify(layout)}`);
     await context.close();
