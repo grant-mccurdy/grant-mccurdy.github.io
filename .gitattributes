@@ -1,0 +1,3 @@
+# Preserve byte-for-byte snapshots and their reproducible report shell.
+sources/logos-report/* -text -whitespace
+demos/math-program-report/* -text -whitespace

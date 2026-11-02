@@ -5,7 +5,13 @@ NODE ?= $(shell command -v node 2>/dev/null || command -v node.exe 2>/dev/null |
 
 all: check
 
-check: prose links inventory sitemap site-shell profile-positioning portfolio-refresh chat-ui assessment-core assessment-manifest logos-alignment department-dashboard tracking-contract visual-smoke accessibility-smoke dashboard-logic learning-course walkthrough
+check: prose links inventory sitemap site-shell profile-positioning portfolio-refresh chat-ui assessment-core assessment-manifest logos-alignment department-dashboard tracking-contract visual-smoke accessibility-smoke dashboard-logic learning-course walkthrough report-mirror
+
+.PHONY: report-mirror
+report-mirror:
+	"$(NODE)" scripts/sync-logos-report.mjs --check
+	$(PYTHON) scripts/sync-class-comparisons.py --check
+	"$(NODE)" scripts/report-mirror-smoke.mjs
 
 .PHONY: walkthrough
 walkthrough:

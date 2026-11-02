@@ -167,6 +167,7 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px soli
 .work-intro p { margin: 0; max-width: 650px; color: var(--muted); font-size: 17px; line-height: 1.7; }
 .work-intro p.background-education { margin-top: 12px; font-size: 14px; line-height: 1.65; }
 .portfolio-project p.project-skills { margin-top: 12px; font-size: 13px; line-height: 1.65; color: #606060; }
+.portfolio-project p.project-context { margin-top: 12px; font-size: 13px; line-height: 1.65; color: #606060; }
 .work-collection { padding-block: 0 40px; }
 .work-collection-heading { font-size: 24px; font-weight: 500; margin: 0 0 20px; }
 .work-foundation { max-width: 850px; margin: 0 0 28px; color: var(--muted); font-size: 15px; line-height: 1.7; }

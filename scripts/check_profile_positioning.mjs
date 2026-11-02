@@ -44,7 +44,7 @@ requireText(intro, '<h1 id="background-heading">Background</h1>', "Background-fi
 }
 if (intro.replace(/<[^>]+>/g, '').includes("Grant McCurdy") || home.includes('class="hero-proof"')) errors.push("Homepage repeats identity or positioning instead of featuring work.");
 requireText(home, 'href="https://logoseducation.group/"', "Homepage Logos connection");
-requireText(home, 'href="https://logoseducation.group/sample-report/"', "Homepage interactive report path");
+requireText(home, 'href="demos/math-program-report/"', "Homepage interactive report path");
 requireText(home, "Founder of Logos Education Group", "Company ownership");
 requireText(home, 'href="projects/logos-assessment.html"', "Original assessment case study");
 

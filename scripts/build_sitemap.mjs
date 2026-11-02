@@ -32,6 +32,7 @@ addRoute("demos/", registry.siteLastReviewed);
 addRoute("projects/logos-assessment.html", "2026-10-06");
 addRoute("projects/instructional-design.html", "2026-10-23");
 addRoute("demos/assessment-evidence/index.html", "2026-10-23");
+addRoute("demos/math-program-report/", "2026-11-01");
 
 for (const project of registry.projects) {
   addRoute(project.portalPath, project.lastReviewed);

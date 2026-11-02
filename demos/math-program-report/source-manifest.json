@@ -1,0 +1,28 @@
+{
+  "sourceUrl": "https://logoseducation.group/sample-report/",
+  "retrievedAt": "2026-11-01T19:02:35.379Z",
+  "policy": "Versioned public Logos snapshot. Analytical JavaScript, CSS, and data are byte-identical. Only index.html navigation/title and a separate portfolio shell stylesheet are adapted. Supporting evidence remains at Logos.",
+  "files": {
+    "index.html": {
+      "sourceSha256": "16b199b67129ad8fc5f19c2206b02f8970a0edf7b6dc463565f0b7e8c7d50825",
+      "mirrorSha256": "e8df309c7044e510cefbe0f622747ccf74106ebb1ee8c5af23e9d6ac0481528d"
+    },
+    "workspace.css": {
+      "sourceSha256": "a5e5b73ef3b6c4765686c82a33f7fd4100e0380881f95e54be3d71309da3e7e1",
+      "mirrorSha256": "a5e5b73ef3b6c4765686c82a33f7fd4100e0380881f95e54be3d71309da3e7e1"
+    },
+    "workspace.js": {
+      "sourceSha256": "82d09ecb98269df83a99e9062e33be9d50752ab26c7d10bb1501f49cf5b8bc3d",
+      "mirrorSha256": "82d09ecb98269df83a99e9062e33be9d50752ab26c7d10bb1501f49cf5b8bc3d"
+    },
+    "reviewed-data.js": {
+      "sourceSha256": "f16557d08462ba2dee8fa8601e2ad537c89f95ad82d72bdc591d2bd3202f8609",
+      "mirrorSha256": "f16557d08462ba2dee8fa8601e2ad537c89f95ad82d72bdc591d2bd3202f8609"
+    },
+    "density-extension.js": {
+      "sourceSha256": "3dac66eb12d7db94edd92ed0ce04eee3259b7d908efe78f742297a3fb8dafe5e",
+      "mirrorSha256": "3dac66eb12d7db94edd92ed0ce04eee3259b7d908efe78f742297a3fb8dafe5e"
+    }
+  },
+  "presentationExtension": "class-comparisons.js displays the existing 14 planned class comparisons. See class-comparisons.json for published evidence provenance; no new inferential tests. report-guide.js adds portfolio-only Overview and Priorities editorial tabs without modifying canonical analysis."
+}

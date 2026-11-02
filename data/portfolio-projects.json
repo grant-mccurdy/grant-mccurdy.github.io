@@ -132,7 +132,7 @@
         "task": "Explore course, class, content-area, and question results from the Logos report and inspect the paired assessment.",
         "dataBoundary": "One designed fictional administration: 500 students, 21 classes, and the same 30-question form as the Logos report.",
         "dataManifest": "data/logos/manifest.json",
-        "reportUrl": "https://logoseducation.group/sample-report/",
+        "reportUrl": "demos/math-program-report/",
         "assessmentUrl": "https://logoseducation.group/assessment-preview/",
         "legacyDemoUrl": "dashboard/longitudinal.html"
       }

@@ -9,7 +9,7 @@ from urllib.parse import urldefrag, urlparse
 
 
 ROOT = Path(__file__).resolve().parents[1]
-SKIP_DIRS = {".git", "node_modules"}
+SKIP_DIRS = {".git", "node_modules", "sources"}
 
 
 class LinkParser(HTMLParser):
