@@ -1,0 +1,58 @@
+{
+  "capturedAt": "2026-11-02T00:20:31.680Z",
+  "source": "demos/math-program-report/",
+  "deviceScaleFactor": 2,
+  "sourceHashes": {
+    "index.html": "e8df309c7044e510cefbe0f622747ccf74106ebb1ee8c5af23e9d6ac0481528d",
+    "workspace.js": "82d09ecb98269df83a99e9062e33be9d50752ab26c7d10bb1501f49cf5b8bc3d",
+    "workspace.css": "a5e5b73ef3b6c4765686c82a33f7fd4100e0380881f95e54be3d71309da3e7e1",
+    "reviewed-data.js": "f16557d08462ba2dee8fa8601e2ad537c89f95ad82d72bdc591d2bd3202f8609",
+    "density-extension.js": "3dac66eb12d7db94edd92ed0ce04eee3259b7d908efe78f742297a3fb8dafe5e",
+    "portfolio-shell.css": "1c54a1de1dee613455dc27f4075113a6a45d5e5908c01a868b2361a24c68dd27",
+    "report-guide.js": "232b8d5026976ca567ba605eecbce064f6059eff96246b2aca41381988f9c12a",
+    "class-comparisons.js": "4063207832c9e8952edd5abce8f387e7ea8ca4b00b3a01996be35cef4c06c18f",
+    "class-comparisons.json": "5433390f9e759c7e5960b5b76e290c63461cf39f41764e8c1de6487fb6422800"
+  },
+  "frames": [
+    {
+      "view": "courses",
+      "mode": "violin",
+      "name": "report-courses.png",
+      "sha256": "1a53c73657fee208d4a19d1d1044ce1b83b5846cbf20d8cbfc892bddde77aa07",
+      "cssPixels": {
+        "width": 1124,
+        "height": 720
+      }
+    },
+    {
+      "view": "comparisons",
+      "mode": "heatmap",
+      "name": "report-comparisons.png",
+      "sha256": "87607ddf30321ee0b6214b79b037dfb68578e45e7cb8920bfede8a2efb809da9",
+      "cssPixels": {
+        "width": 1124,
+        "height": 720
+      }
+    },
+    {
+      "view": "classes",
+      "mode": "box",
+      "name": "report-classes.png",
+      "sha256": "bb675a4fed35cb3c3603c327402b94a0955c3a8e8c9f374c46743ac773e5ac36",
+      "cssPixels": {
+        "width": 1124,
+        "height": 720
+      }
+    },
+    {
+      "view": "content",
+      "mode": "profile",
+      "name": "report-content.png",
+      "sha256": "391f725503211e84670f371511cb1d4432856b352e885e1995578ad7b7126472",
+      "cssPixels": {
+        "width": 1124,
+        "height": 720
+      }
+    }
+  ]
+}

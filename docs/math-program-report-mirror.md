@@ -25,3 +25,9 @@ Overview headings match the four chart tabs. Each section describes the figure,
 the overall pattern, and relevant detail. Priorities names proposed owners, tasks,
 and follow-up evidence. Keep claims tied to the source data and avoid repeated
 disclaimers or sentences that merely announce a need for review.
+
+Refresh the four homepage carousel figures with
+`node scripts/capture-report-previews.mjs`. It retains the selected chart types,
+groups and framing, captures at 2x resolution, and checks desktop/mobile carousel
+navigation. `scripts/report-preview-snapshots.json` records source and image
+hashes so the captures can be traced to the report version they show.
